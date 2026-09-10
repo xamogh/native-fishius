@@ -1,0 +1,9 @@
+Built-in image_gen tool used with collection reference.
+Generated RGB checkerboard removed by connected exterior flood fill. Full yellow body, mouth, eye, and fins preserved. Tight crop with 4 px transparent padding.
+Final assets: fish-yellow-tang.png, fish-yellow-tang-mask.png (white RGB, matching alpha), fish-yellow-tang-dead.png (desaturated, matching alpha).
+
+Use case: stylized-concept. Asset type: production side-view fish sprite for an aquarium mobile game.
+Input is visual reference ONLY. Generate only the bright golden yellow tang fish in the fourth card of the top row, isolated as a single sprite with genuine alpha transparency. The fish must face LEFT (mirror the reference direction), with the eye, face, and small puckered snout at the LEFT, and tail at the RIGHT.
+Match its reference appearance closely: thick deep rounded oval body, brilliant golden-yellow coloring with soft golden shading, tall elegant triangular-curved dorsal fin following the upper back and softly scalloped rounded lower fin, tiny triangular side pectoral fin, delicate narrow radiating fin striations, thin stem to fan-shaped triangular tail. One friendly expressive glossy black eye with white ring and pinpoint white catchlight, slightly open tiny puckered yellow lips.
+Style: same richly rendered glossy 3D cartoon casual mobile-game illustration as reference, clean detailed fins, subtle highlights, dimensional yellow body, gentle playful expression, absolutely no stripes or other colors. Full fish completely visible with equal transparent margins. Output a landscape PNG, approximately 1024x768, fish centered and filling 80 percent of frame.
+Avoid: no water, no shadows on background, no UI, no labels, no text, no other fish, no framing. No checkerboard painted into background. True transparent PNG alpha surrounding the fish.

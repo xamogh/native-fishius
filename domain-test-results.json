@@ -1,0 +1,102 @@
+{
+  "failures": 1,
+  "tests": [
+    {
+      "name": "catalog counts and exact imported duration",
+      "passed": true
+    },
+    {
+      "name": "four hungry starter babies",
+      "passed": true
+    },
+    {
+      "name": "all catalog purchase and four stage rewards",
+      "passed": true
+    },
+    {
+      "name": "six-second hatch and hungry newborn",
+      "passed": true
+    },
+    {
+      "name": "free feeding pauses and resumes exact growth",
+      "passed": true
+    },
+    {
+      "name": "sickness and death boundaries; feeding cannot revive",
+      "passed": true
+    },
+    {
+      "name": "large and small lifecycle advances agree",
+      "passed": true
+    },
+    {
+      "name": "purchase rejection is atomic",
+      "passed": true
+    },
+    {
+      "name": "art gate precedes event and funds",
+      "passed": true
+    },
+    {
+      "name": "level-two pearl granted only once",
+      "passed": true
+    },
+    {
+      "name": "repeatable tutorial premium fish",
+      "passed": true
+    },
+    {
+      "name": "stash preserves identity and all remaining clocks",
+      "passed": true
+    },
+    {
+      "name": "egg storage pauses hatching",
+      "passed": true
+    },
+    {
+      "name": "five exact tank schedules and pearl shortcuts",
+      "passed": true
+    },
+    {
+      "name": "tank sequencing and level gates",
+      "passed": true
+    },
+    {
+      "name": "revival overflow allowed, purchase and restore blocked",
+      "passed": true
+    },
+    {
+      "name": "atomic bulk revival and corpse removal",
+      "passed": true
+    },
+    {
+      "error": "d.pellets().empty()",
+      "name": "one pellet feeds one fish with stable tie order",
+      "passed": false
+    },
+    {
+      "name": "food is bounded and cleared on tank switch",
+      "passed": true
+    },
+    {
+      "name": "year-crossing events and annual claims",
+      "passed": true
+    },
+    {
+      "name": "daily claims and clock rollback cannot duplicate gifts",
+      "passed": true
+    },
+    {
+      "name": "save round-trip, unknown IDs, duplicate IDs and future schemas",
+      "passed": true
+    },
+    {
+      "name": "atomic storage retains corrupt primary and recovers backup",
+      "passed": true
+    },
+    {
+      "name": "suspension interval is applied once",
+      "passed": true
+    }
+  ]
+}

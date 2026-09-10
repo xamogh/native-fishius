@@ -1,0 +1,14 @@
+{
+  "crop": {
+    "left": 1802,
+    "top": 5,
+    "width": 419,
+    "height": 140
+  },
+  "normalizedCrop": [
+    1160,
+    3,
+    270,
+    90
+  ]
+}

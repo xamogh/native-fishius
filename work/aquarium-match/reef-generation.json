@@ -1,0 +1,13 @@
+{
+  "tool": "image_gen__imagegen",
+  "mode": "built-in",
+  "model": "tool-selected; not explicitly specified",
+  "input_path": "/Users/amoghrijal/amogh/aquarium-native/design/reference/aquarium.png",
+  "generated_output_path": "/Users/amoghrijal/.codex/generated_images/01a08b39-dd3d-7030-b09e-f80945a14bac/exec-230984d7-c63f-4725-b8d8-be18e48a414e.png",
+  "workspace_output_path": "/Users/amoghrijal/amogh/aquarium-native/assets/aquarium/reef-restored.png",
+  "output_dimensions": {
+    "width": 1745,
+    "height": 901
+  },
+  "prompt": "Use case: precise-object-edit. Asset type: clean background plate for this exact mobile aquarium game screen. This input image is the EDIT TARGET. Make only removal/inpainting edits. Remove ALL interface elements: the coin and pearl counters at top left; level star, experience meter, bell and menu at top right; every control down the right edge including Select, Food, Medicine, Mastery, Sell; the bottom left Tanks button and its decorative bubbles/plants; the bottom right Shop button and its decorative bubbles/plants. Remove ALL SIX FISH, including the small vertical orange fish at center-left. Remove black device framing/rounded corner slivers so scenery fills a plain rectangular canvas to its outer edges. Fill all removed regions seamlessly by continuing the surrounding underwater water, rock, sand and reef textures. Preserve every untouched area of this exact background pixel-faithfully: SAME composition, same camera, same scale, same rock shapes/positions and left rocky cliff, same right stone arch with hole, same coral positions, same green plants, same light rays/caustics, same sand dunes, same colors, same detailed cartoon rendering, same depth of field. Do not redesign, shift, simplify, crop, zoom, recolor or sharpen the scene. No animals, no text, no UI, no icons, no borders, no new scene elements. The center stays open turquoise water and sandy floor. Maintain input aspect ratio 2498:1290, ideally output 2498x1290 or larger at identical aspect ratio. Exact reconstruction of the hidden background behind foreground elements is the only requested change."
+}

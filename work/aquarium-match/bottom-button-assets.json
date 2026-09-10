@@ -1,0 +1,38 @@
+{
+  "tanks": {
+    "sourceCrop": {
+      "left": 0,
+      "top": 1069,
+      "width": 472,
+      "height": 221
+    },
+    "normalizedCrop": [
+      0,
+      688,
+      304,
+      142
+    ],
+    "size": [
+      472,
+      221
+    ]
+  },
+  "shop": {
+    "sourceCrop": {
+      "left": 1939,
+      "top": 1057,
+      "width": 559,
+      "height": 233
+    },
+    "normalizedCrop": [
+      1248,
+      680,
+      360,
+      150
+    ],
+    "size": [
+      559,
+      233
+    ]
+  }
+}

@@ -1,0 +1,1701 @@
+{
+  "version": 1,
+  "assets": {
+    "fish/neonTetra.png": {
+      "size": [
+        576,
+        235
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        15.503472222222221
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "19f0d5f1c33c1d023b8eb9af8fa8c8209abf8ec962e9f75d50dbcf8ad4dec979"
+    },
+    "fish/neonTetra-dead.png": {
+      "size": [
+        576,
+        235
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        15.503472222222221
+      ],
+      "source": "Desaturated variant of neonTetra",
+      "sha256": "c03993cdf32f1f8bbb222b7e9fc031ee484d7c78fe1e3c60ad0da176b8aded55"
+    },
+    "fish/guppy.png": {
+      "size": [
+        576,
+        244
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        16.09722222222222
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "4645fdb0aaa133849683d144635f8b24084fbade6f7e04f6a9628ff41e3d8b7c"
+    },
+    "fish/guppy-dead.png": {
+      "size": [
+        576,
+        244
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        16.09722222222222
+      ],
+      "source": "Desaturated variant of guppy",
+      "sha256": "36f25dce63d01d5f08cbdcf0fdc49066bd80ab13d5ef2714f18e0178663d4bfa"
+    },
+    "fish/platy.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "6f4ead5e0175ffc3366ec283572e0e81cf0c867de76fd65e5e694167f9cafc50"
+    },
+    "fish/platy-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of platy",
+      "sha256": "be3ab63c29f45372d5b49efdb7accb349910fe24a177db1fa60dc89da4716f06"
+    },
+    "fish/molly.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "621c6cc584c044b53153b57e671422c3cd6a91b372bcc4f3ebe74f5f76a5391f"
+    },
+    "fish/molly-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of molly",
+      "sha256": "5fa092f746f79e7de80ddfdb40b2f0ae3710fd313ac07740a190709984cdcc71"
+    },
+    "fish/zebraDanio.png": {
+      "size": [
+        576,
+        235
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        15.503472222222221
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "24a1a6405f1c517ed4d3b46b2a2d6f11f9b7eece14cd808c53d6a6d45115eeda"
+    },
+    "fish/zebraDanio-dead.png": {
+      "size": [
+        576,
+        235
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        15.503472222222221
+      ],
+      "source": "Desaturated variant of zebraDanio",
+      "sha256": "7ca36ed15e213a3aaa13b10a40b51cf04843df67d3ea82e3a09f5fb51cb62863"
+    },
+    "fish/emberTetra.png": {
+      "size": [
+        576,
+        235
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        15.503472222222221
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "ce1cba315d4a523504a75e76074ab726d5a603d868d86ad6170a0d4b35e1cbbb"
+    },
+    "fish/emberTetra-dead.png": {
+      "size": [
+        576,
+        235
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        15.503472222222221
+      ],
+      "source": "Desaturated variant of emberTetra",
+      "sha256": "e5731fa74f34ab33b0546c0ea1396a4f601be1f944cf7da1a8339a83f8e37c49"
+    },
+    "fish/harlequinRasbora.png": {
+      "size": [
+        576,
+        235
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        15.503472222222221
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "43dc047b6da80b3fc025eebb422fcd1802fea90dc08ddda642f9d71bb2f33dcd"
+    },
+    "fish/harlequinRasbora-dead.png": {
+      "size": [
+        576,
+        235
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        15.503472222222221
+      ],
+      "source": "Desaturated variant of harlequinRasbora",
+      "sha256": "84c19f7797cc08496b7abcade5d1b820259b12db7f471e4d4f7a7f1d9e92f96a"
+    },
+    "fish/greenChromis.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "40736dc28071116ce572b8f33bddb55727800821d9477af601d28cdcadb1dd1f"
+    },
+    "fish/greenChromis-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of greenChromis",
+      "sha256": "cd60a047d0166c4b4ee03fb2a8a73b17ec2820b8d1858149587e9ac88017ed20"
+    },
+    "fish/pajamaCardinalfish.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "8cc79cc6e318514380b4463e49f1cc1e1654babda84c6e40b99e8b5f3ebb93f3"
+    },
+    "fish/pajamaCardinalfish-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of pajamaCardinalfish",
+      "sha256": "13a7e1a7ca9c68930eb5a1504a8ba9a9249c94dc5ed689d82caae412b9d0743d"
+    },
+    "fish/pearlGourami.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "fb0b667cd1ac28d5075007965ad6ad6287c67bbf206143053d5889bcf901866d"
+    },
+    "fish/pearlGourami-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of pearlGourami",
+      "sha256": "41bf104595b6658c3eae33446b08111abe73a4c4fd5a8a3bcff2173932be4610"
+    },
+    "fish/sixlineWrasse.png": {
+      "size": [
+        576,
+        235
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        15.503472222222221
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "731fa24656679278f3430113330c658581e3b78f32ed97ab33e5e560d640951d"
+    },
+    "fish/sixlineWrasse-dead.png": {
+      "size": [
+        576,
+        235
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        15.503472222222221
+      ],
+      "source": "Desaturated variant of sixlineWrasse",
+      "sha256": "c103aaeb49b7c4e75f3aab43a04d28524e94de4d0f2fa504f97fefe5d1922abc"
+    },
+    "fish/shyHamlet.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "add64f3fd2027df35e11ba6280c8708b6f60fc08f5d8a2fe1abe4ca19018378f"
+    },
+    "fish/shyHamlet-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of shyHamlet",
+      "sha256": "8874c336dd9ec1868e4223306e857eaee644c671227c1b11eda24664d3a8db37"
+    },
+    "fish/hawaiianHogfish.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "e954b90d4670d83f0222c0ce713fc32efe84d6436eb0c517123a2840672fcec8"
+    },
+    "fish/hawaiianHogfish-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of hawaiianHogfish",
+      "sha256": "20d9b90c7fd6989a5b454d71efc44bbcfc871b911f1d1688207c30bca8e1dea1"
+    },
+    "fish/scooterBlenny.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "e09adcac08db49856d95dc78208311ac56b219aab651b3689c4c31db04e49675"
+    },
+    "fish/scooterBlenny-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of scooterBlenny",
+      "sha256": "d611dae0ebffad87e13265a0cd043c99bc911001b6c69e72e03b815c5cfdb3d5"
+    },
+    "fish/ocellarisClownfish.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "395e45c64ed603d3f04db9ed40d3a526eaeb1a37b7bbd8a5148375318a627148"
+    },
+    "fish/ocellarisClownfish-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of ocellarisClownfish",
+      "sha256": "b4b96e57f6264df6f756810a6675e5f238491803947c0fef010471b9755f1211"
+    },
+    "fish/yellowTang.png": {
+      "size": [
+        576,
+        333
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        21.96875
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "7a5f3257cccdfe715311dbba65d1f68e188795576d9f5fa7a42716159bbea4c9"
+    },
+    "fish/yellowTang-dead.png": {
+      "size": [
+        576,
+        333
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        21.96875
+      ],
+      "source": "Desaturated variant of yellowTang",
+      "sha256": "05bec133f79a1219abde44b84b96449309077e3c4bfca18e5e4de3eaf3f27bfc"
+    },
+    "fish/banggaiCardinalfish.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "638dd9fb60bb23ed3d4c94c4fd6ce65b0d5f4f91e829fc95ae71b9e732e58288"
+    },
+    "fish/banggaiCardinalfish-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of banggaiCardinalfish",
+      "sha256": "15361984a5bfe2da96b1fd8af16ef29c8437ff5cd356f3454e93211c1a77b7f4"
+    },
+    "fish/coralBeauty.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "d09ca795800d8516d6cc88c923c00a72a7cdbe26bb58def6b53c4b204f1b7374"
+    },
+    "fish/coralBeauty-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of coralBeauty",
+      "sha256": "f7399284542063e8f71971627b989bb4aa5121055a2719e571f88a73252a02f1"
+    },
+    "fish/flameAngelfish.png": {
+      "size": [
+        576,
+        333
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        21.96875
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "72032a0b4db4c9d5e6577839e2f1aca762ef249e3a287480449f0d58b9768602"
+    },
+    "fish/flameAngelfish-dead.png": {
+      "size": [
+        576,
+        333
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        21.96875
+      ],
+      "source": "Desaturated variant of flameAngelfish",
+      "sha256": "90b74d68acb8af64e3b1b54ab3970b0d6a795915575a6dac33e3d4bff34c7327"
+    },
+    "fish/longhornCowfish.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "fa8c78c0365e175fd05008e84d97d52ebecd2d2cb8d1956b03efae8b06d0b5f1"
+    },
+    "fish/longhornCowfish-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of longhornCowfish",
+      "sha256": "f94a25a2185dc587b517dcca7f05f62bfde91f341d33a838ebce271f1535c76e"
+    },
+    "fish/foxfaceRabbitfish.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "8727cca18f95b118d12ec0d14fd76a5371f16534c4515ca122406f9298161362"
+    },
+    "fish/foxfaceRabbitfish-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of foxfaceRabbitfish",
+      "sha256": "aa3107c52089c0497873d6cc1745bce599cddbe5991e08af4bf9875529a7fd38"
+    },
+    "fish/picassoTriggerfish.png": {
+      "size": [
+        576,
+        333
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        21.96875
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "3c0b8e3508c9ca1c0666f101a1d93e69599f622f1f2f1040cb09b03b071e3236"
+    },
+    "fish/picassoTriggerfish-dead.png": {
+      "size": [
+        576,
+        333
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        21.96875
+      ],
+      "source": "Desaturated variant of picassoTriggerfish",
+      "sha256": "d112b42cb55868c41befd19197af911551c3b801453a8423e735b5fd868e3789"
+    },
+    "fish/discus.png": {
+      "size": [
+        576,
+        333
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        21.96875
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "dea4c514935151b5a39eb657d6da76274cd3f39afb8d570afd38b118db074716"
+    },
+    "fish/discus-dead.png": {
+      "size": [
+        576,
+        333
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        21.96875
+      ],
+      "source": "Desaturated variant of discus",
+      "sha256": "f318d05e4ac35f3f0ceeee240ce1fd94079843201fce54888ed00e5e31cf0959"
+    },
+    "fish/moorishIdol.png": {
+      "size": [
+        576,
+        333
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        21.96875
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "00896cf2c4b6ae2c8124ada6d497b41da6d15d712af65ca1db1c3c185abf0773"
+    },
+    "fish/moorishIdol-dead.png": {
+      "size": [
+        576,
+        333
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        21.96875
+      ],
+      "source": "Desaturated variant of moorishIdol",
+      "sha256": "c07df7484bab6db6689827de7514a2fa5609eb42f4cd12a5f63897beac3968fc"
+    },
+    "fish/bluelineTriggerfish.png": {
+      "size": [
+        576,
+        333
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        21.96875
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "e6055a0e0a01af6ac0e32720b32fb7a86fbf1dab32c3d1022c7a18fabf704661"
+    },
+    "fish/bluelineTriggerfish-dead.png": {
+      "size": [
+        576,
+        333
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        21.96875
+      ],
+      "source": "Desaturated variant of bluelineTriggerfish",
+      "sha256": "67d33e4c5b5f0194f48745c6c54cf10d0928a32d5a2b96d78ab2ef6590bba759"
+    },
+    "fish/queenAngelfish.png": {
+      "size": [
+        576,
+        333
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        21.96875
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "f167f3b2015457c019f44b5b386d122ac169243d7fa85de928e50862a89a5b63"
+    },
+    "fish/queenAngelfish-dead.png": {
+      "size": [
+        576,
+        333
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        21.96875
+      ],
+      "source": "Desaturated variant of queenAngelfish",
+      "sha256": "b4e20e916d8f5d1a5a648f041bb40f5fe7a78b264924d8cf0cbca2fcf2647c83"
+    },
+    "fish/bubbleEyeGoldfish.png": {
+      "size": [
+        590,
+        287
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        28.2135593220339
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "c46e61fbd39631953ab1717dbbdd71a13f8b99dc5138b07ea741877e40a98d4f"
+    },
+    "fish/bubbleEyeGoldfish-dead.png": {
+      "size": [
+        590,
+        287
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        28.2135593220339
+      ],
+      "source": "Desaturated variant of bubbleEyeGoldfish",
+      "sha256": "bc46bb2774f81e8b24e1342a7ed862d6c7a548d8905a9722964b8dece72c8edc"
+    },
+    "fish/koi.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        28.29513888888889
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "4996689dab81d590497184d820338d0fe8505528d2798c24fae2ea856aa44862"
+    },
+    "fish/koi-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        28.29513888888889
+      ],
+      "source": "Desaturated variant of koi",
+      "sha256": "ea3b331925d389aa56431823342efb393bf7f3870c63c250734a31579fe63f6d"
+    },
+    "fish/platinumBetta.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        28.29513888888889
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "7632647729d9b91da27c9e69d0cbdbe63bf1d436a7aee25563b0b71d300c3e21"
+    },
+    "fish/platinumBetta-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        28.29513888888889
+      ],
+      "source": "Desaturated variant of platinumBetta",
+      "sha256": "6080df2609a804d54ab0f94e73a29e32cb384293b5cbc851d8adda8851c276a4"
+    },
+    "fish/mandarinDragonet.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        28.29513888888889
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "1cf15df2dc26b40fe82625c385962e684fad09325a358b1f6ce825d806ab365f"
+    },
+    "fish/mandarinDragonet-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        28.29513888888889
+      ],
+      "source": "Desaturated variant of mandarinDragonet",
+      "sha256": "b211c23cd91877a9ddf10929151fc8cfc61b837f5eee2137b08da67fe3affe5d"
+    },
+    "fish/axolotl.png": {
+      "size": [
+        631,
+        293
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        26.93185419968304
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "274787dbbbd5f04a0800858ecbe20dcd34fea125fe7869ebc3168967e1d3d031"
+    },
+    "fish/axolotl-dead.png": {
+      "size": [
+        631,
+        293
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        26.93185419968304
+      ],
+      "source": "Desaturated variant of axolotl",
+      "sha256": "48d71eb96a4604962a719cff7f1b9032d6ede306023ebf80fda289a46f435eb1"
+    },
+    "fish/flashlightFish.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        28.29513888888889
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "ac16a8f11d714253844a42ce3b8f3e6f959fa736f7f124847f0d495566877c98"
+    },
+    "fish/flashlightFish-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        28.29513888888889
+      ],
+      "source": "Desaturated variant of flashlightFish",
+      "sha256": "612934e6db51a796f6e1d950e39f386176651825eed341b7fb1fef1ca790afd1"
+    },
+    "fish/goldenArowana.png": {
+      "size": [
+        576,
+        235
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        23.663194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "92609d3dc8c31e19b2b2fa0087e4e0b12ba3ef24ed579fa4faba151899743334"
+    },
+    "fish/goldenArowana-dead.png": {
+      "size": [
+        576,
+        235
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        23.663194444444443
+      ],
+      "source": "Desaturated variant of goldenArowana",
+      "sha256": "40c7bdf4aaac52e8ff6783ba803495c8ed02b6e2c4cddd04e782e30eb3485860"
+    },
+    "fish/peppermintAngelfish.png": {
+      "size": [
+        576,
+        333
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        33.53125
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "90ff22b9ab83f90c0ca401493821edb0d5ea630f57098e176eb413910b348dba"
+    },
+    "fish/peppermintAngelfish-dead.png": {
+      "size": [
+        576,
+        333
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        33.53125
+      ],
+      "source": "Desaturated variant of peppermintAngelfish",
+      "sha256": "1b6453a7cedfc5d27e738210988165da0fce79542c75808e4ffe1c415899c6d5"
+    },
+    "fish/blackDiamondStingray.png": {
+      "size": [
+        574,
+        285
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        28.797909407665504
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "c04f04f52594e2e66fc2db9b0807a3c6ddf1abbe050fc20307603e4ce4dcbc81"
+    },
+    "fish/blackDiamondStingray-dead.png": {
+      "size": [
+        574,
+        285
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        28.797909407665504
+      ],
+      "source": "Desaturated variant of blackDiamondStingray",
+      "sha256": "e91e70bfe663daad007e315e5bb812ebd870f63e6cbc37f0527d5026188ce543"
+    },
+    "fish/platinumArowana.png": {
+      "size": [
+        576,
+        235
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        23.663194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "7be4c38f746a01fdf899ee02d439e52b8d5451e8aa47a95c0b24eb6c4d302abb"
+    },
+    "fish/platinumArowana-dead.png": {
+      "size": [
+        576,
+        235
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        58,
+        23.663194444444443
+      ],
+      "source": "Desaturated variant of platinumArowana",
+      "sha256": "4bafa88509fc2b45f1aa3db22f6a98b6be9afa7868dea3300cb1e3f41fa5b314"
+    },
+    "fish/heartfinTetra.png": {
+      "size": [
+        576,
+        235
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        15.503472222222221
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "efb9a7181a1ac77f610e7332c1e0b2f38628f7c2987f4ea5fc12f5adce7cfb15"
+    },
+    "fish/heartfinTetra-dead.png": {
+      "size": [
+        576,
+        235
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        15.503472222222221
+      ],
+      "source": "Desaturated variant of heartfinTetra",
+      "sha256": "39b7f65616e028552a68439ab4fa643c12b8a1e602430c82bdca27457de4f943"
+    },
+    "fish/emeraldCod.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "c8a6a74476c01c077452cb35f22ade18baee74de7f21f708fc483e0f73a85fa9"
+    },
+    "fish/emeraldCod-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of emeraldCod",
+      "sha256": "56e2d1faf415e9b9d54584959651b14e942fc3966d9c7ac1e69be89fdd59c1cf"
+    },
+    "fish/sakuraGoldfish.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "f2decc2fce0262504a6e3099e0c7984ae48b75ca192a784a4a28372aba315052"
+    },
+    "fish/sakuraGoldfish-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of sakuraGoldfish",
+      "sha256": "97eb1631757fa4c2a3acaadcbe922a28ccc8b6989115dd33f272f08524ab446e"
+    },
+    "fish/fireworkFish.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "4b5fa7e63f29635febb9e9af3b9c1db1cddca93f7b5e7ba7f308e25e27570a9c"
+    },
+    "fish/fireworkFish-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of fireworkFish",
+      "sha256": "6260e53f078a31df7cda748fb8f5e8cba81a31b05ad0d88a7243cddfa84da7a4"
+    },
+    "fish/jackOLanternPuffer.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "f1f879b1aa8f417ae84f7ced6ffc34091efbcf5e494770639f54c1faa4cbed45"
+    },
+    "fish/jackOLanternPuffer-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of jackOLanternPuffer",
+      "sha256": "3ca97621567aa72ba316758c6cf484783f63a0ab4674731b3b65317c1949cf78"
+    },
+    "fish/midnightVampireSquid.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "1e5ea4cc66f981bd7affacb20c819e68e448db3b0cb8d5f66e709a08f3c35d28"
+    },
+    "fish/midnightVampireSquid-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of midnightVampireSquid",
+      "sha256": "6baa0ed9e2d8819c4b919d8efebeec44e9a8875c795cb47b31e1b24d16a6aad6"
+    },
+    "fish/santaClownfish.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "1a972cb8c14d236b188ecd103c465886a86b2a8bbf53f48f5a6fc8c932dc8fb6"
+    },
+    "fish/santaClownfish-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of santaClownfish",
+      "sha256": "68dfedc6eb26d518105d6d2e8c8b1f5f9519dffdb5517d22a099eac3c1f70751"
+    },
+    "fish/frostAngelfish.png": {
+      "size": [
+        576,
+        333
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        21.96875
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "b1a8de78cfa05c1a5e0b65fa9e4df09545f3a2923baa44b5d38c867536638c91"
+    },
+    "fish/frostAngelfish-dead.png": {
+      "size": [
+        576,
+        333
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        21.96875
+      ],
+      "source": "Desaturated variant of frostAngelfish",
+      "sha256": "0bbb56442e6bed41e7864b3a0fd12f79c127a80bb1d0df1512f168409183c933"
+    },
+    "fish/goldenKoi.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "7380ecc665a43cd4f78428e6eb6471a816c8e472514a8db034cadba9e8c2b2e2"
+    },
+    "fish/goldenKoi-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of goldenKoi",
+      "sha256": "ad1702779365443e3c022f4b358cb74759b8d17e0f2e56b3cb01430730040978"
+    },
+    "fish/anniversaryRainbowfish.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "New species-specific illustration based on supplied visual direction",
+      "sha256": "79151d110f8dbeba3ea80aee8bcdc6a65dec0b648fa54e185ceb769d01609a36"
+    },
+    "fish/anniversaryRainbowfish-dead.png": {
+      "size": [
+        576,
+        281
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        38,
+        18.538194444444443
+      ],
+      "source": "Desaturated variant of anniversaryRainbowfish",
+      "sha256": "1abe4e746b5a057123e034775132d980015d0b4a7f57b9ace66c2bb7099173f8"
+    },
+    "background.png": {
+      "size": [
+        1632,
+        952
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        1632,
+        952
+      ],
+      "source": "New illustrated aquarium backdrop",
+      "sha256": "1bdf5fb260d8cae24cf07db68b76ebd5dbf15c5bc7d4b767a07905361c911a2f"
+    },
+    "ui/coin.png": {
+      "size": [
+        192,
+        192
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        64,
+        64
+      ],
+      "source": "New game illustration",
+      "sha256": "3563bceaf62cda0260ef21003a14d592d2f8686f780a3cef960085936da7ce57"
+    },
+    "ui/pearl.png": {
+      "size": [
+        192,
+        192
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        64,
+        64
+      ],
+      "source": "New game illustration",
+      "sha256": "9a61900774d1b51ca73bbbc9bc6c1eb2bd8fc37fb141bd6afaabb6f3a36b2c3d"
+    },
+    "ui/egg.png": {
+      "size": [
+        192,
+        192
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        64,
+        64
+      ],
+      "source": "New game illustration",
+      "sha256": "939f282c9e65f3af6f3832769fbf727dd4eedfaee58afa73814c7124c2fb0e73"
+    },
+    "ui/food.png": {
+      "size": [
+        192,
+        192
+      ],
+      "pivot": [
+        0.5,
+        0.8
+      ],
+      "logical_size": [
+        64,
+        64
+      ],
+      "source": "New game illustration",
+      "sha256": "fd05e5151067fdf9221f5414044a92c0a853d3b5790a0c44afcc1f0f959b9e6c"
+    },
+    "ui/net.png": {
+      "size": [
+        192,
+        192
+      ],
+      "pivot": [
+        0.395,
+        0.355
+      ],
+      "logical_size": [
+        64,
+        64
+      ],
+      "source": "New game illustration",
+      "sha256": "4fefef74584c134aae4e97671bf8a8d2826a62ad64ecda0cab5384eaf958d5be"
+    },
+    "ui/tank.png": {
+      "size": [
+        192,
+        192
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        64,
+        64
+      ],
+      "source": "New game illustration",
+      "sha256": "42d41ae09d38df66c1e3e5b72193111a4b196c4a59f43624b936396791d70dee"
+    },
+    "ui/xp.png": {
+      "size": [
+        192,
+        192
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        64,
+        64
+      ],
+      "source": "New game illustration",
+      "sha256": "eeb8ced252b806da98fdfa4f46f7e4bfcecdf03446e1cacb7c8c9ebaeb22aa93"
+    },
+    "ui/inventory.png": {
+      "size": [
+        192,
+        192
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        64,
+        64
+      ],
+      "source": "New game illustration",
+      "sha256": "73133bb18908a4fabcaf6e748dbb41ac328d8f82652a6b1acf0935dfac51f7c0"
+    },
+    "decor/seaweed.png": {
+      "size": [
+        280,
+        240
+      ],
+      "pivot": [
+        0.5,
+        1
+      ],
+      "logical_size": [
+        100,
+        90
+      ],
+      "source": "New game illustration",
+      "sha256": "7853b52c1728d7f0ec591d7906805b56bedbb0845eb3f35b6fc9a41fed0cc244"
+    },
+    "decor/coral.png": {
+      "size": [
+        280,
+        240
+      ],
+      "pivot": [
+        0.5,
+        1
+      ],
+      "logical_size": [
+        100,
+        90
+      ],
+      "source": "New game illustration",
+      "sha256": "bdcbd59cd379aaa333eaa8459db1e0d5b419818c2f36d8e2b78bac5398f02ef7"
+    },
+    "decor/shell.png": {
+      "size": [
+        280,
+        240
+      ],
+      "pivot": [
+        0.5,
+        1
+      ],
+      "logical_size": [
+        100,
+        90
+      ],
+      "source": "New game illustration",
+      "sha256": "70340f0c6fc45cec39ff07370941df25891a2d9f894fe438db3b5c10640dc623"
+    },
+    "decor/arch.png": {
+      "size": [
+        280,
+        240
+      ],
+      "pivot": [
+        0.5,
+        1
+      ],
+      "logical_size": [
+        100,
+        90
+      ],
+      "source": "New game illustration",
+      "sha256": "c33324604386c6aa4c87069a3b054f5fa0ea63e2961c21d49e9fbb2ed8930a34"
+    },
+    "decor/chest.png": {
+      "size": [
+        280,
+        240
+      ],
+      "pivot": [
+        0.5,
+        1
+      ],
+      "logical_size": [
+        100,
+        90
+      ],
+      "source": "New game illustration",
+      "sha256": "050ba43fe1d55ff90b480fdfdcd3173f1f4d1245226e12f3f8930834d2cc5345"
+    }
+  }
+}

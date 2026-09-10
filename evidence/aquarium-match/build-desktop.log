@@ -1,0 +1,23 @@
+[0/2] Re-checking globbed directories...
+-- GLOB mismatch!
+The following files were added:
+  +/Users/amoghrijal/amogh/aquarium-native/assets/aquarium/README.md
+[1/2] Re-running CMake...
+-- Using the multi-header code from /private/tmp/claude-501/-Users-amoghrijal-amogh-aquarium-native/f5ff1595-ed3a-4725-ba81-a7f0e8d9d04f/scratchpad/deps-cache/json-src/include/
+-- Configuring SDL3_image 3.2.4
+-- SDL3_image backends:
+-- - enabled:  stb imageio bmp gif jpg lbm pcx png pnm qoi svg tga xcf xpm xv
+-- - disabled: wic avif jxl tif webp
+-- Configuring SDL3_ttf 3.2.2
+-- SDL3_ttf: Using system freetype library
+-- Could NOT find plutovg (missing: plutovg_LIBRARY plutovg_INCLUDE_PATH) 
+-- Could NOT find plutosvg (missing: plutosvg_LIBRARY plutosvg_INCLUDE_PATH plutovg_FOUND) 
+-- plutosvg NOT found
+-- SDL3_ttf backends:
+-- - enabled:  freetype
+-- - disabled: harfbuzz plutosvg
+-- Configuring done (0.3s)
+-- Generating done (0.0s)
+-- Build files have been written to: /Users/amoghrijal/amogh/aquarium-native/build/desktop
+[0/4] Re-checking globbed directories...
+[1/4] Linking CXX executable aquarium

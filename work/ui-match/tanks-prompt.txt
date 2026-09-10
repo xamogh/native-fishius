@@ -1,0 +1,18 @@
+Built-in image_gen tool used for image generation and transparency correction.
+The built-in output remained RGB. Exterior grayscale checkerboard was then removed mechanically using a connected exterior flood fill, as permitted by the Product Design image-to-code skill for generated assets. The five icons were not redrawn.
+Final atlas: assets/skin/tanks-atlas.png. Individual alpha icons: assets/skin/tank-1.png through tank-5.png.
+
+Use case: stylized-concept.
+Asset type: transparent PNG sprite atlas for an aquarium mobile game.
+Input image is reference for the five small glass aquarium thumbnail icons in its left panel, not an image to reproduce as a whole.
+Generate only these FIVE isolated thumbnail aquarium icons on a genuinely transparent alpha background, arranged as a strictly regular THREE-COLUMN, TWO-ROW grid, at 1536 x 1024 pixels. Each grid cell is 512 x 512. Place each icon centered in its cell at matching scale, about 400 pixels wide and 315 pixels tall, with generous fully transparent margins and no overlap between cells. Sixth bottom-right cell is completely empty and transparent. No grid lines or tiles behind icons.
+Reading order:
+1 TOP LEFT: Starter aquarium, clear bright cyan rectangular glass tank seen slightly from above and slightly from left, blue rim and thin glass edges, shallow golden sand along bottom, bright clean transparent blue water, no rocks or decorations.
+2 TOP CENTER: Reef aquarium, matching rectangular clear blue glass tank with gray rounded rocks, small tall green seaweed and pink coral in golden sand.
+3 TOP RIGHT: Deep aquarium, matching rectangular clear glass tank, midnight blue deep water, blue rocks and subtle distant small light rays.
+4 BOTTOM LEFT: Zen aquarium, matching rectangular blue glass tank, warm pale sand and two calm stacked gray rock formations to either side, sparse green seaweed, open center.
+5 BOTTOM CENTER: Aqua Palace aquarium, matching rectangular blue glass tank filled with ornate miniature golden palace arches, golden columns and a little green seaweed and coral at the bottom.
+Style: closely match the supplied thumbnail artwork: vivid polished toy-like 3D cartoon glass, bright saturated turquoise, clean dimensional illustrated outlines, glossy beveled translucent glass reflections. Aquariums are slightly landscape proportions with visible top and side glass edges. Keep all five consistent in camera angle, size, and style.
+Constraints: actual transparent alpha around every aquarium; no background color; no checkerboard baked in; no text, labels, numbers, UI, selection glows, fish or phone frame; exactly five tank icons and empty sixth cell.
+
+Use case: background-extraction. Edit this image, preserve all five aquarium icons EXACTLY, their positions, proportions, colors and grid. Remove the entire gray checkerboard background and all surrounding gray wavy texture, including the entire empty sixth cell. Output must be a PNG with a genuine alpha transparency channel and all background pixels alpha=0. DO NOT draw a checkerboard to imply transparency. DO NOT use gray or white as the background. It is crucial the pixels between and around the tanks are actually transparent, not painted. Keep tanks completely opaque and untouched, including blue glass. Canvas remains exactly 1536x1024. Output only those five isolated icons over actual alpha transparency.

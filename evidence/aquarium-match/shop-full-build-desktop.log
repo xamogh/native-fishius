@@ -1,0 +1,55 @@
+[0/2] Re-checking globbed directories...
+[1/7] Building CXX object CMakeFiles/aquarium_view.dir/src/view.cpp.o
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:49:164: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   49 |  auto id=f->id;float by=p.y+p.h-49,bw=(p.w-58)/3;if(f->dead){button("one-revive",{p.x+20,by,(p.w-50)*.5f,34},"REVIVE: 1 PEARL",[this,id]{command({Action::Revive,id});},purple);button("one-remove",{p.x+p.w*.5f+5,by,(p.w-50)*.5f,34},"REMOVE",[this,id]{if(command({Action::Remove,id}))open(Panel::None);},{237,170,146,255});}
+      |                                                                                                                                                                    ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:49:280: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   49 |  auto id=f->id;float by=p.y+p.h-49,bw=(p.w-58)/3;if(f->dead){button("one-revive",{p.x+20,by,(p.w-50)*.5f,34},"REVIVE: 1 PEARL",[this,id]{command({Action::Revive,id});},purple);button("one-remove",{p.x+p.w*.5f+5,by,(p.w-50)*.5f,34},"REMOVE",[this,id]{if(command({Action::Remove,id}))open(Panel::None);},{237,170,146,255});}
+      |                                                                                                                                                                                                                                                                                        ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:50:84: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   50 |  else{button("one-feed",{p.x+14,by,bw,34},"FEED",[this,id]{command({Action::Feed,id});},green);button("one-stash",{p.x+28+bw,by,bw,34},"STASH",[this,id]{if(command({Action::Stash,id}))open(Panel::None);},aqua);button("one-sell",{p.x+42+bw*2,by,bw,34},"SELL "+compact(s.saleCoins[f->age]),[this,id]{if(command({Action::Sell,id}))open(Panel::None);},cream);}
+      |                                                                                    ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:50:182: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   50 |  else{button("one-feed",{p.x+14,by,bw,34},"FEED",[this,id]{command({Action::Feed,id});},green);button("one-stash",{p.x+28+bw,by,bw,34},"STASH",[this,id]{if(command({Action::Stash,id}))open(Panel::None);},aqua);button("one-sell",{p.x+42+bw*2,by,bw,34},"SELL "+compact(s.saleCoins[f->age]),[this,id]{if(command({Action::Sell,id}))open(Panel::None);},cream);}
+      |                                                                                                                                                                                      ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:50:326: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   50 |  else{button("one-feed",{p.x+14,by,bw,34},"FEED",[this,id]{command({Action::Feed,id});},green);button("one-stash",{p.x+28+bw,by,bw,34},"STASH",[this,id]{if(command({Action::Stash,id}))open(Panel::None);},aqua);button("one-sell",{p.x+42+bw*2,by,bw,34},"SELL "+compact(s.saleCoins[f->age]),[this,id]{if(command({Action::Sell,id}))open(Panel::None);},cream);}
+      |                                                                                                                                                                                                                                                                                                                                      ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:59:113: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   59 |  float bw=(p.w-45)*.5f;button("send-gift",{p.x+15,p.y+p.h-54,bw,36},"SEND GIFT",[this]{command({Action::SendGift});},purple);button("daily-egg",{p.x+30+bw,p.y+p.h-54,bw,36},"DAILY EGG: 1 TOKEN",[this]{if(command({Action::DailyEgg}))open(Panel::None);},green);
+      |                                                                                                                 ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:59:230: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   59 |  float bw=(p.w-45)*.5f;button("send-gift",{p.x+15,p.y+p.h-54,bw,36},"SEND GIFT",[this]{command({Action::SendGift});},purple);button("daily-egg",{p.x+30+bw,p.y+p.h-54,bw,36},"DAILY EGG: 1 TOKEN",[this]{if(command({Action::DailyEgg}))open(Panel::None);},green);
+      |                                                                                                                                                                                                                                      ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:64:340: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   64 |  button("tutorial-action",{x+pw-76,y+6,67,28},step==4?"GROW":"NEXT",[this,step]{if(step==2||step==3)open(Panel::Shop);else if(step==6){open(Panel::Shop);category_=1;}else if(step==8)open(Panel::Quests);else if(step==9)open(Panel::Gifts);else if(step==1)setTool(Tool::Food);else if(step==5)setTool(Tool::Sell);else command({Action::Tutorial});},green);
+      |                                                                                                                                                                                                                                                                                                                                                    ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:86:51: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   86 |  if(tool_==Tool::Sell){if(command({Action::Sell,id})){netAt_=now_;selected_={};}return;}
+      |                                                   ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:87:304: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   87 |  if(tool_==Tool::Medicine){const auto* f=session_.domain().fish(id);if(f&&f->dead){selected_=id;open(Panel::Details);selected_=id;}else if(f&&careOf(*session_.domain().content().find(f->species),*f,session_.domain().state().simNow)==Care::Fed)toast("This fish is healthy.");else command({Action::Feed,id});return;}
+      |                                                                                                                                                                                                                                                                                                                ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:88:50: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   88 |  if(tool_==Tool::Stash){command({Action::Stash,id});return;}
+      |                                                  ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:9:39: warning: unused variable 'blue' [-Wunused-const-variable]
+    9 | constexpr Color aqua{159,225,216,255},blue{117,197,215,255},green{161,217,144,255},cream{247,235,197,255},muted{177,195,197,255},ink{32,77,96,255},purple{199,172,230,255};
+      |                                       ^~~~
+12 warnings generated.
+[2/7] Building CXX object CMakeFiles/aquarium_view_tests.dir/tests/view_tests.cpp.o
+/Users/amoghrijal/amogh/aquarium-native/tests/view_tests.cpp:40:7: warning: unused variable 'close' [-Wunused-variable]
+   40 |  auto close=[&]{SDL_Event e{};e.type=SDL_EVENT_KEY_DOWN;e.key.key=SDLK_ESCAPE;view.event(e,time);render();};
+      |       ^~~~~
+1 warning generated.
+[3/7] Building CXX object CMakeFiles/aquarium_view.dir/src/skin.cpp.o
+/Users/amoghrijal/amogh/aquarium-native/src/skin.cpp:154:110: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+  154 |   touchTarget("tank-select"+std::to_string(id),r,[this,id,tank]{if(tank){command({Action::SwitchTank,{}, {id}});open(Panel::None);}else{selectedTank_=id;}});
+      |                                                                                                              ^
+/Users/amoghrijal/amogh/aquarium-native/src/skin.cpp:9:62: warning: unused variable 'navy' [-Wunused-const-variable]
+    9 | constexpr Color white{250,254,255,255},pale{186,244,255,255},navy{5,62,113,255};
+      |                                                              ^~~~
+2 warnings generated.
+[4/7] Linking CXX shared library libaquarium_view.dylib
+[5/7] Linking CXX executable aquarium_view_tests
+[6/7] Linking CXX executable aquarium

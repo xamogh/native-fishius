@@ -1,0 +1,46 @@
+[
+  {
+    "state": "tanks",
+    "source_filename": "ChatGPT Image Sep 8, 2026, 04_25_18 PM (1).png",
+    "width": 1672,
+    "height": 941,
+    "reference": "reference-tanks.png",
+    "source_assignment": "Prior reference inspection identified Tanks, Shop, Collection, Settings in attachment order.",
+    "comparison_status": "Not visually certified",
+    "measured_geometry": "Only image dimensions are automatically measured here. Aquarium, panel, font and safe-area geometry require visual review.",
+    "native_capture": "Not produced"
+  },
+  {
+    "state": "shop",
+    "source_filename": "ChatGPT Image Sep 8, 2026, 04_25_18 PM (2).png",
+    "width": 1672,
+    "height": 941,
+    "reference": "reference-shop.png",
+    "source_assignment": "Prior reference inspection identified Tanks, Shop, Collection, Settings in attachment order.",
+    "comparison_status": "Not visually certified",
+    "measured_geometry": "Only image dimensions are automatically measured here. Aquarium, panel, font and safe-area geometry require visual review.",
+    "native_capture": "Not produced"
+  },
+  {
+    "state": "collection",
+    "source_filename": "ChatGPT Image Sep 8, 2026, 04_25_18 PM (3).png",
+    "width": 1672,
+    "height": 941,
+    "reference": "reference-collection.png",
+    "source_assignment": "Prior reference inspection identified Tanks, Shop, Collection, Settings in attachment order.",
+    "comparison_status": "Not visually certified",
+    "measured_geometry": "Only image dimensions are automatically measured here. Aquarium, panel, font and safe-area geometry require visual review.",
+    "native_capture": "Not produced"
+  },
+  {
+    "state": "settings",
+    "source_filename": "ChatGPT Image Sep 8, 2026, 04_25_18 PM (4).png",
+    "width": 1672,
+    "height": 941,
+    "reference": "reference-settings.png",
+    "source_assignment": "Prior reference inspection identified Tanks, Shop, Collection, Settings in attachment order.",
+    "comparison_status": "Not visually certified",
+    "measured_geometry": "Only image dimensions are automatically measured here. Aquarium, panel, font and safe-area geometry require visual review.",
+    "native_capture": "Not produced"
+  }
+]

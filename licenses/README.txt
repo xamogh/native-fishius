@@ -1,0 +1,1 @@
+Dependency license records are obtained from the exact pinned upstream release sources. User-supplied and locally recreated game art remains separate from third-party code. No font binaries are included. Font licensing records are downloaded by tools/setup_fonts.py on the developer machine.

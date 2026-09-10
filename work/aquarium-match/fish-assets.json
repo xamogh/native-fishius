@@ -1,0 +1,188 @@
+{
+  "guppy-lower": {
+    "name": "guppy-lower",
+    "path": "assets/aquarium/fish-guppy-lower.png",
+    "crop": [
+      1103,
+      926,
+      191,
+      120
+    ],
+    "normalized": [
+      710,
+      596,
+      123,
+      77
+    ],
+    "normalizedCropCenter": [
+      771.5,
+      634.5
+    ],
+    "sourceCropCenter": [
+      1198.5,
+      986
+    ],
+    "alphaBounds": [
+      11,
+      13,
+      181,
+      106
+    ],
+    "flipped": true
+  },
+  "guppy-tilted": {
+    "name": "guppy-tilted",
+    "path": "assets/aquarium/fish-guppy-tilted.png",
+    "crop": [
+      1522,
+      653,
+      190,
+      124
+    ],
+    "normalized": [
+      980,
+      420,
+      122,
+      80
+    ],
+    "normalizedCropCenter": [
+      1041,
+      460
+    ],
+    "sourceCropCenter": [
+      1617,
+      715
+    ],
+    "alphaBounds": [
+      9,
+      8,
+      179,
+      114
+    ],
+    "flipped": false
+  },
+  "guppy": {
+    "name": "guppy",
+    "path": "assets/aquarium/fish-guppy.png",
+    "crop": [
+      1105,
+      572,
+      165,
+      96
+    ],
+    "normalized": [
+      711,
+      368,
+      106,
+      62
+    ],
+    "normalizedCropCenter": [
+      764,
+      399
+    ],
+    "sourceCropCenter": [
+      1187.5,
+      620
+    ],
+    "alphaBounds": [
+      10,
+      8,
+      157,
+      91
+    ],
+    "flipped": true
+  },
+  "molly": {
+    "name": "molly",
+    "path": "assets/aquarium/fish-molly.png",
+    "crop": [
+      1268,
+      326,
+      245,
+      104
+    ],
+    "normalized": [
+      816,
+      210,
+      158,
+      67
+    ],
+    "normalizedCropCenter": [
+      895,
+      243.5
+    ],
+    "sourceCropCenter": [
+      1390.5,
+      378
+    ],
+    "alphaBounds": [
+      8,
+      6,
+      233,
+      100
+    ],
+    "flipped": false
+  },
+  "turn": {
+    "name": "turn",
+    "path": "assets/aquarium/fish-turn.png",
+    "crop": [
+      1066,
+      525,
+      56,
+      84
+    ],
+    "normalized": [
+      686,
+      338,
+      36,
+      54
+    ],
+    "normalizedCropCenter": [
+      704,
+      365
+    ],
+    "sourceCropCenter": [
+      1094,
+      567
+    ],
+    "alphaBounds": [
+      7,
+      10,
+      52,
+      79
+    ],
+    "flipped": false
+  },
+  "green": {
+    "name": "green",
+    "path": "assets/aquarium/fish-green.png",
+    "crop": [
+      1595,
+      917,
+      166,
+      109
+    ],
+    "normalized": [
+      1027,
+      590,
+      107,
+      70
+    ],
+    "normalizedCropCenter": [
+      1080.5,
+      625
+    ],
+    "sourceCropCenter": [
+      1678,
+      971.5
+    ],
+    "alphaBounds": [
+      8,
+      11,
+      158,
+      103
+    ],
+    "flipped": false
+  }
+}

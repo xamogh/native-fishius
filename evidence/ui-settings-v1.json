@@ -1,0 +1,13 @@
+{
+  "frames": 1,
+  "max_ms": 612.185083,
+  "metric": "CPU update and draw submission milliseconds; excludes vsync wait; includes capture when enabled",
+  "mobile_device_tested": false,
+  "p50_ms": 612.185083,
+  "p95_ms": 612.185083,
+  "p99_ms": 612.185083,
+  "renderer": "metal",
+  "scenario": "settings",
+  "window_height": 816,
+  "window_width": 1608
+}

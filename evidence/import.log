@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/mnt/data/aquarium-delivery/tools/import_content.py", line 110, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/mnt/data/aquarium-delivery/tools/import_content.py", line 94, in main
+    items,h=import_sheet(w,sheet,prefix);species.extend(items);headers[sheet]=h
+            ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/mnt/data/aquarium-delivery/tools/import_content.py", line 43, in import_sheet
+    level=get(r,['unlock level','min level','level'],['reward','xp'])
+  File "/mnt/data/aquarium-delivery/tools/import_content.py", line 38, in get
+    j=col(aliases,exclude,required);return default if j is None or j>=len(r) or r[j] is None else r[j]
+  File "/mnt/data/aquarium-delivery/tools/import_content.py", line 34, in col
+    if required:raise ValueError(f'{kind} missing {aliases}, headers={header}')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Coin Fish missing ['unlock level', 'min level', 'level'], headers=['id', 'fish', 'rarity', 'unlock lvl', 'buy coins', 'stage time hrs', 'stage time', 'adult in hrs', 'feed window hrs', 'sick grace hrs', 'target coins hr', 'target xp hr', 'buy xp', 'adult sell coins', 'adult sell xp', 'mature sell coins', 'young sell coins', 'junior sell coins', 'mature sell xp', 'young sell xp', 'junior sell xp', 'profit coins', 'coins hr', 'xp hr', 'coins action', 'xp action', 'primary role', 'secondary trait', 'playstyle', 'store badge', 'balance flag', 'real lifespan', 'real maturity', 'notes']

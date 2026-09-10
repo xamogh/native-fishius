@@ -1,0 +1,14 @@
+// Source silhouettes are masks for the supplied raster, not drawn artwork.
+process.chdir(require('path').resolve(__dirname,'../..'));
+const sharp=require(process.env.SHARP_MODULE || '/Users/amoghrijal/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/sharp');
+const fs=require('fs'),sx=2498/1608,sy=1290/830;
+(async()=>{const crop={left:Math.round(1160*sx),top:Math.round(3*sy),width:Math.round(270*sx),height:Math.round(90*sy)};
+const star='M 43 6.8 C 45 4.5 48.2 4.6 50.1 6.5 C 54.8 12.3 58.5 19.4 61.8 26.2 L 78.9 28.4 C 84.3 28.9 87.5 31.2 88.5 35.1 C 90 40.2 87.3 44.1 83.5 48.6 L 74.5 58.1 L 76.7 72.5 C 77.8 78.2 77.2 82.9 73.8 85.5 C 70.4 88.2 66.5 87.6 61.8 84.8 L 46.4 77 L 31.8 85.4 C 26.8 88.5 22.8 88.1 19.2 84.9 C 15.7 82 15.2 78.2 16.2 72.6 L 19.2 58.4 L 8.9 47.4 C 4.6 42.3 2.9 38.9 3.4 34.9 C 4 31.1 7 29.1 12.8 28.3 L 30.3 26.5 L 39.5 11.3 Z';
+const pill='M 83.8 29.9 L 241.5 29.9 C 253.8 30 263.4 39.3 263.4 51.8 C 263.4 64 254.5 73.5 241.4 73.5 L 74.9 73.5 L 74.5 58.1 L 83.5 48.6 C 89.1 42.5 90 37.5 87.5 33.2 Z';
+const svg=`<svg width="${crop.width}" height="${crop.height}" viewBox="0 0 270 90"><path fill="white" d="${pill}"/><path fill="white" d="${star}"/></svg>`;
+const [{data},{data:mask}]=await Promise.all([sharp('design/reference/aquarium.png').extract(crop).ensureAlpha().raw().toBuffer({resolveWithObject:true}),sharp(Buffer.from(svg)).ensureAlpha().raw().toBuffer({resolveWithObject:true})]);
+for(let i=0;i<crop.width*crop.height;i++)data[i*4+3]=mask[i*4+3];
+await sharp(data,{raw:{width:crop.width,height:crop.height,channels:4}}).png().toFile('assets/aquarium/level.png');
+const p=await sharp({create:{width:crop.width,height:crop.height,channels:3,background:'#04c7ef'}}).composite([{input:'assets/aquarium/level.png'}]).png().toBuffer();await sharp(p).resize({width:crop.width*2}).png().toFile('work/aquarium-match/level-preview.png');
+fs.writeFileSync('work/aquarium-match/level-asset.json',JSON.stringify({crop,normalizedCrop:[1160,3,270,90]},null,2));console.log(crop);
+})().catch(e=>{console.error(e);process.exitCode=1});

@@ -1,0 +1,21 @@
+[
+  {
+    "step": "fetch-json",
+    "command": [
+      "curl",
+      "--fail",
+      "--location",
+      "--retry",
+      "2",
+      "--max-time",
+      "60",
+      "https://raw.githubusercontent.com/nlohmann/json/v3.11.3/single_include/nlohmann/json.hpp",
+      "-o",
+      "/mnt/data/aquarium-delivery/third_party/nlohmann/json.hpp"
+    ],
+    "exit_code": 6,
+    "seconds": 8.021,
+    "status": "failed",
+    "log": "fetch-json.log"
+  }
+]

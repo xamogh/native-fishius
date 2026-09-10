@@ -1,0 +1,13 @@
+{
+  "frames": 60,
+  "max_ms": 598.784708,
+  "metric": "CPU update and draw submission milliseconds; excludes vsync wait; includes capture when enabled",
+  "mobile_device_tested": false,
+  "p50_ms": 0.162917,
+  "p95_ms": 6.336042,
+  "p99_ms": 78.508334,
+  "renderer": "metal",
+  "scenario": "aquarium",
+  "window_height": 393,
+  "window_width": 852
+}

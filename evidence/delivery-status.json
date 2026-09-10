@@ -1,0 +1,88 @@
+{
+  "generated_utc": "2026-09-08T14:56:55.277744+00:00",
+  "project_source_files": 9,
+  "cpp_source_lines": 917,
+  "packaged_file_count_before_report": 59,
+  "checks": [
+    {
+      "step": "fetch-json",
+      "command": [
+        "curl",
+        "--fail",
+        "--location",
+        "--retry",
+        "2",
+        "--max-time",
+        "60",
+        "https://raw.githubusercontent.com/nlohmann/json/v3.11.3/single_include/nlohmann/json.hpp",
+        "-o",
+        "/mnt/data/aquarium-delivery/third_party/nlohmann/json.hpp"
+      ],
+      "exit_code": 6,
+      "seconds": 8.021,
+      "status": "failed",
+      "log": "fetch-json.log"
+    },
+    {
+      "step": "configure-domain",
+      "status": "not run or no result recorded",
+      "exit_code": null
+    },
+    {
+      "step": "test-domain",
+      "status": "not run or no result recorded",
+      "exit_code": null
+    },
+    {
+      "step": "configure-desktop",
+      "status": "not run or no result recorded",
+      "exit_code": null
+    },
+    {
+      "step": "capture-tanks",
+      "status": "not run or no result recorded",
+      "exit_code": null
+    },
+    {
+      "step": "capture-shop",
+      "status": "not run or no result recorded",
+      "exit_code": null
+    },
+    {
+      "step": "capture-collection",
+      "status": "not run or no result recorded",
+      "exit_code": null
+    },
+    {
+      "step": "capture-settings",
+      "status": "not run or no result recorded",
+      "exit_code": null
+    },
+    {
+      "step": "performance-40-fish",
+      "status": "not run or no result recorded",
+      "exit_code": null
+    },
+    {
+      "step": "configure-sanitize",
+      "status": "not run or no result recorded",
+      "exit_code": null
+    },
+    {
+      "step": "test-sanitize",
+      "status": "not run or no result recorded",
+      "exit_code": null
+    },
+    {
+      "step": "asset-integrity",
+      "status": "not run or no result recorded",
+      "exit_code": null
+    }
+  ],
+  "font_binaries_in_delivery": false,
+  "android_device_verified": false,
+  "ios_device_verified": false,
+  "reference_fidelity_certified": false,
+  "complete_requested_scope": false,
+  "remaining_scope": "See docs/feature-matrix.md. Source implementation is not equivalent to verified completion."
+}
