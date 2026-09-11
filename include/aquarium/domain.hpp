@@ -26,12 +26,16 @@ struct Species {
  std::string id,modelId,name,rarity,role,badge,description,asset;
  int level{1};Currency currency{Currency::Coins};Amount price{},buyXp{};
  Millis stageMs{},feedMs{},graceMs{};std::array<Amount,5> saleCoins{},saleXp{};
- double nominalLength{38};int eventStart{},eventEnd{};bool annual{},oneTime{},nonResellable{},artReady{true};
+ double nominalLength{38};int eventStart{},eventEnd{};bool eventConfigured{true},annual{},oneTime{},nonResellable{},artReady{true};
 };
 struct Content {
  std::vector<Species> species;std::array<Amount,40> levels{};Json workbook;Json supplement;
- std::array<std::array<Amount,4>,5> tankCosts{{{{0,6000,12000,22000}},{{12000,28000,52000,85000}},{{40000,80000,140000,220000}},{{110000,220000,380000,600000}},{{250000,500000,850000,1300000}}}};
+ std::array<std::array<Amount,4>,5> tankCosts{};
+ std::array<std::array<Amount,4>,5> tankTokens{};
  std::array<int,5> tankLevels{1,7,16,25,34};
+ Money startingWallet;int startingTankCapacity{10};Amount levelTwoPearls{1};
+ std::vector<std::string> starters;
+ std::array<int,3> masteryTargets{5,25,100};
  const Species* find(std::string_view id)const;
  static Content fromJson(const Json&);
 };
@@ -40,16 +44,20 @@ struct Motion {
  double dashInterval{10},dashWait{5},dashDuration{.7},dashStrength{3.5},dashRemaining{};
  double turnDuration{.35},turnRemaining{},pitch{},speed{},noticeDelay{},mealDelay{};
  std::uint64_t foodTarget{};WorldPoint previous{};
+ // Presentation history is transient. It never changes care rules or saves.
+ double previousPhase{},previousPitch{},previousFacing{},previousSpeed{};bool hasPrevious{};
 };
+double motionFacing(const Motion&);
 struct Fish {
  FishId id;std::string species;TankId tank;WorldPoint position;int age{};bool egg{},dead{},stashed{};
  Millis growthMs{},hatchAt{},lastFedAt{},stashedAt{},boughtAt{};Motion motion;
 };
 struct Tank {TankId id;int slots{10};};
-struct Pellet {std::uint64_t id{};WorldPoint position;double speed{38},phase{},rotation{},rest{};};
+struct Pellet {std::uint64_t id{};WorldPoint position;double speed{38},phase{},rotation{},rest{};WorldPoint previous{};bool hasPrevious{};};
 struct DecorDef {std::string id,name;Amount price{};int score{};std::string source;};
 struct Decoration {std::uint64_t id{};std::string kind;TankId tank;WorldPoint position;};
-struct Quest {std::string id,label,event;int target{1};Amount coins{},xp{},tokens{},pearls{};bool weekly{};std::string source;};
+struct Quest {std::string id,label,event;int target{1};Amount coins{},xp{},tokens{},pearls{};bool weekly{};std::string source;int level{1};bool configured{true};std::string missing;};
+struct MasteryProgress {std::int64_t count{};int target{5},tier{};bool ready{},complete{};};
 struct ObjectiveProgress {std::int64_t count{};bool claimed{};};
 struct Settings {bool reducedMotion{},sound{true},music{true};double volume{.65};int tankLook{};};
 struct State {
@@ -58,6 +66,7 @@ struct State {
  std::vector<Fish> fish;std::vector<Decoration> decor;std::uint64_t nextFishId{1},nextDecorId{1},rngState{0x94239abd};
  std::vector<std::string> claims;std::map<std::string,ObjectiveProgress> quests;
  std::map<std::string,std::int64_t> totalEvents,mastery;std::vector<std::string> collected;
+ std::map<std::string,std::int64_t> adultRaised;
  Amount giftTokens{};int tutorialStep{};std::vector<std::string> tutorialClaims;
  std::int64_t dailyPeriod{-1},weeklyPeriod{-1},giftDay{-1},eggDay{-1};Settings settings;
 };
@@ -88,6 +97,7 @@ class Domain {
  const std::vector<Pellet>& pellets()const{return pellets_;}
  const std::vector<DecorDef>& decorations()const{return decorDefs_;}
  const std::vector<Quest>& questDefinitions()const{return questDefs_;}
+ MasteryProgress masteryProgress(std::string_view species)const;
  const Fish* fish(FishId)const;const Tank* tank(TankId)const;
  std::size_t living(TankId)const;int level()const{return levelFor(content_,state_.xp);}
  Result blocker(const Species&)const;Result execute(const Command&);

@@ -16,7 +16,13 @@ Food starts at 38 units per second, accelerates at 34, caps at 105, rests for 30
 
 ## Presentation
 
-The intended panel opening uses 220 milliseconds and cubic-bezier(0.34,1.56,0.64,1). Evaluate the time axis of the curve rather than treating its polynomial parameter as elapsed time. The tank drawer adds a 42-unit entrance offset over 240 milliseconds.
+Menu motion is defined in `src/menu_motion.cpp`. Panels grow from 84 percent width and 80 percent height, rise 24 logical units, and fade in. The spring peaks near 165 milliseconds and finishes settling by 580 milliseconds. Closing uses critical damping and finishes within 320 milliseconds. Reversing an opening or closing menu preserves its current position and velocity.
+
+Tanks expands from its lower left corner. Fish details expand from the pointer beside the selected fish. Select options open 45 milliseconds apart. Buttons compress to 95 percent over 75 milliseconds and spring back on release. Reduced Motion shows menus immediately and disables the spring effects.
+
+The renderer draws a panel and its text into one layer at the native display resolution. Tap targets use the same transform. A closing panel retains only its artwork, with no active controls, and releases the layer when the exit ends. The Shop backdrop fades with the panel and consumes dismissal taps.
+
+`View::prepareMenus` prepares the initial menu layouts, artwork and text before the first interactive frame. This prevents the first Shop or Mastery tap from decoding images and rasterizing labels. It uses a separate view and does not change saved state. Startup preparation time is reported as `menu_preparation_ms` by `--report`. The `menu_motion` test checks first-open cache reuse, animation timing, tap targets and Reduced Motion on phone and tablet layouts.
 
 The jar pivots around its mouth. The net pivots around its hoop. Receipts last 800 milliseconds. Toast fade begins near 1.9 seconds and removal near 2.4 seconds. A repeated action should replace or restart a bounded effect, not build an unlimited queue.
 

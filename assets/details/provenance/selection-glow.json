@@ -1,0 +1,31 @@
+{
+  "asset": "selection-glow.png",
+  "mode": "built-in imagegen",
+  "prompt": "Use case: stylized-concept. Asset type: transparent selected-fish highlight VFX sprite for a glossy casual underwater aquarium game. Generate exactly ONE isolated oval cyan-white radial underwater glow and eight small glossy aqua soap bubbles around its outer perimeter, closely matching the reference effect around the black Molly fish near the bottom. Reference image is style/composition guidance only. The glow has a small bright soft white center, many delicate wide cyan rays extending radially, with all rays and haze fading smoothly to alpha zero at the outside. Bubbles have translucent cyan interiors, thin brilliant aqua rims, one white specular highlight, and vary in small sizes. Composition: horizontal oval, aspect 1.8:1, centered effect, modest transparent margin, roughly 400 by 220 intended game pixels. Leave center empty so a separate fish sprite can be composited over it. Real RGBA transparency is required, including translucent rays fading to transparent. No opaque background. No checkerboard painted into the pixels. No black background. No fish, animal, interface panel, text, stars, scenery, seabed, floor, ground shadow, or other objects. Output only the isolated glow and perimeter bubbles on a genuinely transparent background.",
+  "generatedSource": "/Users/amoghrijal/.codex/generated_images/01a08bcd-386f-78c3-9661-194932e53030/exec-9d1e237c-239a-4a72-a873-ed891e93874a.png",
+  "referenceImage": "/var/folders/85/chd10vj53d11mj25yvpk5z640000gn/T/TemporaryItems/NSIRD_screencaptureui_7cKWL0/Screenshot 2026-09-10 at 8.31.43 PM.png",
+  "referenceRole": "Visual guidance for selected-fish glow below details panel; no copied reference pixels",
+  "dimensions": [
+    1682,
+    935
+  ],
+  "alpha": {
+    "min": 0,
+    "max": 254,
+    "zeroFraction": 0.4167034406455264,
+    "partialFraction": 0.5832965593544736,
+    "boundsNonzero": [
+      0,
+      9,
+      1672,
+      935
+    ],
+    "boundsAbove8": [
+      147,
+      120,
+      1542,
+      830
+    ]
+  },
+  "visualAcceptance": "Single cyan-white radial oval glow, eight perimeter bubbles, no fish, text, panel or scenery. Real RGBA alpha; all pixels remain translucent. Source copied byte-for-byte."
+}

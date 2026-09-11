@@ -1,0 +1,17 @@
+Test project /Users/amoghrijal/amogh/aquarium-native/build/desktop
+    Start 1: domain_contract
+1/4 Test #1: domain_contract ..................   Passed    0.07 sec
+    Start 2: mobile_ui_controls
+2/4 Test #2: mobile_ui_controls ...............   Passed   27.50 sec
+    Start 3: fish_details_controls
+3/4 Test #3: fish_details_controls ............   Passed   21.31 sec
+    Start 4: rendering_quality
+4/4 Test #4: rendering_quality ................   Passed    1.08 sec
+
+100% tests passed out of 4
+
+Label Time Summary:
+native    =  49.90 sec*proc (3 tests)
+ui        =  49.90 sec*proc (3 tests)
+
+Total Test time (real) =  49.97 sec

@@ -1,0 +1,19 @@
+{
+  "speciesId": "sakuraGoldfish",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-ffa0-7b00-a9bc-b223ed4e7ba7/exec-3274447f-c21a-4b4d-8329-bd4c7c82634d.png",
+  "generator": "built-in image_gen",
+  "prompts": [
+    "Use case: stylized-concept. Asset type: transparent aquarium mobile-game fish sprite. Generate one Sakura Goldfish in strict LEFT-facing side profile, head left and tail right. Fancy goldfish with a delightfully rounded plump creamy-white body, delicate rosy-pink blossom-inspired petal markings on its scales and cheeks, large friendly dark eye, graceful long flowing translucent pink-white double fantail and elegant fins resembling soft cherry petals. This is a fish with natural blossom-inspired color markings, not a fish carrying flowers: NO actual flowers or separate petals. Glossy colorful polished cartoon aquarium-game shading, clean dark navy contour, smooth sculpted highlights and silhouette readable at small mobile size. Single isolated whole fish, entire long tail and every fin visible with modest transparent padding. Genuinely transparent alpha background, no backdrop color, no checkerboard drawn, no halo outside body, no text, UI, bubbles, props, extra objects or cast shadow."
+  ],
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "visualAcceptance": "Accepted left-facing pink-white fancy goldfish with full flowing tail, blossom-inspired markings and no separate props. Event visual is interpretation of roster name.",
+  "width": 1536,
+  "height": 1024,
+  "hasAlpha": true,
+  "alphaMin": 0,
+  "alphaMax": 254,
+  "fullyTransparentPixels": 741704
+}

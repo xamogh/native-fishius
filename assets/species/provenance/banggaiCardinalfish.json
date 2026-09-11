@@ -1,0 +1,24 @@
+{
+  "speciesId": "banggaiCardinalfish",
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-09-10",
+  "sourcePath": "/Users/amoghrijal/.codex/generated_images/01a08ba7-f708-7373-a9d8-9962c1b37fe2/exec-273ccd2f-5293-4d54-b72c-6a838804e220.png",
+  "prompt": "Use case: stylized-concept. Generate a new single transparent fish sprite: Banggai Cardinalfish Pterapogon kauderni in full LEFT-facing profile. Compact SILVER WHITE body with EXACTLY THREE broad BLACK VERTICAL BANDS: one through the eye, one immediately behind gill, and one at the rear of body. The broad silver area between middle and rear band has WHITE spots but absolutely no fourth dark body stripe. Long tasseled first dorsal, swept second dorsal, long triangular anal fins, deeply forked long tail, dark fins with white polka-dot spots. Clear friendly glossy eye. Bright polished mobile aquarium-game cartoon illustration, round sculpted shiny gradients, crisp dark outlines, strong silhouette and complete fin tips. One isolated entire specimen centered in image with generous empty margin around all fins. TRUE transparent alpha PNG: empty background pixels must be alpha zero, preserve real alpha channel. No painted checkerboard, background, halo, shadows, water, bubbles, text, UI, props or other fish.",
+  "previousPrompts": [
+    "Use case: stylized-concept. Asset type: transparent aquarium game fish sprite. Draw ONE Banggai Cardinalfish (Pterapogon kauderni) in LEFT-facing whole-body side profile, head on left, deeply forked tail on right. Exact distinctive anatomy: compact silver-white slightly tall body with THREE bold vertical black bands, first through eye, second behind gills, third toward rear; white speckles between bands and across the elongated dark fins; tall tasseled first dorsal, very elongated pointed second dorsal and anal fins, deeply forked caudal fin with long tapering lobes. One large glossy friendly eye. Polished cheerful colorful cartoon mobile aquarium-game illustration, sculpted silver blue highlights, clean thick navy-black outline, easy-to-read species pattern at small size. Entire single fish centered with all exceptionally long fin tips and forked tail fully inside frame, 8 percent transparent margin, no cropping. True transparent PNG alpha: EVERY background pixel alpha zero, with no visible background or halo. No extra creatures, water, bubbles, props, cast shadows, backdrop, text, logo, UI, watermark.",
+    "Use case: precise-object-edit. Edit only the body stripe pattern of this Banggai Cardinalfish sprite. It currently has four major black vertical bars; the species must have exactly THREE. Preserve the eye-crossing black bar and the black bar near the rear of body. Merge the two adjacent center black bars into ONE black band immediately behind the gill, with the remaining belly/back silver-white and speckled. Thus three bars total across the fish: through eye, immediately behind gills, near rear body. Preserve all fins, their white dots, shape, forked tail, glossy cartoon rendering, left-facing profile, size and placement. Maintain TRUE transparent alpha outside the fish, alpha zero for every background pixel. Do not introduce background, halos, text, shadow, objects, or extra creatures.",
+    "Use case: background-extraction. Remove the entire gray checkerboard backdrop from this isolated Banggai Cardinalfish and output the EXACT fish as a true TRANSPARENT PNG cutout with real alpha channel. Background pixels must have alpha value zero, not a painted checkerboard. Keep the single fish's shape, colors, three black body bands, fin spots, LEFT-facing pose, full thin fin tips and forked tail intact. Only the fish is visible; no background, halo, ground, shadow, checkerboard or other objects. Return image with actual alpha transparency."
+  ],
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "anatomySources": [
+    "https://www.georgiaaquarium.org/animal/banggai-cardinalfish/",
+    "https://www.fisheries.noaa.gov/species/banggai-cardinalfish"
+  ],
+  "width": 1374,
+  "height": 1145,
+  "hasAlpha": true,
+  "visualAcceptance": "Accepted left profile, exactly three broad black body bands, speckled silver body, white-spotted dark long fins and deeply forked tail. First attempt had four bars; two edit attempts corrected bands but lacked alpha. Final fresh generation fixes both and preserves entire fins. Transparent alpha verified."
+}

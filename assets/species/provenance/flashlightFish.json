@@ -1,0 +1,33 @@
+{
+  "id": "flashlightFish",
+  "asset": "assets/species/flashlightFish.png",
+  "generationMode": "built-in image_gen",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-a451-7472-9e64-1f534f9b6a30/exec-89493259-3ec4-4367-8041-565cf5832e84.png",
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "referenceRole": "Style only, visually inspected before generation. Text style description supplied, not image edits.",
+  "prompt": "Use case: stylized-concept\nAsset type: a single production-ready fish sprite for a native mobile aquarium game.\nPrimary request: Generate ONE isolated, complete specimen with its head facing LEFT and tail to the RIGHT, readable at a small mobile-game size. True transparent background with alpha, no solid background or checkerboard drawn in.\nStyle reference: existing game guppy and clownfish sprites use glossy colorful polished cartoon illustration, smooth 3D-like shading, bright top highlights, a crisp clean dark outline and expressive friendly eyes. Match that look, but preserve the requested species' distinctive anatomy. Do NOT copy guppy or clownfish anatomy, patterns, silhouette or tail.\nComposition: horizontal side profile, entire body, all fins and appendages present and not cropped, centered with modest transparent padding.\nAvoid: text, letters, labels, UI, additional specimens, bubbles, props, water, scenery, floor, ground shadows, backdrop, frame, watermark.\nSubject: Flashlight Fish: a compact dark navy-black deepwater fish with an unmistakable prominent glowing cyan-white oval light organ immediately beneath/behind each eye on its cheeks. One cheek light fully visible on the camera side and a hint of the far light in a slight three-quarter left-facing profile. Bioluminescence remains ON THE FISH, not a surrounding halo. Big friendly dark eyes, navy dorsal fins, a moderately forked tail, reflective electric-blue edge highlights to keep its dark silhouette readable. The cheek light must be visually separated from the eyeball so it reads as a light organ. Whole body facing LEFT.",
+  "acceptance": "Accepted: left-facing dark navy fish with distinct glowing cyan cheek organ separate from eye, bright blue silhouette accents and complete fins/tail.",
+  "imageProcessing": "Raw generated image copied without edits. Alpha preserved.",
+  "imageAudit": {
+    "width": 1536,
+    "height": 1024,
+    "channels": 4,
+    "hasAlpha": true,
+    "alphaMin": 0,
+    "alphaMax": 254,
+    "fullyTransparentPixels": 978886,
+    "fullyTransparentPercent": 62.24,
+    "nonTransparentBorderPixels": 1,
+    "sha256": "ff58cda04cf047fc90ca152f2ba64642ba0bab43a7a8a9339a963513c1edc22a",
+    "maximumBorderAlpha": 1,
+    "visibleBoundsAlphaAbove16": {
+      "x": 88,
+      "y": 98,
+      "width": 1427,
+      "height": 795
+    }
+  }
+}

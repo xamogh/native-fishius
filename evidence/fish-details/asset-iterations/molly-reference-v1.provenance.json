@@ -1,0 +1,29 @@
+{
+  "asset": "molly-reference.png",
+  "created": "2026-09-10",
+  "generator": "built-in image_gen",
+  "mode": "text-only generation",
+  "source_reference": "Screenshot 2026-09-10 at 8.31.43 PM.png; bottom-center selected black Molly fish",
+  "source_file": "/Users/amoghrijal/.codex/generated_images/01a08bcd-978a-7642-a58a-f08b6977a2d0/exec-33bb7b95-a559-4f01-86fd-fb2d120962a9.png",
+  "prompt": "Create a production PNG sprite with a REAL TRANSPARENT BACKGROUND and RGBA ALPHA CHANNEL. The image must have actual transparent pixels outside the fish, not a painted checkerboard or any opaque background. One single complete black Molly aquarium fish, facing LEFT in clean side view, centered with modest transparent padding. Cute polished glossy 3D cartoon mobile-game style. Body is a compact rounded oval, head round with short gently pursed mouth at the left, one expressive large golden yellow eye with black pupil and tiny white glint, slightly serious but friendly expression. Black and charcoal blue scales with subtle cool glossy highlights. Very tall swept-back black dorsal fin, gracefully rounded top and scalloped rear edge, reaching about half a body-height above the back. Large fully spread flowing black fantail to the right, broad vertically, upper and lower lobes rounded, delicate curved fin rays with silver gray highlights. Visible small black fan-shaped pectoral fin behind the gill, rounded black pelvic fin below the body, and small black anal fin near the tail. Strong crisp dark silhouette, all fins complete and uncut. Fish overall width about 1.65 times its overall height including dorsal fin, head and body about 62 percent of total width. High quality smooth rendering with clear gold eye. The black fish alone is the entire asset. No water, no scenery, no aquarium panel, no text, no bubbles, no halo, no light rays, no shadows. Use true alpha transparency outside the complete fish silhouette.",
+  "validation": {
+    "format": "RGBA PNG",
+    "width": 1610,
+    "height": 977,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "fully_transparent_pixels": 729165,
+    "total_pixels": 1572970,
+    "alpha_nonzero_bounds": [
+      0,
+      17,
+      1579,
+      959
+    ],
+    "orientation": "left",
+    "artwork": "Whole black Molly with golden eye, tall dorsal fin and broad flowing fantail. Complete fins and genuine alpha. Recreation has a more detailed scale texture and smaller eye than the screenshot; it is not an exact extraction."
+  },
+  "provenance": "Generated image copied byte-for-byte; no manual image edits or postprocessing. Two earlier reference-based outputs rejected because they had painted checkerboard backgrounds."
+}

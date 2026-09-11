@@ -1,0 +1,27 @@
+{
+  "id": "picassoTriggerfish",
+  "generator": "built-in image_gen",
+  "date": "2026-09-10",
+  "prompt": "Use case: stylized-concept. Asset type: transparent PNG fish sprite for a mobile aquarium game. Draw ONE isolated PICASSO TRIGGERFISH (Rhinecanthus aculeatus) in full-body SIDE PROFILE facing LEFT with face LEFT and tail RIGHT. Clear angular diamondlike triggerfish body, pointed snout, small puckered mouth, eye high on head, small erect dorsal trigger spine and fan tail. Cream-white lower body and pale tan upper body with the species' bold abstract geometric BLACK, YELLOW and electric BLUE markings: black wedge patches, golden yellow line running back from the mouth, bright blue lines crossing the forehead/eye area, black angular striping near the rear tail stem. Must look unmistakably like a Picasso Triggerfish, not a clownfish, tang, angelfish or generic fish. Match existing aquarium sprites' polished colorful glossy cartoon-game shading, bold clean dark outline, readable silhouette and charming large shiny eye, keeping distinctive anatomy and color pattern. Complete fish including all fins and tail, modest transparent padding on every side. TRUE TRANSPARENT ALPHA background. No colored backdrop, glow aura, floor, cast shadow, bubbles, water scene, props, text, UI, labels, watermark, other fish or sprite sheet.",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-50cc-76f2-a405-6125adffd466/exec-c0207079-1bf6-42fd-8d07-478314a1c6bc.png",
+  "output": "assets/species/picassoTriggerfish.png",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "alpha": true,
+  "acceptance": "Single left-facing Picasso triggerfish with angular cream/tan body, bold black geometric patches, yellow mouth stripe, electric-blue facial lines and dorsal trigger spine. All fins and full tail visible. Generated alpha retained unchanged.",
+  "validation": {
+    "width": 1536,
+    "height": 1024,
+    "channels": 4,
+    "fullyTransparentPixels": 776052,
+    "maxAlpha": 254,
+    "fishBounds": [
+      28,
+      9,
+      1486,
+      932
+    ]
+  }
+}

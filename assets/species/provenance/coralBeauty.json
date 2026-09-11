@@ -1,0 +1,18 @@
+{
+  "speciesId": "coralBeauty",
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-09-10",
+  "sourcePath": "/Users/amoghrijal/.codex/generated_images/01a08ba7-f708-7373-a9d8-9962c1b37fe2/exec-2bcee5db-b5aa-435d-a653-81b91088383f.png",
+  "prompt": "Use case: stylized-concept. Asset type: transparent aquarium game fish sprite. Generate ONE Coral Beauty dwarf angelfish (Centropyge bispinosa), entirely visible in strict LEFT-facing side profile, small mouth and eye on left, rounded tail right. Species recognizable compact high oval laterally-compressed body, vivid orange-gold central flank with delicate narrow violet vertical stripe marks fading into deep blue-purple head/back/belly, long continuous dorsal and anal fins following body curves with luminous royal-blue rims, purple rounded tail, orange pectoral fin. One friendly clear glossy eye, not a realistic photo. Bright polished cartoon aquarium-game art: silky glossy sculpted color gradients, strong clean dark navy outline, detailed but readable fin rays, charming proportions that keep recognizable dwarf angelfish silhouette. Entire single fish centered with all fins and tail fully inside image, 8 percent transparent padding. Actual transparent alpha PNG, empty background pixels must all be alpha zero. No painted checkerboard, water, bubbles, glow halo, backdrop, props, ground, shadow, UI, text, watermark or other animals.",
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "anatomySources": [
+    "https://www.aquariumofpacific.org/onlinelearningcenter/species/coral_beauty_angelfish"
+  ],
+  "width": 1536,
+  "height": 1024,
+  "hasAlpha": true,
+  "visualAcceptance": "Accepted left profile, compact oval dwarf-angelfish silhouette, deep purple-blue head/fins, orange center with fine vertical purple stripes, blue fin rims. Entire tail/fins, transparent alpha verified."
+}

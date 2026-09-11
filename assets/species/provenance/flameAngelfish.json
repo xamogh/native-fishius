@@ -1,0 +1,27 @@
+{
+  "id": "flameAngelfish",
+  "generator": "built-in image_gen",
+  "date": "2026-09-10",
+  "prompt": "Use case: stylized-concept. Asset type: transparent PNG fish sprite for a mobile aquarium game. Create ONE isolated FLAME ANGELFISH (Centropyge loricula), whole body side view facing LEFT with its face on the LEFT and tail on the RIGHT. The earlier guppy and clownfish images are STYLE REFERENCE ONLY: match their glossy, colorful, polished cartoon aquarium-game shading, clean dark outline, expressive bright eye and simple readable silhouette. Species anatomy must be a laterally compressed oval deep-bodied angelfish with warm red-orange body, several narrow vertical black bars, dark dorsal/anal fins with electric-blue edges, and a yellow-orange tail. Recognizable at small mobile size. Include all fins and complete tail without cropping, modest transparent padding around all sides. Truly transparent alpha background. No backdrop color, white background, checkerboard pixels, floor, shadow, bubbles, plants, props, UI, text, watermark, extra fish or sprite sheet. The output must contain only this single fish on actual transparency.",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-50cc-76f2-a405-6125adffd466/exec-87dae9c8-1932-41f3-a151-63cd458ce3c8.png",
+  "output": "assets/species/flameAngelfish.png",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "alpha": true,
+  "acceptance": "Single whole-body left-facing flame angelfish with orange-red body, black vertical bars, blue fin edges. Complete fins, readable silhouette, transparent alpha retained unchanged. 823959 fully transparent pixels, mostly alpha 252-253 within fish.",
+  "validation": {
+    "width": 1536,
+    "height": 1024,
+    "channels": 4,
+    "fullyTransparentPixels": 823959,
+    "maxAlpha": 254,
+    "fishBounds": [
+      147,
+      58,
+      1295,
+      884
+    ]
+  }
+}

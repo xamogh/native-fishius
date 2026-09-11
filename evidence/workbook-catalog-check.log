@@ -1,0 +1,60 @@
+{
+  "workbook": "/Users/amoghrijal/amogh/aquarium-native/design/aquarium_game_master_model.xlsx",
+  "content": "/Users/amoghrijal/amogh/aquarium-native/assets/content.json",
+  "errors": [],
+  "unverified": [
+    {
+      "field": "species.anniversaryRainbowfish.calendar_dates",
+      "reason": "Workbook specifies one week yearly but no dates; correctly left unconfigured.",
+      "requires_configuration": true
+    },
+    {
+      "field": "tank_expansion_levels.capacity_mapping",
+      "reason": "Workbook names Medium and Large beats but does not map all four slot steps to unlock levels.",
+      "requires_configuration": true
+    },
+    {
+      "field": "supplement.mastery",
+      "reason": "XP reward amounts; Statue decoration specification",
+      "requires_configuration": true
+    },
+    {
+      "field": "supplement.collection",
+      "reason": "Theme names and species membership; Pearl or event egg reward",
+      "requires_configuration": true
+    },
+    {
+      "field": "supplement.decorator",
+      "reason": "Decor score thresholds; Cosmetic titles and backgrounds",
+      "requires_configuration": true
+    },
+    {
+      "field": "supplement.daily_egg",
+      "reason": "Weekly drop tables and probabilities; Retired fish pool; Resale guardrail",
+      "requires_configuration": true
+    },
+    {
+      "field": "supplement.quests",
+      "reason": "Daily coin pool split; Tank Stylist decor score reward; Neighbor Helper coin and token rewards",
+      "requires_configuration": true
+    }
+  ],
+  "source_conflicts": [
+    {
+      "field": "species.bubbleEyeGoldfish.one_time",
+      "authoritative_cell": "Premium Fish!AA2",
+      "conflicting_summary_cells": [
+        "Unlock Plan!F5",
+        "Balance Review!B6",
+        "Inputs!F111",
+        "XP Curve!H5"
+      ],
+      "resolution": "Detailed catalog explicitly says repeatable; summaries are stale."
+    }
+  ],
+  "explicit_field_checks": 1439,
+  "derived_field_checks": 233,
+  "structural_pass": true,
+  "independent_workbook_parity_verified": true,
+  "all_runtime_values_specified_by_workbook": false
+}

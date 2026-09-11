@@ -1,94 +1,140 @@
 {
+  "quest_definitions": [
+    {
+      "id": "daily-feed",
+      "label": "Feed Caretaker",
+      "event": "healthy-feed",
+      "target": 8,
+      "level": 2,
+      "weekly": false,
+      "configured": true,
+      "missing": "Per-quest coin amount is not specified.",
+      "source": {
+        "sheet": "Quests & Live Ops",
+        "row": 4,
+        "column": 3
+      }
+    },
+    {
+      "id": "daily-sell",
+      "label": "Junior Seller",
+      "event": "sell",
+      "target": 2,
+      "level": 2,
+      "weekly": false,
+      "configured": true,
+      "missing": "Per-quest coin amount is not specified.",
+      "source": {
+        "sheet": "Quests & Live Ops",
+        "row": 5,
+        "column": 3
+      }
+    },
+    {
+      "id": "daily-adult",
+      "label": "Adult Harvest",
+      "event": "adult-sale",
+      "target": 1,
+      "level": 3,
+      "weekly": false,
+      "configured": true,
+      "missing": "Per-quest coin amount is not specified.",
+      "source": {
+        "sheet": "Quests & Live Ops",
+        "row": 6,
+        "column": 3
+      }
+    },
+    {
+      "id": "daily-decor",
+      "label": "Tank Stylist",
+      "event": "decor",
+      "target": 1,
+      "level": 3,
+      "weekly": false,
+      "configured": true,
+      "missing": "Decor score reward is not specified.",
+      "source": {
+        "sheet": "Quests & Live Ops",
+        "row": 7,
+        "column": 3
+      }
+    },
+    {
+      "id": "weekly-collection",
+      "label": "Collection Chapter",
+      "event": "collection",
+      "target": 5,
+      "level": 8,
+      "weekly": true,
+      "configured": false,
+      "missing": "Collection themes and Pearl or event egg rewards are not specified.",
+      "source": {
+        "sheet": "Quests & Live Ops",
+        "row": 8,
+        "column": 3
+      }
+    },
+    {
+      "id": "weekly-helper",
+      "label": "Neighbor Helper",
+      "event": "gift",
+      "target": 5,
+      "level": 5,
+      "weekly": true,
+      "configured": false,
+      "missing": "Gift Token and coin rewards are not specified.",
+      "source": {
+        "sheet": "Quests & Live Ops",
+        "row": 9,
+        "column": 3
+      }
+    }
+  ],
   "quests_by_level": {
     "1": {},
     "2": {
       "daily-feed": {
-        "coins": 263,
         "xp": 5,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 4,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 4,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 263,
-        "xp": 6,
+        "xp": 5,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 4,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 4,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 263,
         "xp": 6,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 4,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 4,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 263,
-        "xp": 19,
+        "xp": 3,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 4,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 4,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 263,
-        "xp": 19,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 4,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 4,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -99,110 +145,53 @@
             "sheet": "Quest Scaling",
             "row": 4,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 5,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 4,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "3": {
       "daily-feed": {
-        "coins": 271,
         "xp": 8,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 5,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 5,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 271,
-        "xp": 10,
+        "xp": 9,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 5,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 5,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 271,
         "xp": 10,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 5,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 5,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 271,
-        "xp": 32,
+        "xp": 5,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 5,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 5,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 271,
-        "xp": 32,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 5,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 5,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -213,110 +202,53 @@
             "sheet": "Quest Scaling",
             "row": 5,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 8,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 5,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "4": {
       "daily-feed": {
-        "coins": 278,
         "xp": 13,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 6,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 6,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 278,
-        "xp": 16,
+        "xp": 14,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 6,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 6,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 278,
         "xp": 16,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 6,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 6,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 278,
-        "xp": 51,
+        "xp": 8,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 6,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 6,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 278,
-        "xp": 51,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 6,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 6,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -327,110 +259,53 @@
             "sheet": "Quest Scaling",
             "row": 6,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 13,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 6,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "5": {
       "daily-feed": {
-        "coins": 286,
         "xp": 17,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 7,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 7,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 286,
-        "xp": 22,
+        "xp": 19,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 7,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 7,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 286,
         "xp": 22,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 7,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 7,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 286,
-        "xp": 69,
+        "xp": 11,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 7,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 7,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 286,
-        "xp": 69,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 7,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 7,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -441,110 +316,53 @@
             "sheet": "Quest Scaling",
             "row": 7,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 17,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 7,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "6": {
       "daily-feed": {
-        "coins": 294,
         "xp": 25,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 8,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 8,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 294,
-        "xp": 31,
+        "xp": 27,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 8,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 8,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 294,
         "xp": 31,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 8,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 8,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 294,
-        "xp": 98,
+        "xp": 15,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 8,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 8,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 294,
-        "xp": 98,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 8,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 8,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -555,110 +373,53 @@
             "sheet": "Quest Scaling",
             "row": 8,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 25,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 8,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "7": {
       "daily-feed": {
-        "coins": 844,
         "xp": 33,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 9,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 9,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 844,
-        "xp": 42,
+        "xp": 37,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 9,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 9,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 844,
         "xp": 42,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 9,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 9,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 844,
-        "xp": 131,
+        "xp": 19,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 9,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 9,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 844,
-        "xp": 131,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 9,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 9,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -669,110 +430,53 @@
             "sheet": "Quest Scaling",
             "row": 9,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 33,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 9,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "8": {
       "daily-feed": {
-        "coins": 866,
         "xp": 43,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 10,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 10,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 866,
-        "xp": 55,
+        "xp": 48,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 10,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 10,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 866,
         "xp": 55,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 10,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 10,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 866,
-        "xp": 173,
+        "xp": 27,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 10,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 10,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 866,
-        "xp": 173,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 10,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 10,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -783,110 +487,53 @@
             "sheet": "Quest Scaling",
             "row": 10,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 43,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 10,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "9": {
       "daily-feed": {
-        "coins": 887,
         "xp": 56,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 11,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 11,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 887,
-        "xp": 71,
+        "xp": 62,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 11,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 11,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 887,
         "xp": 71,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 11,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 11,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 887,
-        "xp": 222,
+        "xp": 33,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 11,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 11,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 887,
-        "xp": 222,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 11,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 11,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -897,110 +544,53 @@
             "sheet": "Quest Scaling",
             "row": 11,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 56,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 11,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "10": {
       "daily-feed": {
-        "coins": 909,
         "xp": 72,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 12,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 12,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 909,
-        "xp": 92,
+        "xp": 81,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 12,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 12,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 909,
         "xp": 92,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 12,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 12,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 909,
-        "xp": 289,
+        "xp": 44,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 12,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 12,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 909,
-        "xp": 289,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 12,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 12,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -1011,110 +601,53 @@
             "sheet": "Quest Scaling",
             "row": 12,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 72,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 12,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "11": {
       "daily-feed": {
-        "coins": 930,
         "xp": 93,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 13,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 13,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 930,
-        "xp": 118,
+        "xp": 104,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 13,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 13,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 930,
         "xp": 118,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 13,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 13,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 930,
-        "xp": 370,
+        "xp": 55,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 13,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 13,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 930,
-        "xp": 370,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 13,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 13,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -1125,110 +658,53 @@
             "sheet": "Quest Scaling",
             "row": 13,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 93,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 13,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "12": {
       "daily-feed": {
-        "coins": 952,
         "xp": 116,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 14,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 14,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 952,
-        "xp": 148,
+        "xp": 130,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 14,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 14,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 952,
         "xp": 148,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 14,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 14,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 952,
-        "xp": 463,
+        "xp": 69,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 14,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 14,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 952,
-        "xp": 463,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 14,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 14,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -1239,110 +715,53 @@
             "sheet": "Quest Scaling",
             "row": 14,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 116,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 14,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "13": {
       "daily-feed": {
-        "coins": 974,
         "xp": 143,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 15,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 15,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 974,
-        "xp": 183,
+        "xp": 160,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 15,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 15,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 974,
         "xp": 183,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 15,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 15,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 974,
-        "xp": 571,
+        "xp": 85,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 15,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 15,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 974,
-        "xp": 571,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 15,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 15,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -1353,110 +772,53 @@
             "sheet": "Quest Scaling",
             "row": 15,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 143,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 15,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "14": {
       "daily-feed": {
-        "coins": 995,
         "xp": 174,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 16,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 16,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 995,
-        "xp": 222,
+        "xp": 195,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 16,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 16,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 995,
         "xp": 222,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 16,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 16,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 995,
-        "xp": 695,
+        "xp": 104,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 16,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 16,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 995,
-        "xp": 695,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 16,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 16,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -1467,110 +829,53 @@
             "sheet": "Quest Scaling",
             "row": 16,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 174,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 16,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "15": {
       "daily-feed": {
-        "coins": 1016,
         "xp": 209,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 17,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 17,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 1016,
-        "xp": 267,
+        "xp": 234,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 17,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 17,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 1016,
         "xp": 267,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 17,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 17,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 1016,
-        "xp": 834,
+        "xp": 124,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 17,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 17,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 1016,
-        "xp": 834,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 17,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 17,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -1581,110 +886,53 @@
             "sheet": "Quest Scaling",
             "row": 17,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 209,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 17,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "16": {
       "daily-feed": {
-        "coins": 1706,
         "xp": 248,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 18,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 18,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 1706,
-        "xp": 317,
+        "xp": 277,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 18,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 18,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 1706,
         "xp": 317,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 18,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 18,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 1706,
-        "xp": 991,
+        "xp": 149,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 18,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 18,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 1706,
-        "xp": 991,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 18,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 18,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -1695,110 +943,53 @@
             "sheet": "Quest Scaling",
             "row": 18,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 248,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 18,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "17": {
       "daily-feed": {
-        "coins": 1741,
         "xp": 291,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 19,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 19,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 1741,
-        "xp": 373,
+        "xp": 326,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 19,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 19,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 1741,
         "xp": 373,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 19,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 19,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 1741,
-        "xp": 1165,
+        "xp": 175,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 19,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 19,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 1741,
-        "xp": 1165,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 19,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 19,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -1809,110 +1000,53 @@
             "sheet": "Quest Scaling",
             "row": 19,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 291,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 19,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "18": {
       "daily-feed": {
-        "coins": 1776,
         "xp": 331,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 20,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 20,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 1776,
-        "xp": 423,
+        "xp": 370,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 20,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 20,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 1776,
         "xp": 423,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 20,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 20,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 1776,
-        "xp": 1322,
+        "xp": 198,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 20,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 20,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 1776,
-        "xp": 1322,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 20,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 20,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -1923,110 +1057,53 @@
             "sheet": "Quest Scaling",
             "row": 20,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 331,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 20,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "19": {
       "daily-feed": {
-        "coins": 1811,
         "xp": 373,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 21,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 21,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 1811,
-        "xp": 477,
+        "xp": 417,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 21,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 21,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 1811,
         "xp": 477,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 21,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 21,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 1811,
-        "xp": 1490,
+        "xp": 223,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 21,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 21,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 1811,
-        "xp": 1490,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 21,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 21,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -2037,110 +1114,53 @@
             "sheet": "Quest Scaling",
             "row": 21,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 373,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 21,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "20": {
       "daily-feed": {
-        "coins": 1847,
         "xp": 417,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 22,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 22,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 1847,
-        "xp": 534,
+        "xp": 467,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 22,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 22,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 1847,
         "xp": 534,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 22,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 22,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 1847,
-        "xp": 1669,
+        "xp": 251,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 22,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 22,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 1847,
-        "xp": 1669,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 22,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 22,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -2151,110 +1171,53 @@
             "sheet": "Quest Scaling",
             "row": 22,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 417,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 22,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "21": {
       "daily-feed": {
-        "coins": 1883,
         "xp": 465,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 23,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 23,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 1883,
-        "xp": 595,
+        "xp": 520,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 23,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 23,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 1883,
         "xp": 595,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 23,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 23,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 1883,
-        "xp": 1858,
+        "xp": 278,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 23,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 23,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 1883,
-        "xp": 1858,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 23,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 23,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -2265,110 +1228,53 @@
             "sheet": "Quest Scaling",
             "row": 23,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 465,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 23,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "22": {
       "daily-feed": {
-        "coins": 1918,
         "xp": 514,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 24,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 24,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 1918,
-        "xp": 658,
+        "xp": 576,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 24,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 24,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 1918,
         "xp": 658,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 24,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 24,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 1918,
-        "xp": 2057,
+        "xp": 309,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 24,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 24,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 1918,
-        "xp": 2057,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 24,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 24,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -2379,110 +1285,53 @@
             "sheet": "Quest Scaling",
             "row": 24,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 514,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 24,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "23": {
       "daily-feed": {
-        "coins": 1953,
         "xp": 567,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 25,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 25,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 1953,
-        "xp": 725,
+        "xp": 635,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 25,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 25,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 1953,
         "xp": 725,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 25,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 25,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 1953,
-        "xp": 2267,
+        "xp": 340,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 25,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 25,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 1953,
-        "xp": 2267,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 25,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 25,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -2493,110 +1342,53 @@
             "sheet": "Quest Scaling",
             "row": 25,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 567,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 25,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "24": {
       "daily-feed": {
-        "coins": 1989,
         "xp": 622,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 26,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 26,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 1989,
-        "xp": 796,
+        "xp": 697,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 26,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 26,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 1989,
         "xp": 796,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 26,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 26,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 1989,
-        "xp": 2488,
+        "xp": 373,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 26,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 26,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 1989,
-        "xp": 2488,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 26,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 26,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -2607,110 +1399,53 @@
             "sheet": "Quest Scaling",
             "row": 26,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 622,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 26,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "25": {
       "daily-feed": {
-        "coins": 3036,
         "xp": 680,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 27,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 27,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 3036,
-        "xp": 870,
+        "xp": 761,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 27,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 27,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 3036,
         "xp": 870,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 27,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 27,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 3036,
-        "xp": 2719,
+        "xp": 408,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 27,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 27,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 3036,
-        "xp": 2719,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 27,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 27,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -2721,110 +1456,53 @@
             "sheet": "Quest Scaling",
             "row": 27,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 680,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 27,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "26": {
       "daily-feed": {
-        "coins": 3089,
         "xp": 740,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 28,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 28,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 3089,
-        "xp": 947,
+        "xp": 829,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 28,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 28,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 3089,
         "xp": 947,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 28,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 28,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 3089,
-        "xp": 2960,
+        "xp": 444,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 28,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 28,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 3089,
-        "xp": 2960,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 28,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 28,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -2835,110 +1513,53 @@
             "sheet": "Quest Scaling",
             "row": 28,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 740,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 28,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "27": {
       "daily-feed": {
-        "coins": 3142,
         "xp": 803,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 29,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 29,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 3142,
-        "xp": 1028,
+        "xp": 899,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 29,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 29,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 3142,
         "xp": 1028,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 29,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 29,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 3142,
-        "xp": 3212,
+        "xp": 482,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 29,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 29,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 3142,
-        "xp": 3212,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 29,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 29,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -2949,110 +1570,53 @@
             "sheet": "Quest Scaling",
             "row": 29,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 803,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 29,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "28": {
       "daily-feed": {
-        "coins": 3196,
         "xp": 869,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 30,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 30,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 3196,
-        "xp": 1112,
+        "xp": 973,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 30,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 30,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 3196,
         "xp": 1112,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 30,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 30,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 3196,
-        "xp": 3475,
+        "xp": 521,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 30,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 30,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 3196,
-        "xp": 3475,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 30,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 30,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -3063,110 +1627,53 @@
             "sheet": "Quest Scaling",
             "row": 30,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 869,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 30,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "29": {
       "daily-feed": {
-        "coins": 3249,
         "xp": 937,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 31,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 31,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 3249,
-        "xp": 1199,
+        "xp": 1049,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 31,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 31,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 3249,
         "xp": 1199,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 31,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 31,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 3249,
-        "xp": 3748,
+        "xp": 563,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 31,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 31,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 3249,
-        "xp": 3748,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 31,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 31,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -3177,110 +1684,53 @@
             "sheet": "Quest Scaling",
             "row": 31,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 937,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 31,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "30": {
       "daily-feed": {
-        "coins": 3301,
         "xp": 1044,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 32,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 32,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 3301,
-        "xp": 1336,
+        "xp": 1169,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 32,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 32,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 3301,
         "xp": 1336,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 32,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 32,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 3301,
-        "xp": 4175,
+        "xp": 626,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 32,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 32,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 3301,
-        "xp": 4175,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 32,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 32,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -3291,110 +1741,53 @@
             "sheet": "Quest Scaling",
             "row": 32,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 1044,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 32,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "31": {
       "daily-feed": {
-        "coins": 3354,
         "xp": 1159,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 33,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 33,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 3354,
-        "xp": 1483,
+        "xp": 1298,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 33,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 33,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 3354,
         "xp": 1483,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 33,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 33,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 3354,
-        "xp": 4634,
+        "xp": 694,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 33,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 33,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 3354,
-        "xp": 4634,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 33,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 33,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -3405,110 +1798,53 @@
             "sheet": "Quest Scaling",
             "row": 33,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 1159,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 33,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "32": {
       "daily-feed": {
-        "coins": 3408,
         "xp": 1282,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 34,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 34,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 3408,
-        "xp": 1640,
+        "xp": 1435,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 34,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 34,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 3408,
         "xp": 1640,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 34,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 34,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 3408,
-        "xp": 5126,
+        "xp": 769,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 34,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 34,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 3408,
-        "xp": 5126,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 34,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 34,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -3519,110 +1855,53 @@
             "sheet": "Quest Scaling",
             "row": 34,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 1282,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 34,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "33": {
       "daily-feed": {
-        "coins": 3461,
         "xp": 1413,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 35,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 35,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 3461,
-        "xp": 1808,
+        "xp": 1582,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 35,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 35,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 3461,
         "xp": 1808,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 35,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 35,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 3461,
-        "xp": 5651,
+        "xp": 848,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 35,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 35,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 3461,
-        "xp": 5651,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 35,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 35,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -3633,110 +1912,53 @@
             "sheet": "Quest Scaling",
             "row": 35,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 1413,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 35,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "34": {
       "daily-feed": {
-        "coins": 4430,
         "xp": 1553,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 36,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 36,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 4430,
-        "xp": 1988,
+        "xp": 1739,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 36,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 36,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 4430,
         "xp": 1988,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 36,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 36,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 4430,
-        "xp": 6211,
+        "xp": 931,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 36,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 36,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 4430,
-        "xp": 6211,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 36,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 36,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -3747,110 +1969,53 @@
             "sheet": "Quest Scaling",
             "row": 36,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 1553,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 36,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "35": {
       "daily-feed": {
-        "coins": 4497,
         "xp": 1702,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 37,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 37,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 4497,
-        "xp": 2179,
+        "xp": 1906,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 37,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 37,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 4497,
         "xp": 2179,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 37,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 37,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 4497,
-        "xp": 6808,
+        "xp": 1021,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 37,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 37,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 4497,
-        "xp": 6808,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 37,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 37,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -3861,110 +2026,53 @@
             "sheet": "Quest Scaling",
             "row": 37,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 1702,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 37,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "36": {
       "daily-feed": {
-        "coins": 4565,
         "xp": 1807,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 38,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 38,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 4565,
-        "xp": 2313,
+        "xp": 2024,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 38,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 38,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 4565,
         "xp": 2313,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 38,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 38,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 4565,
-        "xp": 7228,
+        "xp": 1084,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 38,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 38,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 4565,
-        "xp": 7228,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 38,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 38,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -3975,110 +2083,53 @@
             "sheet": "Quest Scaling",
             "row": 38,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 1807,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 38,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "37": {
       "daily-feed": {
-        "coins": 4632,
         "xp": 1916,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 39,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 39,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 4632,
-        "xp": 2452,
+        "xp": 2145,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 39,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 39,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 4632,
         "xp": 2452,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 39,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 39,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 4632,
-        "xp": 7662,
+        "xp": 1149,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 39,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 39,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 4632,
-        "xp": 7662,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 39,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 39,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -4089,110 +2140,53 @@
             "sheet": "Quest Scaling",
             "row": 39,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 1916,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 39,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "38": {
       "daily-feed": {
-        "coins": 4698,
         "xp": 2027,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 40,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 40,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 4698,
-        "xp": 2595,
+        "xp": 2270,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 40,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 40,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 4698,
         "xp": 2595,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 40,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 40,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 4698,
-        "xp": 8108,
+        "xp": 1216,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 40,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 40,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 4698,
-        "xp": 8108,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 40,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 40,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -4203,110 +2197,53 @@
             "sheet": "Quest Scaling",
             "row": 40,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 2027,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 40,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "39": {
       "daily-feed": {
-        "coins": 4765,
         "xp": 2142,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 41,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 41,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 4765,
-        "xp": 2741,
+        "xp": 2399,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 41,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 41,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 4765,
         "xp": 2741,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 41,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 41,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 4765,
-        "xp": 8567,
+        "xp": 1285,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 41,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 41,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 4765,
-        "xp": 8567,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 41,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 41,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -4317,110 +2254,53 @@
             "sheet": "Quest Scaling",
             "row": 41,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 2142,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 41,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     },
     "40": {
       "daily-feed": {
-        "coins": 5110,
         "xp": 2260,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 42,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 42,
             "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Feed Caretaker XP"
           }
         }
       },
       "daily-sell": {
-        "coins": 5110,
-        "xp": 2892,
+        "xp": 2531,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 42,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 42,
-            "column": 6,
-            "heading": "adult harvest xp"
+            "column": 5,
+            "heading": "Junior Seller XP"
           }
         }
       },
       "daily-adult": {
-        "coins": 5110,
         "xp": 2892,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 42,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 42,
             "column": 6,
-            "heading": "adult harvest xp"
+            "heading": "Adult Harvest XP"
           }
         }
       },
       "daily-decor": {
-        "coins": 5110,
-        "xp": 9039,
+        "xp": 1356,
         "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 42,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
           "xp": {
             "sheet": "Quest Scaling",
             "row": 42,
-            "column": 3,
-            "heading": "daily xp pool"
-          }
-        }
-      },
-      "daily-gift": {
-        "coins": 5110,
-        "xp": 9039,
-        "source": {
-          "coins": {
-            "sheet": "Quest Scaling",
-            "row": 42,
-            "column": 9,
-            "heading": "est daily coin pool"
-          },
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 42,
-            "column": 3,
-            "heading": "daily xp pool"
+            "column": 7,
+            "heading": "Tank Stylist XP"
           }
         }
       },
@@ -4431,26 +2311,682 @@
             "sheet": "Quest Scaling",
             "row": 42,
             "column": 8,
-            "heading": "weekly xp"
-          }
-        }
-      },
-      "weekly-care": {
-        "xp": 2260,
-        "source": {
-          "xp": {
-            "sheet": "Quest Scaling",
-            "row": 42,
-            "column": 4,
-            "heading": "feed caretaker xp"
+            "heading": "Weekly XP"
           }
         }
       }
     }
   },
+  "quest_pools_by_level": {
+    "2": {
+      "daily_xp": 19,
+      "daily_coins": 263,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 4,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 4,
+          "column": 9
+        }
+      }
+    },
+    "3": {
+      "daily_xp": 32,
+      "daily_coins": 271,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 5,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 5,
+          "column": 9
+        }
+      }
+    },
+    "4": {
+      "daily_xp": 51,
+      "daily_coins": 278,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 6,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 6,
+          "column": 9
+        }
+      }
+    },
+    "5": {
+      "daily_xp": 69,
+      "daily_coins": 286,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 7,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 7,
+          "column": 9
+        }
+      }
+    },
+    "6": {
+      "daily_xp": 98,
+      "daily_coins": 294,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 8,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 8,
+          "column": 9
+        }
+      }
+    },
+    "7": {
+      "daily_xp": 131,
+      "daily_coins": 844,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 9,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 9,
+          "column": 9
+        }
+      }
+    },
+    "8": {
+      "daily_xp": 173,
+      "daily_coins": 866,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 10,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 10,
+          "column": 9
+        }
+      }
+    },
+    "9": {
+      "daily_xp": 222,
+      "daily_coins": 887,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 11,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 11,
+          "column": 9
+        }
+      }
+    },
+    "10": {
+      "daily_xp": 289,
+      "daily_coins": 909,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 12,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 12,
+          "column": 9
+        }
+      }
+    },
+    "11": {
+      "daily_xp": 370,
+      "daily_coins": 930,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 13,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 13,
+          "column": 9
+        }
+      }
+    },
+    "12": {
+      "daily_xp": 463,
+      "daily_coins": 952,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 14,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 14,
+          "column": 9
+        }
+      }
+    },
+    "13": {
+      "daily_xp": 571,
+      "daily_coins": 974,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 15,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 15,
+          "column": 9
+        }
+      }
+    },
+    "14": {
+      "daily_xp": 695,
+      "daily_coins": 995,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 16,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 16,
+          "column": 9
+        }
+      }
+    },
+    "15": {
+      "daily_xp": 834,
+      "daily_coins": 1016,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 17,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 17,
+          "column": 9
+        }
+      }
+    },
+    "16": {
+      "daily_xp": 991,
+      "daily_coins": 1706,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 18,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 18,
+          "column": 9
+        }
+      }
+    },
+    "17": {
+      "daily_xp": 1165,
+      "daily_coins": 1741,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 19,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 19,
+          "column": 9
+        }
+      }
+    },
+    "18": {
+      "daily_xp": 1322,
+      "daily_coins": 1776,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 20,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 20,
+          "column": 9
+        }
+      }
+    },
+    "19": {
+      "daily_xp": 1490,
+      "daily_coins": 1811,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 21,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 21,
+          "column": 9
+        }
+      }
+    },
+    "20": {
+      "daily_xp": 1669,
+      "daily_coins": 1847,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 22,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 22,
+          "column": 9
+        }
+      }
+    },
+    "21": {
+      "daily_xp": 1858,
+      "daily_coins": 1883,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 23,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 23,
+          "column": 9
+        }
+      }
+    },
+    "22": {
+      "daily_xp": 2057,
+      "daily_coins": 1918,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 24,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 24,
+          "column": 9
+        }
+      }
+    },
+    "23": {
+      "daily_xp": 2267,
+      "daily_coins": 1953,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 25,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 25,
+          "column": 9
+        }
+      }
+    },
+    "24": {
+      "daily_xp": 2488,
+      "daily_coins": 1989,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 26,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 26,
+          "column": 9
+        }
+      }
+    },
+    "25": {
+      "daily_xp": 2719,
+      "daily_coins": 3036,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 27,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 27,
+          "column": 9
+        }
+      }
+    },
+    "26": {
+      "daily_xp": 2960,
+      "daily_coins": 3089,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 28,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 28,
+          "column": 9
+        }
+      }
+    },
+    "27": {
+      "daily_xp": 3212,
+      "daily_coins": 3142,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 29,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 29,
+          "column": 9
+        }
+      }
+    },
+    "28": {
+      "daily_xp": 3475,
+      "daily_coins": 3196,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 30,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 30,
+          "column": 9
+        }
+      }
+    },
+    "29": {
+      "daily_xp": 3748,
+      "daily_coins": 3249,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 31,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 31,
+          "column": 9
+        }
+      }
+    },
+    "30": {
+      "daily_xp": 4175,
+      "daily_coins": 3301,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 32,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 32,
+          "column": 9
+        }
+      }
+    },
+    "31": {
+      "daily_xp": 4634,
+      "daily_coins": 3354,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 33,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 33,
+          "column": 9
+        }
+      }
+    },
+    "32": {
+      "daily_xp": 5126,
+      "daily_coins": 3408,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 34,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 34,
+          "column": 9
+        }
+      }
+    },
+    "33": {
+      "daily_xp": 5651,
+      "daily_coins": 3461,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 35,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 35,
+          "column": 9
+        }
+      }
+    },
+    "34": {
+      "daily_xp": 6211,
+      "daily_coins": 4430,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 36,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 36,
+          "column": 9
+        }
+      }
+    },
+    "35": {
+      "daily_xp": 6808,
+      "daily_coins": 4497,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 37,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 37,
+          "column": 9
+        }
+      }
+    },
+    "36": {
+      "daily_xp": 7228,
+      "daily_coins": 4565,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 38,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 38,
+          "column": 9
+        }
+      }
+    },
+    "37": {
+      "daily_xp": 7662,
+      "daily_coins": 4632,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 39,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 39,
+          "column": 9
+        }
+      }
+    },
+    "38": {
+      "daily_xp": 8108,
+      "daily_coins": 4698,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 40,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 40,
+          "column": 9
+        }
+      }
+    },
+    "39": {
+      "daily_xp": 8567,
+      "daily_coins": 4765,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 41,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 41,
+          "column": 9
+        }
+      }
+    },
+    "40": {
+      "daily_xp": 9039,
+      "daily_coins": 5110,
+      "source": {
+        "daily_xp": {
+          "sheet": "Quest Scaling",
+          "row": 42,
+          "column": 3
+        },
+        "daily_coins": {
+          "sheet": "Quest Scaling",
+          "row": 42,
+          "column": 9
+        }
+      }
+    }
+  },
+  "mastery": {
+    "adult_targets": [
+      5,
+      25,
+      100
+    ],
+    "source": {
+      "sheet": "Quests & Live Ops",
+      "row": 10,
+      "column": 3
+    },
+    "missing": [
+      "XP reward amounts",
+      "Statue decoration specification"
+    ]
+  },
+  "missing_specifications": {
+    "mastery": [
+      "XP reward amounts",
+      "Statue decoration specification"
+    ],
+    "collection": [
+      "Theme names and species membership",
+      "Pearl or event egg reward"
+    ],
+    "decorator": [
+      "Decor score thresholds",
+      "Cosmetic titles and backgrounds"
+    ],
+    "daily_egg": [
+      "Weekly drop tables and probabilities",
+      "Retired fish pool",
+      "Resale guardrail"
+    ],
+    "quests": [
+      "Daily coin pool split",
+      "Tank Stylist decor score reward",
+      "Neighbor Helper coin and token rewards"
+    ]
+  },
   "onboarding_rewards": {},
   "import_status": {
     "quest_profiles": 39,
-    "onboarding_bonus_actions": []
+    "quest_definitions": 6,
+    "tutorial": "deferred"
   }
 }

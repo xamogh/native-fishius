@@ -1,0 +1,29 @@
+PASS all 46 species: canonical artwork, transparent silhouettes, Collection masks and dead variants
+PASS 804x415: source starters, all 46 Shop and Collection entries, purchase gates, mastery, modal backdrop, navigation and fish controls
+PASS 852x393: source starters, all 46 Shop and Collection entries, purchase gates, mastery, modal backdrop, navigation and fish controls
+PASS 667x375: source starters, all 46 Shop and Collection entries, purchase gates, mastery, modal backdrop, navigation and fish controls
+TAP 152,1135 panel=1 tool=0
+TAP 626.5,640 panel=1 tool=0
+TAP 529.5,1087 panel=1 tool=0
+TAP 529.5,1087 panel=1 tool=0
+TAP 529.5,1087 panel=1 tool=0
+TAP 344,768 panel=1 tool=0
+TAP 1540.5,834 panel=4 tool=0
+TAP 1477.5,126.5 panel=0 tool=0
+TAP 152,1135 panel=1 tool=0
+TAP 1540.5,545 panel=0 tool=0
+TAP 152,1135 panel=1 tool=0
+TAP 1540.5,978 panel=0 tool=4
+TAP 969.5,1148 panel=0 tool=0
+TAP 152,1135 panel=1 tool=0
+TAP 525.5,608.5 panel=0 tool=0
+TAP 1471,88 panel=7 tool=0
+TAP 1315,367 panel=0 tool=0
+TAP 1545,88 panel=5 tool=0
+TAP 1364,345 panel=0 tool=0
+TAP 213,49.5172 panel=8 tool=0
+TAP 1315,367 panel=0 tool=0
+TAP 1396,1131 panel=2 tool=0
+TAP 75,220 panel=2 tool=0
+TAP 1489.7,690 panel=0 tool=5
+FAIL Wrong panel after nav1 at 1024x768: expected 2, got 0

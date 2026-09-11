@@ -1,0 +1,18 @@
+{
+  "speciesId": "shyHamlet",
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-09-10",
+  "sourcePath": "/Users/amoghrijal/.codex/generated_images/01a08ba7-f708-7373-a9d8-9962c1b37fe2/exec-2fde1d18-ec45-414b-8d5c-2414d320d9d6.png",
+  "prompt": "Use case: stylized-concept. Asset type: isolated transparent aquarium game fish sprite. Draw ONE Shy Hamlet reef fish, Hypoplectrus guttavarius, LEFT-facing full side profile with head on left. Species recognition is essential: compact high-backed basslet/hamlet shape with a blunt snout, rich yellow head and upper neck, a broad continuous chocolate-black to indigo area covering the center/rear body extending to the tail base, small luminous blue speckles around the yellow cheek, dark rounded tail edged warm gold, small golden pelvic and pectoral fins and long subtly spined dorsal. This is a yellow-head dark-body hamlet, not a vertically striped clownfish. Glossy polished cartoon aquarium game illustration, sculpted cheerful highlights, clean dark navy outline, a clear friendly round eye, crisp silhouettes recognizable at small mobile scale. True TRANSPARENT PNG alpha; all empty background pixels alpha zero. One entire fish centered, complete tail and fins with 8 percent transparent margin. No other creatures, water, bubbles, halo, backdrop, shadow, prop, text, logo, UI, or watermark.",
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "anatomySources": [
+    "https://biogeodb.stri.si.edu/caribbean/en/thefishes/species/3505"
+  ],
+  "width": 1536,
+  "height": 1024,
+  "hasAlpha": true,
+  "visualAcceptance": "Accepted left profile with yellow head, dark center/rear and blue cheek speckles. Corrected task shorthand to actual shy-hamlet color pattern using primary species source. Complete fins/tail, transparent alpha verified."
+}

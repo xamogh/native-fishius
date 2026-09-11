@@ -1,0 +1,13 @@
+[0/2] Re-checking globbed directories...
+[1/6] Building CXX object CMakeFiles/aquarium_view.dir/src/skin.cpp.o
+/Users/amoghrijal/amogh/aquarium-native/src/skin.cpp:213:110: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+  213 |   touchTarget("tank-select"+std::to_string(id),r,[this,id,tank]{if(tank){command({Action::SwitchTank,{}, {id}});open(Panel::None);}else{selectedTank_=id;}});
+      |                                                                                                              ^
+/Users/amoghrijal/amogh/aquarium-native/src/skin.cpp:9:62: warning: unused variable 'navy' [-Wunused-const-variable]
+    9 | constexpr Color white{250,254,255,255},pale{186,244,255,255},navy{5,62,113,255};
+      |                                                              ^~~~
+2 warnings generated.
+[2/6] Linking CXX shared library libaquarium_view.dylib
+[3/6] Linking CXX executable aquarium_details_tests
+[4/6] Linking CXX executable aquarium_view_tests
+[5/6] Linking CXX executable aquarium

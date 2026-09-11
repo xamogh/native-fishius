@@ -1,0 +1,27 @@
+{
+  "id": "longhornCowfish",
+  "generator": "built-in image_gen",
+  "date": "2026-09-10",
+  "prompt": "Use case: stylized-concept. Asset type: transparent PNG fish sprite for a mobile aquarium game. Create ONE isolated LONGHORN COWFISH (Lactoria cornuta), whole body side view facing LEFT with its face on the LEFT and tail on the RIGHT. Earlier existing guppy and clownfish sprites are STYLE REFERENCE ONLY: match their glossy bright polished cartoon shading, smooth surfaces, clean dark outline and charming large eye. The cowfish has a chunky box-shaped armored lemon-yellow body covered in small orange and pale turquoise spots, a small puckered snout and TWO clearly visible long tapered horns projecting FORWARD from above the eyes, plus small lower rear spines. Keep its long narrow tail stem and rounded fan tail fully visible on the right. Its boxy body and unmistakable forward horns are the defining species traits. Fish anatomy should read as a cowfish, not a generic oval yellow fish. Friendly compact mobile-game silhouette with complete fins, tail and horns and 5 percent padding on every side. True transparent alpha background. Only this one fish. No backdrop, glow aura, colored haze, shadow, floor, bubbles, water, plants, props, UI, text, watermark or sprite sheet.",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-50cc-76f2-a405-6125adffd466/exec-105f2acf-7e8f-4932-9ded-3dcd9a799c5f.png",
+  "output": "assets/species/longhornCowfish.png",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "alpha": true,
+  "acceptance": "Single left-facing yellow spotted cowfish with two long forward horns, angular boxy body, rear spines and long tail stem. Full silhouette and all horns/fins preserved. Generated alpha retained unchanged.",
+  "validation": {
+    "width": 1536,
+    "height": 1024,
+    "channels": 4,
+    "fullyTransparentPixels": 979681,
+    "maxAlpha": 254,
+    "fishBounds": [
+      42,
+      131,
+      1467,
+      703
+    ]
+  }
+}

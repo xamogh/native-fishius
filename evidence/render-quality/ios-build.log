@@ -1,0 +1,193 @@
+[0/2] Re-checking globbed directories...
+[1/2] Re-running CMake...
+-- Using the multi-header code from /private/tmp/claude-501/-Users-amoghrijal-amogh-aquarium-native/f5ff1595-ed3a-4725-ba81-a7f0e8d9d04f/scratchpad/deps-cache/json-src/include/
+-- Could NOT find PkgConfig (missing: PKG_CONFIG_EXECUTABLE) 
+-- Could NOT find LibUSB (missing: LibUSB_LIBRARY LibUSB_INCLUDE_PATH) (found version "LibUSB_VERSION-NOTFOUND")
+-- 
+-- SDL3 was configured with the following options:
+-- 
+-- Platform: iOS
+-- 64-bit:   TRUE
+-- Compiler: /usr/bin/cc
+-- Revision: SDL3-3.2.20-HEAD-HASH-NOTFOUND
+-- Vendor:   
+-- 
+-- Subsystems:
+--   Audio:    ON
+--   Video:    ON
+--   GPU:      ON
+--   Render:   ON
+--   Camera:   ON
+--   Joystick: ON
+--   Haptic:   ON
+--   Hidapi:   ON
+--   Power:    ON
+--   Sensor:   ON
+--   Dialog:   ON
+-- 
+-- Options:
+--   SDL_ALSA                    (Wanted: OFF): OFF
+--   SDL_ALSA_SHARED             (Wanted: OFF): OFF
+--   SDL_ALTIVEC                 (Wanted: OFF): OFF
+--   SDL_ARMNEON                 (Wanted: OFF): OFF
+--   SDL_ASAN                    (Wanted: OFF): OFF
+--   SDL_ASSEMBLY                (Wanted: ON): ON
+--   SDL_ASSERTIONS              (Wanted: auto): auto
+--   SDL_AVX                     (Wanted: OFF): OFF
+--   SDL_AVX2                    (Wanted: OFF): OFF
+--   SDL_AVX512F                 (Wanted: OFF): OFF
+--   SDL_BACKGROUNDING_SIGNAL    (Wanted: OFF): OFF
+--   SDL_CCACHE                  (Wanted: OFF): OFF
+--   SDL_CLANG_TIDY              (Wanted: OFF): OFF
+--   SDL_CLOCK_GETTIME           (Wanted: OFF): OFF
+--   SDL_COCOA                   (Wanted: ON): OFF
+--   SDL_DBUS                    (Wanted: OFF): OFF
+--   SDL_DEPS_SHARED             (Wanted: ON): OFF
+--   SDL_DIRECTX                 (Wanted: OFF): OFF
+--   SDL_DISKAUDIO               (Wanted: ON): ON
+--   SDL_DUMMYAUDIO              (Wanted: ON): ON
+--   SDL_DUMMYCAMERA             (Wanted: ON): ON
+--   SDL_DUMMYVIDEO              (Wanted: ON): ON
+--   SDL_EXAMPLES                (Wanted: OFF): OFF
+--   SDL_EXAMPLES_LINK_SHARED    (Wanted: OFF): OFF
+--   SDL_FOREGROUNDING_SIGNAL    (Wanted: OFF): OFF
+--   SDL_GCC_ATOMICS             (Wanted: ON): ON
+--   SDL_GPU_DXVK                (Wanted: OFF): OFF
+--   SDL_HIDAPI                  (Wanted: ON): ON
+--   SDL_HIDAPI_JOYSTICK         (Wanted: ON): ON
+--   SDL_HIDAPI_LIBUSB           (Wanted: ON): OFF
+--   SDL_HIDAPI_LIBUSB_SHARED    (Wanted: ON): OFF
+--   SDL_IBUS                    (Wanted: OFF): OFF
+--   SDL_INSTALL                 (Wanted: OFF): OFF
+--   SDL_INSTALL_TESTS           (Wanted: OFF): OFF
+--   SDL_JACK                    (Wanted: OFF): OFF
+--   SDL_JACK_SHARED             (Wanted: OFF): OFF
+--   SDL_KMSDRM                  (Wanted: OFF): OFF
+--   SDL_KMSDRM_SHARED           (Wanted: OFF): OFF
+--   SDL_LASX                    (Wanted: OFF): OFF
+--   SDL_LIBC                    (Wanted: ON): ON
+--   SDL_LIBICONV                (Wanted: OFF): OFF
+--   SDL_LIBUDEV                 (Wanted: ON): OFF
+--   SDL_LIBURING                (Wanted: OFF): OFF
+--   SDL_LSX                     (Wanted: OFF): OFF
+--   SDL_METAL                   (Wanted: ON): ON
+--   SDL_MMX                     (Wanted: OFF): OFF
+--   SDL_OFFSCREEN               (Wanted: ON): ON
+--   SDL_OPENGL                  (Wanted: OFF): OFF
+--   SDL_OPENGLES                (Wanted: ON): ON
+--   SDL_OPENVR                  (Wanted: OFF): OFF
+--   SDL_OSS                     (Wanted: OFF): OFF
+--   SDL_PIPEWIRE                (Wanted: OFF): OFF
+--   SDL_PIPEWIRE_SHARED         (Wanted: OFF): OFF
+--   SDL_PTHREADS                (Wanted: ON): ON
+--   SDL_PTHREADS_SEM            (Wanted: ON): ON
+--   SDL_PULSEAUDIO              (Wanted: OFF): OFF
+--   SDL_PULSEAUDIO_SHARED       (Wanted: OFF): OFF
+--   SDL_RENDER_D3D              (Wanted: OFF): OFF
+--   SDL_RENDER_D3D11            (Wanted: OFF): OFF
+--   SDL_RENDER_D3D12            (Wanted: OFF): OFF
+--   SDL_RENDER_GPU              (Wanted: ON): ON
+--   SDL_RENDER_METAL            (Wanted: ON): ON
+--   SDL_RENDER_VULKAN           (Wanted: ON): ON
+--   SDL_ROCKCHIP                (Wanted: OFF): OFF
+--   SDL_RPATH                   (Wanted: ON): OFF
+--   SDL_RPI                     (Wanted: OFF): OFF
+--   SDL_SNDIO                   (Wanted: OFF): OFF
+--   SDL_SNDIO_SHARED            (Wanted: OFF): OFF
+--   SDL_SSE                     (Wanted: OFF): OFF
+--   SDL_SSE2                    (Wanted: OFF): OFF
+--   SDL_SSE3                    (Wanted: OFF): OFF
+--   SDL_SSE4_1                  (Wanted: OFF): OFF
+--   SDL_SSE4_2                  (Wanted: OFF): OFF
+--   SDL_SYSTEM_ICONV            (Wanted: OFF): OFF
+--   SDL_TESTS                   (Wanted: OFF): OFF
+--   SDL_TESTS_LINK_SHARED       (Wanted: OFF): OFF
+--   SDL_UNINSTALL               (Wanted: OFF): OFF
+--   SDL_VIRTUAL_JOYSTICK        (Wanted: ON): ON
+--   SDL_VIVANTE                 (Wanted: OFF): OFF
+--   SDL_VULKAN                  (Wanted: ON): ON
+--   SDL_WASAPI                  (Wanted: OFF): OFF
+--   SDL_WAYLAND                 (Wanted: OFF): OFF
+--   SDL_WAYLAND_LIBDECOR        (Wanted: OFF): OFF
+--   SDL_WAYLAND_LIBDECOR_SHARED (Wanted: OFF): OFF
+--   SDL_WAYLAND_SHARED          (Wanted: OFF): OFF
+--   SDL_X11                     (Wanted: OFF): OFF
+--   SDL_X11_SHARED              (Wanted: OFF): OFF
+--   SDL_X11_XCURSOR             (Wanted: OFF): OFF
+--   SDL_X11_XDBE                (Wanted: OFF): OFF
+--   SDL_X11_XFIXES              (Wanted: OFF): OFF
+--   SDL_X11_XINPUT              (Wanted: OFF): OFF
+--   SDL_X11_XRANDR              (Wanted: OFF): OFF
+--   SDL_X11_XSCRNSAVER          (Wanted: OFF): OFF
+--   SDL_X11_XSHAPE              (Wanted: OFF): OFF
+--   SDL_X11_XSYNC               (Wanted: OFF): OFF
+--   SDL_XINPUT                  (Wanted: OFF): OFF
+-- 
+--  Build Shared Library: OFF
+--  Build Static Library: ON
+--  Build Static Library with Position Independent Code: 
+--  Build libraries as Apple Framework: OFF
+-- 
+-- If something was not detected, although the libraries
+-- were installed, then make sure you have set the
+-- CMAKE_C_FLAGS and CMAKE_PREFIX_PATH CMake variables correctly.
+-- 
+-- Configuring SDL3_image 3.2.4
+-- SDL3_image backends:
+-- - enabled:  stb bmp gif jpg lbm pcx png pnm qoi svg tga xcf xpm xv
+-- - disabled: imageio wic avif jxl tif webp
+-- Configuring SDL3_ttf 3.2.2
+-- SDL3_ttf: Using system freetype library
+-- Could NOT find plutovg (missing: plutovg_LIBRARY plutovg_INCLUDE_PATH) 
+-- Could NOT find plutosvg (missing: plutosvg_LIBRARY plutosvg_INCLUDE_PATH plutovg_FOUND) 
+-- plutosvg NOT found
+-- SDL3_ttf backends:
+-- - enabled:  freetype
+-- - disabled: harfbuzz plutosvg
+-- Configuring done (0.4s)
+-- Generating done (0.0s)
+-- Build files have been written to: /Users/amoghrijal/amogh/aquarium-native/build/ios-simulator
+[0/4] Re-checking globbed directories...
+[1/10] Building CXX object CMakeFiles/aquarium_view.dir/src/details.cpp.o
+[2/10] Building CXX object CMakeFiles/aquarium_view.dir/src/canvas.cpp.o
+/Users/amoghrijal/amogh/aquarium-native/src/canvas.cpp:229:64: warning: unused parameter 'time' [-Wunused-parameter]
+  229 | void Canvas::scene(const Domain& d,double interpolation,double time,Tool tool,FishId held,bool careBadges,FishId hidden){
+      |                                                                ^
+1 warning generated.
+[3/10] Building CXX object CMakeFiles/aquarium_view.dir/src/view.cpp.o
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:72:139: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   72 |  glassButton("send-gift",{p.x+30,p.y+p.h-112,bw,62},d.level()<5?"Gifting: Level 5":"Gifting: Coming soon",[this]{command({Action::SendGift});},"blue",25);
+      |                                                                                                                                           ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:73:146: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   73 |  glassButton("daily-egg",{p.x+58+bw,p.y+p.h-112,bw,62},d.level()<6?"Daily Egg: Level 6":"Daily Egg: Coming soon",[this]{command({Action::DailyEgg});},"blue",25);
+      |                                                                                                                                                  ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:78:340: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   78 |  button("tutorial-action",{x+pw-76,y+6,67,28},step==4?"GROW":"NEXT",[this,step]{if(step==2||step==3)open(Panel::Shop);else if(step==6){open(Panel::Shop);category_=1;}else if(step==8)open(Panel::Quests);else if(step==9)open(Panel::Gifts);else if(step==1)setTool(Tool::Food);else if(step==5)setTool(Tool::Sell);else command({Action::Tutorial});},green);
+      |                                                                                                                                                                                                                                                                                                                                                    ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:103:51: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+  103 |  if(tool_==Tool::Sell){if(command({Action::Sell,id})){netAt_=now_;selected_={};}return;}
+      |                                                   ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:104:304: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+  104 |  if(tool_==Tool::Medicine){const auto* f=session_.domain().fish(id);if(f&&f->dead){selected_=id;open(Panel::Details);selected_=id;}else if(f&&careOf(*session_.domain().content().find(f->species),*f,session_.domain().state().simNow)==Care::Fed)toast("This fish is healthy.");else command({Action::Feed,id});return;}
+      |                                                                                                                                                                                                                                                                                                                ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:105:50: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+  105 |  if(tool_==Tool::Stash){command({Action::Stash,id});return;}
+      |                                                  ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:9:39: warning: unused variable 'blue' [-Wunused-const-variable]
+    9 | constexpr Color aqua{159,225,216,255},blue{117,197,215,255},green{161,217,144,255},cream{247,235,197,255},muted{177,195,197,255},ink{32,77,96,255},purple{199,172,230,255};
+      |                                       ^~~~
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:9:107: warning: unused variable 'muted' [-Wunused-const-variable]
+    9 | constexpr Color aqua{159,225,216,255},blue{117,197,215,255},green{161,217,144,255},cream{247,235,197,255},muted{177,195,197,255},ink{32,77,96,255},purple{199,172,230,255};
+      |                                                                                                           ^~~~~
+8 warnings generated.
+[4/10] Building CXX object CMakeFiles/aquarium_view.dir/src/skin.cpp.o
+/Users/amoghrijal/amogh/aquarium-native/src/skin.cpp:231:110: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+  231 |   touchTarget("tank-select"+std::to_string(id),r,[this,id,tank]{if(tank){command({Action::SwitchTank,{}, {id}});open(Panel::None);}else{selectedTank_=id;}});
+      |                                                                                                              ^
+/Users/amoghrijal/amogh/aquarium-native/src/skin.cpp:9:62: warning: unused variable 'navy' [-Wunused-const-variable]
+    9 | constexpr Color white{250,254,255,255},pale{186,244,255,255},navy{5,62,113,255};
+      |                                                              ^~~~
+2 warnings generated.
+[5/10] Linking CXX static library libaquarium_view.a
+[6/10] Building CXX object CMakeFiles/aquarium.dir/src/main.cpp.o
+[7/10] Linking CXX executable aquarium.app/aquarium

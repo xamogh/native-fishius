@@ -1,0 +1,27 @@
+{
+  "id": "foxfaceRabbitfish",
+  "generator": "built-in image_gen",
+  "date": "2026-09-10",
+  "prompt": "Use case: stylized-concept. Asset type: single transparent fish sprite for a mobile aquarium game. Create ONE FOXFACE RABBITFISH (Siganus vulpinus). Whole body SIDE VIEW facing LEFT, face at LEFT, tail at RIGHT. Species-defining shape: laterally compressed lemon-yellow oval body, long pointed rabbitlike snout, WHITE face and chest with a strong diagonal BLACK mask through the eye and black lower chin, small bright eye, tall spiny yellow dorsal fin, yellow fan tail. Keep it distinctly a foxface rabbitfish, never a generic tang. Match the existing guppy/clownfish sprites' polished glossy colorful cartoon game aesthetic, clean dark outlines, softly rounded volume and bold readable forms. Charming eye but accurate species markings. Every fin and full tail visible with modest transparent padding. GENUINE TRANSPARENT ALPHA background. Only one isolated fish, no floor, shadow, colored aura, glow haze, bubbles, water scene, coral, props, text, UI, labels, watermark, multiple specimens or sprite sheet.",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-50cc-76f2-a405-6125adffd466/exec-c48aa42d-c9b9-4ae0-8e98-dbf79baf5daf.png",
+  "output": "assets/species/foxfaceRabbitfish.png",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "alpha": true,
+  "acceptance": "Single whole-body left-facing foxface rabbitfish with yellow body, white pointed snout and black diagonal face mask. Complete tail and fins, polished mobile-game shading. Generated alpha retained unchanged.",
+  "validation": {
+    "width": 1536,
+    "height": 1024,
+    "channels": 4,
+    "fullyTransparentPixels": 800403,
+    "maxAlpha": 254,
+    "fishBounds": [
+      39,
+      54,
+      1465,
+      917
+    ]
+  }
+}

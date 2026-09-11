@@ -1,0 +1,11 @@
+Test project /Users/amoghrijal/amogh/aquarium-native/build/desktop
+    Start 2: mobile_ui_controls
+1/1 Test #2: mobile_ui_controls ...............   Passed   27.02 sec
+
+100% tests passed out of 1
+
+Label Time Summary:
+native    =  27.02 sec*proc (1 test)
+ui        =  27.02 sec*proc (1 test)
+
+Total Test time (real) =  27.03 sec

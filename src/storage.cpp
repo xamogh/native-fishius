@@ -19,6 +19,7 @@ Json readFile(const std::filesystem::path& p){auto size=std::filesystem::file_si
 }
 Json encode(const State& s){
  Json j={{"version",s.version},{"contentVersion",s.contentVersion},{"simNow",s.simNow},{"wallAnchor",s.wallAnchor},{"calendarNow",s.calendarNow},{"coins",s.wallet.coins},{"pearls",s.wallet.pearls},{"xp",s.xp},{"highestRewardedLevel",s.highestRewardedLevel},{"activeTank",s.activeTank.value},{"nextFishId",s.nextFishId},{"nextDecorId",s.nextDecorId},{"rngState",s.rngState},{"claims",s.claims},{"collected",s.collected},{"mastery",s.mastery},{"totalEvents",s.totalEvents},{"giftTokens",s.giftTokens},{"tutorialStep",s.tutorialStep},{"tutorialClaims",s.tutorialClaims},{"dailyPeriod",s.dailyPeriod},{"weeklyPeriod",s.weeklyPeriod},{"giftDay",s.giftDay},{"eggDay",s.eggDay}};
+ j["adultRaised"]=s.adultRaised;
  j["settings"]={{"reducedMotion",s.settings.reducedMotion},{"sound",s.settings.sound},{"music",s.settings.music},{"volume",s.settings.volume},{"tankLook",s.settings.tankLook}};
  j["tanks"]=Json::array();for(auto& t:s.tanks)j["tanks"].push_back({{"id",t.id.value},{"slots",t.slots}});
  j["fish"]=Json::array();for(auto& f:s.fish){const auto& m=f.motion;Json v={{"id",f.id.value},{"species",f.species},{"tank",f.tank.value},{"position",point(f.position)},{"age",f.age},{"egg",f.egg},{"dead",f.dead},{"stashed",f.stashed},{"growthMs",f.growthMs},{"hatchAt",f.hatchAt},{"lastFedAt",f.lastFedAt},{"stashedAt",f.stashedAt},{"boughtAt",f.boughtAt}};
@@ -50,7 +51,14 @@ State decodeAndValidate(const Json& j,const Content& c){
  s.claims=strings("claims");s.collected=strings("collected");for(auto& id:s.collected)require(c.find(id),"Unknown collected species");s.tutorialClaims=strings("tutorialClaims");s.tutorialStep=j.at("tutorialStep");require(s.tutorialStep>=0&&s.tutorialStep<=11,"Invalid tutorial step");
  s.giftTokens=j.at("giftTokens");require(bounded(s.giftTokens),"Invalid Gift Tokens");s.dailyPeriod=j.at("dailyPeriod");s.weeklyPeriod=j.at("weeklyPeriod");s.giftDay=j.at("giftDay");s.eggDay=j.at("eggDay");
  s.totalEvents=j.at("totalEvents").get<std::map<std::string,std::int64_t>>();s.mastery=j.at("mastery").get<std::map<std::string,std::int64_t>>();require(s.totalEvents.size()<100&&s.mastery.size()<=46,"Oversized progress map");for(auto& [k,v]:s.totalEvents)require(bounded(v),"Invalid event counter");for(auto& [k,v]:s.mastery)require(c.find(k)&&bounded(v),"Invalid mastery counter");
+ // Previous saves recorded sales in mastery, including Juniors. Retain those
+ // counters as history, but do not convert them into unproven Adult growth.
+ if(j.contains("adultRaised"))s.adultRaised=j.at("adultRaised").get<std::map<std::string,std::int64_t>>();
+ require(s.adultRaised.size()<=46,"Oversized Adult progress map");for(auto& [id,count]:s.adultRaised)require(c.find(id)&&bounded(count),"Invalid Adult progress");
  require(j.at("quests").is_object()&&j.at("quests").size()<=100,"Invalid quests");for(auto& [id,v]:j.at("quests").items()){ObjectiveProgress p{v.at("count").get<std::int64_t>(),v.at("claimed").get<bool>()};require(id.size()<128&&bounded(p.count),"Invalid quest progress");s.quests[id]=p;}
+ // Old daily-feed counted all feeds against a different target. Reset that
+ // unclaimed objective when upgrading, preserving all claimed rewards.
+ if(!j.contains("adultRaised")&&!s.quests["daily-feed"].claimed)s.quests["daily-feed"].count=0;
  auto& st=j.at("settings");s.settings.reducedMotion=st.at("reducedMotion");s.settings.sound=st.at("sound");s.settings.music=st.at("music");s.settings.volume=st.at("volume");s.settings.tankLook=st.at("tankLook");require(std::isfinite(s.settings.volume)&&s.settings.volume>=0&&s.settings.volume<=1,"Invalid volume");require(s.settings.tankLook>=0&&s.settings.tankLook<=2,"Invalid tank look");return s;
 }
 LoadResult Storage::load(const Content& c){

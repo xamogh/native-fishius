@@ -1,0 +1,65 @@
+{
+  "checked_at": "2026-09-10T20:28:50.727928+05:45",
+  "catalog_species": 46,
+  "new_generated_species_art": 40,
+  "reused_species_art": 6,
+  "independent_workbook_checks": 1672,
+  "domain_tests": {
+    "passed": 29,
+    "total": 29
+  },
+  "importer_tests": {
+    "passed": 3,
+    "total": 3
+  },
+  "native_art_variants_checked": 138,
+  "mobile_viewports": [
+    [
+      804,
+      415
+    ],
+    [
+      852,
+      393
+    ],
+    [
+      667,
+      375
+    ]
+  ],
+  "native_ui_tests_passed": true,
+  "simulator": {
+    "device": "iPhone 17 Pro",
+    "os": "iOS 26.5",
+    "bundle": "com.pixmot.aquarium",
+    "installed_and_launched": true,
+    "fresh_test_session": true,
+    "verified": [
+      "real starters and wallet",
+      "Shop and Collection catalog",
+      "premium fish art",
+      "quest unlock labels",
+      "Shop backdrop consumes tap",
+      "Neon Tetra placement costs 7 coins and grants 2 XP",
+      "food tool activates and drops pellet"
+    ]
+  },
+  "deferred_by_user": [
+    "tutorial",
+    "anniversary calendar",
+    "unspecified rewards, collection themes and egg tables"
+  ],
+  "separate_work": [
+    "online friends and reward services",
+    "physical device and Android verification"
+  ],
+  "logs": [
+    "workbook-domain-tests.log",
+    "workbook-import-tests.log",
+    "workbook-mobile-ui-tests.log",
+    "workbook-catalog-check.log",
+    "asset-validation.json",
+    "workbook-ios-bundle-check.json"
+  ],
+  "screenshots": "workbook-catalog/667x375"
+}

@@ -1,0 +1,65 @@
+{
+  "asset": "assets/details/frame-v2.png",
+  "derivedFrom": "assets/details/frame.png",
+  "tool": "built-in image_gen",
+  "generatedFile": "/Users/amoghrijal/.codex/generated_images/01a08bcc-ea29-7423-9bcc-4b7b41993e24/exec-3aad4be2-d049-485b-98f9-346a779f3c9f.png",
+  "purpose": "Palette candidate. Root should compare before replacing frame.png.",
+  "dimensions": [
+    1368,
+    1149
+  ],
+  "mode": "RGBA",
+  "alphaExtrema": [
+    0,
+    255
+  ],
+  "zeroAlphaPixels": 261704,
+  "alphaBounds": [
+    0,
+    0,
+    1355,
+    1123
+  ],
+  "alphaGreaterThan8Bounds": [
+    17,
+    27,
+    1353,
+    1117
+  ],
+  "alphaGreaterThan32Bounds": [
+    17,
+    28,
+    1353,
+    1117
+  ],
+  "sampleRGBA": {
+    "684,900": [
+      3,
+      169,
+      228,
+      251
+    ],
+    "684,500": [
+      21,
+      195,
+      232,
+      252
+    ],
+    "1200,900": [
+      2,
+      129,
+      188,
+      250
+    ]
+  },
+  "prompts": [
+    "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a transparent PNG frame asset. Image 2 is COLOR REFERENCE ONLY. Make ONE targeted palette correction to image 1: the main panel water interior is too royal-blue, especially its lower half. Match the rich cyan/turquoise/teal water of image 2. Center and bottom-center should be around #06A7CE, with deeper teal-blue bottom corners. Keep luminous cyan caustic rays at the top. Keep the title pill bright blue unchanged. The five stage rings may become softer pale cyan with gentler contrast, like image 2, instead of silver-white bevels. Change nothing else. Preserve exact image 1 dimensions 1368x1149, all object positions, geometry, borders, bubbles, seaweed, orange orb, XP star, growth track, five rings and all alpha pixels outside the frame. Do not add ANY text or fish from image 2. Preserve true RGBA transparency outside the frame; no checkerboard, white, gray or opaque background. Keep original anti-aliased cutout silhouette unchanged. This is a color adjustment only, no redesign.",
+    "Make this a transparent PNG asset. Delete the entire gray checkered background around the outside of the UI frame, with clean anti-aliased edges and real alpha transparency. Keep all of the teal cyan and gold UI frame, bubbles, seaweed, XP star, orange orb, progress bar, and five circular stage markers. Keep the colored panel interior filled. Preserve the exact current teal cyan palette, feature positions, and dimensions. The background must be transparent, not a drawing of a transparency checkerboard. This is a background removal task only."
+  ],
+  "validation": {
+    "palette": "Main body changed from royal blue toward cyan and teal, particularly lower center; darker teal-blue lower corners. Header remains bright blue.",
+    "geometry": "1368x1149 unchanged, same icon/bar/ring feature coordinates as frame.provenance.json within a few pixels.",
+    "transparency": "True RGBA, exterior checkerboard removed. Original files remain unchanged.",
+    "deviations": "Rings still have noticeable silver-white bevels. Colors closer to reference; sampled lower-center RGB is #03A9E4 rather than exact #06A7CE. Slight alpha silhouette differences, including approximately four pixels above title border."
+  }
+}

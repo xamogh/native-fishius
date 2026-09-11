@@ -1,0 +1,33 @@
+{
+  "id": "koi",
+  "asset": "assets/species/koi.png",
+  "generationMode": "built-in image_gen",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-a451-7472-9e64-1f534f9b6a30/exec-ff9858c2-ffa4-404d-838c-42965f9e07b5.png",
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "referenceRole": "Style only, visually inspected before generation. Text style description supplied, not image edits.",
+  "prompt": "Use case: stylized-concept\nAsset type: a single production-ready fish sprite for a native mobile aquarium game.\nPrimary request: Generate ONE isolated, complete specimen with its head facing LEFT and tail to the RIGHT, readable at a small mobile-game size. True transparent background with alpha, no solid background or checkerboard drawn in.\nStyle reference: existing game guppy and clownfish sprites use glossy colorful polished cartoon illustration, smooth 3D-like shading, bright top highlights, a crisp clean dark outline and expressive friendly eyes. Match that look, but preserve the requested species' distinctive anatomy. Do NOT copy guppy or clownfish anatomy, patterns, silhouette or tail.\nComposition: horizontal side profile, entire body, all fins and appendages present and not cropped, centered with modest transparent padding.\nAvoid: text, letters, labels, UI, additional specimens, bubbles, props, water, scenery, floor, ground shadows, backdrop, frame, watermark.\nSubject: Koi carp: an elongated elegant white carp with bold red and black patches resembling painted silk patterns. Recognizable koi head with a small pair of mouth barbels, layered scales, moderate flowing carp fins, and a distinct forked carp tail. White base, saturated red and jet black pattern. Avoid oversized guppy tail and clownfish stripes. Friendly but natural koi anatomy. Whole body facing LEFT.",
+  "acceptance": "Accepted: left-facing carp body with mouth barbels, red/black/white silk-like markings, forked tail and complete fins.",
+  "imageProcessing": "Raw generated image copied without edits. Alpha preserved.",
+  "imageAudit": {
+    "width": 1536,
+    "height": 1024,
+    "channels": 4,
+    "hasAlpha": true,
+    "alphaMin": 0,
+    "alphaMax": 254,
+    "fullyTransparentPixels": 995190,
+    "fullyTransparentPercent": 63.27,
+    "nonTransparentBorderPixels": 0,
+    "sha256": "651cc2d019aeedaf4a9f24e7fa1368f574235935c13e121931ccb9354442480d",
+    "maximumBorderAlpha": 0,
+    "visibleBoundsAlphaAbove16": {
+      "x": 34,
+      "y": 143,
+      "width": 1472,
+      "height": 677
+    }
+  }
+}

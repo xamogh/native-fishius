@@ -1,0 +1,30 @@
+PASS catalog counts and exact imported duration
+PASS four hungry starter babies
+PASS all catalog purchase and four stage rewards
+PASS six-second hatch and hungry newborn
+PASS free feeding pauses and resumes exact growth
+PASS sickness and death boundaries; feeding cannot revive
+PASS large and small lifecycle advances agree
+PASS purchase rejection is atomic
+PASS art gate precedes event and funds
+PASS level-two pearl granted only once
+PASS repeatable tutorial premium fish
+PASS quest XP uses exact columns and refreshes after level changes
+PASS caretaker requires eight healthy feeds and sickness resets progress
+PASS mastery counts Adult growth once and claims three persistent tiers
+PASS old sales counters do not become Adult mastery when a save upgrades
+PASS stash preserves identity and all remaining clocks
+PASS egg storage pauses hatching
+PASS five exact workbook tank schedules without invented pearl conversion
+PASS tank sequencing and level gates
+PASS every tank step consumes source coins plus solo tokens atomically
+PASS revival overflow allowed, purchase and restore blocked
+PASS atomic bulk revival and corpse removal
+PASS one pellet feeds exactly one fish after its notice delay
+PASS food is bounded and cleared on tank switch
+PASS year-crossing events and annual claims
+PASS deferred gifts and egg rewards preserve state and enforce source unlocks
+PASS save round-trip, unknown IDs, duplicate IDs and future schemas
+PASS atomic storage retains corrupt primary and recovers backup
+PASS suspension interval is applied once
+29 / 29 tests passed

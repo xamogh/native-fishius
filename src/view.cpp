@@ -7,56 +7,83 @@
 namespace aq {
 namespace {
 constexpr Color aqua{159,225,216,255},blue{117,197,215,255},green{161,217,144,255},cream{247,235,197,255},muted{177,195,197,255},ink{32,77,96,255},purple{199,172,230,255};
-constexpr double pi=3.14159265358979323846;
-float bodySize(float h){return h<450?12.f:15.f;}
 }
-View::View(Canvas& c,Session& s):canvas_(c),session_(s){panelOpened_=-10;}
+View::View(Canvas& c,Session& s):canvas_(c),session_(s){}
 void View::toast(std::string t){if(t.empty())return;if(toasts_.size()>=3)toasts_.pop_front();toasts_.push_back({std::move(t),now_});}
 Result View::command(Command c){auto r=session_.command(c);if(!r)toast(r.message.empty()?errorText(r.error):r.message);else if(session_.domain().state().settings.sound)canvas_.sound(600,float(session_.domain().state().settings.volume));return r;}
-void View::cancelGesture(){if(dragged_.value){session_.command({Action::Move,dragged_,{},"",dragOriginal_});dragged_={};}pointerDown_=false;touchOwned_=false;worldGesture_=false;pressed_.clear();SDL_CaptureMouse(false);}
-void View::open(Panel p){cancelGesture();panel_=p;page_=0;panelOpened_=now_;if(p!=Panel::Details)selected_={};}
+void View::cancelGesture(){if(dragged_.value){session_.command({Action::Move,dragged_,{},"",dragOriginal_});dragged_={};}if(!pressed_.empty())press(pressed_,false);pointerDown_=false;touchOwned_=false;worldGesture_=false;pressed_.clear();SDL_CaptureMouse(false);}
+void View::open(Panel p){
+ cancelGesture();closeSelectMenu();
+ if(p!=Panel::None&&p!=paintedPanel_)panelMotion_={};
+ panelMotion_.show(p!=Panel::None,now_);panel_=p;page_=0;
+ if(p!=Panel::Details)selected_={};
+}
 void View::setPanel(Panel p){open(p);}
-void View::setTool(Tool t){cancelGesture();tool_=t;selectMenuOpen_=false;panel_=Panel::None;selected_={};restore_={};buySpecies_.clear();decorId_.clear();armed_=false;}
+void View::setTool(Tool t){open(Panel::None);tool_=t;restore_={};buySpecies_.clear();decorId_.clear();armed_=false;}
 void View::armBuy(std::string id){setTool(Tool::Buy);buySpecies_=std::move(id);armX_=pointerX_;armY_=pointerY_;armed_=true;toast("Tap inside the aquarium to place an egg. Done cancels.");}
 void View::armRestore(FishId id){setTool(Tool::Restore);restore_=id;armX_=pointerX_;armY_=pointerY_;armed_=true;}
 void View::armDecor(std::string id){setTool(Tool::Decor);decorId_=std::move(id);armX_=pointerX_;armY_=pointerY_;armed_=true;}
 void View::button(std::string id,Rect rect,std::string label,std::function<void()> action,Color color,std::string icon){
- Rect display=rect;double scale=1.;if(pressed_==id)scale=.94;else if(auto i=presses_.find(id);i!=presses_.end()){double t=(now_-i->second)/.18;if(t<1)scale=1.+.035*std::sin(t*pi)*std::exp(-t*2);}
- display.w*=float(scale);display.h*=float(scale);display.x+=(rect.w-display.w)*.5f;display.y+=(rect.h-display.h)*.5f;canvas_.round(display,color,std::min(18.f,display.h*.4f),{43,100,119,255},2,true);
+ Rect display=buttonVisual(id,rect);canvas_.round(display,color,std::min(18.f,display.h*.4f),{43,100,119,255},2,true);
  float textY=display.y+display.h*.28f;if(!icon.empty()){float size=std::min(display.w*.65f,display.h*.59f);canvas_.image(icon,{display.x+(display.w-size)*.5f,display.y+2,size,size});textY=display.y+display.h*.69f;}
  if(!label.empty())canvas_.text(label,display.x+display.w*.5f,textY,icon.empty()?std::clamp(display.h*.31f,10.f,18.f):std::clamp(display.h*.18f,9.f,12.f),ink,true,display.w-9,true);
- rect.x+=canvas_.origin();buttons_.push_back({std::move(id),rect,std::move(action)});
+ rect.x+=canvas_.origin();rect.y+=canvas_.originY();buttons_.push_back({std::move(id),rect,std::move(action)});
 }
-void View::render(double t){now_=t;buttons_.clear();canvas_.begin();canvas_.origin(0);auto& d=session_.domain();canvas_.scene(d,session_.interpolation(),t,tool_,held(),panel_==Panel::None);
+void View::render(double t){now_=t;buttons_.clear();auto& d=session_.domain();if(panel_==Panel::Details&&!d.fish(selected_))open(Panel::None);canvas_.begin();canvas_.origin(0);canvas_.scene(d,session_.interpolation(),t,tool_,held(),panel_==Panel::None||panel_==Panel::Details);
  ui();panelButtonStart_=buttons_.size();
- if(panel_==Panel::Shop)canvas_.fill({0,0,canvas_.width(),canvas_.height()},{0,25,55,120});
- if(panel_!=Panel::None)panel();else if(tutorialVisible_)tutorial();effects();
+ if(panel_!=Panel::None)panel();
+ else if(panelLayer_){
+  panelPose_=menuPose(panelMotion_,panelAnchor_);
+  // A closing snapshot has no controls and never re-renders removed fish.
+  if(panelPose_.alpha<=0||layerWidth_!=canvas_.width()||layerHeight_!=canvas_.height()){panelLayer_.reset();paintedPanel_=Panel::None;}
+  else{
+   panelDisplayRect_=panelPose_.apply(panelLayoutRect_);
+   if(paintedPanel_==Panel::Shop)canvas_.fill({0,0,canvas_.width(),canvas_.height()},{0,25,55,Uint8(120*panelPose_.alpha)});
+   canvas_.menuLayer(*panelLayer_,panelPose_);
+  }
+ }
+ if(panel_==Panel::None&&tutorialVisible_)tutorial();effects();
  for(auto e:d.takeEvents()){if(receipts_.size()>=32)receipts_.pop_front();receipts_.push_back({e,t});if(e.kind=="level")toast(e.text+(e.pearls?"  +1 pearl":""));if(d.state().settings.sound)canvas_.sound(e.kind=="feed"?890:520,float(d.state().settings.volume));}
- for(auto it=presses_.begin();it!=presses_.end();)if(t-it->second>1)it=presses_.erase(it);else ++it;
+ for(auto it=presses_.begin();it!=presses_.end();)if(!it->second.down&&t-it->second.start>1)it=presses_.erase(it);else ++it;
 }
 std::string View::price(const Species& s)const{return s.currency==Currency::Gift?"FREE":compact(s.price)+(s.currency==Currency::Pearls?" pearls":" coins");}
 void View::inventory(){
  auto& d=session_.domain();Rect p=panelRect_;std::vector<const Fish*> stored;for(auto& f:d.state().fish)if(f.stashed)stored.push_back(&f);if(stored.empty()){canvas_.image("ui/inventory.png",{p.x+p.w*.5f-52,p.y+p.h*.35f-25,104,104});canvas_.text("A cozy place for a little break",p.x+p.w*.5f,p.y+p.h*.66f,18,ink,true,p.w-30,true);canvas_.text("Use STASH on a living fish or egg. Its care clock pauses here.",p.x+p.w*.5f,p.y+p.h*.79f,14,ink,true,p.w-40);return;}
  int pages=std::max(1,(static_cast<int>(stored.size())+7)/8);page_=std::clamp(page_,0,pages-1);float gap=10,cw=(p.w-54)/4,ch=(p.h-104)/2;
- for(int i=0;i<8;++i){int ix=page_*8+i;if(ix>=static_cast<int>(stored.size()))break;const auto& f=*stored[ix];const auto& s=*d.content().find(f.species);Rect r{p.x+12+(i%4)*(cw+gap),p.y+56+(i/4)*(ch+gap),cw,ch};canvas_.round(r,{232,245,224,255},13,{116,174,166,255},2,false);canvas_.text(s.name,r.x+cw*.5f,r.y+7,bodySize(canvas_.height()),ink,true,cw-12,true);canvas_.image(f.egg?"ui/egg.png":s.asset,{r.x+cw*.15f,r.y+ch*.24f,cw*.7f,ch*(ch<140?.27f:.39f)});canvas_.text(stageName(f)+" / PAUSED",r.x+cw*.5f,r.y+ch-53,12,ink,true,cw-10);button("restore"+std::to_string(f.id.value),{r.x+8,r.y+ch-30,cw-16,25},"PLACE",[this,id=f.id]{armRestore(id);},green);}
+ for(int i=0;i<8;++i){int ix=page_*8+i;if(ix>=static_cast<int>(stored.size()))break;const auto& f=*stored[ix];const auto& s=*d.content().find(f.species);Rect r{p.x+12+(i%4)*(cw+gap),p.y+56+(i/4)*(ch+gap),cw,ch};canvas_.round(r,{232,245,224,255},13,{116,174,166,255},2,false);canvas_.text(s.name,r.x+cw*.5f,r.y+7,20,ink,true,cw-12,true);canvas_.icon(f.egg?"ui/egg.png":s.asset,{r.x+cw*.15f,r.y+ch*.24f,cw*.7f,ch*(ch<140?.27f:.39f)});canvas_.text(stageName(f)+" / PAUSED",r.x+cw*.5f,r.y+ch-53,12,ink,true,cw-10);button("restore"+std::to_string(f.id.value),{r.x+8,r.y+ch-30,cw-16,25},"PLACE",[this,id=f.id]{armRestore(id);},green);}
  button("inv-prev",{p.x+14,p.y+p.h-33,48,23},"<",[this]{page_=std::max(0,page_-1);});button("inv-next",{p.x+p.w-62,p.y+p.h-33,48,23},">",[this,pages]{page_=std::min(pages-1,page_+1);});canvas_.text(std::to_string(stored.size())+" stored fish",p.x+p.w*.5f,p.y+p.h-33,13,ink,true);
 }
-void View::details(){
- auto& d=session_.domain();const auto* f=d.fish(selected_);if(!f){panel_=Panel::None;selected_={};return;}const auto& s=*d.content().find(f->species);Rect p=panelRect_;float h=p.h;canvas_.text(s.name,p.x+p.w*.5f,p.y+51,20,ink,true,p.w-30,true);canvas_.image(s.asset,{p.x+p.w*.5f-58,p.y+77,116,55});canvas_.text(stageName(*f)+"  |  "+careName(careOf(s,*f,d.state().simNow)),p.x+p.w*.5f,p.y+138,14,ink,true,p.w-25);
- float frac=f->age>=4?1.f:float(double(f->growthMs)/double(s.stageMs));canvas_.round({p.x+24,p.y+166,p.w-48,19},{118,171,171,255},10,ink,1,false);canvas_.round({p.x+26,p.y+168,(p.w-52)*frac,15},green,8,green,0,false);canvas_.text("GROWTH "+std::to_string(static_cast<int>(frac*100))+"%",p.x+p.w*.5f,p.y+168,10,ink,true);
- float rowY=p.y+196;if(h>340){for(int i=0;i<5;++i){float xx=p.x+20+i*(p.w-40)/5;float pulse=(i==f->age&&!d.state().settings.reducedMotion)?float(1+.055*std::sin(now_*2*pi/1.6)):1;canvas_.round({xx,rowY,((p.w-55)/5)*pulse,26*pulse},i==f->age?cream:aqua,11,ink,1,false);canvas_.text(std::to_string(i),xx+(p.w-55)/10,rowY+4,12,ink,true);}rowY+=36;}
- if(!f->dead){canvas_.text(f->egg?"Hatches in "+durationText(f->hatchAt-d.state().simNow):"Feed within "+durationText(f->lastFedAt+s.feedMs-d.state().simNow),p.x+p.w*.5f,rowY,12,ink,true,p.w-24);}
- auto id=f->id;float by=p.y+p.h-49,bw=(p.w-58)/3;if(f->dead){button("one-revive",{p.x+20,by,(p.w-50)*.5f,34},"REVIVE: 1 PEARL",[this,id]{command({Action::Revive,id});},purple);button("one-remove",{p.x+p.w*.5f+5,by,(p.w-50)*.5f,34},"REMOVE",[this,id]{if(command({Action::Remove,id}))open(Panel::None);},{237,170,146,255});}
- else{button("one-feed",{p.x+14,by,bw,34},"FEED",[this,id]{command({Action::Feed,id});},green);button("one-stash",{p.x+28+bw,by,bw,34},"STASH",[this,id]{if(command({Action::Stash,id}))open(Panel::None);},aqua);button("one-sell",{p.x+42+bw*2,by,bw,34},"SELL "+compact(s.saleCoins[f->age]),[this,id]{if(command({Action::Sell,id}))open(Panel::None);},cream);}
-}
 void View::quests(){
- auto& d=session_.domain();Rect p=panelRect_;int per=p.h<360?3:5;int pages=(static_cast<int>(d.questDefinitions().size())+per-1)/per;page_=std::clamp(page_,0,pages-1);float rowH=(p.h-106)/float(per);
- for(int i=0;i<per;++i){int index=page_*per+i;if(index>=static_cast<int>(d.questDefinitions().size()))break;auto q=d.questDefinitions()[index];float y=p.y+56+i*rowH;canvas_.round({p.x+13,y,p.w-26,rowH-7},{227,242,220,255},13,{109,172,166,255},1,false);auto it=d.state().quests.find(q.id);ObjectiveProgress progress=it==d.state().quests.end()?ObjectiveProgress{}:it->second;canvas_.text((q.weekly?"WEEKLY: ":"")+q.label,p.x+24,y+6,bodySize(canvas_.height()),ink,false,p.w-154,true);canvas_.text(std::to_string(progress.count)+" / "+std::to_string(q.target)+"    "+compact(q.coins)+" coins + "+compact(q.xp)+" XP",p.x+24,y+rowH*.49f,11,ink,false,p.w-164);button("claim"+q.id,{p.x+p.w-124,y+8,99,rowH-23},progress.claimed?"CLAIMED":"CLAIM",[this,id=q.id]{command({Action::ClaimQuest,{}, {},id});},progress.count>=q.target&&!progress.claimed?green:muted);}
- button("quest-prev",{p.x+16,p.y+p.h-37,40,25},"<",[this]{page_=std::max(0,page_-1);});button("quest-next",{p.x+p.w-56,p.y+p.h-37,40,25},">",[this,pages]{page_=std::min(pages-1,page_+1);});button("go-gifts",{p.x+p.w*.5f-80,p.y+p.h-39,160,29},"MARINA'S GIFTS",[this]{open(Panel::Gifts);},purple);
+ const auto& d=session_.domain();const Rect p=panelRect_;constexpr int per=4;
+ const int pages=std::max(1,(int(d.questDefinitions().size())+per-1)/per);page_=std::clamp(page_,0,pages-1);
+ const float rowH=(p.h-133)/per;
+ for(int i=0;i<per;++i){const int index=page_*per+i;if(index>=int(d.questDefinitions().size()))break;
+  const auto& q=d.questDefinitions()[index];const float y=p.y+69+i*rowH;
+  canvas_.skin("card",{p.x+22,y,p.w-44,rowH-9},24);
+  const auto it=d.state().quests.find(q.id);const auto progress=it==d.state().quests.end()?ObjectiveProgress{}:it->second;
+  const bool locked=d.level()<q.level,ready=!locked&&q.configured&&progress.count>=q.target&&!progress.claimed;
+  canvas_.label((q.weekly?"Weekly: ":"")+q.label,p.x+39,y+10,23,false,p.w-230);
+  std::string detail;
+  if(locked)detail="Unlocks at Level "+std::to_string(q.level);
+  else if(!q.configured)detail="Rewards coming in a future update";
+  else {detail=std::to_string(progress.count)+" / "+std::to_string(q.target);if(q.xp)detail+="   +"+compact(q.xp)+" XP";if(q.coins)detail+="   +"+compact(q.coins)+" coins";if(q.tokens)detail+="   +"+compact(q.tokens)+" Gift Tokens";if(q.pearls)detail+="   +"+compact(q.pearls)+" pearls";}
+  canvas_.text(detail,p.x+39,y+57,20,{225,248,255,255},false,p.w-230);
+  const std::string label=progress.claimed?"Claimed":locked?"Level "+std::to_string(q.level):!q.configured?"Soon":ready?"Claim":"In progress";
+  glassButton("claim"+q.id,{p.x+p.w-179,y+23,137,55},label,[this,id=q.id]{command({Action::ClaimQuest,{}, {},id});},ready?"green":"blue",22);
+ }
+ glassButton("quest-prev",{p.x+24,p.y+p.h-53,116,37},"Previous",[this]{page_=std::max(0,page_-1);},"blue",20);
+ glassButton("quest-next",{p.x+p.w-140,p.y+p.h-53,116,37},"Next",[this,pages]{page_=std::min(pages-1,page_+1);},"blue",20);
+ glassButton("go-gifts",{p.x+p.w*.5f-113,p.y+p.h-57,226,45},"Gifts",[this]{open(Panel::Gifts);},"blue",23);
 }
 void View::gifts(){
- const auto& d=session_.domain();Rect p=panelRect_;canvas_.image("ui/inventory.png",{p.x+p.w*.5f-42,p.y+67,84,84});canvas_.text("A friendly visit from Marina",p.x+p.w*.5f,p.y+158,20,ink,true,p.w-35,true);canvas_.text("Gift Tokens: "+compact(d.state().giftTokens),p.x+p.w*.5f,p.y+195,16,ink,true,p.w-35);canvas_.text("Local NPC gifting. Online friends and real-money services are not connected.",p.x+p.w*.5f,p.y+p.h-95,12,ink,true,p.w-36);
- float bw=(p.w-45)*.5f;button("send-gift",{p.x+15,p.y+p.h-54,bw,36},"SEND GIFT",[this]{command({Action::SendGift});},purple);button("daily-egg",{p.x+30+bw,p.y+p.h-54,bw,36},"DAILY EGG: 1 TOKEN",[this]{if(command({Action::DailyEgg}))open(Panel::None);},green);
+ const auto& d=session_.domain();const Rect p=panelRect_;
+ canvas_.icon("ui/inventory.png",{p.x+p.w*.5f-55,p.y+79,110,110});
+ canvas_.label("Gift Tokens: "+compact(d.state().giftTokens),p.x+p.w*.5f,p.y+202,30,true,p.w-60);
+ canvas_.text("Use Gift Tokens with coins to expand your tanks.",p.x+p.w*.5f,p.y+257,25,{235,251,255,255},true,p.w-65);
+ canvas_.text("Gifting and Daily Egg rewards are coming in a future update.",p.x+p.w*.5f,p.y+307,23,{235,251,255,255},true,p.w-65);
+ const float bw=(p.w-88)*.5f;
+ glassButton("send-gift",{p.x+30,p.y+p.h-112,bw,62},d.level()<5?"Gifting: Level 5":"Gifting: Coming soon",[this]{command({Action::SendGift});},"blue",25);
+ glassButton("daily-egg",{p.x+58+bw,p.y+p.h-112,bw,62},d.level()<6?"Daily Egg: Level 6":"Daily Egg: Coming soon",[this]{command({Action::DailyEgg});},"blue",25);
 }
 void View::tutorial(){
  const auto& d=session_.domain();int step=d.state().tutorialStep;if(step>=11)return;float w=canvas_.width(),h=canvas_.height();constexpr std::array<const char*,11> tips{"Choose your aquarium look","Meet your fish: choose FOOD, then tap the water","Open SHOP and choose a fish","Tap the aquarium to place your egg","Try one free growth demonstration","Choose SELL and catch your Junior fish","Open SHOP > DECOR and decorate your aquarium","Earn 80 XP through ordinary purchases and sales","Complete and claim a quest","Visit Marina and send a gift","Your next visit: feed before the hungry timer closes"};
@@ -66,7 +93,10 @@ void View::tutorial(){
 }
 void View::effects(){
  while(!toasts_.empty()&&now_-toasts_.front().start>=2.4)toasts_.pop_front();float yy=canvas_.height()*.19f;for(auto& t:toasts_){double age=now_-t.start;float alpha=age<1.9?1.f:float((2.4-age)/.5);float w=std::min(canvas_.width()-40,610.f);canvas_.round({(canvas_.width()-w)*.5f,yy,w,35},{246,237,204,static_cast<Uint8>(245*alpha)},14,{92,130,132,static_cast<Uint8>(255*alpha)},1,true);canvas_.text(t.text,canvas_.width()*.5f,yy+8,12,{38,76,91,static_cast<Uint8>(255*alpha)},true,w-24);yy+=39;}
- while(!receipts_.empty()&&now_-receipts_.front().start>.8)receipts_.pop_front();for(auto& r:receipts_){double t=(now_-r.start)/.8;auto at=canvas_.toScreen(r.event.position);float alpha=float(std::min(t/.08,std::min(1.,(1-t)/.27)));std::string label=r.event.text;auto part=[](Amount x,const char* unit){return (x>=0?"+":"")+compact(x)+unit;};if(r.event.coins||r.event.xp||r.event.pearls){label="";if(r.event.coins)label+=part(r.event.coins,"c  ");if(r.event.xp)label+=part(r.event.xp," XP  ");if(r.event.pearls)label+=part(r.event.pearls,"p");}float y=at.y+6-float(t)*39;canvas_.text(label,at.x+1,y+1,16,{39,72,86,static_cast<Uint8>(255*alpha)},true,280,true);canvas_.text(label,at.x,y,16,{255,237,178,static_cast<Uint8>(255*alpha)},true,280,true);}
+ while(!receipts_.empty()&&now_-receipts_.front().start>.8)receipts_.pop_front();
+ // World feedback stays behind the selected fish's information card.
+ if(panel_==Panel::Details)return;
+ for(auto& r:receipts_){double t=(now_-r.start)/.8;auto at=canvas_.toScreen(r.event.position);float alpha=float(std::min(t/.08,std::min(1.,(1-t)/.27)));std::string label=r.event.text;auto part=[](Amount x,const char* unit){return (x>=0?"+":"")+compact(x)+unit;};if(r.event.coins||r.event.xp||r.event.pearls){label="";if(r.event.coins)label+=part(r.event.coins,"c  ");if(r.event.xp)label+=part(r.event.xp," XP  ");if(r.event.pearls)label+=part(r.event.pearls,"p");}float y=at.y+6-float(t)*39;canvas_.text(label,at.x+1,y+1,16,{39,72,86,static_cast<Uint8>(255*alpha)},true,280,true);canvas_.text(label,at.x,y,16,{255,237,178,static_cast<Uint8>(255*alpha)},true,280,true);}
 }
 FishId View::hitFish(float x,float y,bool net)const{
  const auto& d=session_.domain();double nearest=std::numeric_limits<double>::max(),nearestAny=nearest;FishId best{},any{};
@@ -91,19 +121,27 @@ void View::aquariumPress(){
 }
 void View::pointerDown(float x,float y){
  if(pointerDown_)return;pointerDown_=true;pointerX_=x;pointerY_=y;pressStarted_=now_;pressed_.clear();worldGesture_=false;
+ if(panel_==Panel::None&&panelLayer_&&(paintedPanel_==Panel::Shop||panelDisplayRect_.has(x,y)))return;
  std::size_t firstButton=0;
  if(panel_==Panel::Shop){
-  Rect r=panelRect_;r.x+=panelOrigin();
+  Rect r=panelDisplayRect_;
   if(!r.has(x,y)){open(Panel::None);return;}
   firstButton=panelButtonStart_;
  }
- for(std::size_t i=buttons_.size();i>firstButton;--i){const auto& b=buttons_[i-1];if(b.area.has(x,y)){pressed_=b.id;presses_[b.id]=now_;return;}}
+ if(panel_==Panel::Details&&panelDisplayRect_.has(x,y))firstButton=panelButtonStart_;
+ for(std::size_t i=buttons_.size();i>firstButton;--i){const auto& b=buttons_[i-1];if(b.area.has(x,y)){press(b.id,true);pressed_=b.id;return;}}
  // Expanded touch target uses nearest center only after exact visual hits fail.
- if(touchOwned_){const Button* nearest=nullptr;float dist=1e9;for(std::size_t i=firstButton;i<buttons_.size();++i){const auto& b=buttons_[i];float ex=std::max(0.f,(canvas_.minimumTouchSize()-b.area.w)*.5f),ey=std::max(0.f,(canvas_.minimumTouchSize()-b.area.h)*.5f);if(Rect{b.area.x-ex,b.area.y-ey,b.area.w+2*ex,b.area.h+2*ey}.has(x,y)){float dd=std::hypot(x-b.area.x-b.area.w*.5f,y-b.area.y-b.area.h*.5f);if(dd<dist){dist=dd;nearest=&b;}}}if(nearest){pressed_=nearest->id;presses_[pressed_]=now_;return;}}
- if(panel_!=Panel::None){Rect r=panelRect_;r.x+=panelOrigin();if(!r.has(x,y))open(Panel::None);return;}worldGesture_=true;aquariumPress();
+ if(touchOwned_){const Button* nearest=nullptr;float dist=1e9;for(std::size_t i=firstButton;i<buttons_.size();++i){const auto& b=buttons_[i];float ex=std::max(0.f,(canvas_.minimumTouchSize()-b.area.w)*.5f),ey=std::max(0.f,(canvas_.minimumTouchSize()-b.area.h)*.5f);if(Rect{b.area.x-ex,b.area.y-ey,b.area.w+2*ex,b.area.h+2*ey}.has(x,y)){float dd=std::hypot(x-b.area.x-b.area.w*.5f,y-b.area.y-b.area.h*.5f);if(dd<dist){dist=dd;nearest=&b;}}}if(nearest){press(nearest->id,true);pressed_=nearest->id;return;}}
+ if(panel_==Panel::Details){
+  if(panelDisplayRect_.has(x,y))return;
+  const auto id=hitFish(x,y);
+  if(id.value){selected_=id;open(Panel::Details);}else open(Panel::None);
+  return;
+ }
+ if(panel_!=Panel::None){if(!panelDisplayRect_.has(x,y))open(Panel::None);return;}worldGesture_=true;aquariumPress();
 }
 void View::pointerMove(float x,float y){pointerX_=x;pointerY_=y;if(armed_&&std::hypot(x-armX_,y-armY_)>=24)armed_=false;if(dragged_.value){auto p=canvas_.toWorld(x,y);p.x=std::clamp(p.x,0.,1088.);p.y=std::clamp(p.y,56.,512.);session_.command({Action::Move,dragged_,{},"",p});}else if(tool_==Tool::Sell&&panel_==Panel::None)selected_=hitFish(x,y,true);}
-void View::pointerUp(float x,float y){pointerX_=x;pointerY_=y;if(!pointerDown_)return;std::string id=pressed_;pointerDown_=false;pressed_.clear();if(dragged_.value){dragged_={};session_.checkpoint(session_.domain().state().wallAnchor);SDL_CaptureMouse(false);}if(!id.empty()){auto i=std::find_if(buttons_.begin(),buttons_.end(),[&](auto& b){return b.id==id;});if(i!=buttons_.end()){Rect r=i->area;if(touchOwned_){float ex=std::max(8.f,(canvas_.minimumTouchSize()-r.w)*.5f),ey=std::max(8.f,(canvas_.minimumTouchSize()-r.h)*.5f);r.x-=ex;r.y-=ey;r.w+=2*ex;r.h+=2*ey;}if(r.has(x,y)){auto action=i->action;presses_[id]=now_;action();}}}worldGesture_=false;}
+void View::pointerUp(float x,float y){pointerX_=x;pointerY_=y;if(!pointerDown_)return;std::string id=pressed_;if(!id.empty())press(id,false);pointerDown_=false;pressed_.clear();if(dragged_.value){dragged_={};session_.checkpoint(session_.domain().state().wallAnchor);SDL_CaptureMouse(false);}if(!id.empty()){auto i=std::find_if(buttons_.begin(),buttons_.end(),[&](auto& b){return b.id==id;});if(i!=buttons_.end()){Rect r=i->area;if(touchOwned_){float ex=std::max(8.f,(canvas_.minimumTouchSize()-r.w)*.5f),ey=std::max(8.f,(canvas_.minimumTouchSize()-r.h)*.5f);r.x-=ex;r.y-=ey;r.w+=2*ex;r.h+=2*ey;}if(r.has(x,y)){auto action=i->action;action();}}}worldGesture_=false;}
 void View::event(const SDL_Event& original,double t){now_=t;SDL_Event e=original;
  if(e.type==SDL_EVENT_MOUSE_BUTTON_DOWN||e.type==SDL_EVENT_MOUSE_BUTTON_UP){auto p=canvas_.inputPoint(e.button.x,e.button.y);e.button.x=p.x;e.button.y=p.y;}
  if(e.type==SDL_EVENT_MOUSE_MOTION){auto p=canvas_.inputPoint(e.motion.x,e.motion.y);e.motion.x=p.x;e.motion.y=p.y;}
@@ -119,5 +157,19 @@ void View::event(const SDL_Event& original,double t){now_=t;SDL_Event e=original
  else if(e.type==SDL_EVENT_MOUSE_WHEEL&&panel_!=Panel::None){page_=std::max(0,page_+(e.wheel.y<0?1:-1));}
  else if(e.type==SDL_EVENT_WINDOW_FOCUS_LOST||e.type==SDL_EVENT_WINDOW_RESIZED||e.type==SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED||e.type==SDL_EVENT_WILL_ENTER_BACKGROUND)cancelGesture();
 }
-void View::fixture(std::string_view name){referencePreview_=name=="shop"||name=="tanks"||name=="collection"||name=="settings";if(name=="aquarium")open(Panel::None);else if(name=="shop")open(Panel::Shop);else if(name=="tanks")open(Panel::Tanks);else if(name=="collection")open(Panel::Collection);else if(name=="settings")open(Panel::Settings);else if(name=="inventory")open(Panel::Inventory);else if(name=="care")setTool(Tool::Food);panelOpened_=-10;}
+void View::fixture(std::string_view name){
+ if(name.starts_with("details")){
+  auto& d=session_.domain();Domain sample(d.content(),d.state().calendarNow);auto state=sample.state();std::erase_if(state.fish,[](const Fish& fish){return fish.species!="molly"&&fish.species!="guppy";});state.xp=14;state.simNow=60000;
+  for(auto& fish:state.fish){if(fish.species!="molly"){fish.position={940,156};fish.motion.previous=fish.position;fish.age=4;fish.lastFedAt=state.simNow;}else{
+   if(name=="details-fed")fish.lastFedAt=state.simNow;
+   if(name=="details-junior"){fish.age=1;fish.growthMs=d.content().find(fish.species)->stageMs/2;fish.lastFedAt=state.simNow;}
+   if(name=="details-adult"){fish.age=4;fish.lastFedAt=state.simNow;}
+   if(name=="details-sick")fish.lastFedAt=state.simNow-d.content().find(fish.species)->feedMs;
+   if(name=="details-dead")fish.dead=true;
+   if(name=="details-egg"){fish.egg=true;fish.hatchAt=state.simNow+6000;}
+   selected_=fish.id;
+  }}
+  d.install(std::move(state));open(Panel::Details);panelMotion_.settle();return;
+ }
+ referencePreview_=name=="shop"||name=="tanks"||name=="collection"||name=="settings";if(name=="aquarium")open(Panel::None);else if(name=="shop")open(Panel::Shop);else if(name=="tanks")open(Panel::Tanks);else if(name=="collection")open(Panel::Collection);else if(name=="settings")open(Panel::Settings);else if(name=="inventory")open(Panel::Inventory);else if(name=="care")setTool(Tool::Food);panelMotion_.settle();}
 }

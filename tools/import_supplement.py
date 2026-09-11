@@ -1,86 +1,134 @@
 #!/usr/bin/env python3
-"""Import recognizable supplemental tables with cell provenance.
-Unresolved reward fields remain unresolved. No invented currency replaces them.
+"""Import explicit launch quest rules and rewards from cached workbook rows.
+
+Every mapped field is rebuilt. Unmapped local configuration and deferred
+onboarding data are preserved; unsupported payouts are never invented.
 """
-import json,re
+from __future__ import annotations
+import argparse
+import copy
+import json
+import os
+import re
+import tempfile
 from pathlib import Path
-ROOT=Path(__file__).resolve().parents[1];p=ROOT/'assets/content.json'
-if not p.exists():raise SystemExit('Import catalog first')
-c=json.loads(p.read_text());raw=c['raw_sheets'];audit=[]
-def n(v):return re.sub('[^a-z0-9]+',' ',str(v or '').lower()).strip()
-def numeric(v):return isinstance(v,(int,float)) and not isinstance(v,bool)
-quests=[('daily-feed','feed',False),('daily-sell','sell',False),('daily-adult','adult',False),('daily-decor','decor',False),('daily-gift','gift',False),('weekly-collection','collection',True),('weekly-care','feed',True)]
-by_level={str(i):{} for i in range(1,41)}
-rows=raw.get('Quest Scaling',[])
-# Handle common wide tables: one level per row, rewards in named columns.
-header_row=None;best=-1
-for index,row in enumerate(rows):
- h=[n(x) for x in row];score=sum(any(word in x for word in ['coin','xp','reward','target']) for x in h)
- if any(x in ['level','player level','level min','min level','lv'] for x in h) and score>best:header_row=index;best=score
-if header_row is not None:
- headers=[n(x) for x in rows[header_row]];lc=next(i for i,x in enumerate(headers) if x in ['level','player level','level min','min level','lv'])
- for rindex,row in enumerate(rows[header_row+1:],header_row+2):
-  if lc>=len(row) or not numeric(row[lc]) or not 1<=row[lc]<=70:continue
-  level=int(row[lc])
-  if level>40:continue
-  for qid,event,weekly in quests:
-   result={};sources={}
-   for field,aliases in [('coins',['coin']),('xp',['xp']),('tokens',['token']),('pearls',['pearl']),('target',['target','count','require','goal'])]:
-    choices=[]
-    for i,h in enumerate(headers):
-     if i>=len(row) or not numeric(row[i]) or not any(a in h for a in aliases):continue
-     if any(x in h for x in ['per hour','rate','frontier','fraction','factor','multiplier','total budget']):continue
-     period= 'weekly' if weekly else 'daily'
-     opposite='daily' if weekly else 'weekly'
-     if opposite in h:continue
-     tags=[event]
-     if event=='sell':tags+=['junior','harvest']
-     if event=='collection':tags+=['collect','species']
-     if event=='decor':tags+=['plant','decorate']
-     score=10 if period in h else 0
-     if any(t in h for t in tags):score+=20
-     if 'reward' in h:score+=3
-     if score>=10:choices.append((score,i))
-    if choices:
-     _,i=max(choices);result[field]=int(round(row[i]));sources[field]={'sheet':'Quest Scaling','row':rindex,'column':i+1,'heading':headers[i]}
-   if any(k in result for k in ['coins','xp','tokens','pearls']):
-    result['source']=sources;by_level[str(level)][qid]=result
-# Interpret long tables only where an objective and explicit reward columns coexist.
-for sheet in ['Quest Scaling','Quests & Live Ops']:
- rows=raw.get(sheet,[])
- for hi,row in enumerate(rows):
-  headers=[n(v) for v in row]
-  coincols=[i for i,h in enumerate(headers) if 'coin' in h and not any(x in h for x in ['rate','budget','cost'])]
-  xpcols=[i for i,h in enumerate(headers) if 'xp' in h and not any(x in h for x in ['cumulative','rate','total'])]
-  if not coincols and not xpcols:continue
-  for ri,data in enumerate(rows[hi+1:],hi+2):
-   text=' '.join(n(v) for v in data if isinstance(v,str))
-   if not text:continue
-   for qid,event,weekly in quests:
-    if event not in text and not(event=='sell' and 'junior' in text) and not(event=='collection' and 'collect' in text):continue
-    if weekly!=('weekly' in text):continue
-    # Only use an explicit target/reward row, not descriptive paragraphs.
-    vals={};provenance={}
-    for field,cols in [('coins',coincols),('xp',xpcols)]:
-     if len(cols)==1 and cols[0]<len(data) and numeric(data[cols[0]]):vals[field]=int(round(data[cols[0]]));provenance[field]={'sheet':sheet,'row':ri,'column':cols[0]+1,'heading':headers[cols[0]]}
-    if vals:
-     vals['source']=provenance
-     for level in range(1,41):
-      if qid not in by_level[str(level)]:by_level[str(level)][qid]=vals
-onboarding={};rows=raw.get('Onboarding',[])
-for hi,row in enumerate(rows):
- h=[n(v) for v in row];xp=[i for i,s in enumerate(h) if 'xp' in s and not any(z in s for z in ['total','cumulative','running','threshold'])]
- if len(xp)!=1:continue
- col=xp[0]
- for ri,data in enumerate(rows[hi+1:],hi+2):
-  if col>=len(data) or not numeric(data[col]) or data[col]<0:continue
-  text=' '.join(n(v) for v in data if isinstance(v,str))
-  for action,terms in [('feed',['feed']),('place',['place','placement']),('decor',['decor','plant']),('gift',['send a gift','send gift'])]:
-   if not any(term in text for term in terms):continue
-   if action=='place' and 'buy' in text:continue
-   if any(term in text for term in ['total','level 2 reward','quest reward']):continue
-   if action not in onboarding:onboarding[action]={'xp':int(round(data[col])),'source':{'sheet':'Onboarding','row':ri,'column':col+1,'heading':h[col]}}
- break
-c['supplement']={'quests_by_level':by_level,'onboarding_rewards':onboarding,'import_status':{'quest_profiles':sum(bool(v) for v in by_level.values()),'onboarding_bonus_actions':list(onboarding)}}
-p.write_text(json.dumps(c,indent=2));(ROOT/'evidence/supplement-import.json').write_text(json.dumps(c['supplement'],indent=2))
-print(json.dumps(c['supplement']['import_status']))
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def source(sheet, row, column, heading=None):
+    result = {'sheet': sheet, 'row': row, 'column': column}
+    if heading:
+        result['heading'] = heading
+    return result
+
+
+def import_supplement(content):
+    """Return fresh mapped supplements without mutating the caller's content."""
+    result = copy.deepcopy(content)
+    raw = result['raw_sheets']
+    rules = [
+        ('daily-feed', 'Feed Caretaker', 'healthy-feed', 4, 'Per-quest coin amount is not specified.'),
+        ('daily-sell', 'Junior Seller', 'sell', 5, 'Per-quest coin amount is not specified.'),
+        ('daily-adult', 'Adult Harvest', 'adult-sale', 6, 'Per-quest coin amount is not specified.'),
+        ('daily-decor', 'Tank Stylist', 'decor', 7, 'Decor score reward is not specified.'),
+        ('weekly-collection', 'Collection Chapter', 'collection', 8, 'Collection themes and Pearl or event egg rewards are not specified.'),
+        ('weekly-helper', 'Neighbor Helper', 'gift', 9, 'Gift Token and coin rewards are not specified.'),
+    ]
+    definitions = []
+    for qid, label, event, row, missing in rules:
+        cells = raw['Quests & Live Ops'][row-1]
+        if cells[1] != label:
+            raise ValueError(f'Unexpected quest at Quests & Live Ops!B{row}: {cells[1]}')
+        parsed_target = re.search(r'\b(\d+)\b', cells[2])
+        parsed_level = re.fullmatch(r'L(\d+)\+', cells[4])
+        if not parsed_target or not parsed_level:
+            raise ValueError(f'Quest target or unlock cannot be read at row {row}')
+        target, level = int(parsed_target[1]), int(parsed_level[1])
+        weekly = cells[0] == 'Weekly'
+        definitions.append(dict(id=qid, label=label, event=event, target=target,
+                                level=level, weekly=weekly, configured=not weekly,
+                                missing=missing, source=source('Quests & Live Ops', row, 3)))
+
+    rows = raw['Quest Scaling']
+    expected = ['Level', 'Next-Level XP Delta', 'Daily XP Pool', 'Feed Caretaker XP',
+                'Junior Seller XP', 'Adult Harvest XP', 'Tank Stylist XP', 'Weekly XP',
+                'Est. Daily Coin Pool', 'Quest Balance Flag']
+    if rows[2][:10] != expected:
+        raise ValueError('Quest Scaling headings changed; review explicit mapping')
+    columns = {'daily-feed': 3, 'daily-sell': 4, 'daily-adult': 5,
+               'daily-decor': 6, 'weekly-collection': 7}
+    profiles = {str(level): {} for level in range(1, 41)}
+    pools = {}
+    for rowno, row in enumerate(rows[3:], 4):
+        if not isinstance(row[0], (int, float)) or not 1 <= row[0] <= 40:
+            continue
+        level = int(row[0])
+        for qid, column in columns.items():
+            reward = row[column]
+            if isinstance(reward, bool) or not isinstance(reward, (int, float)) or reward < 0:
+                raise ValueError(f'Missing cached quest reward at row {rowno}, column {column+1}')
+            profiles[str(level)][qid] = {'xp': int(reward), 'source': {
+                'xp': source('Quest Scaling', rowno, column+1, expected[column])}}
+        pools[str(level)] = {'daily_xp': int(row[2]), 'daily_coins': int(row[8]),
+                             'source': {'daily_xp': source('Quest Scaling', rowno, 3),
+                                        'daily_coins': source('Quest Scaling', rowno, 9)}}
+
+    # Preserve only fields that this importer does not map. Replacing whole
+    # mapped sections prevents removed or retuned workbook rules staying stale.
+    supplement = result.get('supplement', {})
+    if not isinstance(supplement, dict):
+        raise ValueError('Supplement must be an object')
+    supplement.update({
+        'quest_definitions': definitions,
+        'quests_by_level': profiles,
+        'quest_pools_by_level': pools,
+        'mastery': {'adult_targets': [int(n) for n in re.search(r'(\d+/\d+/\d+)', raw['Quests & Live Ops'][9][2])[1].split('/')],
+                    'source': source('Quests & Live Ops', 10, 3),
+                    'missing': ['XP reward amounts', 'Statue decoration specification']},
+        'missing_specifications': {
+            'mastery': ['XP reward amounts', 'Statue decoration specification'],
+            'collection': ['Theme names and species membership', 'Pearl or event egg reward'],
+            'decorator': ['Decor score thresholds', 'Cosmetic titles and backgrounds'],
+            'daily_egg': ['Weekly drop tables and probabilities', 'Retired fish pool', 'Resale guardrail'],
+            'quests': ['Daily coin pool split', 'Tank Stylist decor score reward', 'Neighbor Helper coin and token rewards'],
+        },
+        'onboarding_rewards': supplement.get('onboarding_rewards', {}),
+        'import_status': {'quest_profiles': sum(bool(v) for v in profiles.values()),
+                          'quest_definitions': len(definitions), 'tutorial': 'deferred'},
+    })
+    result['supplement'] = supplement
+    return result
+
+
+def write_json_atomic(path, value):
+    """Replace a complete JSON artifact only after generation and sync succeed."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(mode='w', encoding='utf-8', dir=path.parent,
+                                         prefix=path.name + '.', suffix='.tmp', delete=False) as stream:
+            temporary = Path(stream.name)
+            stream.write(json.dumps(value, indent=2, default=str) + '\n')
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    finally:
+        if temporary is not None and temporary.exists():
+            temporary.unlink()
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--content', type=Path, default=ROOT / 'assets/content.json')
+    parser.add_argument('--audit', type=Path, default=ROOT / 'evidence/supplement-import.json')
+    args = parser.parse_args()
+    content = import_supplement(json.loads(args.content.read_text()))
+    write_json_atomic(args.content, content)
+    write_json_atomic(args.audit, content['supplement'])
+    print(json.dumps(content['supplement']['import_status']))
+
+
+if __name__ == '__main__':
+    main()

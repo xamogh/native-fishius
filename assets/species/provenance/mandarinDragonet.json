@@ -1,0 +1,33 @@
+{
+  "id": "mandarinDragonet",
+  "asset": "assets/species/mandarinDragonet.png",
+  "generationMode": "built-in image_gen",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-a451-7472-9e64-1f534f9b6a30/exec-3b7810ef-b777-4935-9a85-7d84ff1ddf5b.png",
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "referenceRole": "Style only, visually inspected before generation. Text style description supplied, not image edits.",
+  "prompt": "Use case: stylized-concept\nAsset type: a single production-ready fish sprite for a native mobile aquarium game.\nPrimary request: Generate ONE isolated, complete specimen with its head facing LEFT and tail to the RIGHT, readable at a small mobile-game size. True transparent background with alpha, no solid background or checkerboard drawn in.\nStyle reference: existing game guppy and clownfish sprites use glossy colorful polished cartoon illustration, smooth 3D-like shading, bright top highlights, a crisp clean dark outline and expressive friendly eyes. Match that look, but preserve the requested species' distinctive anatomy. Do NOT copy guppy or clownfish anatomy, patterns, silhouette or tail.\nComposition: horizontal side profile, entire body, all fins and appendages present and not cropped, centered with modest transparent padding.\nAvoid: text, letters, labels, UI, additional specimens, bubbles, props, water, scenery, floor, ground shadows, backdrop, frame, watermark.\nSubject: Mandarin Dragonet: an unmistakable small dragonet with a chunky low elongated body and an intricate psychedelic pattern of vivid orange and cyan-blue swirling wavy lines, small yellow accents and dark blue outlines in the pattern. Broad spread pectoral fins, distinctive broad soft dorsal fins and a relatively compact rounded tail. Large alert eyes on its rounded head, small protruding mouth. Saturated colors form legible large swirling color patches at mobile scale. Whole body facing LEFT.",
+  "acceptance": "Accepted: left-facing dragonet with distinctive broad pectoral fins, two dorsal fins, vivid orange/cyan swirling markings.",
+  "imageProcessing": "Raw generated image copied without edits. Alpha preserved.",
+  "imageAudit": {
+    "width": 1536,
+    "height": 1024,
+    "channels": 4,
+    "hasAlpha": true,
+    "alphaMin": 0,
+    "alphaMax": 254,
+    "fullyTransparentPixels": 846102,
+    "fullyTransparentPercent": 53.79,
+    "nonTransparentBorderPixels": 48,
+    "sha256": "4531fe71027fb9424f952646a5d70e78ee89c8bb408a34e3b8eb305ccd1f8e2b",
+    "maximumBorderAlpha": 1,
+    "visibleBoundsAlphaAbove16": {
+      "x": 38,
+      "y": 47,
+      "width": 1488,
+      "height": 893
+    }
+  }
+}

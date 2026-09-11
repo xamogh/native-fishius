@@ -1,0 +1,22 @@
+{
+  "output": "assets/content.json",
+  "species": 46,
+  "launch_levels": 40,
+  "future_levels": 30,
+  "unconfigured": [
+    {
+      "field": "species.anniversaryRainbowfish.event_start/event_end",
+      "source": {
+        "sheet": "Limited Edition",
+        "cells": [
+          "D11"
+        ]
+      },
+      "reason": "The workbook specifies one week yearly, but no calendar dates."
+    },
+    {
+      "field": "tank_expansion_levels",
+      "reason": "Medium and Large beats are explicit; their capacity mapping and fourth-step unlock are not specified."
+    }
+  ]
+}

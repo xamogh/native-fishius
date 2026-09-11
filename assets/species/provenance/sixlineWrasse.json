@@ -1,0 +1,18 @@
+{
+  "speciesId": "sixlineWrasse",
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-09-10",
+  "sourcePath": "/Users/amoghrijal/.codex/generated_images/01a08ba7-f708-7373-a9d8-9962c1b37fe2/exec-50f2ef79-45bd-477b-8bfe-456e4b5224bd.png",
+  "prompt": "Use case: stylized-concept. Asset type: transparent aquarium game fish sprite. Draw ONE Sixline Wrasse (Pseudocheilinus hexataenia) in full LEFT-facing side profile, head on left, tail right. Recognizable long slender wrasse silhouette and pointed small snout, purple-lavender body crossed by SIX bold orange horizontal stripes, green rounded tail and small black eyespot edged in turquoise at its base, vivid pink-orange face and clear round glossy eye. Polished playful mobile aquarium-game art: bright luminous colors, sculpted glossy gradients, smooth navy outline, fins with clean ray detail, simple expressive eye. Not photorealistic. One whole fish centered with every fin and tail fully inside frame, 8 percent padding. Actual transparent alpha background exactly zero outside the fish. No backdrop, glow halo, shadows, water, bubbles, props, text, logo, UI, or extra creatures.",
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "anatomySources": [
+    "https://www.fishbase.se/summary/5617"
+  ],
+  "width": 1536,
+  "height": 1024,
+  "hasAlpha": true,
+  "visualAcceptance": "Accepted left profile, slender wrasse silhouette, orange horizontal stripes on purple body, green tail with ocellus. Complete fins/tail, transparent alpha verified."
+}

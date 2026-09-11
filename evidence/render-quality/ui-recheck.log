@@ -1,0 +1,6 @@
+PASS all 46 species: canonical artwork, transparent silhouettes, Collection masks and dead variants
+PASS 804x415: source starters, all 46 Shop and Collection entries, purchase gates, mastery, modal backdrop, navigation and fish controls
+PASS 852x393: source starters, all 46 Shop and Collection entries, purchase gates, mastery, modal backdrop, navigation and fish controls
+PASS 667x375: source starters, all 46 Shop and Collection entries, purchase gates, mastery, modal backdrop, navigation and fish controls
+PASS 1024x768: source starters, all 46 Shop and Collection entries, purchase gates, mastery, modal backdrop, navigation and fish controls
+FAIL Wrong panel after panel-close at 1210x834: expected 8, got 0

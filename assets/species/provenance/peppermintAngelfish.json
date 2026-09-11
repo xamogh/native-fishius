@@ -1,0 +1,19 @@
+{
+  "speciesId": "peppermintAngelfish",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-ffa0-7b00-a9bc-b223ed4e7ba7/exec-6bd2e0ed-3b11-42a4-bae8-8fe7757b2f4d.png",
+  "generator": "built-in image_gen",
+  "prompts": [
+    "Use case: stylized-concept. Asset type: transparent aquarium mobile game fish sprite. Generate one Peppermint Angelfish, an entire isolated specimen facing LEFT in strict side profile, mouth at left and tail at right. Deep round oval angelfish body, brilliant candy-cane red and creamy-white vertical alternating stripes, small friendly large eye, precise graceful dorsal and anal fins. Glossy colorful polished cartoon aquarium-game rendering with smooth sculpted shading and clean dark navy contour, comparable to a cute mobile aquarium game, readable at small size. No reference fish reproduction. Single fish only, all fins and tail visible with modest 6 percent padding. Wide composition. Genuinely transparent alpha background. No backdrop color, no checkerboard drawn, no text, no UI, no bubbles, no props, no decorative extra objects, no cast shadow.",
+    "Use case: background-extraction. Edit target: the provided Peppermint Angelfish image. Preserve this exact fish, facing left, all red-white stripes, anatomy, colors, shading, eye, dark contour, fins and entire tail. Change ONLY the pixels outside the fish silhouette: remove the entire black/pink glow/background and all soft halos, leaving genuinely completely transparent alpha zero everywhere outside the fish with just a clean crisp antialiased contour. No shadows or glow outside the body. Keep the entire fish visible and centered with modest transparent padding. This is a production transparent mobile-game sprite cutout, not a picture of a fish on a dark backdrop."
+  ],
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "visualAcceptance": "Accepted left-facing red/white angelfish with full fins and tail. Exterior sampled pixels have alpha 0; displayed background color is hidden RGB. Second tool output selected.",
+  "width": 1536,
+  "height": 1024,
+  "hasAlpha": true,
+  "alphaMin": 0,
+  "alphaMax": 254
+}

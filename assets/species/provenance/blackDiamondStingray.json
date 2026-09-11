@@ -1,0 +1,18 @@
+{
+  "speciesId": "blackDiamondStingray",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-ffa0-7b00-a9bc-b223ed4e7ba7/exec-96ffbb1a-bff2-446b-aa16-b976cab912d2.png",
+  "generator": "built-in image_gen",
+  "prompts": [
+    "Use case: stylized-concept. Asset type: isolated aquarium mobile-game creature sprite. Generate one Black Diamond Stingray facing LEFT: flattened wide black disc body with broad graceful pectoral wings, galaxy-like scattered ivory-white round spots, two small charming raised eyes near the left-facing front, long slender whip tail extending fully to the RIGHT. Side-oblique top view so its distinctive flattened stingray disc silhouette is unmistakable, no ordinary fish body shape. Glossy colorful polished cartoon game shading with smooth sculpted blue-black highlights and clean dark navy outline, readable at small mobile size. Entire whole-body ray including entire whip tail and both fins fits with modest padding. Single specimen only. Genuinely transparent alpha cutout background with clean sharp edges, no backdrop color, no glow outside body, no text, no UI, no bubbles, no props, no extra objects, no cast shadow."
+  ],
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "visualAcceptance": "Accepted unmistakable black spotted flattened disc, left-facing head, full slender tail, isolated silhouette.",
+  "width": 1774,
+  "height": 887,
+  "hasAlpha": true,
+  "alphaMin": 0,
+  "alphaMax": 255
+}

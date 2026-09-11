@@ -1,0 +1,19 @@
+{
+  "speciesId": "heartfinTetra",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-ffa0-7b00-a9bc-b223ed4e7ba7/exec-e03cd2f5-d6e3-4064-8938-040d0c28fc3b.png",
+  "generator": "built-in image_gen",
+  "prompts": [
+    "Use case: stylized-concept. Asset type: transparent aquarium mobile-game fish sprite. Generate one Heartfin Tetra in LEFT-facing strict side profile, snout left tail right. Small charming streamlined tetra fish, glossy pearlescent rose-pink body with rich crimson back and ruby-pink fins, bright silver-pink belly, large friendly dark eye. Tasteful distinct valentine heart-shaped motif integrated into its broad crimson tail fin and small dorsal fin, retain recognizable natural tetra anatomy rather than a heart object with eyes. Two rounded tail lobes form a heart-like outline. Polished colorful cartoon aquarium-game shading with clean dark navy outline, smooth saturated sculpted highlights, readable at small mobile size. Single entire isolated fish, all fins and tail visible with modest padding. Genuinely transparent alpha cutout background, no backdrop color, no checkerboard drawn, no halo outside body, no text, UI, bubbles, floating hearts, props, extra objects or cast shadows."
+  ],
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "visualAcceptance": "Accepted left-facing pink-red tetra with heart motifs integrated into dorsal/tail fins, whole fish visible. Event visual is interpretation of roster name.",
+  "width": 1536,
+  "height": 1024,
+  "hasAlpha": true,
+  "alphaMin": 0,
+  "alphaMax": 254,
+  "fullyTransparentPixels": 980636
+}

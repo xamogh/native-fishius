@@ -1,0 +1,9 @@
+{
+  "id": "ocellarisClownfish",
+  "source": "assets/skin/fish-clownfish.png",
+  "method": "Reused approved existing species illustration, copied unchanged",
+  "orientation": "right",
+  "runtime_orientation": "left",
+  "acceptance": "Existing full-body illustration visually matches species; Moorish Idol is the black, white and yellow fish with long dorsal pennant previously mislabeled angelfish.",
+  "sha256": "8e8fd01ff9402666d3a5a95755ef01cc30a7309b46064e550590b68edb0ee3b2"
+}

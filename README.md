@@ -4,7 +4,7 @@ The game uses native SDL rendering, textured fish meshes, an event-driven care m
 
 ## Delivery status
 
-Read `docs/verification.md` and `evidence/build-results.json` first. A feature being present in source is not proof that its tests passed or that it matches a reference image. Failed or unavailable checks are retained. Android and iOS host configuration is provided, but device installation, signing, safe-area behavior, and sustained mobile performance are not verified here.
+Read `docs/workbook-implementation.md` for the current workbook and artwork update. It documents the requested deferrals and the latest evidence. `docs/verification.md` and `evidence/build-results.json` retain earlier build history. A feature being present in source is not proof that its tests passed or that it matches a reference image. Failed or unavailable checks are retained. The iPhone simulator build and landscape controls were tested on 10 September 2026. Physical device installation, Android testing, signing and sustained mobile performance are not verified here.
 
 This project must not be described as release-ready or as a verified complete reproduction while the outstanding items in `docs/feature-matrix.md` remain unresolved.
 
@@ -27,7 +27,7 @@ The CMake files pin SDL 3.2.20, SDL_image 3.2.4, SDL_ttf 3.2.2, and nlohmann/jso
 
 ## Fonts
 
-Font binaries are not included in this delivery. Install the intended font families on your build machine before making your own package:
+The app bundles its current display and body fonts with their licenses under `assets/fonts`. To restore the earlier optional font set:
 
 ```sh
 python3 tools/setup_fonts.py
@@ -56,7 +56,7 @@ Open Shop, select a fish, and place eggs in the aquarium. Selecting Buy only arm
 
 Food drops pellets. Hungry fish notice and pursue them at individual times. Select opens fish details. Move drags a fish. Stash moves a living fish or egg into paused inventory. Bag restores it into the active tank without buying it again. Sell aims a net at Junior or older living fish.
 
-Tank controls switch owned tanks, unlock the next tank, and buy the next capacity step. Revival costs one pearl and can temporarily exceed nominal capacity, as required by the behavior contract. Purchases and inventory restoration are blocked while full.
+Tank controls switch owned tanks, unlock the next tank, and buy the next capacity step using the workbook coin and Gift Token costs. Revival costs one pearl and can temporarily exceed nominal capacity, as required by the behavior contract. Purchases and inventory restoration are blocked while full.
 
 Keyboard shortcuts: F for Food, S for Sell, B for Shop, I for inventory, M for Move, and Escape to close or cancel. Mouse and touch use the same ownership rules.
 

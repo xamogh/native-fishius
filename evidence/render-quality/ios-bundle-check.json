@@ -1,0 +1,8 @@
+{
+  "bundle": "com.pixmot.aquarium",
+  "device_families": [
+    1,
+    2
+  ],
+  "native_iphone_and_ipad": true
+}

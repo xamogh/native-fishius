@@ -1,0 +1,9 @@
+{
+  "id": "guppy",
+  "source": "assets/skin/fish-guppy.png",
+  "method": "Reused approved existing species illustration, copied unchanged",
+  "orientation": "left",
+  "runtime_orientation": "left",
+  "acceptance": "Existing full-body illustration visually matches species; Moorish Idol is the black, white and yellow fish with long dorsal pennant previously mislabeled angelfish.",
+  "sha256": "25b6199b974ac55f95767f8547eb0992b8cef1230bf438f1af6870c6f32f8030"
+}

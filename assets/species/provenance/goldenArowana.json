@@ -1,0 +1,33 @@
+{
+  "id": "goldenArowana",
+  "asset": "assets/species/goldenArowana.png",
+  "generationMode": "built-in image_gen",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-a451-7472-9e64-1f534f9b6a30/exec-a17c8304-7ac1-480c-9366-2b72afbbad4f.png",
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "referenceRole": "Style only, visually inspected before generation. Text style description supplied, not image edits.",
+  "prompt": "Use case: stylized-concept\nAsset type: a single production-ready fish sprite for a native mobile aquarium game.\nPrimary request: Generate ONE isolated, complete specimen with its head facing LEFT and tail to the RIGHT, readable at a small mobile-game size. True transparent background with alpha, no solid background or checkerboard drawn in.\nStyle reference: existing game guppy and clownfish sprites use glossy colorful polished cartoon illustration, smooth 3D-like shading, bright top highlights, a crisp clean dark outline and expressive friendly eyes. Match that look, but preserve the requested species' distinctive anatomy. Do NOT copy guppy or clownfish anatomy, patterns, silhouette or tail.\nComposition: horizontal side profile, entire body, all fins and appendages present and not cropped, centered with modest transparent padding.\nAvoid: text, letters, labels, UI, additional specimens, bubbles, props, water, scenery, floor, ground shadows, backdrop, frame, watermark.\nSubject: Golden Arowana: an elegant long slender golden Asian arowana, much longer than it is tall, with large gleaming metallic-gold dragon scales arranged in clear rows. A distinctive upturned mouth and TWO short slender barbels protruding from its lower lip. Low long dorsal and anal fins located on the REAR half of the body, elongated pectoral fins, and a small rounded fan tail. Rich yellow-gold with warm orange fins and white specular highlights. Majestic sleek dragon fish anatomy, not a koi or goldfish. Whole body facing LEFT; preserve complete short mouth barbels and tail.",
+  "acceptance": "Accepted: left-facing long golden arowana, orderly dragon scales, upturned mouth, two lip barbels, rear dorsal/anal fins and rounded tail.",
+  "imageProcessing": "Raw generated image copied without edits. Alpha preserved.",
+  "imageAudit": {
+    "width": 1774,
+    "height": 887,
+    "channels": 4,
+    "hasAlpha": true,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "fullyTransparentPixels": 984215,
+    "fullyTransparentPercent": 62.55,
+    "nonTransparentBorderPixels": 3,
+    "sha256": "f1a789b0c891fd0b74a6957a6bc7b95917fee5575e11e7e272710ad07abeac18",
+    "maximumBorderAlpha": 1,
+    "visibleBoundsAlphaAbove16": {
+      "x": 20,
+      "y": 182,
+      "width": 1736,
+      "height": 500
+    }
+  }
+}

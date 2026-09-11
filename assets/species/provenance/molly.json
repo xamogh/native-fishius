@@ -1,0 +1,39 @@
+{
+  "species": "molly",
+  "tool": "image_gen.imagegen (built-in)",
+  "style_references": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "prompt": "Use case: stylized-concept. Asset type: one transparent fish sprite for a premium mobile aquarium game. Use the two reference fish ONLY for the polished illustration style: glossy saturated color, dimensional highlights, dark clean outline, friendly large eye, crisp readable fins. Do not copy either reference species. Generate exactly ONE complete fish, strict side profile facing LEFT with nose at left and tail at right, centered in a landscape canvas, occupying most of canvas with modest transparent padding. Entire body and all fins and tail must be visible and uncropped. True transparent alpha background, nothing else. No checkerboard, no background color, no water, no shadows, no glow outside body, no props, no bubbles, no typography or labels. Species and markings must be biologically recognizable despite appealing cartoon style. Subject: a black sailfin Molly freshwater livebearer. Plump elongated charcoal-black body with beautiful subtle blue iridescent highlights, rounded snout, large upright broad fan-shaped sail dorsal fin with visible delicate fin rays, and rounded dark tail of modest size. Clear black Molly identity, black fins, slightly lighter silver-charcoal belly. Not red, not orange, not striped; no fancy oversized guppy tail.",
+  "initial_source": "/Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d/exec-0ad2f953-834d-47b3-90ef-c88d12fa5310.png",
+  "initial_output_hint": "Generated images are saved to /Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d as /Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d/exec-0ad2f953-834d-47b3-90ef-c88d12fa5310.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+  "initial_alpha": false,
+  "correction_prompt": "Use case: background-extraction. Edit the provided molly fish image. Preserve the exact fish pixels, orientation, body shape, eyes, fins, color, outline and complete silhouette. Remove every part of the existing background outside the fish and output a TRUE TRANSPARENT RGBA PNG with transparent alpha, including between fins. This is a transparent sprite cutout, not a picture of a transparent background. No white, no checkerboard, no backdrop of any color, no shadows. Keep all fins intact and a small transparent margin. Only the fish is visible. The empty background must have alpha value zero.",
+  "source_path": "/Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d/exec-1354fc2a-145d-4eb3-a083-afac06df0d25.png",
+  "output_hint": "Generated images are saved to /Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d as /Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d/exec-1354fc2a-145d-4eb3-a083-afac06df0d25.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+  "asset_path": "assets/species/molly.png",
+  "has_alpha": true,
+  "dimensions": [
+    1586,
+    992
+  ],
+  "visual_acceptance": {
+    "accepted": true,
+    "notes": "Single complete left-facing black sailfin Molly, tall ray-lined dorsal sail, charcoal body with subtle blue highlights and rounded tail. Glossy shaded game style. Transparent correction removed white background."
+  },
+  "final_file_validation": {
+    "width": 1586,
+    "height": 992,
+    "has_alpha": true,
+    "transparent_pixels": 731074,
+    "max_alpha": 255,
+    "solid_alpha_bounds": [
+      18,
+      17,
+      1569,
+      972
+    ],
+    "sha256": "a4cfff51453b23d301e7a21642568a0548628e3bea1786774a02d8cff44cfb14"
+  }
+}

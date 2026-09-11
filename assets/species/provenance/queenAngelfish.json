@@ -1,0 +1,27 @@
+{
+  "id": "queenAngelfish",
+  "generator": "built-in image_gen",
+  "date": "2026-09-10",
+  "prompt": "Use case: stylized-concept. Asset type: transparent PNG fish sprite for a mobile aquarium game. Create ONE isolated adult QUEEN ANGELFISH (Holacanthus ciliaris), complete body SIDE PROFILE facing LEFT, face on the LEFT, tail on the RIGHT. Species traits: tall laterally compressed blue and turquoise body with golden yellow-edged scales, yellow face and lips, vivid yellow rounded tail and pectoral fin, sweeping blue-edged yellow dorsal and anal fins trailing toward the tail. A distinctive deep blue/black forehead CROWN spot ringed in electric blue above the eye is essential. Queen Angelfish is a broad-bodied blue/yellow angelfish, NOT a Moorish Idol: no black-and-white vertical bands, no exaggerated white filament/banner and no narrow triangle body. Match established guppy and clownfish sprites as STYLE REFERENCE ONLY: polished glossy colorful cartoon aquarium-game shading, clean dark contour, charming bright eye, smoothly rounded volume and strong mobile-readable silhouette. Keep all fins and tail complete, centered specimen, modest transparent padding all around. Real TRANSPARENT ALPHA background. Only the one fish, no floor, cast shadow, glow aura, colored haze, backdrop, water, bubbles, plants, props, UI, labels, text, watermark, other specimens or sprite sheet.",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-50cc-76f2-a405-6125adffd466/exec-d6f7eeeb-9da3-48e0-a3e2-71478fb34a88.png",
+  "output": "assets/species/queenAngelfish.png",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "alpha": true,
+  "acceptance": "Single complete left-facing Queen Angelfish with broad turquoise-blue body, yellow scales/fins/tail and blue-ringed dark forehead crown. Distinct from a Moorish Idol. Full fins and tail visible. Generated alpha retained unchanged.",
+  "validation": {
+    "width": 1536,
+    "height": 1024,
+    "channels": 4,
+    "fullyTransparentPixels": 650685,
+    "maxAlpha": 254,
+    "fishBounds": [
+      89,
+      41,
+      1422,
+      913
+    ]
+  }
+}

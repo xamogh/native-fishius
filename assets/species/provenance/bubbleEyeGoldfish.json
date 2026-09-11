@@ -1,0 +1,33 @@
+{
+  "id": "bubbleEyeGoldfish",
+  "asset": "assets/species/bubbleEyeGoldfish.png",
+  "generationMode": "built-in image_gen",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-a451-7472-9e64-1f534f9b6a30/exec-ee51fe58-4b14-4b5e-8984-863356cc38c7.png",
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "referenceRole": "Style only, visually inspected before generation. Text style description supplied, not image edits.",
+  "prompt": "Use case: stylized-concept\nAsset type: a single production-ready fish sprite for a native mobile aquarium game.\nPrimary request: Generate ONE isolated, complete specimen with its head facing LEFT and tail to the RIGHT, readable at a small mobile-game size. True transparent background with alpha, no solid background or checkerboard drawn in.\nStyle reference: existing game guppy and clownfish sprites use glossy colorful polished cartoon illustration, smooth 3D-like shading, bright top highlights, a crisp clean dark outline and expressive friendly eyes. Match that look, but preserve the requested species' distinctive anatomy. Do NOT copy guppy or clownfish anatomy, patterns, silhouette or tail.\nComposition: horizontal side profile, entire body, all fins and appendages present and not cropped, centered with modest transparent padding.\nAvoid: text, letters, labels, UI, additional specimens, bubbles, props, water, scenery, floor, ground shadows, backdrop, frame, watermark.\nSubject: Bubble Eye Goldfish: a squat rounded bright orange goldfish with TWO oversized soft translucent golden fluid-filled bubble cheek sacs immediately below the eyes. Both characteristic inflated bubble cheeks should be clearly visible in the slightly turned side pose. Delicate split fan tail and fluttering small fins, smooth rounded back without a tall dorsal fin. Orange body and luminous wobbling bubble cheeks, attractive and recognizable as bubble-eye goldfish. Friendly face. Whole body facing LEFT.",
+  "acceptance": "Accepted: left-facing whole body, no dorsal fin, orange scales, two oversized translucent bubble cheek sacs, split flowing tail.",
+  "imageProcessing": "Raw generated image copied without edits. Alpha preserved.",
+  "imageAudit": {
+    "width": 1536,
+    "height": 1024,
+    "channels": 4,
+    "hasAlpha": true,
+    "alphaMin": 0,
+    "alphaMax": 254,
+    "fullyTransparentPixels": 944345,
+    "fullyTransparentPercent": 60.04,
+    "nonTransparentBorderPixels": 3,
+    "sha256": "9300e02d2b4a9b1860f77593df1bd74c4a69e8ede23cd7636b82c92a00b024a1",
+    "maximumBorderAlpha": 1,
+    "visibleBoundsAlphaAbove16": {
+      "x": 64,
+      "y": 161,
+      "width": 1443,
+      "height": 702
+    }
+  }
+}

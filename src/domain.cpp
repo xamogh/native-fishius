@@ -1,4 +1,3 @@
-#include <cctype>
 #include "aquarium/domain.hpp"
 #include <algorithm>
 #include <chrono>
@@ -16,7 +15,6 @@ bool addOk(Amount a,Amount b){return a>=0&&b>=0&&a<=limit-b;}
 bool validPoint(WorldPoint p){return std::isfinite(p.x)&&std::isfinite(p.y)&&p.x>=0&&p.x<=1088&&p.y>=0&&p.y<=512;}
 bool contains(const std::vector<std::string>& v,std::string_view s){return std::find(v.begin(),v.end(),s)!=v.end();}
 Result bad(Error e){return {e,{},{},{},{},{},errorText(e)};}
-std::string normalized(std::string s){for(auto& c:s)c=static_cast<char>(std::tolower(static_cast<unsigned char>(c)));return s;}
 std::string claimKey(const Species& s,const Calendar& c){return s.id+(s.annual?":"+std::to_string(c.year):"");}
 void check(bool b,const char* message){if(!b)throw std::runtime_error(message);}
 }
@@ -28,21 +26,29 @@ Content Content::fromJson(const Json& j){
   s.level=x.at("level");std::string currency=x.at("currency");s.currency=currency=="pearls"?Currency::Pearls:currency=="gift"?Currency::Gift:Currency::Coins;
   s.price=x.at("price");s.buyXp=x.at("buy_xp");s.stageMs=x.at("stage_ms");s.feedMs=x.at("feed_ms");s.graceMs=x.at("grace_ms");
   s.saleCoins=x.at("sale_coins").get<std::array<Amount,5>>();s.saleXp=x.at("sale_xp").get<std::array<Amount,5>>();
-  s.badge=x.value("badge","");s.description=x.value("description","");s.nominalLength=x.value("length",38.);s.asset="fish/"+s.id+".png";
-  s.eventStart=x.value("event_start",0);s.eventEnd=x.value("event_end",0);s.annual=x.value("annual",false);s.oneTime=x.value("one_time",false);s.nonResellable=x.value("non_resellable",false);
+  s.badge=x.value("badge","");s.description=x.value("description","");s.nominalLength=x.value("length",38.);s.asset="species/"+s.id+".png";
+  s.eventStart=x.value("event_start",0);s.eventEnd=x.value("event_end",0);s.eventConfigured=x.value("event_configured",true);s.annual=x.value("annual",false);s.oneTime=x.value("one_time",false);s.nonResellable=x.value("non_resellable",false);
   check(s.stageMs>0&&s.feedMs>0&&s.graceMs>0,"Invalid lifecycle duration");check(s.price>=0&&s.buyXp>=0,"Invalid price");
   check(!c.find(s.id),"Duplicate species id");c.species.push_back(std::move(s));
  }
  check(c.species.size()==46,"Expected the 46-entry launch catalog");
  c.levels=j.at("levels").get<std::array<Amount,40>>();check(c.levels[0]==0&&c.levels[1]==80,"Invalid initial XP curve");
- check(std::is_sorted(c.levels.begin(),c.levels.end()),"XP curve not monotonic");c.workbook=j.value("raw_sheets",Json::object());c.supplement=j.value("supplement",Json::object());return c;
+ check(std::is_sorted(c.levels.begin(),c.levels.end()),"XP curve not monotonic");c.workbook=j.value("raw_sheets",Json::object());c.supplement=j.value("supplement",Json::object());
+ c.tankCosts=j.at("tank_costs").get<decltype(c.tankCosts)>();c.tankLevels=j.at("tank_levels").get<decltype(c.tankLevels)>();
+ if(j.contains("tank_tokens"))c.tankTokens=j.at("tank_tokens").get<decltype(c.tankTokens)>();
+ const auto inputs=j.value("inputs",Json::object());c.startingWallet={inputs.value("starting_coins",Amount{250}),inputs.value("starting_pearls",Amount{0})};c.startingTankCapacity=inputs.value("starting_tank_capacity",10);c.levelTwoPearls=inputs.value("level_2_pearl_grant",Amount{1});
+ c.starters=j.value("starter_species",std::vector<std::string>{"neonTetra","guppy","platy","molly"});for(const auto& id:c.starters)check(c.find(id)&&c.find(id)->level==1,"Invalid starter species");
+ if(c.supplement.contains("mastery"))c.masteryTargets=c.supplement["mastery"]["adult_targets"].get<decltype(c.masteryTargets)>();check(c.masteryTargets[0]>0&&c.masteryTargets[0]<c.masteryTargets[1]&&c.masteryTargets[1]<c.masteryTargets[2],"Invalid mastery milestones");
+ check(c.startingWallet.coins>=0&&c.startingWallet.pearls>=0&&c.levelTwoPearls>=0&&c.startingTankCapacity==10,"Invalid starting configuration");
+ for(std::size_t i=0;i<c.tankCosts.size();++i){check(c.tankLevels[i]>=1&&c.tankLevels[i]<=40,"Invalid tank unlock level");for(auto cost:c.tankCosts[i])check(cost>=0,"Invalid tank price");for(auto cost:c.tankTokens[i])check(cost>=0,"Invalid tank material cost");}
+ return c;
 }
 Calendar calendarAt(Millis unixMs){
  using namespace std::chrono;const auto d=floor<days>(sys_time<milliseconds>{milliseconds{unixMs}});year_month_day ymd{d};
  const auto day=d.time_since_epoch().count();const auto week=floor<days>(d-days{weekday{d}.iso_encoding()-1}).time_since_epoch().count()/7;
  return {day,week,int(ymd.year()),int(unsigned(ymd.month()))*100+int(unsigned(ymd.day()))};
 }
-bool eventOpen(const Species& s,const Calendar& c){if(!s.eventStart)return true;return s.eventStart<=s.eventEnd?(c.monthDay>=s.eventStart&&c.monthDay<=s.eventEnd):(c.monthDay>=s.eventStart||c.monthDay<=s.eventEnd);}
+bool eventOpen(const Species& s,const Calendar& c){if(!s.eventConfigured)return false;if(!s.eventStart)return true;return s.eventStart<=s.eventEnd?(c.monthDay>=s.eventStart&&c.monthDay<=s.eventEnd):(c.monthDay>=s.eventStart||c.monthDay<=s.eventEnd);}
 int levelFor(const Content& c,Amount xp){return static_cast<int>(std::upper_bound(c.levels.begin(),c.levels.end(),xp)-c.levels.begin());}
 Care careOf(const Species& s,const Fish& f,Millis now){if(f.dead)return Care::Dead;if(f.egg)return Care::Fed;Millis elapsed=(f.stashed?f.stashedAt:now)-f.lastFedAt;if(elapsed>=s.feedMs)return Care::Sick;if(elapsed*10>=s.feedMs*9)return Care::Urgent;if(elapsed*4>=s.feedMs*3)return Care::Hungry;return Care::Fed;}
 bool sellable(const Species& s,const Fish& f){return !f.egg&&!f.dead&&!f.stashed&&f.age>=1&&!s.nonResellable;}
@@ -59,8 +65,8 @@ std::string stageName(const Fish& f){if(f.dead)return "Dead";if(f.egg)return "Eg
 std::string careName(Care c){switch(c){case Care::Fed:return "Happy & fed";case Care::Hungry:return "Hungry";case Care::Urgent:return "Feed soon!";case Care::Sick:return "SICK";case Care::Dead:return "Needs revival";}return "";}
 Domain::Domain(Content content,Millis calendarMs,std::uint64_t seed):content_(std::move(content)){
  state_.calendarNow=calendarMs;state_.wallAnchor=calendarMs;state_.rngState=seed?seed:1;
- constexpr std::array<const char*,4> starters{"guppy","emberTetra","platy","molly"};
- for(std::size_t i=0;i<starters.size();++i){check(content_.find(starters[i]),"Required starter species absent");auto f=makeFish(starters[i],{220.+190.*double(i),220.+130.*double(i%2)},false);state_.collected.push_back(f.species);state_.fish.push_back(std::move(f));}
+ state_.wallet=content_.startingWallet;state_.tanks[0].slots=content_.startingTankCapacity;
+ for(std::size_t i=0;i<content_.starters.size();++i){auto f=makeFish(content_.starters[i],{220.+190.*double(i),220.+130.*double(i%2)},false);state_.collected.push_back(f.species);state_.fish.push_back(std::move(f));}
  configureExtras();setCalendar(calendarMs);
 }
 double Domain::random(double a,double b){auto x=state_.rngState;x^=x<<13;x^=x>>7;x^=x<<17;state_.rngState=x;return a+(b-a)*double(x>>11)/9007199254740992.;}
@@ -77,28 +83,32 @@ Result Domain::blocker(const Species& s)const{
  auto* t=tank(state_.activeTank);if(!t||living(t->id)>=static_cast<std::size_t>(t->slots))return bad(Error::Full);Amount bal=s.currency==Currency::Pearls?state_.wallet.pearls:state_.wallet.coins;if(s.currency!=Currency::Gift&&bal<s.price)return bad(Error::Funds);return {};
 }
 Result Domain::grant(Amount coins,Amount xp,Amount pearls,Amount tokens){
- const int after=levelFor(content_,state_.xp+xp);const Amount levelPearl=state_.highestRewardedLevel<2&&after>=2?1:0;
+ if(!addOk(state_.xp,xp))return bad(Error::Overflow);
+ const int after=levelFor(content_,state_.xp+xp);const Amount levelPearl=state_.highestRewardedLevel<2&&after>=2?content_.levelTwoPearls:0;
  if(!addOk(state_.wallet.coins,coins)||!addOk(state_.xp,xp)||!addOk(state_.wallet.pearls,pearls+levelPearl)||!addOk(state_.giftTokens,tokens))return bad(Error::Overflow);
  const int before=level();state_.wallet.coins+=coins;state_.wallet.pearls+=pearls+levelPearl;state_.xp+=xp;state_.giftTokens+=tokens;state_.highestRewardedLevel=std::max(state_.highestRewardedLevel,after);
- if(after>before)emit({"level",{}, {544,90},0,0,levelPearl,"Level "+std::to_string(after)+"!"});return {Error::None,{},coins,xp,pearls+levelPearl,tokens,{}};
+ if(after>before){configureExtras();emit({"level",{}, {544,90},0,0,levelPearl,"Level "+std::to_string(after)+"!"});}return {Error::None,{},coins,xp,pearls+levelPearl,tokens,{}};
 }
 void Domain::emit(Event e){if(events_.size()>=64)events_.erase(events_.begin());events_.push_back(std::move(e));}
 std::vector<Event> Domain::takeEvents(){auto result=std::move(events_);events_.clear();return result;}
-void Domain::count(std::string_view event,std::int64_t n){state_.totalEvents[std::string(event)]+=n;for(auto& q:questDefs_)if(q.event==event){auto& p=state_.quests[q.id];p.count=std::min<std::int64_t>(q.target,p.count+n);}tutorialEvent(event);}
+void Domain::count(std::string_view event,std::int64_t n){state_.totalEvents[std::string(event)]+=n;for(auto& q:questDefs_)if(q.event==event&&level()>=q.level){auto& p=state_.quests[q.id];p.count=std::min<std::int64_t>(q.target,p.count+n);}tutorialEvent(event);}
 void Domain::setCalendar(Millis now){state_.calendarNow=std::max(state_.calendarNow,now);auto c=calendarAt(state_.calendarNow);if(c.day>state_.dailyPeriod){for(auto& q:questDefs_)if(!q.weekly)state_.quests[q.id]={};state_.dailyPeriod=c.day;}if(c.week>state_.weeklyPeriod){for(auto& q:questDefs_)if(q.weekly)state_.quests[q.id]={};state_.weeklyPeriod=c.week;}}
 void Domain::advanceCare(Millis delta){
  if(delta<=0)return;if(delta>315576000000LL)throw std::invalid_argument("Care advance exceeds ten years");if(state_.simNow>limit-delta)throw std::overflow_error("Simulation clock exhausted");const auto to=state_.simNow+delta;
- for(auto& f:state_.fish){const auto* s=content_.find(f.species);const bool egg=f.egg,dead=f.dead;const int age=f.age;advanceFish(*s,f,state_.simNow,to);if(egg&&!f.egg)emit({"hatch",f.id,f.position,0,0,0,"Hello, little "+s->name+"!"});if(age<f.age)emit({"growth",f.id,f.position,0,0,0,stageName(f)+"!"});if(!dead&&f.dead)emit({"death",f.id,f.position,0,0,0,s->name+" needs help"});}
+ const auto caretaker=std::find_if(questDefs_.begin(),questDefs_.end(),[](const Quest& q){return q.id=="daily-feed";});
+ const int feedTarget=caretaker==questDefs_.end()?0:caretaker->target;
+ for(auto& f:state_.fish){const auto* s=content_.find(f.species);const bool egg=f.egg,dead=f.dead;const int age=f.age;const auto before=careOf(*s,f,state_.simNow);advanceFish(*s,f,state_.simNow,to);if(egg&&!f.egg)emit({"hatch",f.id,f.position,0,0,0,"Hello, little "+s->name+"!"});if(age<f.age)emit({"growth",f.id,f.position,0,0,0,stageName(f)+"!"});if(age<4&&f.age==4){++state_.adultRaised[f.species];count("raised-adult");}if(!dead&&f.dead)emit({"death",f.id,f.position,0,0,0,s->name+" needs help"});if(!f.stashed&&!dead&&before!=Care::Sick&&(careOf(*s,f,to)==Care::Sick||f.dead)){auto& progress=state_.quests["daily-feed"];if(!progress.claimed&&progress.count<feedTarget)progress.count=0;}}
  state_.simNow=to;
 }
 void Domain::beginTurn(Fish& f,int d){auto& m=f.motion;if(d==m.direction||m.turnRemaining>0)return;m.turnFrom=m.direction;m.turnDuration=random(.28,.42);m.turnRemaining=m.turnDuration;}
+double motionFacing(const Motion& m){return m.turnRemaining>0?-m.turnFrom*std::cos(pi*(1-m.turnRemaining/m.turnDuration)):-double(m.direction);}
 void Domain::stepMovement(double dt,Tool tool,FishId held){
  if(!(dt>0&&dt<=.05))return;
- for(auto& p:pellets_){if(p.position.y<507){p.speed=std::min(105.,p.speed+34.*dt);p.position.y=std::min(507.,p.position.y+p.speed*dt);p.position.x=std::clamp(p.position.x+std::sin(p.phase)*3.*dt,8.,1080.);p.rotation+=22.*dt;p.phase+=dt;}else p.rest+=dt;}
+ for(auto& p:pellets_){p.previous=p.position;p.hasPrevious=true;if(p.position.y<507){p.speed=std::min(105.,p.speed+34.*dt);p.position.y=std::min(507.,p.position.y+p.speed*dt);p.position.x=std::clamp(p.position.x+std::sin(p.phase)*3.*dt,8.,1080.);p.rotation+=22.*dt;p.phase+=dt;}else p.rest+=dt;}
  std::erase_if(pellets_,[](auto& p){return p.rest>=31.8;});
  std::vector<FishId> deadIds;for(auto& f:state_.fish)if(!f.stashed&&f.tank==state_.activeTank&&f.dead)deadIds.push_back(f.id);std::sort(deadIds.begin(),deadIds.end());
  struct Arrival {FishId fish;std::uint64_t pellet;double when;};std::vector<Arrival> arrivals;
- for(auto& f:state_.fish){if(f.stashed||f.tank!=state_.activeTank)continue;auto& m=f.motion;m.previous=f.position;const auto& s=*content_.find(f.species);m.drift+=dt;
+ for(auto& f:state_.fish){if(f.stashed||f.tank!=state_.activeTank)continue;auto& m=f.motion;m.previous=f.position;m.previousPhase=m.phase;m.previousPitch=m.pitch;m.previousFacing=motionFacing(m);m.previousSpeed=m.speed;m.hasPrevious=true;const auto& s=*content_.find(f.species);m.drift+=dt;
   if(f.egg){f.position.y=std::min(517.,f.position.y+45.*dt);continue;}
   if(f.dead){auto it=std::find(deadIds.begin(),deadIds.end(),f.id);const double spacing=deadIds.size()<2?0:std::min(64.,256./double(deadIds.size()-1));double tx=544.+(double(it-deadIds.begin())-double(deadIds.size()-1)*.5)*spacing;f.position.x+=(tx-f.position.x)*(1-std::exp(-.28*dt));const double target=40.+std::sin(m.drift*.8)*2.5;f.position.y=std::max(target,f.position.y-18.*dt);m.pitch=std::sin(m.drift*.7)*.07;m.speed=0;continue;}
   Care care=careOf(s,f,state_.simNow);bool hungry=care!=Care::Fed;bool sick=care==Care::Sick;bool heldNow=f.id==held||(tool==Tool::Sell&&sellable(s,f));
@@ -128,11 +138,11 @@ void Domain::stepMovement(double dt,Tool tool,FishId held){
  std::sort(arrivals.begin(),arrivals.end(),[](auto& a,auto& b){if(std::abs(a.when-b.when)>1e-9)return a.when<b.when;return a.fish<b.fish;});
  for(auto& a:arrivals){auto p=std::find_if(pellets_.begin(),pellets_.end(),[&](auto& x){return x.id==a.pellet;});auto* f=mutableFish(a.fish);if(p==pellets_.end()||!f||f->dead||careOf(*content_.find(f->species),*f,state_.simNow)==Care::Fed)continue;auto r=execute({Action::Feed,a.fish});if(r){f=mutableFish(a.fish);f->motion.mealDelay=random(.15,.45);f->motion.retarget=random(.6,1.4);f->motion.foodTarget=0;pellets_.erase(p);}}
 }
-void Domain::clearTransient(){pellets_.clear();for(auto& f:state_.fish){f.motion.foodTarget=0;f.motion.noticeDelay=0;}}
-void Domain::install(State candidate){state_=std::move(candidate);clearTransient();events_.clear();}
+void Domain::clearTransient(){pellets_.clear();for(auto& f:state_.fish){f.motion.foodTarget=0;f.motion.noticeDelay=0;f.motion.previous=f.position;f.motion.hasPrevious=false;}}
+void Domain::install(State candidate){state_=std::move(candidate);configureExtras();clearTransient();events_.clear();}
 Result Domain::execute(const Command& c){
  State original=state_;auto oldPellets=pellets_;auto oldEvents=events_;auto oldNext=nextPellet_;
- auto rollback=[&]{state_=std::move(original);pellets_=std::move(oldPellets);events_=std::move(oldEvents);nextPellet_=oldNext;};
+ auto rollback=[&]{state_=std::move(original);pellets_=std::move(oldPellets);events_=std::move(oldEvents);nextPellet_=oldNext;configureExtras();};
  try{auto result=executeImpl(c);if(!result)rollback();return result;}
  catch(const std::overflow_error&){rollback();return bad(Error::Overflow);}
  catch(...){rollback();throw;}
@@ -149,12 +159,14 @@ Result Domain::executeImpl(const Command& c){
   emit({"purchase",r.fish,c.point,s->currency==Currency::Coins?-s->price:0,s->buyXp,s->currency==Currency::Pearls?-s->price:0,""});return r;
  }
  case Action::Feed:{
-  if(!f||f->stashed)return bad(Error::InvalidFish);if(f->dead)return bad(Error::Dead);if(f->egg)return bad(Error::NotReady);auto* s=content_.find(f->species);if(careOf(*s,*f,state_.simNow)==Care::Fed)return bad(Error::NotReady);f->lastFedAt=state_.simNow;f->motion.foodTarget=0;f->motion.noticeDelay=0;emit({"feed",f->id,f->position,0,0,0,"Yum!"});count("feed");return {};
+  if(!f||f->stashed)return bad(Error::InvalidFish);if(f->dead)return bad(Error::Dead);if(f->egg)return bad(Error::NotReady);auto* s=content_.find(f->species);if(careOf(*s,*f,state_.simNow)==Care::Fed)return bad(Error::NotReady);
+  const bool healthy=std::none_of(state_.fish.begin(),state_.fish.end(),[&](const Fish& other){return !other.stashed&&!other.dead&&careOf(*content_.find(other.species),other,state_.simNow)==Care::Sick;});
+  f->lastFedAt=state_.simNow;f->motion.foodTarget=0;f->motion.noticeDelay=0;emit({"feed",f->id,f->position,0,0,0,"Yum!"});count("feed");if(healthy)count("healthy-feed");return {};
  }
  case Action::Sell:{
   if(!f)return bad(Error::InvalidFish);const auto* s=content_.find(f->species);if(!sellable(*s,*f)||f->tank!=state_.activeTank)return bad(Error::NotSellable);
   const int age=f->age;const WorldPoint at=f->position;const auto species=f->species;const auto id=f->id;auto r=grant(s->saleCoins[age],s->saleXp[age]);if(!r)return r;
-  std::erase_if(state_.fish,[&](auto& x){return x.id==id;});++state_.mastery[species];count("sell");if(age==4)count("adult");emit({"sale",id,at,r.coins,r.xp,r.pearls,""});return r;
+  std::erase_if(state_.fish,[&](auto& x){return x.id==id;});++state_.mastery[species];count("sell");if(age==4)count("adult-sale");emit({"sale",id,at,r.coins,r.xp,r.pearls,""});return r;
  }
  case Action::Stash:
   if(!f||f->stashed||f->tank!=state_.activeTank)return bad(Error::InvalidFish);if(f->dead)return bad(Error::Dead);f->stashed=true;f->stashedAt=state_.simNow;f->motion.foodTarget=0;emit({"stash",f->id,f->position,0,0,0,"Safe in inventory"});return {};
@@ -174,12 +186,18 @@ Result Domain::executeImpl(const Command& c){
  }
  case Action::RemoveAll:{auto before=state_.fish.size();std::erase_if(state_.fish,[](auto& x){return x.dead;});return before==state_.fish.size()?bad(Error::NotDead):Result{};}
  case Action::UnlockTank:{
-  int id=c.tank.value;if(id<1||id>5)return bad(Error::Unknown);if(tank(c.tank))return bad(Error::AlreadyOwned);if(id>1&&!tank(TankId{id-1}))return bad(Error::PreviousTank);if(level()<content_.tankLevels[id-1])return bad(Error::Level);if(c.currency==Currency::Gift)return bad(Error::Unknown);
-  Amount cost=content_.tankCosts[id-1][0];if(c.currency==Currency::Pearls)cost=(cost+999)/1000;Amount& bal=c.currency==Currency::Pearls?state_.wallet.pearls:state_.wallet.coins;if(bal<cost)return bad(Error::Funds);bal-=cost;state_.tanks.push_back({c.tank,10});state_.activeTank=c.tank;clearTransient();emit({"tank",{}, {544,220},0,0,0,"A new aquarium!"});return {};
+  // Coins are the common sink. The solo route supplies the listed Gift Tokens
+  // instead of friend assists; tokens do not bypass the coin price.
+  int id=c.tank.value;if(id<1||id>5)return bad(Error::Unknown);if(tank(c.tank))return bad(Error::AlreadyOwned);if(id>1&&!tank(TankId{id-1}))return bad(Error::PreviousTank);if(level()<content_.tankLevels[id-1])return bad(Error::Level);if(c.currency==Currency::Pearls)return bad(Error::Unavailable);
+  const Amount coins=content_.tankCosts[id-1][0],tokens=content_.tankTokens[id-1][0];
+  if(state_.wallet.coins<coins||state_.giftTokens<tokens)return {Error::Funds,{},{},{},{},{},"This tank needs "+std::to_string(coins)+" coins and "+std::to_string(tokens)+" Gift Tokens."};
+  state_.wallet.coins-=coins;state_.giftTokens-=tokens;state_.tanks.push_back({c.tank,10});state_.activeTank=c.tank;clearTransient();emit({"tank",{}, {544,220},-coins,0,0,"A new aquarium!"});return {};
  }
  case Action::ExpandTank:{
-  int id=c.tank.value;if(id<1||id>5)return bad(Error::Unknown);auto it=std::find_if(state_.tanks.begin(),state_.tanks.end(),[&](auto& t){return t.id==c.tank;});if(it==state_.tanks.end())return bad(Error::Unknown);if(it->slots>=40)return bad(Error::Maximum);if(c.currency==Currency::Gift)return bad(Error::Unknown);
-  Amount cost=content_.tankCosts[id-1][it->slots/10];if(c.currency==Currency::Pearls)cost=(cost+999)/1000;Amount& bal=c.currency==Currency::Pearls?state_.wallet.pearls:state_.wallet.coins;if(bal<cost)return bad(Error::Funds);bal-=cost;it->slots+=10;emit({"tank",{}, {544,220},0,0,0,"More room to swim!"});return {};
+  int id=c.tank.value;if(id<1||id>5)return bad(Error::Unknown);auto it=std::find_if(state_.tanks.begin(),state_.tanks.end(),[&](auto& t){return t.id==c.tank;});if(it==state_.tanks.end())return bad(Error::Unknown);if(it->slots>=40)return bad(Error::Maximum);if(c.currency==Currency::Pearls)return bad(Error::Unavailable);
+  const auto step=it->slots/10;const Amount coins=content_.tankCosts[id-1][step],tokens=content_.tankTokens[id-1][step];
+  if(state_.wallet.coins<coins||state_.giftTokens<tokens)return {Error::Funds,{},{},{},{},{},"This expansion needs "+std::to_string(coins)+" coins and "+std::to_string(tokens)+" Gift Tokens."};
+  state_.wallet.coins-=coins;state_.giftTokens-=tokens;it->slots+=10;emit({"tank",{}, {544,220},-coins,0,0,"More room to swim!"});return {};
  }
  case Action::SwitchTank:
   if(!tank(c.tank))return bad(Error::Unknown);state_.activeTank=c.tank;clearTransient();return {};
@@ -193,7 +211,7 @@ Result Domain::executeImpl(const Command& c){
  case Action::SendGift:return sendGift();
  case Action::DailyEgg:return dailyEgg();
  case Action::ClaimMastery:{
-  const auto* s=content_.find(c.key);if(!s)return bad(Error::Unknown);std::string key="mastery:"+c.key;if(contains(state_.claims,key))return bad(Error::Claimed);if(state_.mastery[c.key]<5)return bad(Error::NotReady);state_.claims.push_back(key);emit({"mastery",{}, {544,220},0,0,0,s->name+" mastery badge earned!"});return {};
+  const auto* s=content_.find(c.key);if(!s)return bad(Error::Unknown);const auto progress=masteryProgress(c.key);if(progress.complete)return bad(Error::Claimed);if(!progress.ready)return bad(Error::NotReady);state_.claims.push_back("mastery:"+c.key+":"+std::to_string(progress.target));emit({"mastery",{}, {544,220},0,0,0,s->name+" "+std::to_string(progress.target)+" Adult mastery badge earned!"});return {};
  }
  case Action::Tutorial:return tutorial();
  case Action::SetLook:state_.settings.tankLook=std::clamp(static_cast<int>(c.value),0,2);tutorialEvent("look");return {};
@@ -204,44 +222,38 @@ Result Domain::executeImpl(const Command& c){
  }
  return bad(Error::Unknown);
 }
+MasteryProgress Domain::masteryProgress(std::string_view species)const{
+ MasteryProgress result;const auto it=state_.adultRaised.find(std::string(species));if(it!=state_.adultRaised.end())result.count=it->second;
+ const auto& goals=content_.masteryTargets;for(int goal:goals){if(!contains(state_.claims,"mastery:"+std::string(species)+":"+std::to_string(goal)))break;++result.tier;}
+ result.complete=result.tier==3;result.target=result.complete?goals.back():goals[static_cast<std::size_t>(result.tier)];result.ready=!result.complete&&result.count>=result.target;return result;
+}
 void Domain::configureExtras(){
- // These prices and cosmetic-only mastery goals are explicitly documented local
- // defaults. They are not represented as numerical workbook catalog entries.
+ // Decor catalog prices remain local configuration because the workbook does
+ // not contain individual decor prices or score values.
  decorDefs_={{"seaweed","Seaweed garden",25,5,"ASSUMPTION: local decor configuration"},{"coral","Sunset coral",60,12,"ASSUMPTION: local decor configuration"},{"shell","Pearl shell",40,8,"ASSUMPTION: local decor configuration"},{"arch","Little stone arch",100,20,"ASSUMPTION: local decor configuration"},{"chest","Treasure chest",150,30,"ASSUMPTION: local decor configuration"}};
- // Import identifiable reward columns from Quest Scaling instead of assigning
- // invented currency. Ambiguous columns stay visibly unconfigured in the UI.
- Amount dc=0,dx=0,wc=0,wx=0;std::string source="Quest Scaling: no unambiguous numeric reward columns imported";
- if(content_.workbook.contains("Quest Scaling")){
-  const auto& rows=content_.workbook["Quest Scaling"];std::vector<std::string> header;int levelColumn=-1,dcc=-1,dxc=-1,wcc=-1,wxc=-1;
-  for(const auto& row:rows){if(!row.is_array())continue;bool found=false;for(std::size_t i=0;i<row.size();++i)if(row[i].is_string()&&normalized(row[i].get<std::string>()).find("level")!=std::string::npos)found=true;if(!found)continue;
-   header.clear();for(const auto& cell:row)header.push_back(cell.is_string()?normalized(cell.get<std::string>()):"");
-   for(std::size_t i=0;i<header.size();++i){const auto& h=header[i];if(h=="level"||h=="player level")levelColumn=static_cast<int>(i);if(h.find("daily")!=std::string::npos&&h.find("coin")!=std::string::npos)dcc=static_cast<int>(i);if(h.find("daily")!=std::string::npos&&h.find("xp")!=std::string::npos)dxc=static_cast<int>(i);if(h.find("weekly")!=std::string::npos&&h.find("coin")!=std::string::npos)wcc=static_cast<int>(i);if(h.find("weekly")!=std::string::npos&&h.find("xp")!=std::string::npos)wxc=static_cast<int>(i);}
-   if(levelColumn>=0)break;
-  }
-  auto read=[&](const Json& row,int col)->Amount{return col>=0&&static_cast<std::size_t>(col)<row.size()&&row[col].is_number()?static_cast<Amount>(std::llround(row[col].get<double>())):0;};
-  if(levelColumn>=0)for(const auto& row:rows){auto lv=read(row,levelColumn);if(lv==level()){dc=read(row,dcc);dx=read(row,dxc);wc=read(row,wcc);wx=read(row,wxc);source="Quest Scaling cached values, player level "+std::to_string(lv);break;}}
- }
- questDefs_={{"daily-feed","Feed 5 hungry fish","feed",5,dc,dx,0,0,false,source},{"daily-sell","Sell 2 Junior or older fish","sell",2,dc,dx,0,0,false,source},{"daily-adult","Sell an Adult fish","adult",1,dc,dx,0,0,false,source},{"daily-decor","Place a decoration","decor",1,dc,dx,0,0,false,source},{"daily-gift","Send a gift to Marina","gift",1,dc,dx,0,0,false,source},{"weekly-collection","Discover 3 species","collection",3,wc,wx,0,0,true,source},{"weekly-care","Feed 30 hungry fish","feed",30,wc,wx,0,0,true,source}};
-
- if(content_.supplement.contains("quests_by_level")){
-  const auto& profiles=content_.supplement["quests_by_level"];const auto key=std::to_string(level());
-  if(profiles.contains(key))for(auto& q:questDefs_)if(profiles[key].contains(q.id)){
-   const auto& imported=profiles[key][q.id];q.coins=imported.value("coins",Amount{0});q.xp=imported.value("xp",Amount{0});q.tokens=imported.value("tokens",Amount{0});q.pearls=imported.value("pearls",Amount{0});q.target=std::max(1,imported.value("target",q.target));q.source=imported.value("source",Json::object()).dump();
-  }
+ questDefs_.clear();
+ const auto key=std::to_string(level());
+ if(!content_.supplement.contains("quest_definitions"))return;
+ for(const auto& definition:content_.supplement["quest_definitions"]){
+  Quest q;q.id=definition.at("id");q.label=definition.at("label");q.event=definition.at("event");q.target=definition.at("target");q.level=definition.at("level");q.weekly=definition.at("weekly");q.configured=definition.value("configured",true);q.missing=definition.value("missing","");q.source=definition.at("source").dump();
+  const auto& profiles=content_.supplement["quests_by_level"];
+  if(profiles.contains(key)&&profiles[key].contains(q.id)){const auto& reward=profiles[key][q.id];q.coins=reward.value("coins",Amount{0});q.xp=reward.value("xp",Amount{0});q.tokens=reward.value("tokens",Amount{0});q.pearls=reward.value("pearls",Amount{0});q.source+="; "+reward.at("source").dump();}
+  questDefs_.push_back(std::move(q));
  }
 }
+
 Result Domain::claimQuest(std::string_view id){
- configureExtras();auto q=std::find_if(questDefs_.begin(),questDefs_.end(),[&](auto& x){return x.id==id;});if(q==questDefs_.end())return bad(Error::Unknown);auto& p=state_.quests[q->id];if(p.claimed)return bad(Error::Claimed);if(p.count<q->target)return bad(Error::NotReady);
- if(q->coins==0&&q->xp==0&&q->tokens==0&&q->pearls==0)return {Error::Unavailable,{},{},{},{},{},"Quest rewards need an unambiguous Quest Scaling import. No invented reward was granted."};
+ auto q=std::find_if(questDefs_.begin(),questDefs_.end(),[&](auto& x){return x.id==id;});if(q==questDefs_.end())return bad(Error::Unknown);if(level()<q->level)return bad(Error::Level);if(!q->configured)return {Error::Unavailable,{},{},{},{},{},q->missing};auto& p=state_.quests[q->id];if(p.claimed)return bad(Error::Claimed);if(p.count<q->target)return bad(Error::NotReady);
+ if(q->coins==0&&q->xp==0&&q->tokens==0&&q->pearls==0)return {Error::Unavailable,{},{},{},{},{},"No reward is configured for this quest at your level."};
  auto r=grant(q->coins,q->xp,q->pearls,q->tokens);if(!r)return r;p.claimed=true;tutorialEvent("quest");emit({"quest",{}, {544,240},r.coins,r.xp,r.pearls,"Quest complete!"});return r;
 }
 Result Domain::sendGift(){
- const auto day=calendarAt(state_.calendarNow).day;if(state_.giftDay==day)return bad(Error::Claimed);if(!addOk(state_.giftTokens,1))return bad(Error::Overflow);state_.giftDay=day;++state_.giftTokens;count("gift");emit({"gift",{}, {544,240},0,0,0,"Marina sent one Gift Token. Thank you!"});return {};
+ if(level()<5)return bad(Error::Level);
+ return {Error::Unavailable,{},{},{},{},{},"Gift rewards will be available when their token amounts are configured."};
 }
 Result Domain::dailyEgg(){
- auto day=calendarAt(state_.calendarNow).day;if(state_.eggDay==day)return bad(Error::Claimed);if(state_.giftTokens<1)return bad(Error::Funds);if(living(state_.activeTank)>=static_cast<std::size_t>(tank(state_.activeTank)->slots))return bad(Error::Full);
- const Species* choice=nullptr;for(auto& s:content_.species)if(s.currency==Currency::Coins&&s.level<=level()&&s.artReady&&(!choice||s.price<choice->price))choice=&s;if(!choice)return bad(Error::Unknown);
- --state_.giftTokens;state_.eggDay=day;auto f=makeFish(choice->id,{544,470},true);auto id=f.id;state_.fish.push_back(std::move(f));if(!contains(state_.collected,choice->id)){state_.collected.push_back(choice->id);count("collection");}emit({"egg",id,{544,470},0,0,0,"Daily egg: "+choice->name});return {};
+ if(level()<6)return bad(Error::Level);
+ return {Error::Unavailable,{},{},{},{},{},"The Daily Egg Basket needs its weekly fish table and resale rules."};
 }
 void Domain::tutorialEvent(std::string_view e){
  constexpr std::array<const char*,11> needed{"look","feed","buy","place","demo","sell","decor","level","quest","gift","finish"};

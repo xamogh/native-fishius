@@ -1,0 +1,146 @@
+{
+  "asset": "assets/details/frame.png",
+  "tool": "built-in image_gen",
+  "source": "/var/folders/85/chd10vj53d11mj25yvpk5z640000gn/T/TemporaryItems/NSIRD_screencaptureui_7cKWL0/Screenshot 2026-09-10 at 8.31.43 PM.png",
+  "generatedFile": "/Users/amoghrijal/.codex/generated_images/01a08bcc-ea29-7423-9bcc-4b7b41993e24/exec-d7716a52-f3f0-4f48-a2d4-94fffa395e7b.png",
+  "dimensions": [
+    1368,
+    1149
+  ],
+  "mode": "RGBA",
+  "alphaExtrema": [
+    0,
+    255
+  ],
+  "zeroAlphaPixelCount": 266175,
+  "alphaBounds": [
+    0,
+    0,
+    1353,
+    1149
+  ],
+  "alphaGreaterThan8Bounds": [
+    18,
+    31,
+    1350,
+    1115
+  ],
+  "alphaGreaterThan32Bounds": [
+    18,
+    31,
+    1350,
+    1114
+  ],
+  "alphaGreaterThan128Bounds": [
+    19,
+    32,
+    1349,
+    1114
+  ],
+  "coordinatesConvention": "Absolute original asset pixels. Boxes are x,y,width,height; centers are x,y.",
+  "features": {
+    "titlePill": [
+      299,
+      32,
+      773,
+      202
+    ],
+    "mainBody": [
+      36,
+      116,
+      1296,
+      942
+    ],
+    "pointerTip": [
+      683,
+      1110
+    ],
+    "foodOrb": {
+      "center": [
+        190,
+        402
+      ],
+      "radius": 52
+    },
+    "xpStar": [
+      118,
+      473,
+      142,
+      116
+    ],
+    "growthTrack": [
+      121,
+      593,
+      1125,
+      67
+    ],
+    "growthTrackInterior": [
+      132,
+      602,
+      1103,
+      51
+    ],
+    "stageRingCenters": [
+      [
+        204,
+        718
+      ],
+      [
+        441,
+        718
+      ],
+      [
+        684,
+        718
+      ],
+      [
+        924,
+        718
+      ],
+      [
+        1161,
+        718
+      ]
+    ],
+    "stageRingOuterRadius": 35,
+    "stageRingInnerRadius": 24,
+    "stageLabelBaseline": 800,
+    "nameTextReferenceCenter": [
+      684,
+      290
+    ],
+    "careTextReferenceCenter": [
+      760,
+      403
+    ],
+    "growthTextReferenceLeft": [
+      275,
+      536
+    ],
+    "percentageTextReferenceRight": [
+      1258,
+      536
+    ],
+    "growthStatusReferenceCenter": [
+      684,
+      871
+    ],
+    "saleStatusReferenceCenter": [
+      684,
+      962
+    ]
+  },
+  "prompts": [
+    "Use case: precise-object-edit and background-extraction. Asset type: production transparent PNG game UI frame. Input image is the EDIT TARGET. Extract the existing central glossy cyan/turquoise gold-bordered speech-bubble details panel faithfully, preserving its exact geometry, polished caustic ray interior, gold and white double border, rounded corners, bottom central pointed notch, overlapping rounded blue title pill, decorative edge bubbles, tiny bottom-left seaweed, gold food orb, gold XP star, empty growth track and five stage rings. Remove every text label except the letters XP on the gold star: remove BABY FISH, MOLLY, hunger sentence, GROWTH, percentage, all stage names, paused sentence, sale sentence. Seamlessly restore underlying blue shading where text is removed. Change ONLY the currently gold first stage ring to the same hollow pale-blue ring as other four. Do not add icons or text. Remove all outside aquarium background, rocks, HUD, fish and selected-fish glow. Output REAL transparent alpha outside panel silhouette and bubbles; interior remains colored opaque blue, no fake checkerboard. Tight frame crop with small transparent padding. Do not redesign or distort relative geometry. Original reference coordinates: total screenshot 1338x1012; frame visible x265..1077 y110..795 (width812 height685), title pill x429..911 y111..237, body x266..1077 y160..761, pointer tip (670,792), orb center (363,342), XP center (360,425), empty track x322..1020 y462..503, stage ring centers (370,541),(519,541),(669,541),(819,541),(967,541). Preserve these relative feature positions. Exact extracted asset, no additional artwork, no lettering other than XP.",
+    "Use case: background-extraction. Edit the provided game UI frame. Your ONLY change is removing the gray checkerboard outside the blue/gold frame silhouette and edge bubbles, replacing it with ACTUAL TRANSPARENT ALPHA pixels in an RGBA PNG. The previous image accidentally baked the checkerboard into RGB. Correct that technical issue. Preserve the UI frame pixels, exact dimensions/proportions, gold borders, cyan caustics, empty title pill, orange food orb, XP star, dark-blue empty progress track and all FIVE hollow blue stage rings. No redesign. No new text. Interior of the panel must remain opaque blue. Only the exterior area around this isolated frame is transparent. The output must have an alpha channel, with zero-alpha exterior pixels. No checkerboard pattern, no white backdrop, no solid-color backdrop. Keep object position and size unchanged.",
+    "Make this a transparent PNG asset. Delete the entire gray checkered background around the outside of the UI frame, with clean anti-aliased edges and real alpha transparency. Keep all of the blue and gold UI frame, bubbles, XP star, orange orb, progress bar, and five circular stage markers. Keep the colored panel interior filled. The background must be transparent, not a drawing of a transparency checkerboard. This is a background removal task only."
+  ],
+  "validation": {
+    "textRemoved": "All editable labels removed; XP remains on the star.",
+    "stageRings": "Exactly five matching neutral hollow blue rings.",
+    "layout": "Preserves the source relative panel, title, icon, progress-track, stage-ring, pointer geometry.",
+    "transparency": "True alpha outside the frame; no baked checkerboard. Alpha above 32 forms exactly one connected component. Far stray edge specks have alpha no greater than 8 and are visually negligible when composited.",
+    "visibleDeviations": "Generated interior is slightly brighter and smoother than the reference. Border bubbles and seaweed are close recreations rather than identical pixels. Tiny low-alpha edge artifacts remain outside the border; artwork is saved unchanged.",
+    "rejectedAlternatives": "First two outputs were RGB with checkerboard. A later edge-cleanup output returned RGB and removed seaweed; a fresh text-only output moved the icons. The third extraction is the closest accepted version."
+  }
+}

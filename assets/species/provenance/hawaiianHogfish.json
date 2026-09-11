@@ -1,0 +1,18 @@
+{
+  "speciesId": "hawaiianHogfish",
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-09-10",
+  "sourcePath": "/Users/amoghrijal/.codex/generated_images/01a08ba7-f708-7373-a9d8-9962c1b37fe2/exec-c397bbcc-26e5-4da4-8e86-3da992ff2ef0.png",
+  "prompt": "Use case: stylized-concept. Asset type: transparent aquarium game fish sprite. Generate ONE Hawaiian Hogfish, an elongated robust reef wrasse in strict LEFT-facing side profile, head left, tail right. Recognizable blunt fleshy snout and thick lips, curved elongated body, continuous spiny dorsal, fairly small pectoral fin, broad rounded tail. Hawaiian hogfish female-style markings: pale coral-pink and cream front body with fine warm reddish horizontal lines fading into sunny yellow rear body and tail, a clear dark saddle at rear of dorsal body; orange-pink face and warm yellow fins. One clear glossy friendly eye. Polished colorful cartoon aquarium game illustration, sculpted glossy gradient highlights, simplified anatomy with recognizable silhouette, crisp dark navy outline. One isolated whole fish, all fins and complete tail inside frame, about 8 percent transparent padding. True TRANSPARENT PNG alpha, every empty background pixel alpha zero. No other fish, water, bubbles, halo, background, shadow, props, text, UI, logo, watermark.",
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "anatomySources": [
+    "https://dlnr.hawaii.gov/dar/files/2016/03/Fishing_in_Hawaii.pdf"
+  ],
+  "width": 1536,
+  "height": 1024,
+  "hasAlpha": true,
+  "visualAcceptance": "Accepted left profile with blunt hogfish snout, pale coral-striped head/front, yellow rear and dark dorsal saddle. Whole specimen with complete fins. Female-style markings derived from Hawaii government fish identification guide."
+}

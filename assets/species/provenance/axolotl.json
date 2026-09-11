@@ -1,0 +1,33 @@
+{
+  "id": "axolotl",
+  "asset": "assets/species/axolotl.png",
+  "generationMode": "built-in image_gen",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-a451-7472-9e64-1f534f9b6a30/exec-78430ec7-a140-445d-82e1-dac6150c19fa.png",
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "referenceRole": "Style only, visually inspected before generation. Text style description supplied, not image edits.",
+  "prompt": "Use case: stylized-concept\nAsset type: a single production-ready fish sprite for a native mobile aquarium game.\nPrimary request: Generate ONE isolated, complete specimen with its head facing LEFT and tail to the RIGHT, readable at a small mobile-game size. True transparent background with alpha, no solid background or checkerboard drawn in.\nStyle reference: existing game guppy and clownfish sprites use glossy colorful polished cartoon illustration, smooth 3D-like shading, bright top highlights, a crisp clean dark outline and expressive friendly eyes. Match that look, but preserve the requested species' distinctive anatomy. Do NOT copy guppy or clownfish anatomy, patterns, silhouette or tail.\nComposition: horizontal side profile, entire body, all fins and appendages present and not cropped, centered with modest transparent padding.\nAvoid: text, letters, labels, UI, additional specimens, bubbles, props, water, scenery, floor, ground shadows, backdrop, frame, watermark.\nSubject: Axolotl: a cute smiling pink aquatic amphibian with a long soft salamander body, broad rounded head, small glossy black eyes and curved friendly mouth, pale pink belly, and prominent pink feathery external gill fronds projecting from BOTH sides of the head (three branching stalks on each side). It has EXACTLY FOUR LEGS with little toes: two forelegs and two hindlegs, all four visibly distinct in a slightly three-quarter side swimming pose. A long tapered salamander tail with a soft translucent fin membrane. Anatomically an AXOLOTL AMPHIBIAN, NOT A FISH. No scales, no fish fins, no guppy tail. Whole body with head LEFT, tail RIGHT, complete four limbs visible, modest transparent padding.",
+  "acceptance": "Accepted: left-facing pink smiling amphibian, exactly four visibly separate legs with toes, three branching external gill stalks per side, salamander tail.",
+  "imageProcessing": "Raw generated image copied without edits. Alpha preserved.",
+  "imageAudit": {
+    "width": 1536,
+    "height": 1024,
+    "channels": 4,
+    "hasAlpha": true,
+    "alphaMin": 0,
+    "alphaMax": 254,
+    "fullyTransparentPixels": 1089186,
+    "fullyTransparentPercent": 69.25,
+    "nonTransparentBorderPixels": 0,
+    "sha256": "fbf2cd9deed224b3135d2a16ffeca39ff2cff2cc8b5af830bae29558212af9f2",
+    "maximumBorderAlpha": 0,
+    "visibleBoundsAlphaAbove16": {
+      "x": 54,
+      "y": 160,
+      "width": 1449,
+      "height": 678
+    }
+  }
+}

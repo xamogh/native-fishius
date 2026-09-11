@@ -1,0 +1,134 @@
+Start testing: Sep 11 12:06 +0545
+----------------------------------------------------------
+1/5 Testing: domain_contract
+1/5 Test: domain_contract
+Command: "/Users/amoghrijal/amogh/aquarium-native/build/desktop/aquarium_tests" "/Users/amoghrijal/amogh/aquarium-native/assets/content.json"
+Directory: /Users/amoghrijal/amogh/aquarium-native/build/desktop
+"domain_contract" start time: Sep 11 12:06 +0545
+Output:
+----------------------------------------------------------
+PASS catalog counts and exact imported duration
+PASS four hungry starter babies
+PASS all catalog purchase and four stage rewards
+PASS six-second hatch and hungry newborn
+PASS free feeding pauses and resumes exact growth
+PASS sickness and death boundaries; feeding cannot revive
+PASS large and small lifecycle advances agree
+PASS purchase rejection is atomic
+PASS art gate precedes event and funds
+PASS level-two pearl granted only once
+PASS repeatable tutorial premium fish
+PASS quest XP uses exact columns and refreshes after level changes
+PASS caretaker requires eight healthy feeds and sickness resets progress
+PASS mastery counts Adult growth once and claims three persistent tiers
+PASS old sales counters do not become Adult mastery when a save upgrades
+PASS stash preserves identity and all remaining clocks
+PASS egg storage pauses hatching
+PASS five exact workbook tank schedules without invented pearl conversion
+PASS tank sequencing and level gates
+PASS every tank step consumes source coins plus solo tokens atomically
+PASS revival overflow allowed, purchase and restore blocked
+PASS atomic bulk revival and corpse removal
+PASS one pellet feeds exactly one fish after its notice delay
+PASS food is bounded and cleared on tank switch
+PASS year-crossing events and annual claims
+PASS deferred gifts and egg rewards preserve state and enforce source unlocks
+PASS save round-trip, unknown IDs, duplicate IDs and future schemas
+PASS atomic storage retains corrupt primary and recovers backup
+PASS suspension interval is applied once
+29 / 29 tests passed
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"domain_contract" end time: Sep 11 12:06 +0545
+"domain_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/5 Testing: mobile_ui_controls
+2/5 Test: mobile_ui_controls
+Command: "/Users/amoghrijal/amogh/aquarium-native/build/desktop/aquarium_view_tests" "/Users/amoghrijal/amogh/aquarium-native/assets"
+Directory: /Users/amoghrijal/amogh/aquarium-native/build/desktop
+"mobile_ui_controls" start time: Sep 11 12:06 +0545
+Output:
+----------------------------------------------------------
+PASS all 46 species: canonical artwork, transparent silhouettes, Collection masks and dead variants
+PASS 804x415: source starters, all 46 Shop and Collection entries, purchase gates, mastery, modal backdrop, navigation and fish controls
+PASS 852x393: source starters, all 46 Shop and Collection entries, purchase gates, mastery, modal backdrop, navigation and fish controls
+PASS 667x375: source starters, all 46 Shop and Collection entries, purchase gates, mastery, modal backdrop, navigation and fish controls
+PASS 1024x768: source starters, all 46 Shop and Collection entries, purchase gates, mastery, modal backdrop, navigation and fish controls
+PASS 1210x834: source starters, all 46 Shop and Collection entries, purchase gates, mastery, modal backdrop, navigation and fish controls
+<end of output>
+Test time =  26.95 sec
+----------------------------------------------------------
+Test Passed.
+"mobile_ui_controls" end time: Sep 11 12:07 +0545
+"mobile_ui_controls" time elapsed: 00:00:26
+----------------------------------------------------------
+
+3/5 Testing: fish_details_controls
+3/5 Test: fish_details_controls
+Command: "/Users/amoghrijal/amogh/aquarium-native/build/desktop/aquarium_details_tests" "/Users/amoghrijal/amogh/aquarium-native/assets"
+Directory: /Users/amoghrijal/amogh/aquarium-native/build/desktop
+"fish_details_controls" start time: Sep 11 12:07 +0545
+Output:
+----------------------------------------------------------
+PASS 669x506: anchored popover, live states, screen edges, switching fish, tools, close and outside tap
+PASS 804x415: anchored popover, live states, screen edges, switching fish, tools, close and outside tap
+PASS 852x393: anchored popover, live states, screen edges, switching fish, tools, close and outside tap
+PASS 667x375: anchored popover, live states, screen edges, switching fish, tools, close and outside tap
+PASS 1024x768: anchored popover, live states, screen edges, switching fish, tools, close and outside tap
+PASS 1210x834: anchored popover, live states, screen edges, switching fish, tools, close and outside tap
+<end of output>
+Test time =  21.43 sec
+----------------------------------------------------------
+Test Passed.
+"fish_details_controls" end time: Sep 11 12:07 +0545
+"fish_details_controls" time elapsed: 00:00:21
+----------------------------------------------------------
+
+4/5 Testing: rendering_quality
+4/5 Test: rendering_quality
+Command: "/Users/amoghrijal/amogh/aquarium-native/build/desktop/aquarium_rendering_tests" "/Users/amoghrijal/amogh/aquarium-native/assets"
+Directory: /Users/amoghrijal/amogh/aquarium-native/build/desktop
+"rendering_quality" start time: Sep 11 12:07 +0545
+Output:
+----------------------------------------------------------
+PASS continuous fish position, fins, pitch and turns, including transient reset
+PASS native frames, tablet/phone resizing, full-screen composition, texture filtering and stable tinted text
+<end of output>
+Test time =   1.03 sec
+----------------------------------------------------------
+Test Passed.
+"rendering_quality" end time: Sep 11 12:07 +0545
+"rendering_quality" time elapsed: 00:00:01
+----------------------------------------------------------
+
+5/5 Testing: menu_motion
+5/5 Test: menu_motion
+Command: "/Users/amoghrijal/amogh/aquarium-native/build/desktop/aquarium_menu_motion_tests" "/Users/amoghrijal/amogh/aquarium-native/assets"
+Directory: /Users/amoghrijal/amogh/aquarium-native/build/desktop
+"menu_motion" start time: Sep 11 12:07 +0545
+Output:
+----------------------------------------------------------
+PASS spring overshoot, settling and rapid reversal continuity
+PASS prepared Shop 852x393: first draw 0.496125 ms, no resource cache misses (startup preparation 270.674 ms)
+PASS prepared Mastery 852x393: first draw 0.302334 ms, no resource cache misses (startup preparation 270.674 ms)
+PASS 852x393: menu entrances, exits, moving controls, reopening, backdrop ownership, stagger, fish details and Reduced Motion
+PASS prepared Shop 1024x768: first draw 0.502792 ms, no resource cache misses (startup preparation 309.941 ms)
+PASS prepared Mastery 1024x768: first draw 0.342916 ms, no resource cache misses (startup preparation 309.941 ms)
+PASS 1024x768: menu entrances, exits, moving controls, reopening, backdrop ownership, stagger, fish details and Reduced Motion
+<end of output>
+Test time =   4.18 sec
+----------------------------------------------------------
+Test Passed.
+"menu_motion" end time: Sep 11 12:07 +0545
+"menu_motion" time elapsed: 00:00:04
+----------------------------------------------------------
+
+End testing: Sep 11 12:07 +0545
+
+native =  53.60 sec*proc
+
+ui =  53.60 sec*proc
+

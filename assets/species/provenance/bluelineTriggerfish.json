@@ -1,0 +1,27 @@
+{
+  "id": "bluelineTriggerfish",
+  "generator": "built-in image_gen",
+  "date": "2026-09-10",
+  "prompt": "Use case: stylized-concept. Asset type: transparent PNG fish sprite for mobile aquarium game. Create ONE isolated BLUELINE TRIGGERFISH (Pseudobalistes fuscus), full body SIDE PROFILE facing LEFT, face on the LEFT and tail on the RIGHT. CRITICAL species anatomy: bulky angular diamond-shaped triggerfish with pointed thick-lipped snout, high-set eye, tall short forward dorsal trigger spine, broad rear dorsal and anal fins and rounded fan-shaped tail. Dark chocolate/navy-olive body densely covered with vivid fine electric-blue irregular wavy lines and blue maze-like markings across the face and body. Subtle golden/olive undertones, bright cyan-blue fin edge details, blue-ringed eye. This is NOT a Blue Tang: no solid bright-blue tang body, no black palette-shaped patch and no yellow triangular tail. Preserve the distinct angular triggerfish silhouette and complex blue lines. Polished glossy colorful cartoon mobile aquarium-game shading, clean dark outline, charming shiny eye, bold readable silhouette compatible with the earlier existing guppy/clownfish art as STYLE REFERENCES only. Single whole fish with complete fins and tail, no cropping, 5 percent transparent margin. GENUINE transparent alpha background. No floor, shadow, background color, aura, halo, glow haze, water, bubbles, props, labels, text, UI, watermark, multiple fish or sprite sheet.",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-50cc-76f2-a405-6125adffd466/exec-f4338f8f-438f-4f3d-95c1-76f95a43dbdd.png",
+  "output": "assets/species/bluelineTriggerfish.png",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "alpha": true,
+  "acceptance": "Single left-facing angular triggerfish with dark olive/navy body covered in irregular electric-blue lines. Distinct from a Blue Tang. Complete dorsal trigger spine, fins and tail. Generated alpha retained unchanged.",
+  "validation": {
+    "width": 1536,
+    "height": 1024,
+    "channels": 4,
+    "fullyTransparentPixels": 785451,
+    "maxAlpha": 254,
+    "fishBounds": [
+      53,
+      28,
+      1451,
+      933
+    ]
+  }
+}

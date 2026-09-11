@@ -1,0 +1,22 @@
+{
+  "frame_intervals": {
+    "metric": "Milliseconds between frames, including presentation wait; excludes first 60 frames",
+    "p50_ms": 16.666667,
+    "p95_ms": 16.667542,
+    "p99_ms": 16.670707999999998,
+    "samples": 300
+  },
+  "frames": 360,
+  "max_ms": 232.717708,
+  "metric": "CPU update and draw submission milliseconds; excludes vsync wait; includes capture when enabled",
+  "mobile_device_tested": false,
+  "p50_ms": 0.272625,
+  "p95_ms": 0.992041,
+  "p99_ms": 4.749541,
+  "pixel_height": 1668,
+  "pixel_width": 2420,
+  "renderer": "metal",
+  "scenario": "details",
+  "window_height": 834,
+  "window_width": 1210
+}

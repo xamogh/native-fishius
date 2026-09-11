@@ -1,0 +1,19 @@
+{
+  "speciesId": "platinumArowana",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-ffa0-7b00-a9bc-b223ed4e7ba7/exec-8a93a221-d41f-4998-ad61-0fa7e755981f.png",
+  "generator": "built-in image_gen",
+  "prompts": [
+    "Use case: stylized-concept. Asset type: transparent aquarium mobile-game fish sprite. Generate one Platinum Arowana in strict LEFT-facing side profile, mouth at far left and tail at right. Distinct elongated graceful dragon-fish body, broad overlapping metallic platinum-white scales, upturned jaw and two short visible forward barbels, small friendly large dark eye, long low dorsal and anal fins toward the tail and beautiful rounded tail. Pure white/silvery platinum palette with subtle ice-blue and pearl highlights, no gold. Glossy polished cartoon aquarium-game shading, clean dark navy contour, readable at small mobile sizes. One entire isolated fish with all fins, barbels and tail completely visible and modest transparent padding. Genuinely transparent alpha background, no backdrop color, no checkerboard drawn, no halo or glow outside silhouette, no text, UI, bubbles, props or cast shadow."
+  ],
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "visualAcceptance": "Accepted entire left-facing elongated platinum-white scaled arowana, upturned jaw, barbels, full fins and tail.",
+  "width": 1774,
+  "height": 887,
+  "hasAlpha": true,
+  "alphaMin": 0,
+  "alphaMax": 255,
+  "fullyTransparentPixels": 914973
+}

@@ -1,0 +1,25 @@
+{
+  "species_id": "goldenKoi",
+  "source": "OpenAI built-in image_gen",
+  "generated_at": "2026-09-10",
+  "mode": "generate",
+  "prompt": "Use case: stylized-concept. Asset type: native mobile aquarium game sprite. Generate exactly ONE complete isolated aquarium creature, facing LEFT, head at the left and tail or arms trailing right. Polished colorful cartoon game rendering, glossy rounded shading, crisp clean dark outlines, expressive friendly large eye, bright colors, readable at small mobile sizes. Cohesive with a glossy blue-orange guppy and glossy orange-white clownfish game art, but use the subject's distinct species anatomy and palette. Entire animal and every fin, tail or arm must remain inside the canvas with modest transparent padding. Output a PNG with GENUINE TRANSPARENT ALPHA: empty pixels must be transparent, never white, gray or checkerboard pixels. No aquarium, scenery, ground, cast shadow, bubbles, text, letters, UI, frame, watermark, duplicate creature, sprite sheet or decorative floating objects. Subject: Golden Koi. A graceful ornate golden carp, viewed from the SIDE, facing LEFT, with an elongated but rounded carp body, large friendly dark eye, tiny barbels at the mouth, shimmering warm yellow-gold scales and flowing golden paired fins and fan tail. Distinct ornamental scarlet red patches across the back and head, festive but anatomically recognizable as koi. Full complete single fish.",
+  "style_references": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "source_output": "/Users/amoghrijal/.codex/generated_images/01a08ba3-ffb2-7953-993a-5a8e1accaeba/exec-49df4220-eef7-4bf0-8e77-865f6997768e.png",
+  "output": "assets/species/goldenKoi.png",
+  "acceptance": {
+    "complete_specimen": true,
+    "facing_left": true,
+    "distinct_species_anatomy": true,
+    "no_text_or_ui": true,
+    "transparent_alpha": true,
+    "width": 1536,
+    "height": 1024,
+    "alpha_min": 0,
+    "alpha_max": 254,
+    "notes": "Golden carp with ornamental red patches, complete fins, tail and barbels."
+  }
+}

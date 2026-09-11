@@ -1,0 +1,51 @@
+{
+  "species": "emberTetra",
+  "tool": "image_gen.imagegen (built-in)",
+  "style_references": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "style_reference_usage": "Referenced image paths used for initial generation",
+  "prompt": "Create a production-ready 2D aquarium game sprite PNG with a TRUE TRANSPARENT RGBA alpha background. Exactly ONE fish only. Input images are STYLE REFERENCES ONLY: match their glossy bright shaded cartoon game rendering, crisp dark outline and friendly expressive eye, but do not copy their species or anatomy. Single isolated complete whole-body fish in LEFT-FACING SIDE PROFILE, nose left, tail right, centered on landscape canvas with 5% transparent padding. Body and all fins fully uncropped. No text, no bubbles, no props, no ground shadow, no environment, no gradients outside the fish. Empty pixels must be transparent (alpha zero), not a checkerboard or a white background. Detailed species markings must remain legible at mobile thumbnail size. Species: Ember Tetra (Hyphessobrycon amandae), a delicate SLENDER small freshwater tetra, warm translucent fiery orange body with rich amber glow inside the body and red-orange fin rays, golden-orange belly, little triangular dorsal fin, small anal fin and neatly forked short tail. One large dark amber eye. Uniform orange-red fish with NO blue, NO horizontal neon stripe, NO black body wedge. The compact narrow tetra silhouette is essential.",
+  "source_path": "/Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d/exec-79f9d85e-627f-4f47-bbe7-21f9cc80e7f3.png",
+  "output_hint": "Generated images are saved to /Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d as /Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d/exec-79f9d85e-627f-4f47-bbe7-21f9cc80e7f3.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+  "asset_path": "assets/species/emberTetra.png",
+  "validation": {
+    "id": "emberTetra",
+    "source_path": "/Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d/exec-79f9d85e-627f-4f47-bbe7-21f9cc80e7f3.png",
+    "width": 1536,
+    "height": 1024,
+    "has_alpha": true,
+    "zero_alpha_pixels": 992822,
+    "partial_alpha_pixels": 580042,
+    "max_alpha": 254,
+    "alpha_bounds": [
+      28,
+      32,
+      1517,
+      967
+    ],
+    "sha256": "99e0df14f9131dcdb573493778cedeb3c2473ec8f0eed1cb5870863c333b5883"
+  },
+  "visual_acceptance": {
+    "accepted": true,
+    "notes": "Single complete left-facing slender orange tetra with small triangular dorsal fin and forked tail. Uniform warm orange body distinguishes it from Neon Tetra and the rounder Platy. Targeted background extraction delivered true alpha."
+  },
+  "initial_source": "/Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d/exec-6e028a22-4cf8-49d2-88d3-3b16b60763d4.png",
+  "initial_alpha": false,
+  "correction_prompt": "Use case: background-extraction. Edit the provided emberTetra fish image. Preserve the exact fish pixels, orientation, body shape, eyes, fins, color, outline and complete silhouette. Remove every part of the existing checkerboard background outside the fish and output a TRUE TRANSPARENT RGBA PNG with transparent alpha, including between fins. This is a transparent sprite cutout, not a picture of a transparent background. No white, no checkerboard, no backdrop of any color, no shadows. Keep all fins intact and a small transparent margin. Only the fish is visible. The empty background must have alpha value zero.",
+  "final_file_validation": {
+    "width": 1536,
+    "height": 1024,
+    "has_alpha": true,
+    "transparent_pixels": 992822,
+    "max_alpha": 254,
+    "solid_alpha_bounds": [
+      30,
+      92,
+      1514,
+      881
+    ],
+    "sha256": "99e0df14f9131dcdb573493778cedeb3c2473ec8f0eed1cb5870863c333b5883"
+  }
+}

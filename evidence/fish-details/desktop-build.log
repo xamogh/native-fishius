@@ -1,0 +1,63 @@
+[0/2] Re-checking globbed directories...
+-- GLOB mismatch!
+The following files were removed:
+  -/Users/amoghrijal/amogh/aquarium-native/assets/details/frame-v1.png
+  -/Users/amoghrijal/amogh/aquarium-native/assets/details/frame-v1.provenance.json
+  -/Users/amoghrijal/amogh/aquarium-native/assets/details/frame-v2.png
+  -/Users/amoghrijal/amogh/aquarium-native/assets/details/frame-v2.provenance.json
+[1/2] Re-running CMake...
+-- Using the multi-header code from /private/tmp/claude-501/-Users-amoghrijal-amogh-aquarium-native/f5ff1595-ed3a-4725-ba81-a7f0e8d9d04f/scratchpad/deps-cache/json-src/include/
+-- Configuring SDL3_image 3.2.4
+-- SDL3_image backends:
+-- - enabled:  stb imageio bmp gif jpg lbm pcx png pnm qoi svg tga xcf xpm xv
+-- - disabled: wic avif jxl tif webp
+-- Configuring SDL3_ttf 3.2.2
+-- SDL3_ttf: Using system freetype library
+-- Could NOT find plutovg (missing: plutovg_LIBRARY plutovg_INCLUDE_PATH) 
+-- Could NOT find plutosvg (missing: plutosvg_LIBRARY plutosvg_INCLUDE_PATH plutovg_FOUND) 
+-- plutosvg NOT found
+-- SDL3_ttf backends:
+-- - enabled:  freetype
+-- - disabled: harfbuzz plutosvg
+-- Configuring done (0.3s)
+-- Generating done (0.0s)
+-- Build files have been written to: /Users/amoghrijal/amogh/aquarium-native/build/desktop
+[0/4] Re-checking globbed directories...
+[1/9] Building CXX object CMakeFiles/aquarium_view.dir/src/details.cpp.o
+/Users/amoghrijal/amogh/aquarium-native/src/details.cpp:94:105: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   94 |   glassButton("one-revive",l.rect(348,672,309,57),"REVIVE: 1 PEARL",[this,id]{command({Action::Revive,id});},"green",25*l.scale);
+      |                                                                                                         ^
+/Users/amoghrijal/amogh/aquarium-native/src/details.cpp:95:99: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   95 |   glassButton("one-remove",l.rect(685,672,290,57),"REMOVE",[this,id]{if(command({Action::Remove,id}))open(Panel::None);},"blue",25*l.scale);
+      |                                                                                                   ^
+2 warnings generated.
+[2/9] Building CXX object CMakeFiles/aquarium_view.dir/src/view.cpp.o
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:73:139: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   73 |  glassButton("send-gift",{p.x+30,p.y+p.h-112,bw,62},d.level()<5?"Gifting: Level 5":"Gifting: Coming soon",[this]{command({Action::SendGift});},"blue",25);
+      |                                                                                                                                           ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:74:146: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   74 |  glassButton("daily-egg",{p.x+58+bw,p.y+p.h-112,bw,62},d.level()<6?"Daily Egg: Level 6":"Daily Egg: Coming soon",[this]{command({Action::DailyEgg});},"blue",25);
+      |                                                                                                                                                  ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:79:340: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+   79 |  button("tutorial-action",{x+pw-76,y+6,67,28},step==4?"GROW":"NEXT",[this,step]{if(step==2||step==3)open(Panel::Shop);else if(step==6){open(Panel::Shop);category_=1;}else if(step==8)open(Panel::Quests);else if(step==9)open(Panel::Gifts);else if(step==1)setTool(Tool::Food);else if(step==5)setTool(Tool::Sell);else command({Action::Tutorial});},green);
+      |                                                                                                                                                                                                                                                                                                                                                    ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:104:51: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+  104 |  if(tool_==Tool::Sell){if(command({Action::Sell,id})){netAt_=now_;selected_={};}return;}
+      |                                                   ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:105:304: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+  105 |  if(tool_==Tool::Medicine){const auto* f=session_.domain().fish(id);if(f&&f->dead){selected_=id;open(Panel::Details);selected_=id;}else if(f&&careOf(*session_.domain().content().find(f->species),*f,session_.domain().state().simNow)==Care::Fed)toast("This fish is healthy.");else command({Action::Feed,id});return;}
+      |                                                                                                                                                                                                                                                                                                                ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:106:50: warning: missing field 'key' initializer [-Wmissing-field-initializers]
+  106 |  if(tool_==Tool::Stash){command({Action::Stash,id});return;}
+      |                                                  ^
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:9:39: warning: unused variable 'blue' [-Wunused-const-variable]
+    9 | constexpr Color aqua{159,225,216,255},blue{117,197,215,255},green{161,217,144,255},cream{247,235,197,255},muted{177,195,197,255},ink{32,77,96,255},purple{199,172,230,255};
+      |                                       ^~~~
+/Users/amoghrijal/amogh/aquarium-native/src/view.cpp:9:107: warning: unused variable 'muted' [-Wunused-const-variable]
+    9 | constexpr Color aqua{159,225,216,255},blue{117,197,215,255},green{161,217,144,255},cream{247,235,197,255},muted{177,195,197,255},ink{32,77,96,255},purple{199,172,230,255};
+      |                                                                                                           ^~~~~
+8 warnings generated.
+[3/9] Linking CXX shared library libaquarium_view.dylib
+[4/9] Linking CXX executable aquarium_details_tests
+[5/9] Linking CXX executable aquarium_view_tests
+[6/9] Linking CXX executable aquarium

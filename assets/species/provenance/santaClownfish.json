@@ -1,0 +1,25 @@
+{
+  "species_id": "santaClownfish",
+  "source": "OpenAI built-in image_gen",
+  "generated_at": "2026-09-10",
+  "mode": "generate",
+  "prompt": "Use case: stylized-concept. Asset type: native mobile aquarium game sprite. Generate exactly ONE complete isolated aquarium creature, facing LEFT, head at the left and tail or arms trailing right. Polished colorful cartoon game rendering, glossy rounded shading, crisp clean dark outlines, expressive friendly large eye, bright colors, readable at small mobile sizes. Cohesive with a glossy blue-orange guppy and glossy orange-white clownfish game art, but use the subject's distinct species anatomy and palette. Entire animal and every fin, tail or arm must remain inside the canvas with modest transparent padding. Output a PNG with GENUINE TRANSPARENT ALPHA: empty pixels must be transparent, never white, gray or checkerboard pixels. No aquarium, scenery, ground, cast shadow, bubbles, text, letters, UI, frame, watermark, duplicate creature, sprite sheet or decorative floating objects. Subject: Santa Clownfish. A distinctive orange clownfish with three broad creamy white bands edged in dark navy, rounded fins, expressive friendly face looking LEFT. Add a small red winter Santa cap with soft white trim and a small white pom at the top, integrated with the fish silhouette. Orange-gold fins with red winter accents. The cap must remain entirely in frame. Full single complete fish.",
+  "style_references": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "source_output": "/Users/amoghrijal/.codex/generated_images/01a08ba3-ffb2-7953-993a-5a8e1accaeba/exec-c9671e12-748e-441e-91f9-ba846722ac67.png",
+  "output": "assets/species/santaClownfish.png",
+  "acceptance": {
+    "complete_specimen": true,
+    "facing_left": true,
+    "distinct_species_anatomy": true,
+    "no_text_or_ui": true,
+    "transparent_alpha": true,
+    "width": 1536,
+    "height": 1024,
+    "alpha_min": 0,
+    "alpha_max": 254,
+    "notes": "Orange and white clownfish, complete red and white winter cap."
+  }
+}

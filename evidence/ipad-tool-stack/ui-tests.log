@@ -1,0 +1,23 @@
+Test project /Users/amoghrijal/amogh/aquarium-native/build/desktop
+    Start 2: mobile_ui_controls
+1/2 Test #2: mobile_ui_controls ...............***Failed   19.47 sec
+PASS all 46 species: canonical artwork, transparent silhouettes, Collection masks and dead variants
+PASS 804x415: source starters, all 46 Shop and Collection entries, purchase gates, mastery, modal backdrop, navigation and fish controls
+PASS 852x393: source starters, all 46 Shop and Collection entries, purchase gates, mastery, modal backdrop, navigation and fish controls
+PASS 667x375: source starters, all 46 Shop and Collection entries, purchase gates, mastery, modal backdrop, navigation and fish controls
+FAIL Wrong panel after nav1 at 1024x768: expected 2, got 0
+
+    Start 3: fish_details_controls
+2/2 Test #3: fish_details_controls ............   Passed   21.52 sec
+
+50% tests passed, 1 tests failed out of 2
+
+Label Time Summary:
+native    =  40.99 sec*proc (2 tests)
+ui        =  40.99 sec*proc (2 tests)
+
+Total Test time (real) =  41.00 sec
+
+The following tests FAILED:
+	  2 - mobile_ui_controls (Failed)                       native ui
+Errors while running CTest

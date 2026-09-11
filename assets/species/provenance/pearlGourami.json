@@ -1,0 +1,18 @@
+{
+  "speciesId": "pearlGourami",
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-09-10",
+  "sourcePath": "/Users/amoghrijal/.codex/generated_images/01a08ba7-f708-7373-a9d8-9962c1b37fe2/exec-3da965d1-bcfe-4b66-bd75-8d7ab2af1c3a.png",
+  "prompt": "Use case: stylized-concept. Asset type: isolated transparent aquarium game fish sprite. Generate ONE pearl gourami (Trichopodus leerii), entirely visible in strict LEFT-facing side profile with head on left, tail on right. Adult species-recognizable oval compressed silver body with a field of pearly pale spots, a clear continuous dark horizontal stripe from mouth through eye to tail base, soft warm orange underside, dorsal and long anal fin with delicate blue-white speckles, two slender threadlike pelvic feelers. Glossy colorful polished cartoon game illustration, softly sculpted gradients, clear dark navy outline, one large friendly glossy eye, clean simple face. Match the shiny cartoon rendering vocabulary of the inspected guppy and clownfish style references, but draw a pearl gourami with its real distinctive proportions and markings. True TRANSPARENT ALPHA background, not white and not checkerboard pixels. Center one complete whole fish with complete tail, all fins and both pelvic feelers, and 8 percent transparent padding. No other fish, text, UI, water, bubbles, props, ground, backdrop, cast shadow or watermark.",
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "anatomySources": [
+    "https://www.fws.gov/sites/default/files/documents/Ecological-Risk-Screening-Summary-Pearl-Gourami.pdf"
+  ],
+  "width": 1536,
+  "height": 1024,
+  "hasAlpha": true,
+  "visualAcceptance": "Accepted left profile, pearled silver body and lateral stripe, long pelvic feelers, complete tail/fins. Transparent alpha verified; unused RGB glow outside fish is alpha zero."
+}

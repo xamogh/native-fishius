@@ -1,0 +1,33 @@
+{
+  "id": "platinumBetta",
+  "asset": "assets/species/platinumBetta.png",
+  "generationMode": "built-in image_gen",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-a451-7472-9e64-1f534f9b6a30/exec-7cbab676-4899-45ae-a4bf-115fd11e6ca6.png",
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "referenceRole": "Style only, visually inspected before generation. Text style description supplied, not image edits.",
+  "prompt": "Use case: stylized-concept\nAsset type: a single production-ready fish sprite for a native mobile aquarium game.\nPrimary request: Generate ONE isolated, complete specimen with its head facing LEFT and tail to the RIGHT, readable at a small mobile-game size. True transparent background with alpha, no solid background or checkerboard drawn in.\nStyle reference: existing game guppy and clownfish sprites use glossy colorful polished cartoon illustration, smooth 3D-like shading, bright top highlights, a crisp clean dark outline and expressive friendly eyes. Match that look, but preserve the requested species' distinctive anatomy. Do NOT copy guppy or clownfish anatomy, patterns, silhouette or tail.\nComposition: horizontal side profile, entire body, all fins and appendages present and not cropped, centered with modest transparent padding.\nAvoid: text, letters, labels, UI, additional specimens, bubbles, props, water, scenery, floor, ground shadows, backdrop, frame, watermark.\nSubject: Platinum Betta: a shimmering metallic platinum-white betta fish with an elegant short slim body and enormous flowing billowy translucent-white fins like a silken evening gown. Long trailing anal and pelvic fins, a broad rounded flowing caudal fan, delicately rippled layered fin membranes with subtle cool blue and warm silver highlights. Majestic premium fish, distinctive betta silhouette. No orange patches. Whole body facing LEFT.",
+  "acceptance": "Accepted: left-facing silver-white betta with enormous flowing gown-like fins, two trailing pelvic fins and full tail.",
+  "imageProcessing": "Raw generated image copied without edits. Alpha preserved.",
+  "imageAudit": {
+    "width": 1536,
+    "height": 1024,
+    "channels": 4,
+    "hasAlpha": true,
+    "alphaMin": 0,
+    "alphaMax": 254,
+    "fullyTransparentPixels": 776334,
+    "fullyTransparentPercent": 49.36,
+    "nonTransparentBorderPixels": 0,
+    "sha256": "260ef050f5139cb4731422db36df07dedc61ce23ba2ff37008d852ba9e431f23",
+    "maximumBorderAlpha": 0,
+    "visibleBoundsAlphaAbove16": {
+      "x": 133,
+      "y": 17,
+      "width": 1285,
+      "height": 983
+    }
+  }
+}

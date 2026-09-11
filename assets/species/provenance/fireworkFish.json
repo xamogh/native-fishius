@@ -1,0 +1,19 @@
+{
+  "speciesId": "fireworkFish",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-ffa0-7b00-a9bc-b223ed4e7ba7/exec-188be202-fff6-463a-add3-c6dd92ab0d40.png",
+  "generator": "built-in image_gen",
+  "prompts": [
+    "Use case: stylized-concept. Asset type: transparent aquarium mobile-game fish sprite. Generate one Firework Fish in strict LEFT-facing side profile, head left and tail right. A charming small ornamental fish with sleek midnight navy body, rainbow iridescence over the scales, bright friendly large dark eye. Broad flaring dorsal and tail fins have brilliant radiating stripes in cyan, hot pink, violet, gold and orange, like celebratory firework bursts printed naturally within the fins. The radiating rainbow fin pattern is the key feature. Retain cohesive recognizable fish anatomy. No actual fireworks, no detached sparks or particles. Glossy polished colorful cartoon aquarium-game shading with clean dark navy contour and smooth sculpted highlights, readable at small mobile size. One entire isolated fish, every fin and tail fully visible with modest transparent padding. Genuinely transparent alpha background; no backdrop color, no checkerboard drawn, no glow outside silhouette, no text, UI, bubbles, props, separate objects or cast shadow."
+  ],
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "visualAcceptance": "Accepted entire left-facing dark/rainbow fish with bright radiating fin patterns, no external sparks/props. Event visual is interpretation of roster name.",
+  "width": 1536,
+  "height": 1024,
+  "hasAlpha": true,
+  "alphaMin": 0,
+  "alphaMax": 254,
+  "fullyTransparentPixels": 813822
+}

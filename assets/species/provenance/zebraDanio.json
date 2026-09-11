@@ -1,0 +1,51 @@
+{
+  "species": "zebraDanio",
+  "tool": "image_gen.imagegen (built-in)",
+  "style_references": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "style_reference_usage": "Referenced image paths used for initial generation",
+  "prompt": "Create a production-ready 2D aquarium game sprite PNG with a TRUE TRANSPARENT RGBA alpha background. Exactly ONE fish only. Input images are STYLE REFERENCES ONLY: match their glossy bright shaded cartoon game rendering, crisp dark outline and friendly expressive eye, but do not copy their species or anatomy. Single isolated complete whole-body fish in LEFT-FACING SIDE PROFILE, nose left, tail right, centered on landscape canvas with 5% transparent padding. Body and all fins fully uncropped. No text, no bubbles, no props, no ground shadow, no environment, no gradients outside the fish. Empty pixels must be transparent (alpha zero), not a checkerboard or a white background. Detailed species markings must remain legible at mobile thumbnail size. Species: Zebra Danio (Danio rerio), a slim torpedo-shaped silver-gold freshwater fish with FIVE striking continuous navy-blue HORIZONTAL longitudinal stripes from gill to the base of the forked tail, with striped dorsal and tail fins. Small clear amber fins, slender body, slightly upturned mouth and large friendly eye. Do not make it deep-bodied or vertically striped. Its defining feature is strong blue horizontal stripes.",
+  "source_path": "/Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d/exec-e364e90f-20db-4400-80ed-2106f68b47f6.png",
+  "output_hint": "Generated images are saved to /Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d as /Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d/exec-e364e90f-20db-4400-80ed-2106f68b47f6.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+  "asset_path": "assets/species/zebraDanio.png",
+  "validation": {
+    "id": "zebraDanio",
+    "source_path": "/Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d/exec-e364e90f-20db-4400-80ed-2106f68b47f6.png",
+    "width": 1536,
+    "height": 1024,
+    "has_alpha": true,
+    "zero_alpha_pixels": 1093319,
+    "partial_alpha_pixels": 479545,
+    "max_alpha": 254,
+    "alpha_bounds": [
+      50,
+      9,
+      1494,
+      997
+    ],
+    "sha256": "89467a450b6ed1833efc1f62aa220ad5fccd26a8b28ba0d830a1cbc83ad5cc62"
+  },
+  "visual_acceptance": {
+    "accepted": true,
+    "notes": "Single complete left-facing slim silver/gold fish with strong horizontal navy-blue stripes continuing through the forked tail. Glossy shaded cartoon, distinct from Neon Tetra. Targeted background extraction removed baked checkerboard and delivered true alpha."
+  },
+  "initial_source": "/Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d/exec-aa64a8c7-7db3-4251-bec8-3e503af026e8.png",
+  "initial_alpha": false,
+  "correction_prompt": "Use case: background-extraction. Edit the provided zebraDanio fish image. Preserve the exact fish pixels, orientation, body shape, eyes, fins, color, outline and complete silhouette. Remove every part of the existing checkerboard background outside the fish and output a TRUE TRANSPARENT RGBA PNG with transparent alpha, including between fins. This is a transparent sprite cutout, not a picture of a transparent background. No white, no checkerboard, no backdrop of any color, no shadows. Keep all fins intact and a small transparent margin. Only the fish is visible. The empty background must have alpha value zero.",
+  "final_file_validation": {
+    "width": 1536,
+    "height": 1024,
+    "has_alpha": true,
+    "transparent_pixels": 1093319,
+    "max_alpha": 254,
+    "solid_alpha_bounds": [
+      53,
+      172,
+      1491,
+      804
+    ],
+    "sha256": "89467a450b6ed1833efc1f62aa220ad5fccd26a8b28ba0d830a1cbc83ad5cc62"
+  }
+}

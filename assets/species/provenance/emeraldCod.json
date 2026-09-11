@@ -1,0 +1,19 @@
+{
+  "speciesId": "emeraldCod",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a08ba8-ffa0-7b00-a9bc-b223ed4e7ba7/exec-3de8f086-90e5-4b77-a509-3e59f12232d9.png",
+  "generator": "built-in image_gen",
+  "prompts": [
+    "Use case: stylized-concept. Asset type: transparent aquarium mobile-game fish sprite. Generate one Emerald Cod in strict LEFT-facing side profile, head left and tail right. Substantial thick-bodied cod with a broad expressive head, friendly dark eye, slightly protruding upper lip, tiny chin barbel, recognizable three separate rounded dorsal fins and cod tail. Beautiful rich emerald-green scales graduating to lighter mint belly, tasteful narrow golden accents edging the fins and a few gold flecks on body. Glossy colorful polished cartoon aquarium-game shading with clean dark navy outline and smooth sculpted highlights, clearly readable at small mobile sizes. Single isolated whole fish, all fins, barbel and tail completely visible with modest transparent padding. Genuinely transparent alpha background; no backdrop color, no checkerboard drawn, no halo outside silhouette, no text, UI, bubbles, props, extra objects or cast shadow."
+  ],
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "visualAcceptance": "Accepted entire left-facing green cod, gold fin edges and flecks, three dorsal fins and chin barbel. Event visual is interpretation of roster name.",
+  "width": 1536,
+  "height": 1024,
+  "hasAlpha": true,
+  "alphaMin": 0,
+  "alphaMax": 254,
+  "fullyTransparentPixels": 921106
+}

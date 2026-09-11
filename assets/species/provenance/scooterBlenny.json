@@ -1,0 +1,18 @@
+{
+  "speciesId": "scooterBlenny",
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-09-10",
+  "sourcePath": "/Users/amoghrijal/.codex/generated_images/01a08ba7-f708-7373-a9d8-9962c1b37fe2/exec-2c1f3812-c8f4-4cf1-8fcc-d01b69b59159.png",
+  "prompt": "Use case: stylized-concept. Asset type: isolated transparent aquarium game fish sprite. Generate ONE Scooter Blenny, the ocellated dragonet (Synchiropus ocellatus), strict LEFT-facing side profile with head left and tail right. Clearly different from a generic tropical fish: long low tapering body, broad flattened dragonet head with big eyes set high on head and short puckered mouth, broad fanlike pectoral fins splayed to sides and lower body, large raised first dorsal sail with several dark eyespots and orange base, low second dorsal, rounded tail. Rich tan, copper, cream and dark chocolate mottled spotted camouflage pattern, a few turquoise highlights around eye. Polished glossy cartoon mobile aquarium-game art, vivid warm highlights, smoothly sculpted gradients, crisp dark outline, charming clear eye. Whole specimen floating alone in profile, no rock or ground. Center with all fin tips, tail fully visible and 8 percent empty margin. True transparent PNG ALPHA: all background pixels alpha zero. No water, bubbles, props, shadow, halo, backdrop, text, UI, logo, watermark or extra animals.",
+  "styleReferences": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "anatomySources": [
+    "https://fishdb.sinica.edu.tw/chi/species.php?gen=Synchiropus&spe=ocellatus"
+  ],
+  "width": 1536,
+  "height": 1024,
+  "hasAlpha": true,
+  "visualAcceptance": "Accepted left profile with low dragonet body, high-set eye, mottled tan/brown pattern, broad pectoral fins, separate raised eyespotted first dorsal. Whole fish complete. Transparent alpha verified."
+}

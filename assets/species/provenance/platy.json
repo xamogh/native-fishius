@@ -1,0 +1,39 @@
+{
+  "species": "platy",
+  "tool": "image_gen.imagegen (built-in)",
+  "style_references": [
+    "assets/skin/fish-guppy.png",
+    "assets/skin/fish-clownfish.png"
+  ],
+  "prompt": "Use case: stylized-concept. Asset type: one transparent fish sprite for a premium mobile aquarium game. Use the two reference fish ONLY for the polished illustration style: glossy saturated color, dimensional highlights, dark clean outline, friendly large eye, crisp readable fins. Do not copy either reference species. Generate exactly ONE complete fish, strict side profile facing LEFT with nose at left and tail at right, centered in a landscape canvas, occupying most of canvas with modest transparent padding. Entire body and all fins and tail must be visible and uncropped. True transparent alpha background, nothing else. No checkerboard, no background color, no water, no shadows, no glow outside body, no props, no bubbles, no typography or labels. Species and markings must be biologically recognizable despite appealing cartoon style. Subject: an orange Platy (Xiphophorus maculatus), a short compact oval-bodied freshwater livebearer with a small triangular dorsal fin, blunt friendly face, orange-red rounded fan tail of modest size, golden-orange flanks with warm red fin tips and lighter belly. The tail is much smaller than a fancy guppy's tail. Do not add a swordtail, trailing fins, stripes, or horn.",
+  "initial_source": "/Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d/exec-35f851bb-2ab8-4a6e-9b70-0d5ac0d4b1e3.png",
+  "initial_output_hint": "Generated images are saved to /Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d as /Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d/exec-35f851bb-2ab8-4a6e-9b70-0d5ac0d4b1e3.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+  "initial_alpha": false,
+  "correction_prompt": "Use case: background-extraction. Edit the provided platy fish image. Preserve the exact fish pixels, orientation, body shape, eyes, fins, color, outline and complete silhouette. Remove every part of the existing background outside the fish and output a TRUE TRANSPARENT RGBA PNG with transparent alpha, including between fins. This is a transparent sprite cutout, not a picture of a transparent background. No white, no checkerboard, no backdrop of any color, no shadows. Keep all fins intact and a small transparent margin. Only the fish is visible. The empty background must have alpha value zero.",
+  "source_path": "/Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d/exec-2ef3fa8d-dee6-4ca4-b0a9-0139001ae1e0.png",
+  "output_hint": "Generated images are saved to /Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d as /Users/amoghrijal/.codex/generated_images/01a08ba4-5250-7311-b635-e13b51de9a2d/exec-2ef3fa8d-dee6-4ca4-b0a9-0139001ae1e0.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+  "asset_path": "assets/species/platy.png",
+  "has_alpha": true,
+  "dimensions": [
+    1585,
+    992
+  ],
+  "visual_acceptance": {
+    "accepted": true,
+    "notes": "Single complete left-facing orange Platy, compact oval body, modest rounded fan tail, red fin tips. Glossy shaded game style. Transparent correction removed baked checkerboard without changing silhouette."
+  },
+  "final_file_validation": {
+    "width": 1585,
+    "height": 992,
+    "has_alpha": true,
+    "transparent_pixels": 796240,
+    "max_alpha": 255,
+    "solid_alpha_bounds": [
+      25,
+      22,
+      1564,
+      928
+    ],
+    "sha256": "08b306275ad301df2d1bc11371e5750957e79c2316fd83869bef33795169dc2e"
+  }
+}
