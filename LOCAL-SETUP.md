@@ -34,11 +34,74 @@ From this project folder:
 
 Build tools and Python asset libraries are installed in the task's `work/build-tools` environment. This build uses libraries on this Mac and is not a portable application package.
 
+## Test on a physical iPhone
+
+Double-click `Open iPhone Project.command`. This refreshes and opens the current
+`build/ios-device/FishiusAquarium.xcodeproj`. Close the old
+`FishXAquarium.xcodeproj` window if it is still open. That old project omits
+new source files and caused the missing-symbol build failure on 12 September.
+
+Select the **aquarium** scheme and your connected iPhone, then press **Run**.
+The existing development team is saved in the local CMake cache, so regenerating
+this project preserves it. The team identifier is not added to source control.
+See [the iPhone setup steps](docs/mobile.md#run-on-your-iphone) for phone trust,
+Developer Mode, and signing details.
+
+To rebuild this configured device target from Terminal:
+
+```sh
+xcodebuild -project build/ios-device/FishiusAquarium.xcodeproj \
+  -scheme aquarium -configuration Debug -destination 'generic/platform=iOS' build
+```
+
+The physical-device build uses `build/ios-device-deps/install`, including its
+device FreeType library. Keep it separate from the simulator dependencies in
+`build/ios-deps/install`.
+
+On 12 September 2026, the Debug device build passed, its code signature was
+verified, and the app was installed and launched on the connected iPhone 15 Pro
+Max. Manual touch and visual checks on the phone remain to be done.
+
 ## Run in the iPhone simulator
+
+To build and debug in Xcode, double-click `Open iPhone Simulator Project.command`.
+Choose the **aquarium** scheme and **iPhone 17**, then press **Command-R**.
+This opens `build/ios-simulator-xcode/FishiusAquarium.xcodeproj`, configured with
+the simulator SDK and the FreeType library in `build/ios-deps/install`.
+
+On 12 September 2026, its Debug build passed for the iPhone 17 simulator on
+iOS 26.5. The app installed, launched, and remained running after startup.
+The build log is `build/ios-simulator-xcode-build.log`.
+
+Use `Open iPhone Project.command` for a connected physical phone only. Selecting
+a simulator in that device project fails with `Building for 'iOS-simulator', but
+linking in object file ... built for 'iOS'`, because its FreeType library was
+compiled for physical devices. Device and simulator libraries are not
+interchangeable, even when both use arm64.
+
+To recreate the Xcode simulator project with this Mac's existing dependencies:
+
+```sh
+BIN=/Users/amoghrijal/Documents/Codex/2026-09-09/plea/work/build-tools/bin
+"$BIN/cmake" -S . -B build/ios-simulator-xcode -G Xcode \
+  -DCMAKE_TOOLCHAIN_FILE="$PWD/platform/ios/ios-toolchain.cmake" \
+  -DCMAKE_OSX_SYSROOT=iphonesimulator -DCMAKE_OSX_ARCHITECTURES=arm64 \
+  -DCMAKE_OSX_DEPLOYMENT_TARGET=15.0 -DCMAKE_XCODE_GENERATE_SCHEME=ON \
+  -DCMAKE_XCODE_ATTRIBUTE_SUPPORTED_PLATFORMS=iphonesimulator \
+  -DAQ_BUILD_APP=ON -DAQ_BUILD_TESTS=OFF -DBUILD_SHARED_LIBS=OFF \
+  -DCMAKE_PREFIX_PATH="$PWD/build/ios-deps/install" \
+  -DFREETYPE_INCLUDE_DIR_freetype2="$PWD/build/ios-deps/install/include/freetype2" \
+  -DFREETYPE_INCLUDE_DIR_ft2build="$PWD/build/ios-deps/install/include/freetype2" \
+  -DFREETYPE_LIBRARY_RELEASE="$PWD/build/ios-deps/install/lib/libfreetype.a" \
+  -DFETCHCONTENT_SOURCE_DIR_JSON="$PWD/build/ios-device-deps/json-src" \
+  -DFETCHCONTENT_SOURCE_DIR_SDL3="$PWD/build/ios-device-deps/sdl3-src" \
+  -DFETCHCONTENT_SOURCE_DIR_SDL3_IMAGE="$PWD/build/ios-device-deps/sdl3_image-src" \
+  -DFETCHCONTENT_SOURCE_DIR_SDL3_TTF="$PWD/build/ios-device-deps/sdl3_ttf-src"
+```
 
 Double-click `Run iPhone Simulator.command`. It opens the installed iPhone 17 Pro simulator with iOS 26.5 and launches the native iOS app in landscape. Simulator progress is saved separately from the desktop game.
 
-The simulator app was built and launched on 9 September 2026. The game rendered and a tap on Next advanced its tutorial. Physical iPhone installation has not been tested.
+The simulator app was built and launched on 9 September 2026. The game rendered and a tap on Next advanced its tutorial. Physical iPhone installation was verified on 12 September, as described above.
 
 The camera cutout overlap was fixed on 10 September 2026. The game now fills the whole display, and the left navigation column runs as two buttons above the cutout and two below it, leaving the middle of that edge free. Settings moved off the column to the menu button in the top-right corner. Tapping in the simulator was not scripted, so the new hit areas have not been confirmed by touch.
 
@@ -73,8 +136,8 @@ PATH="$BIN:$PATH" "$BIN/cmake" -S . -B build/ios-simulator -G Ninja \
 ## Aquarium screen reference update, 10 September 2026
 
 The aquarium opens directly into the water view. Its right controls and bottom
-corner buttons now use the supplied screenshot artwork. Select also opens Move,
-Stash, and Bag. Food activates feeding. The four main right-side icons have
+corner buttons now use the supplied screenshot artwork. Tap a fish to select it and drag to move it. Use Arrange tank in Bag before selecting, moving or stashing a plant or decoration.
+Bag opens stored items. Food activates feeding. The four main right-side icons have
 even gaps, and Medicine is hidden for now. The tutorial is skipped for this pass.
 The Tanks menu opens to the right of its button and keeps the right-side
 controls available. Shop sits slightly farther left and lower on iPhone.
@@ -109,7 +172,7 @@ The feeding-order fixture is corrected. The current domain suite passes all 29 c
 
 ## Workbook implementation, 10 September 2026
 
-The normal game now uses the workbook starter roster, all 46 species, exact quest XP, tank coin and Gift Token costs, and Adult mastery milestones. It includes 40 newly generated species illustrations and six suitable existing illustrations, with common art in every screen. The tutorial, anniversary timing and unspecified rewards are deferred.
+The normal game now uses the workbook starter roster, all 46 species, exact quest XP, tank Coin and Pearl costs, and Adult mastery milestones. It includes 40 newly generated species illustrations and six suitable existing illustrations, with common art in every screen. The tutorial, anniversary timing and unspecified rewards are deferred.
 
 Use `--fresh` to try the new starter roster without replacing an existing save. Existing saved fish and balances are preserved. The Shop remains a large modal. Backdrop taps close it without opening another menu.
 
@@ -160,3 +223,20 @@ simulation steps. CTest now includes `rendering_quality` and tablet interaction
 cases. See `design-qa.md` and `evidence/render-quality/final-tests.log` for the
 current results. Frame interval reports include presentation wait and exclude
 the first 60 frames; the older CPU-only fields remain separately labeled.
+
+## Shop screenshot match, 12 September 2026
+
+Shop now uses the supplied cyan reef frame, illustrated aquarium cards, source
+category tabs, green price buttons and red close button. It keeps four cards in
+one row on phones and tablets. All nine regular fish pages, plant and decoration
+catalogs, environment choices, feeding and purchases remain interactive.
+
+Build desktop or iOS with the commands above. A preview that leaves normal saves
+alone is:
+
+```sh
+./build/desktop/aquarium --assets assets --fixture shop --still --width 880 --height 495
+```
+
+The aquarium scenery, HUD and saved balances continue to use the existing game.
+Visual comparisons and native test results are in `evidence/shop-pixel`.

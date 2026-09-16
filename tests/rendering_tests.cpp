@@ -14,6 +14,37 @@ Surface read(SDL_Renderer* renderer){
  Surface rgba(SDL_ConvertSurface(raw.get(),SDL_PIXELFORMAT_RGBA32),SDL_DestroySurface);check(bool(rgba),"Cannot convert frame");return rgba;
 }
 const Uint8* pixel(const SDL_Surface& s,int x,int y){return static_cast<const Uint8*>(s.pixels)+y*s.pitch+x*4;}
+int differingPixels(const SDL_Surface& a,const SDL_Surface& b,int tolerance=0){
+ check(a.w==b.w&&a.h==b.h,"Compared frames differ in size");int count=0;
+ for(int y=0;y<a.h;++y)for(int x=0;x<a.w;++x){const auto* p=pixel(a,x,y);const auto* q=pixel(b,x,y);int difference=0;for(int k=0;k<4;++k)difference=std::max(difference,std::abs(int(p[k])-int(q[k])));count+=difference>tolerance;}
+ return count;
+}
+void checkPremiumFish(const std::filesystem::path& assets){
+ std::ifstream input(assets/"content.json");const auto content=Content::fromJson(Json::parse(input));Domain domain(content,0);
+ Canvas canvas(assets,852,393,true);auto state=domain.state();auto fish=state.fish.front();
+ fish.id={51};fish.position={544,320};fish.egg=false;fish.age=3;fish.motion={};fish.motion.direction=-1;
+ auto frame=[&](const Fish& item,bool reduced,double time){
+  canvas.begin();canvas.fill({0,0,canvas.width(),canvas.height()},{0,0,0,255});
+  canvas.fish(*content.find(item.species),item,1,false,{0,0,0,0},false,reduced,Care::Fed,time);
+  return read(canvas.renderer());
+ };
+ fish.species="koi";auto first=frame(fish,false,0),repeated=frame(fish,false,20);
+ check(differingPixels(*first,*repeated)==0,"Koi pattern changes without a change to fish identity");
+ for(std::uint64_t id=52;id<60;++id){auto other=fish;other.id={id};auto variant=frame(other,false,0);check(differingPixels(*first,*variant,3)>30,"Individual Koi share an indistinguishable painted pattern");}
+ state.fish.clear();state.companions={{fish.id,{},fish.species,fish.tank,fish.position,fish.motion,false,false,0}};state.nextFishId=52;fish=companionVisual(state.companions.front());first=frame(fish,false,0);const auto restored=decodeAndValidate(encode(state),content);auto reloaded=frame(companionVisual(restored.companions.front()),false,0);
+ check(differingPixels(*first,*reloaded)==0,"Koi pattern changes after saving and loading");
+ auto still=frame(fish,true,0),laterStill=frame(fish,true,47);
+ check(differingPixels(*still,*laterStill)==0,"Reduced-motion Koi pattern animates");
+ fish.species="flashlightFish";auto glow=frame(fish,false,0),dim=frame(fish,false,3),cycle=frame(fish,false,6);
+ check(differingPixels(*glow,*dim,3)>15,"Flashlight Fish has no timed cheek glow");
+ check(differingPixels(*glow,*cycle,1)==0,"Flashlight Fish glow jumps at the cycle boundary");
+ for(double time=0;time<6;time+=.25){auto before=frame(fish,false,time),after=frame(fish,false,time+1./60);check(differingPixels(*before,*after,3)==0,"Flashlight Fish light changes abruptly between frames");}
+ still=frame(fish,true,0);laterStill=frame(fish,true,3);
+ check(differingPixels(*still,*laterStill)==0,"Reduced motion leaves the Flashlight Fish pulse active");
+ fish.dead=true;still=frame(fish,false,0);laterStill=frame(fish,false,3);
+ check(differingPixels(*still,*laterStill)==0,"Dead Flashlight Fish keeps pulsing");
+ std::cout<<"PASS persistent individual Koi patterns, smooth cheek glow and reduced-motion stills\n";
+}
 void checkFrames(const std::filesystem::path& assets){
  Canvas canvas(assets,852,393,false);
  const auto directory=std::filesystem::temp_directory_path()/"aquarium-rendering-tests";std::filesystem::create_directories(directory);
@@ -68,4 +99,4 @@ void checkMotion(const std::filesystem::path& assets){
  std::cout<<"PASS continuous fish position, fins, pitch and turns, including transient reset\n";
 }
 }
-int main(int argc,char** argv){try{if(argc!=2)throw std::runtime_error("Usage: aquarium_rendering_tests ASSETS");checkMotion(argv[1]);checkFrames(argv[1]);return 0;}catch(const std::exception& e){std::cerr<<"FAIL "<<e.what()<<'\n';return 1;}}
+int main(int argc,char** argv){try{if(argc!=2)throw std::runtime_error("Usage: aquarium_rendering_tests ASSETS");checkMotion(argv[1]);checkPremiumFish(argv[1]);checkFrames(argv[1]);return 0;}catch(const std::exception& e){std::cerr<<"FAIL "<<e.what()<<'\n';return 1;}}

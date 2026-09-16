@@ -3,8 +3,8 @@
 <plist version="1.0"><dict>
 <key>CFBundleExecutable</key><string>${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
 <key>CFBundleIdentifier</key><string>com.pixmot.aquarium</string>
-<key>CFBundleName</key><string>Aquarium</string>
-<key>CFBundleDisplayName</key><string>Aquarium</string>
+<key>CFBundleName</key><string>Fishius</string>
+<key>CFBundleDisplayName</key><string>Fishius</string>
 <key>CFBundlePackageType</key><string>APPL</string>
 <key>CFBundleShortVersionString</key><string>1.0</string>
 <key>CFBundleVersion</key><string>1</string>

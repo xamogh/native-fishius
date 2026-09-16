@@ -1473,58 +1473,10 @@
       "source": "Desaturated variant of anniversaryRainbowfish",
       "sha256": "1abe4e746b5a057123e034775132d980015d0b4a7f57b9ace66c2bb7099173f8"
     },
-    "background.png": {
-      "size": [
-        1632,
-        952
-      ],
-      "pivot": [
-        0.5,
-        0.5
-      ],
-      "logical_size": [
-        1632,
-        952
-      ],
-      "source": "New illustrated aquarium backdrop",
-      "sha256": "1bdf5fb260d8cae24cf07db68b76ebd5dbf15c5bc7d4b767a07905361c911a2f"
-    },
-    "ui/coin.png": {
-      "size": [
-        192,
-        192
-      ],
-      "pivot": [
-        0.5,
-        0.5
-      ],
-      "logical_size": [
-        64,
-        64
-      ],
-      "source": "New game illustration",
-      "sha256": "3563bceaf62cda0260ef21003a14d592d2f8686f780a3cef960085936da7ce57"
-    },
-    "ui/pearl.png": {
-      "size": [
-        192,
-        192
-      ],
-      "pivot": [
-        0.5,
-        0.5
-      ],
-      "logical_size": [
-        64,
-        64
-      ],
-      "source": "New game illustration",
-      "sha256": "9a61900774d1b51ca73bbbc9bc6c1eb2bd8fc37fb141bd6afaabb6f3a36b2c3d"
-    },
     "ui/egg.png": {
       "size": [
-        192,
-        192
+        256,
+        256
       ],
       "pivot": [
         0.5,
@@ -1534,88 +1486,8 @@
         64,
         64
       ],
-      "source": "New game illustration",
-      "sha256": "939f282c9e65f3af6f3832769fbf727dd4eedfaee58afa73814c7124c2fb0e73"
-    },
-    "ui/food.png": {
-      "size": [
-        192,
-        192
-      ],
-      "pivot": [
-        0.5,
-        0.8
-      ],
-      "logical_size": [
-        64,
-        64
-      ],
-      "source": "New game illustration",
-      "sha256": "fd05e5151067fdf9221f5414044a92c0a853d3b5790a0c44afcc1f0f959b9e6c"
-    },
-    "ui/net.png": {
-      "size": [
-        192,
-        192
-      ],
-      "pivot": [
-        0.395,
-        0.355
-      ],
-      "logical_size": [
-        64,
-        64
-      ],
-      "source": "New game illustration",
-      "sha256": "4fefef74584c134aae4e97671bf8a8d2826a62ad64ecda0cab5384eaf958d5be"
-    },
-    "ui/tank.png": {
-      "size": [
-        192,
-        192
-      ],
-      "pivot": [
-        0.5,
-        0.5
-      ],
-      "logical_size": [
-        64,
-        64
-      ],
-      "source": "New game illustration",
-      "sha256": "42d41ae09d38df66c1e3e5b72193111a4b196c4a59f43624b936396791d70dee"
-    },
-    "ui/xp.png": {
-      "size": [
-        192,
-        192
-      ],
-      "pivot": [
-        0.5,
-        0.5
-      ],
-      "logical_size": [
-        64,
-        64
-      ],
-      "source": "New game illustration",
-      "sha256": "eeb8ced252b806da98fdfa4f46f7e4bfcecdf03446e1cacb7c8c9ebaeb22aa93"
-    },
-    "ui/inventory.png": {
-      "size": [
-        192,
-        192
-      ],
-      "pivot": [
-        0.5,
-        0.5
-      ],
-      "logical_size": [
-        64,
-        64
-      ],
-      "source": "New game illustration",
-      "sha256": "73133bb18908a4fabcaf6e748dbb41ac328d8f82652a6b1acf0935dfac51f7c0"
+      "source": "Built-in imagegen; prompts and integration record in work/control-refresh/provenance.json",
+      "sha256": "c26fef05a577caaed8160ce08b0d76e86f7cc2e3c4eed5e5ac01eedfa09273bb"
     },
     "decor/seaweed.png": {
       "size": [
@@ -1696,6 +1568,206 @@
       ],
       "source": "New game illustration",
       "sha256": "050ba43fe1d55ff90b480fdfdcd3173f1f4d1245226e12f3f8930834d2cc5345"
+    },
+    "tanks/fish.png": {
+      "source": "User screenshot with built-in imagegen clean plate; see work/tank-popup/provenance.json",
+      "size": [
+        47,
+        30
+      ],
+      "sha256": "47c5c7a653b6926cada5ebb13a8e72c9dd0e9e3b958b5640c702eda4d17ec891"
+    },
+    "hud-icons/shop-v1.png": {
+      "size": [
+        1312,
+        1199
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in image_gen, generated RGBA transparency. See hud-icons/generation.json.",
+      "sha256": "fa5cae49357210e0d60ab94f68bf906fce491b3bc7e7094f0fbeb7242990b0d5"
+    },
+    "hud-icons/settings-v1.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in image_gen, generated RGBA transparency. See hud-icons/generation.json.",
+      "sha256": "42d72483d7fb7100e0af3d678b24f16588a042f2fd2dbef9ab328177ff3b3d39"
+    },
+    "hud-icons/shop-button-v3.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in image_gen: approved thin-border Shop, regenerated with genuine transparent alpha.",
+      "sha256": "994234c8089128efd9d2ad98e6ca2901bf1be95723db5e83923271e8f4315ba3"
+    },
+    "hud-icons/tank-button-v3.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in image_gen. See hud-icons/generation-tank-v3.json. Original alpha preserved.",
+      "sha256": "3a6b2f44cbdcf08bbe9c3efe3f2f1615495ba4270f09b47a7217782499b5912b"
+    },
+    "hud-icons/rewards-button-v3.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in image_gen. See hud-icons/generation-rewards-v3.json. Original alpha preserved.",
+      "sha256": "fc1e9f67179c6b1455c65b754973fa22ce86ed919441ec8d9be62d50727d8eb8"
+    },
+    "hud-icons/food-button-v3.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in image_gen. See hud-icons/generation-food-v3.json. Original alpha preserved.",
+      "sha256": "3225c5fa594f89f70a890522bad555cb09f2bc7e401e67137aa497d8e7e070c5"
+    },
+    "hud-icons/projects-button-v3.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in image_gen. See hud-icons/generation-projects-v3.json. Original alpha preserved.",
+      "sha256": "3369d2794206216b9607dc607094cd2244ee1a837ef4c76466941d1a186eb7e3"
+    },
+    "hud-icons/bag-button-v3.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in image_gen. See hud-icons/generation-bag-v3.json. Original alpha preserved.",
+      "sha256": "b7e5cc5291a3b8813b3d0bcf737a15c98c4eac66b58d40042ef8ab0cdb484572"
+    },
+    "hud-icons/coin-v3.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in image_gen. See hud-icons/generation-coin-v3.json. Original alpha preserved.",
+      "sha256": "6d11f4a82b2fe4ce4b49ba834d1788ce1692ab47e96b95916f2091768d677860"
+    },
+    "hud-icons/pearl-v3.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in image_gen. See hud-icons/generation-pearl-v3.json. Original alpha preserved.",
+      "sha256": "46c0320c34da01366557871bff712f3c9cc6347ac3cd4e2f017bd0da47a3eb2b"
+    },
+    "hud-icons/coin-v4.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in image_gen. See hud-icons/generation-coin-v4.json. Original alpha preserved.",
+      "sha256": "7d723e8251a537c6cd7ad341f69cb0b310d8486f916a2d78c8d00b797cd53600"
+    },
+    "hud-icons/pearl-v4.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in image_gen. See hud-icons/generation-pearl-v4.json. Original alpha preserved.",
+      "sha256": "4de7cfbe391c7a1eca1adc66c918fc12e74017eabf5a43a6b7b5d422bead30d8"
+    },
+    "hud-icons/shop-tab-fish-v1.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Generated transparent aquarium shop category icon; see hud-icons/generation-shop-tabs-v1.json",
+      "sha256": "e1ce845dc0eee8921be8ed5a3f08ece9db518e6912e0f440fecb2281868b2d4f"
+    },
+    "hud-icons/shop-tab-plants-v1.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Generated transparent aquarium shop category icon; see hud-icons/generation-shop-tabs-v1.json",
+      "sha256": "259cf9ba308ad1ca0654ae9ac98f30fea4fb7ea162de83da0ac43e75821ea0fa"
+    },
+    "hud-icons/shop-tab-decorations-v1.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Generated transparent aquarium shop category icon; see hud-icons/generation-shop-tabs-v1.json",
+      "sha256": "68194b22009afdf4edb4ce2a1264deb9b06d0bf428856c84eba8ede8eb9cb8b4"
+    },
+    "hud-icons/shop-tab-treasure-v1.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Generated transparent aquarium shop category icon; see hud-icons/generation-shop-tabs-v1.json",
+      "sha256": "9afa0490c41fe4e5a6b145dd69e8c9349c3983698ca4182309ed79111e852198"
     }
   }
 }

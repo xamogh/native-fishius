@@ -31,19 +31,43 @@ Release signing requires the application owner's key. No signing key, store iden
 
 ## iOS
 
-Use macOS with Xcode and an iOS SDK. Install the intended fonts and obtain the pinned native sources on that machine. Configure an Xcode project:
+Use macOS with Xcode and an iOS SDK. See [LOCAL-SETUP.md](../LOCAL-SETUP.md) for this Mac's build tools, dependencies, and simulator instructions.
+
+### Run on your iPhone
+
+The existing `build/ios-device` directory is configured for physical iPhones and iPads: arm64, the `iphoneos` SDK, and iOS 15 or later. It uses the local iOS libraries in `build/ios-device-deps`. Keep this build separate from `build/ios-simulator`.
+
+1. Connect and unlock your iPhone. Accept **Trust This Computer** if asked.
+2. Double-click **`Open iPhone Project.command`** to refresh and open the current project. Choose the **aquarium** scheme and your iPhone as the run destination. The current project is `build/ios-device/FishiusAquarium.xcodeproj`. Close the older `FishXAquarium.xcodeproj` window; it omits newer source files and can fail with undefined-symbol linker errors.
+3. In Xcode, sign in under **Settings > Apple Accounts** if needed. Select the **aquarium** target, open **Signing & Capabilities**, enable **Automatically manage signing**, and choose your team. Keep the existing bundle identifier unless Xcode reports that your team cannot use it. Follow [Apple's device signing instructions](https://developer.apple.com/documentation/xcode/running-your-app-on-simulated-or-physical-devices).
+4. On the phone, enable **Settings > Privacy & Security > Developer Mode**, restart, and confirm. This setting appears after pairing the phone with Xcode. See [Apple's Developer Mode instructions](https://developer.apple.com/documentation/xcode/enabling-developer-mode-on-a-device).
+5. Click **Run** or press **Command-R**. After the app opens, check that the Coin and Pearl **+** buttons open **Currency Shop** directly on the matching tab. Check the dialog by attempting a tank purchase without enough Coins or Pearls. Confirm that it lists only the currency selected for the purchase, even when both balances are low. Check that each price button can buy a tank or upgrade when the other currency balance is zero.
+
+A free Personal Team can install the app on your own phone. Its provisioning profile expires after seven days, so you must rebuild and reinstall after expiry. See [Apple's account guide](https://developer.apple.com/help/account/basics/about-your-developer-account).
+
+### Build for the iPhone simulator
+
+For the iPhone 17 simulator, use **`Open iPhone Simulator Project.command`**
+instead. It opens the separate Xcode project in `build/ios-simulator-xcode`,
+which links the simulator FreeType library from `build/ios-deps/install`.
+Select **aquarium** and **iPhone 17**, then press **Command-R**. Selecting a
+simulator in `build/ios-device` fails at linking because that project uses
+FreeType compiled for a physical phone.
+
+### Preserve signing when CMake regenerates the project
+
+Xcode edits to a generated project can be replaced by CMake. Store the team and automatic signing in the local CMake cache. For this existing device build, run the following from the repository root, using the CMake executable listed in `LOCAL-SETUP.md` and replacing `YOUR_TEAM_ID` with your team ID:
 
 ```sh
-cmake -S . -B build/ios -G Xcode \
-  -DCMAKE_TOOLCHAIN_FILE=platform/ios/ios-toolchain.cmake \
-  -DCMAKE_OSX_SYSROOT=iphoneos -DAQ_BUILD_TESTS=OFF
-cmake --build build/ios --config Release
+cmake -S . -B build/ios-device \
+  -DCMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM=YOUR_TEAM_ID \
+  -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_STYLE=Automatic
 ```
 
-The supplied property list declares landscape orientations for iPhone and iPad. Set your development team and signing identity in Xcode for physical-device installation. Simulator builds need an appropriate simulator sysroot and architecture.
+This reuses the existing device dependency configuration. Repeat it when changing teams. It does not install the app; use Xcode's **Run** action for installation and launch.
 
-The bundle must retain the `assets` resource directory structure. Verify resource paths, font installation, orientation, interruptions, suspend/resume, and safe areas in the actual bundle. A desktop screenshot at an iPhone-like resolution is not evidence that any of these native behaviors work.
+The supplied property list declares landscape orientations for iPhone and iPad. The bundle must retain the `assets` directory structure. On the actual phone, check artwork, fonts, orientation, screen edges, interruptions, and saved progress after backgrounding and reopening the app.
 
-## Unverified platform work
+## Verification limits
 
-No Android or iOS SDK compilation, application signing, device installation, store readiness, native cutout handling, or sustained mobile performance is certified in this delivery. The feature matrix names additional host gaps that require completion and testing.
+A signed Debug build for physical iOS devices completed on 12 September 2026 using the existing development profile. The code signature passed verification, and the app was installed and launched on the connected iPhone 15 Pro Max. Manual visual and touch checks, interruptions, and sustained performance on the phone remain unverified. iOS simulator runs are recorded in `LOCAL-SETUP.md`. Android testing and store readiness remain unverified. The feature matrix lists additional host work.

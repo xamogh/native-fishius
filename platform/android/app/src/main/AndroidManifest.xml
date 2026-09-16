@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-feature android:glEsVersion="0x00030000" android:required="false" />
-    <application android:label="Aquarium" android:allowBackup="false" android:hasCode="true" android:theme="@android:style/Theme.Material.NoActionBar.Fullscreen">
-        <activity android:name=".AquariumActivity" android:label="Aquarium" android:exported="true"
+    <application android:label="Fishius" android:allowBackup="false" android:hasCode="true" android:theme="@android:style/Theme.Material.NoActionBar.Fullscreen">
+        <activity android:name=".AquariumActivity" android:label="Fishius" android:exported="true"
             android:screenOrientation="sensorLandscape"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboardHidden|keyboard|navigation|uiMode|density"
             android:hardwareAccelerated="true">

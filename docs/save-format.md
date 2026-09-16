@@ -1,37 +1,21 @@
-# Save format and recovery
+# Save format 4
 
-The save is JSON with explicit schema and content versions. Both remain version 1. Unsupported future versions are rejected and preserved rather than silently replaced with a new game.
+New development games use `save-v4.json`. Both schema and content versions are 4. No backward compatibility is needed or implemented. The decoder rejects other versions; recovery preserves a corrupt or unsupported file and can load a separate valid backup.
 
-## Saved state
+Productive fish save an immutable `purchase` snapshot, identity, stage, growth milliseconds, hatch deadline, last-fed time, position, motion, favorite and scripted flags. Six seconds of automatic hatching count toward total growth. Hunger pauses elapsed growth. Companion records are separate and contain ownership and visual state, with no coin or XP production fields. Kept adults link to their original terminal settlement.
 
-The record contains the wallet, cumulative XP, highest rewarded level, simulation and wall-time anchors, owned tanks, active tank, fish identities, positions, lifecycle and storage timers, movement and random state, claims, tutorial and quest state, discoveries, decor, and settings.
+The save also contains the wallet, capped account XP, lifetime XP, level reward checkpoint, owned tanks, eight-slot display occupancy per tank, claims and counters, decor ownership and copies, settings, monotonic identity sequences, simulation and wall-clock anchors, transaction receipts, terminal settlements and ledger entries. Decorative copies save position, size, flip and stored state. A queued paid decor copy reserves its identity and inventory space.
 
-Progress fields include:
+## Transactions
 
-- `mastery`: historical per-species sale counts, retained for compatibility.
-- `adultRaised`: per-species counts of fish that reached Adult under the new rules.
-- `claims`: once-only rewards and milestone claims. Adult mastery keys use `mastery:<species>:<target>`, where target is 5, 25 or 100.
-- `quests`: objective count and claim flag, with daily and weekly period anchors.
-- `giftTokens`, `giftDay` and `eggDay`: existing balances and history, even though new gift and egg grants are deferred.
+A request receipt stores the command fingerprint, result and revision. An identical request ID replays the stored result. Different data with the same ID is rejected. A settlement stores the fish snapshot, stage, disposition, principal refund, profit, actual account XP, request ID and timestamp. Keep and Rehome share its unique fish key.
 
-Transient pointers, textures, fonts, active gestures, loose food, tool animations and receipts are not serialized. Artwork updates do not change saved species IDs.
+Ledger entries contain currency, signed amount, balance after the change, reason, source ID, request ID, timestamp and revision. Each crossed level has its own reward source. The decoder checks unique sources, receipts, IDs, bounded values, stage consistency, capacity, companion origins and exact wallet reconciliation.
 
-## Loading older native saves
+`Domain::execute(command, commit)` calculates a candidate and calls the supplied commit function. `Session::command` supplies local storage. If saving fails, domain state, receipts, loose food and pending presentation events revert to their previous values. Successful retries after a failed save remain possible. Move previews and loose food stay local; regular checkpoints save movement and free feeding progress.
 
-`adultRaised` is optional when loading a version 1 save. If absent, it starts empty. Old sale counts included Junior fish and cannot prove that a fish reached Adult, so they are not converted to Adult mastery. Existing claims, currency and fish are retained.
+Writes use a temporary file, flush, file synchronization on POSIX, backup and rename. The Windows branch still requires platform verification because removing the destination before rename does not give the POSIX replacement guarantee. A storage error remains visible until a successful checkpoint. Recovery uses a separate path and does not overwrite the corrupt primary.
 
-The previous Feed Caretaker counter included feeds that do not satisfy the current healthy-feeding objective. When an older save has no `adultRaised` field, only an unclaimed `daily-feed` counter is reset. Claimed rewards remain claimed.
+Offline time is applied once from the saved wall-time anchor. A backward clock does not reverse growth. A fish can use only the fed portion of the absence. The current local save is not an anti-cheat mechanism. A future backend must own the clock, request identity and atomic commit.
 
-Loading a save does not replace its fish with the new starter roster or reset its wallet. The workbook starters apply only to a new game. Existing tutorial state remains available because tutorial work is deferred.
-
-## Validation and recovery
-
-Validation checks known species, unique IDs, tank references, legal capacity steps, numeric bounds, finite positions, stage consistency, and bounded collections. Living fish may exceed nominal capacity after revival. This is valid saved state; ordinary purchases and restoration still reject a full or overflowing tank.
-
-Writes use a temporary file, flush and replacement, retaining a last-good backup where possible. POSIX writes also request file synchronization. The Windows replacement branch still needs platform review because deleting a destination before rename does not provide the same crash-atomic guarantee.
-
-A corrupt or unsupported primary is not overwritten just because a backup loads. Recovery uses a separate recovered path. Storage failures should reach the player and logs rather than silently switching to session-only behavior.
-
-Offline time is applied once from the saved wall-time anchor. A clock rollback does not reverse simulation. Calendar anchors advance monotonically to limit duplicate claims. This local game does not prevent cheating through arbitrary system-clock changes.
-
-There is no asserted migration from the unavailable original application's save format. This is the native application's format.
+Limits are 100 growing fish, 10,000 owned companions, 500 decor copies, 50,000 request receipts and 200,000 ledger entries. Receipt retention and compaction need a defined policy before a public release. Gestures, textures, active tools, loose pellets and on-screen reward animations are transient.

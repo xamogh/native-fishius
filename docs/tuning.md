@@ -4,7 +4,7 @@
 
 Keep catalog prices, XP, stage durations, and staged rewards in generated content. Do not change them in UI code. Preserve milliseconds even when a label rounds a short schedule to five minutes.
 
-The reference world is 1088 by 635. Ordinary swimming starts below y=56 and ends near y=512 with fish-height adjustment. UI coordinates and aquarium coordinates are transformed separately. Artwork must keep its own aspect ratio.
+The reference world is 1088 by 635. Taps, feeding, placement, dragging, and tool cursors use the full tank height. Ordinary swimming starts below y=56 and extends to y=635 with fish-height adjustment. Food settles five world units above the bottom; eggs settle twelve units above it. UI coordinates and aquarium coordinates are transformed separately. Artwork must keep its own aspect ratio. Decor keeps its existing perspective scale independently of the playable bounds.
 
 ## Movement and meshes
 
@@ -24,7 +24,7 @@ The renderer draws a panel and its text into one layer at the native display res
 
 `View::prepareMenus` prepares the initial menu layouts, artwork and text before the first interactive frame. This prevents the first Shop or Mastery tap from decoding images and rasterizing labels. It uses a separate view and does not change saved state. Startup preparation time is reported as `menu_preparation_ms` by `--report`. The `menu_motion` test checks first-open cache reuse, animation timing, tap targets and Reduced Motion on phone and tablet layouts.
 
-The jar pivots around its mouth. The net pivots around its hoop. Receipts last 800 milliseconds. Toast fade begins near 1.9 seconds and removal near 2.4 seconds. A repeated action should replace or restart a bounded effect, not build an unlimited queue.
+The jar pivots around its mouth. The net pivots around its hoop. Receipts last 800 milliseconds. Repeated actions use a bounded effect queue.
 
 Use `--fixture`, `--capture`, `--sequence`, and `--report` for controlled review. Fixture balances and fish populations are synthetic review state unless a comparison document specifically establishes that they came from a supplied screenshot.
 

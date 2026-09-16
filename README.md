@@ -1,10 +1,16 @@
-# Aquarium: a native C++20 and SDL3 game project
+# Fishius: a native C++20 and SDL3 aquarium game
 
-The game uses native SDL rendering, textured fish meshes, an event-driven care model, physical food, a local wallet, tanks, inventory, quests, and JSON saves. The supplied behavior contract is the movement and interaction reference. The supplied spreadsheet is the catalog source. No original game source or running application is required.
+The game uses native SDL rendering, textured fish meshes, an event-driven care model, physical food, a local wallet, tanks, growing and display fish, inventory, and JSON saves. The supplied behavior contract is the movement and interaction reference. The supplied spreadsheet is the catalog source. No original game source or running application is required.
+
+Open [Run Aquarium Studio.command](Run%20Aquarium%20Studio.command) to edit the
+general dialog, currency shop cards, tank upgrade panel and currency HUD.
+The editor shares the game renderer and supports reusable components, layout
+rules, direct text editing, comparisons, purchase tests and recoverable drafts.
+See the [Studio guide](docs/aquarium-studio.md) for controls and verification.
 
 ## Delivery status
 
-Read `docs/workbook-implementation.md` for the current workbook and artwork update. It documents the requested deferrals and the latest evidence. `docs/verification.md` and `evidence/build-results.json` retain earlier build history. A feature being present in source is not proof that its tests passed or that it matches a reference image. Failed or unavailable checks are retained. The iPhone simulator build and landscape controls were tested on 10 September 2026. Physical device installation, Android testing, signing and sustained mobile performance are not verified here.
+Read `docs/workbook-implementation.md` for the workbook and artwork integration, and `docs/workbook-fixes-2026-09-12.md` for the latest audit fixes and validation. These records distinguish implemented rules from the work the user deferred. `docs/verification.md` and `evidence/build-results.json` retain earlier build history. A feature being present in source is not proof that its tests passed or that it matches a reference image. Failed or unavailable checks are retained. The iPhone simulator build and landscape controls were tested on 10 September 2026. Physical device installation, Android testing, signing and sustained mobile performance are not verified here.
 
 This project must not be described as release-ready or as a verified complete reproduction while the outstanding items in `docs/feature-matrix.md` remain unresolved.
 
@@ -50,15 +56,23 @@ The executable is named `aquarium` in the desktop build directory selected by `C
 
 Use `aquarium --help` to inspect the actual command-line options. `--fresh` opens an ephemeral new-game session. `--save PATH` selects an explicit local save. Do not use a production save when running review fixtures.
 
+## Startup
+
+Fishius shows a reef loading screen while it prepares fish artwork, all Shop and Collection pages, menu labels, tools, and the starting aquarium. Progress follows completed preparation steps. The Shop keeps prepared labels in a separate, bounded cache, so swipes do not trigger first-use image decoding or text rendering. Cards outside the visible area are skipped.
+
+New development games use a separate `save-v4.json` file. Older saves are not migrated. Use `--loading-capture PATH` to capture the loading screen during a review run.
+
 ## Play
 
-Open Shop, select a fish, and place eggs in the aquarium. Selecting Buy only arms the placement tool. Each subsequent valid placement performs its own transaction. Done or Escape cancels placement.
+Open Shop and choose a fish to start egg placement. The egg follows the pointer, and each primary tap buys and places one egg at that spot. The hint shows the species and price per egg. Keep tapping to place more, or choose Done or press Escape to stop. Choosing a fish or cancelling placement costs nothing. A failed purchase ends placement without charging. Free Bubble Eye Goldfish and premium fish create permanent companions and stop after one placement.
 
-Food drops pellets. Hungry fish notice and pursue them at individual times. Select opens fish details. Move drags a fish. Stash moves a living fish or egg into paused inventory. Bag restores it into the active tank without buying it again. Sell aims a net at Junior or older living fish.
+Food drops pellets. Opening another menu turns off Food or Sell and returns to normal selection. Closing the menu keeps those tools off. Hungry fish notice and pursue them at individual times. Tap a fish to open its details. Use Arrange tank from Bag to enter decorate mode, then tap a plant or decoration to select it. Drag it to preview a move, then press the green tick to save the position. The red X cancels the move. Stash stores the selected copy. Growing fish and eggs cannot be stored. Kept adults and premium companions can be stored and restored through Bag. Bag also opens stored decor so you can place it in the active tank without buying it again. Selecting a plant or decoration in Shop opens a draggable preview. Only the green tick purchases and places it. The red X cancels for free. Stored items use the same controls. The net opens the compact fish popover. Rehome shows the exact current coins and XP, with a small inline confirmation. At adulthood, Keep gives the same reward and retains a nonproducing display fish.
 
-Tank controls switch owned tanks, unlock the next tank, and buy the next capacity step using the workbook coin and Gift Token costs. Revival costs one pearl and can temporarily exceed nominal capacity, as required by the behavior contract. Purchases and inventory restoration are blocked while full.
+Tank controls switch owned tanks, unlock the next tank, and buy the next capacity step using either the workbook coin price or the pearl price. Each price button charges only its own currency. Growing capacity is 10, 15 or 20 per tank. Display fish have eight separate slots per tank. Keep stores excess display fish in Bag. Feeding is free, and hunger only pauses growth. Eggs still hatch after six seconds. Decor uses its own placement limit.
 
-Keyboard shortcuts: F for Food, S for Sell, B for Shop, I for inventory, M for Move, and Escape to close or cancel. Mouse and touch use the same ownership rules.
+Keyboard shortcuts: F for Food, S for Sell, B for Shop, I for inventory, and Escape to close or cancel. Mouse and touch use the same ownership rules.
+
+Each level-up pays its exact one-time v4 grant. Buying fish or decor gives no account XP. Keep and Rehome settle a saved purchase quote once, even after a retry or reload. See `docs/workbook-implementation.md` for the completed steps and deferred systems.
 
 ## Tests
 
@@ -88,7 +102,7 @@ It retains each command, exit code, elapsed time, and log. Screenshots or clips 
 
 ## Content and documentation
 
-`design/aquarium_game_master_model.xlsx` is the supplied workbook, unchanged. `assets/content.json` is generated runtime content. `assets/workbook.json` retains source cells and formulas for inspection. Import tools are in `tools/`; inspect each tool's `--help` before changing a content-generation command.
+`design/aquarium_game_design_v4.xlsx` is the active balancing source workbook. `assets/content.json` is generated runtime content. `assets/workbook.json` retains source cells and formulas for inspection. Import tools are in `tools/`; inspect each tool's `--help` before changing a content-generation command.
 
 Additional documentation:
 
@@ -97,6 +111,7 @@ Additional documentation:
 - `docs/tuning.md`: visual, motion, and input constants.
 - `docs/assumptions.md`: source conflicts and unspecified details.
 - `docs/feature-matrix.md`: implementation and verification status.
+- `docs/workbook-fixes-2026-09-12.md`: fixes from the detailed workbook audit and remaining undefined rules.
 - `docs/mobile.md`: Android and iOS build configuration.
 - `docs/verification.md`: actual evidence and limitations.
 

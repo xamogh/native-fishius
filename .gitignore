@@ -3,3 +3,7 @@ build/
 __pycache__/
 .DS_Store
 local-data/
+
+# Local captures, scratch output and asset backups. Existing tracked files remain tracked.
+/evidence/
+/work/

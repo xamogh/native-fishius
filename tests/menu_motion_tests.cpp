@@ -10,6 +10,14 @@ struct ViewTestAccess {
  static Panel panel(const View& v){return v.panel_;}
  static MenuPose pose(const View& v){return v.panelPose_;}
  static bool snapshot(const View& v){return bool(v.panelLayer_);}
+ static const auto& dialog(const View& v,int kind){return kind==5?v.helpAnimation_:kind==6?v.levelAnimation_:v.fundsAnimation_;}
+ static bool dialogVisible(const View& v,int kind){return kind==5?v.helpOpen_:kind==6?!v.levelUps_.empty():v.fundsDialog_.has_value();}
+ static void showDialog(View& v,int kind){
+  if(kind==5)v.showHelp();
+  else if(kind==6)v.session_.domain().fixture("level-up");
+  else if(kind==7)v.showCurrencyFunds(Currency::Coins);
+  else v.showFunds(std::array{CurrencyShortfall{240,0},CurrencyShortfall{0,3},CurrencyShortfall{2,3},CurrencyShortfall{},CurrencyShortfall{5,8}}[kind]);
+ }
  static std::pair<std::size_t,std::size_t> resources(const Canvas& c){return {c.textures_.size(),c.textCache_.size()};}
  static bool has(const View& v,std::string_view id){return std::any_of(v.buttons_.begin(),v.buttons_.end(),[&](const auto& b){return b.id==id;});}
  static Rect button(const View& v,std::string_view id){for(const auto& b:v.buttons_)if(b.id==id)return b.area;throw std::runtime_error("Missing button: "+std::string(id));}
@@ -60,10 +68,14 @@ void checkView(const std::filesystem::path& assets,int w,int h,const std::filesy
  auto capture=[&](std::string name){if(captures.empty())return;std::filesystem::create_directories(captures);view.render(time);check(canvas.capture(captures/(std::to_string(w)+"-"+name+".png")),"Cannot capture menu animation");canvas.present();};
  auto finger=[&](Uint32 type,float x,float y){SDL_Event e{};e.type=type;e.tfinger.touchID=1;e.tfinger.fingerID=1;e.tfinger.x=x/canvas.width();e.tfinger.y=y/canvas.height();view.event(e,time);};
  auto tap=[&](float x,float y){finger(SDL_EVENT_FINGER_DOWN,x,y);finger(SDL_EVENT_FINGER_UP,x,y);};
+ auto mouse=[&](Uint32 type,float x,float y){
+  int width{},height{};SDL_GetWindowSize(canvas.window(),&width,&height);
+  SDL_Event e{};e.type=type;e.button.button=SDL_BUTTON_LEFT;e.button.x=x/canvas.width()*width;e.button.y=y/canvas.height()*height;view.event(e,time);
+ };
  auto button=[&](std::string_view id){const auto r=ViewTestAccess::button(view,id);tap(r.x+r.w*.5f,r.y+r.h*.5f);};
  auto key=[&](SDL_Keycode keycode){SDL_Event e{};e.type=SDL_EVENT_KEY_DOWN;e.key.key=keycode;view.event(e,time);};
  render(0);
- for(auto panel:{Panel::Tanks,Panel::Shop,Panel::Inventory,Panel::Collection,Panel::Settings,Panel::Quests,Panel::Gifts}){
+ for(auto panel:{Panel::Tanks,Panel::Shop,Panel::Inventory,Panel::Collection,Panel::Settings,Panel::Quests,Panel::Gifts,Panel::CurrencyShop}){
   view.setPanel(panel);render(.04);auto early=ViewTestAccess::pose(view);
   check(early.alpha>0&&early.alpha<1&&early.xScale<1,"Menu appears instantly");capture("open-"+std::to_string(int(panel))+"-early");
   render(.125);check(ViewTestAccess::pose(view).xScale>1,"Menu has no visible spring overshoot");capture("open-"+std::to_string(int(panel))+"-bounce");
@@ -79,10 +91,9 @@ void checkView(const std::filesystem::path& assets,int w,int h,const std::filesy
  render(.7);const auto state=encode(session.domain().state());tap(12,canvas.height()*.5f);render(.01);
  check(ViewTestAccess::panel(view)==Panel::None,"Shop backdrop does not dismiss");tap(canvas.width()*.5f,canvas.height()*.5f);render(.01);
  check(encode(session.domain().state())==state&&ViewTestAccess::panel(view)==Panel::None,"Dismissing Shop sends a tap through to the aquarium");render(.5);
- button("tool-select");render(.025);
- check(ViewTestAccess::has(view,"select-option0")&&!ViewTestAccess::has(view,"select-option2"),"Select options do not stagger their entrance");capture("select-early");
- render(.7);capture("select-settled");button("select-option0");render(.02);
- check(view.tool()==Tool::Move&&!ViewTestAccess::has(view,"select-option0"),"Closing Select options still accept taps");render(.5);button("done");render(.5);
+ check(!ViewTestAccess::has(view,"tool-select")&&!ViewTestAccess::has(view,"select-option0"),"Select menu is still visible");
+ button("inventory");render(.7);check(ViewTestAccess::panel(view)==Panel::Inventory,"Bag does not open inventory directly");
+ button("panel-close");render(.5);
  view.fixture("details");render(.01);key(SDLK_ESCAPE);render(.5);
  const auto* fish=session.domain().fish(session.domain().state().fish.front().id);const auto position=canvas.toScreen(fish->position);tap(position.x,position.y);render(.04);
  check(ViewTestAccess::panel(view)==Panel::Details&&ViewTestAccess::pose(view).xScale<1,"Fish details do not animate");capture("details-early");
@@ -90,8 +101,67 @@ void checkView(const std::filesystem::path& assets,int w,int h,const std::filesy
  session.domain().execute({.action=Action::SetReducedMotion,.value=1});view.setPanel(Panel::Shop);render(.01);
  check(ViewTestAccess::pose(view).xScale==1&&ViewTestAccess::pose(view).yScale==1&&ViewTestAccess::pose(view).rise==0,"Reduced Motion still moves menus");
  key(SDLK_ESCAPE);render(.01);check(!ViewTestAccess::snapshot(view),"Reduced Motion waits for a hidden exit");
- button("tool-select");render(.01);check(ViewTestAccess::has(view,"select-option2"),"Reduced Motion delays submenu options");
- std::cout<<"PASS "<<w<<'x'<<h<<": menu entrances, exits, moving controls, reopening, backdrop ownership, stagger, fish details and Reduced Motion\n";
+ button("inventory");render(.01);check(ViewTestAccess::panel(view)==Panel::Inventory&&ViewTestAccess::pose(view).xScale==1,"Reduced Motion delays Bag");
+ view.setPanel(Panel::None);render(.5);
+ // Exercise each modal independently, including dialogs over an existing menu.
+ for(bool reduced:{false,true})for(int kind=0;kind<8;++kind){
+  session.domain().execute({.action=Action::SetReducedMotion,.value=reduced?1.:0.});
+  view.setPanel(Panel::Settings);render(.7);
+  const auto navigation=ViewTestAccess::button(view,"nav1");
+  ViewTestAccess::showDialog(view,kind);render(0);
+  const auto saved=encode(session.domain().state());
+  const auto close=kind==5?"help-close":kind==6?"level-close":"funds-close";
+  if(!reduced){
+   render(.04);const auto early=ViewTestAccess::dialog(view,kind).pose;
+   check(early.alpha>0&&early.alpha<1&&early.xScale<1,"Dialog appears instantly");capture("dialog-"+std::to_string(kind)+"-early");
+   render(.125);check(ViewTestAccess::dialog(view,kind).pose.xScale>1,"Dialog does not bounce");capture("dialog-"+std::to_string(kind)+"-bounce");
+   // Close at the overshoot, where the visible target differs from its layout.
+  }else{
+   const auto pose=ViewTestAccess::dialog(view,kind).pose;
+   check(pose.xScale==1&&pose.yScale==1&&pose.rise==0&&pose.alpha==1,"Reduced Motion still animates a dialog");
+  }
+  const auto target=ViewTestAccess::button(view,close);
+  check(target.w+.01f>=canvas.minimumTouchSize()&&target.h+.01f>=canvas.minimumTouchSize(),"Moving dialog shrinks its touch target");
+  button(close);check(!ViewTestAccess::dialogVisible(view,kind),"Moving dialog close misses taps");render(.04);
+  if(!reduced){
+   check(ViewTestAccess::dialog(view,kind).layer&&!ViewTestAccess::has(view,close),"Closing dialog disappears instantly or retains controls");
+   capture("dialog-"+std::to_string(kind)+"-closing");
+   tap(navigation.x+navigation.w*.5f,navigation.y+navigation.h*.5f);key(SDLK_B);render(.01);
+   check(ViewTestAccess::panel(view)==Panel::Settings&&encode(session.domain().state())==saved,"Closing dialog leaks input to the menu or aquarium");
+   render(.4);
+  }
+  check(!ViewTestAccess::dialog(view,kind).layer,"Closed dialog retains its snapshot");
+  for(bool useMouse:{false,true}){
+   ViewTestAccess::showDialog(view,kind);render(0);render(.04);
+   const auto& animation=ViewTestAccess::dialog(view,kind);
+   const auto bounds=animation.pose.apply(animation.bounds);
+   const float insideX=bounds.x+bounds.w*.05f,y=bounds.y+bounds.h*.5f;
+   const auto down=[&](float x,float y){if(useMouse)mouse(SDL_EVENT_MOUSE_BUTTON_DOWN,x,y);else finger(SDL_EVENT_FINGER_DOWN,x,y);};
+   const auto up=[&](float x,float y){if(useMouse)mouse(SDL_EVENT_MOUSE_BUTTON_UP,x,y);else finger(SDL_EVENT_FINGER_UP,x,y);};
+   // Pressing the body, then releasing outside, must leave the dialog open.
+   down(insideX,y);up(bounds.x-1,y);
+   check(ViewTestAccess::dialogVisible(view,kind),"A press inside the dialog dismisses it");
+   const auto before=encode(session.domain().state());
+   down(bounds.x-1,y);up(bounds.x-1,y);
+   check(!ViewTestAccess::dialogVisible(view,kind),"Mouse or touch backdrop does not close the moving dialog");
+   // Queued taps and taps during the exit cannot activate the menu underneath.
+   tap(navigation.x+navigation.w*.5f,navigation.y+navigation.h*.5f);render(.02);
+   if(!reduced)tap(navigation.x+navigation.w*.5f,navigation.y+navigation.h*.5f);
+   check(ViewTestAccess::panel(view)==Panel::Settings&&encode(session.domain().state())==before,"Backdrop dismissal reaches the underlying menu or changes state");
+   render(.5);check(!ViewTestAccess::dialog(view,kind).layer,"Backdrop dismissal retains its closing layer");
+  }
+ }
+ session.domain().execute({.action=Action::SetReducedMotion,.value=0});
+ ViewTestAccess::showDialog(view,0);render(.7);
+ ViewTestAccess::showDialog(view,6);ViewTestAccess::showDialog(view,6);render(0);render(.7);
+ button("level-continue");render(.04);
+ check(ViewTestAccess::dialog(view,6).pose.xScale<1&&!ViewTestAccess::has(view,"funds-close"),"Queued level-up does not animate or exposes the dialog underneath");
+ render(.7);tap(1,canvas.height()*.5f);tap(1,canvas.height()*.5f);render(.04);
+ check(!ViewTestAccess::dialogVisible(view,6)&&ViewTestAccess::dialogVisible(view,0),"Backdrop dismissal reaches the dialog underneath a closing level-up");
+ render(.4);
+ check(ViewTestAccess::has(view,"funds-close")&&ViewTestAccess::dialogVisible(view,0),"Level-up exit loses the underlying funds dialog");
+ button("funds-close");render(.4);
+ std::cout<<"PASS "<<w<<'x'<<h<<": menu and dialog bounces, exits, moving controls, mouse/touch backdrops, queued level-ups, modal input, reopening and Reduced Motion\n";
 }
 }
 int main(int argc,char** argv){try{if(argc<2||argc>3)throw std::runtime_error("Usage: aquarium_menu_motion_tests ASSETS [CAPTURES]");checkSpring();for(auto [w,h]:{std::pair{852,393},std::pair{1024,768}}){checkPreparedMenus(argv[1],w,h);checkView(argv[1],w,h,argc==3?argv[2]:std::filesystem::path{});}return 0;}catch(const std::exception& e){std::cerr<<"FAIL "<<e.what()<<'\n';return 1;}}

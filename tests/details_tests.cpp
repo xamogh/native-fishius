@@ -1,10 +1,9 @@
 #include "aquarium/view.hpp"
+#include "fixtures.hpp"
 #include <algorithm>
-#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
-
 namespace aq {
 struct ViewTestAccess {
  static Panel panel(const View& v){return v.panel_;}
@@ -15,78 +14,45 @@ struct ViewTestAccess {
 };
 }
 namespace {
+using namespace aq;
 void check(bool good,const char* message){if(!good)throw std::runtime_error(message);}
 void run(const std::filesystem::path& assets,int width,int height){
- using namespace aq;
- std::ifstream file(assets/"content.json");Session session(Content::fromJson(Json::parse(file)),"/tmp/aquarium-details-test-unused.json",0,true);
- auto& d=session.domain();const auto* species=d.content().find("molly");check(species,"Molly missing");
- auto state=d.state();auto original=std::find_if(state.fish.begin(),state.fish.end(),[](const auto& f){return f.species=="molly";});const auto id=original->id;
- state.simNow=60000;d.install(state);const auto initial=encode(d.state());
- const auto first=fishDetailsContent(*species,*d.fish(id),d.state().simNow);
- check(first.title=="BABY FISH"&&first.stage==0&&first.progress==0,"Baby stage presentation is wrong");
- check(first.care=="HUNGRY - FEED WITHIN 11H 59M","Molly countdown does not use its live workbook interval");
- check(first.growth=="GROWTH PAUSED - FEED TO RESUME"&&first.sale=="FIRST SALE UNLOCKS AT JUNIOR","Baby guidance is wrong");
- Canvas canvas(assets,width,height,false);View view(canvas,session);double time=1;
- // These tests check settled controls. Animation timing has its own suite.
- auto render=[&]{view.render(time+=.7);canvas.present();};render();
- auto finger=[&](Uint32 type,float x,float y){int w{},h{};SDL_GetWindowSize(canvas.window(),&w,&h);const float fit=std::min(float(w)/canvas.width(),float(h)/canvas.height());SDL_Event event{};event.type=type;event.tfinger.touchID=1;event.tfinger.fingerID=1;event.tfinger.x=((w-canvas.width()*fit)*.5f+x*fit)/w;event.tfinger.y=((h-canvas.height()*fit)*.5f+y*fit)/h;view.event(event,time);};
- auto tap=[&](float x,float y){finger(SDL_EVENT_FINGER_DOWN,x,y);finger(SDL_EVENT_FINGER_UP,x,y);render();};
- const auto originalWidth=canvas.width();const auto at=canvas.toScreen(d.fish(id)->position);tap(at.x,at.y);
- check(ViewTestAccess::panel(view)==Panel::Details&&ViewTestAccess::selected(view)==id,"Selecting a fish did not open its details");
- check(encode(d.state())==initial,"Selecting a fish mutated its care or position");
- const auto p=ViewTestAccess::bounds(view);
- check(canvas.width()==originalWidth,"Opening a popover changed the aquarium viewport");
- check(p.w<=580&&p.h<=467&&!p.has(at.x,at.y),"Details is not a compact popover beside the real fish");
- check(p.x>=0&&p.y>=0&&p.x+p.w<=canvas.width()+1&&p.y+p.h<=canvas.height()+1,"Details frame overflows viewport");
- for(const char* button:{"nav0","nav1","tool-select","tool-food","nav3","tool-sell","details-close"})check(ViewTestAccess::has(view,button),"Aquarium controls are hidden by the popover");
- tap(p.x+p.w*.65f,p.y+p.h*.34f);
- check(ViewTestAccess::panel(view)==Panel::Details&&encode(d.state())==initial,"Card text triggers an unintended action");
- const auto out=std::filesystem::absolute(assets).parent_path()/"evidence/fish-popover-reference";std::filesystem::create_directories(out);
- auto capture=[&](std::string name){view.render(time+=.02);check(canvas.capture(out/(std::to_string(width)+"x"+std::to_string(height)+"-"+name+".png"),true),"Cannot capture details");canvas.present();};
- capture("baby");
- check(bool(d.execute({Action::Feed,id})),"Cannot feed test fish");render();
- check(fishDetailsContent(*species,*d.fish(id),d.state().simNow).condition==Care::Fed,"Open card did not reflect feeding");
- for(const std::string name:{"junior","adult","sick","egg","dead"}){
-  auto change=d.state();auto& fish=*std::find_if(change.fish.begin(),change.fish.end(),[&](const auto& f){return f.id==id;});fish.egg=false;fish.dead=false;fish.age=0;fish.growthMs=0;fish.lastFedAt=change.simNow;
-  if(name=="junior"){fish.age=1;fish.growthMs=species->stageMs/2;}
-  if(name=="adult")fish.age=4;
-  if(name=="sick")fish.lastFedAt=change.simNow-species->feedMs;
-  if(name=="egg"){fish.egg=true;fish.hatchAt=change.simNow+6000;}
-  if(name=="dead"){fish.dead=true;change.wallet.pearls=1;}
-  d.install(std::move(change));render();const auto content=fishDetailsContent(*species,*d.fish(id),d.state().simNow);
-  if(name=="junior")check(content.stage==1&&std::abs(content.progress-.5f)<.001f&&content.sale.find("SELL VALUE:")==0,"Junior stage or live sale value is wrong");
-  if(name=="adult")check(content.stage==4&&content.progress==1&&content.growth=="FULLY GROWN","Adult details are wrong");
-  if(name=="sick")check(content.care=="SICK - FEED TO RECOVER","Sick details are wrong");
-  if(name=="egg")check(content.title=="FISH EGG"&&content.stage==-1&&content.care=="HATCHES IN 6S","Egg details are wrong");
-  if(name=="dead")check(ViewTestAccess::has(view,"one-revive")&&ViewTestAccess::has(view,"one-remove"),"Dead fish lost recovery controls");
-  capture(name);
+ std::ifstream file(assets/"content.json");Session session(Content::fromJson(Json::parse(file)),"/tmp/aquarium-details-unused.json",0,true);
+ auto& d=session.domain();const auto bought=d.execute({.action=Action::Buy,.key="neonTetra",.point={490,330}});check(bool(bought),"Cannot create purchased fish");const auto id=bought.fish;
+ auto state=d.state();std::erase_if(state.fish,[&](const auto& f){return f.id!=id;});state.simNow=60000;testing::stage(state.fish.front(),1);state.fish.front().lastFedAt=state.simNow-state.fish.front().purchase.feedMs;state.settings.reducedMotion=true;d.install(state);
+ const auto& species=*d.content().find("neonTetra");const auto info=fishDetailsContent(species,*d.fish(id),state.simNow);
+ check(info.stage==1&&info.progress==.25f&&info.care=="Hungry · Paused"&&info.reward.coins()==4&&info.reward.xp==0&&info.adultReward.coins()==11&&info.adultReward.xp==2,"Growth and reward details differ from the snapshot");
+ Canvas canvas(assets,width,height,true);View view(canvas,session);double time=1;
+ const auto render=[&]{view.render(time+=.7);};render();
+ const auto tap=[&](SDL_FPoint p){for(auto type:{SDL_EVENT_FINGER_DOWN,SDL_EVENT_FINGER_UP}){SDL_Event e{};e.type=type;e.tfinger.touchID=1;e.tfinger.fingerID=1;e.tfinger.x=p.x/canvas.width();e.tfinger.y=p.y/canvas.height();view.event(e,time);}render();};
+ const auto click=[&](std::string_view key){const auto r=ViewTestAccess::button(view,key);tap({r.x+r.w/2,r.y+r.h/2});};
+ const auto out=std::filesystem::absolute(assets).parent_path()/"evidence/fish-popover-match";std::filesystem::create_directories(out);
+ const auto capture=[&](std::string name){check(canvas.capture(out/(std::to_string(width)+"x"+std::to_string(height)+"-"+name+".png"),true),"Cannot capture popover");};
+ const auto initial=encode(d.state());tap(canvas.toScreen(d.fish(id)->position));
+ check(ViewTestAccess::panel(view)==Panel::Details&&ViewTestAccess::selected(view)==id&&encode(d.state())==initial,"Selecting fish changed its state");
+ const auto bounds=ViewTestAccess::bounds(view);check(bounds.x>=0&&bounds.y>=0&&bounds.x+bounds.w<=canvas.width()&&bounds.y+bounds.h<=canvas.height(),"Popover overflows viewport");
+ check(!bounds.has(canvas.toScreen(d.fish(id)->position).x,canvas.toScreen(d.fish(id)->position).y),"Popover covers its fish");
+ check(!ViewTestAccess::has(view,"one-feed")&&!ViewTestAccess::has(view,"one-revive")&&ViewTestAccess::has(view,"tool-food"),"Popover retained removed care actions");
+ capture("hungry");
+ for(const auto position:{WorldPoint{80,90},WorldPoint{980,90},WorldPoint{205,500},WorldPoint{870,500}}){
+  click("details-close");auto moved=state;moved.fish.front().position=position;moved.fish.front().motion.previous=position;d.install(moved);render();const auto at=canvas.toScreen(position);tap(at);
+  check(ViewTestAccess::panel(view)==Panel::Details&&ViewTestAccess::selected(view)==id,"Edge fish cannot open its popover");
+  const auto p=ViewTestAccess::bounds(view);check(p.x>=0&&p.y>=0&&p.x+p.w<=canvas.width()&&p.y+p.h<=canvas.height()&&!p.has(at.x,at.y),"Edge popover overlaps its fish or screen boundary");
+  capture("edge-"+std::to_string(int(position.x))+"-"+std::to_string(int(position.y)));
  }
- auto revive=ViewTestAccess::button(view,"one-revive");tap(revive.x+revive.w/2,revive.y+revive.h/2);
- check(!d.fish(id)->dead&&d.state().wallet.pearls==0&&!ViewTestAccess::has(view,"one-revive"),"Revival does not refresh the card");
- const auto unchanged=encode(d.state());tap(canvas.width()*.5f,canvas.height()-10);
- check(ViewTestAccess::panel(view)==Panel::None&&encode(d.state())==unchanged,"Backdrop did not dismiss without a second action");
- check(view.tool()==Tool::Select,"Backdrop changed the active tool");
- // The card must re-anchor at the edges without covering its selected fish.
- for(auto point:{WorldPoint{80,90},WorldPoint{980,90},WorldPoint{80,500},WorldPoint{980,500},WorldPoint{544,320}}){
-  auto change=d.state();auto& fish=*std::find_if(change.fish.begin(),change.fish.end(),[&](const auto& f){return f.id==id;});fish.position=point;fish.motion.previous=point;d.install(std::move(change));render();
-  const auto position=canvas.toScreen(point);tap(position.x,position.y);
-  const auto bounds=ViewTestAccess::bounds(view);
-  check(ViewTestAccess::panel(view)==Panel::Details&&ViewTestAccess::selected(view)==id,"Edge fish did not open its popover");
-  check(bounds.x>=0&&bounds.y>=0&&bounds.x+bounds.w<=canvas.width()&&bounds.y+bounds.h<=canvas.height(),"Edge popover is clipped");
-  check(!bounds.has(position.x,position.y),"Popover covers the selected fish");
-  capture("edge-"+std::to_string(int(point.x))+"-"+std::to_string(int(point.y)));
-  tap(canvas.width()*.5f,canvas.height()-10);
- }
- auto current=canvas.toScreen(d.fish(id)->position);tap(current.x,current.y);
- auto change=d.state();auto& other=*std::find_if(change.fish.begin(),change.fish.end(),[&](const auto& f){return f.id!=id;});const auto otherId=other.id;other.position={940,145};other.motion.previous=other.position;d.install(std::move(change));render();
- const auto otherAt=canvas.toScreen(d.fish(otherId)->position);tap(otherAt.x,otherAt.y);
- check(ViewTestAccess::selected(view)==otherId&&ViewTestAccess::panel(view)==Panel::Details,"A single tap did not switch to another fish");
- const auto food=ViewTestAccess::button(view,"tool-food");tap(food.x+food.w*.5f,food.y+food.h*.5f);
- check(view.tool()==Tool::Food&&ViewTestAccess::panel(view)==Panel::None,"Popover blocks aquarium tools");
- const auto select=ViewTestAccess::button(view,"tool-select");tap(select.x+select.w*.5f,select.y+select.h*.5f);
- current=canvas.toScreen(d.fish(id)->position);tap(current.x,current.y);const auto close=ViewTestAccess::button(view,"details-close");tap(close.x+close.w*.5f,close.y+close.h*.5f);
- check(ViewTestAccess::panel(view)==Panel::None,"Popover close button failed");
- std::cout<<"PASS "<<width<<'x'<<height<<": anchored popover, live states, screen edges, switching fish, tools, close and outside tap\n";
+ click("details-close");d.install(state);render();tap(canvas.toScreen(d.fish(id)->position));
+ click("fish-rehome");check(d.fish(id)&&ViewTestAccess::has(view,"rehome-confirm")&&ViewTestAccess::has(view,"rehome-back"),"Rehome needs an inline confirmation");capture("confirm");click("rehome-back");check(encode(d.state())==initial,"Cancelling rehome changed state");
+ check(bool(d.execute({.action=Action::Feed,.fish=id})),"Cannot feed");render();check(fishDetailsContent(species,*d.fish(id),d.state().simNow).care=="Fed · Growing","Popover did not refresh after feeding");capture("fed");
+ click("fish-favorite");capture("favorite");click("fish-rehome");check(!ViewTestAccess::has(view,"rehome-confirm"),"Favorite protection failed");click("fish-favorite");
+ // If growth changes the amount while confirming, the first new tap only
+ // refreshes the quote. A second deliberate tap confirms that displayed value.
+ click("fish-rehome");auto grown=d.state();testing::stage(grown.fish.front(),4);d.install(grown);render();capture("adult-confirm");click("rehome-confirm");check(d.fish(id),"A changed reward was confirmed without review");click("rehome-back");capture("adult");
+ const auto before=d.state().wallet.coins;click("fish-keep");check(!d.fish(id)&&d.companion(id)&&d.state().wallet.coins==before+11&&d.state().xp==2,"Keep did not pay exactly once");
+ check(ViewTestAccess::panel(view)==Panel::Details&&ViewTestAccess::has(view,"fish-store")&&!ViewTestAccess::has(view,"fish-rehome"),"Keep did not switch to display details");capture("display");
+ check(encode(decodeAndValidate(encode(d.state()),d.content()))==encode(d.state()),"Kept fish save is invalid");click("fish-store");check(d.companion(id)->stored&&ViewTestAccess::panel(view)==Panel::None,"Store did not close display details");
+ // Rehome itself removes the growing fish and pays the same adult amount.
+ const auto another=d.execute({.action=Action::Buy,.key="neonTetra",.point={490,330}});check(bool(another),"Cannot create rehome sample");grown=d.state();testing::stage(grown.fish.back(),4);d.install(grown);render();tap(canvas.toScreen(d.fish(another.fish)->position));const auto old=d.state().wallet.coins;click("fish-rehome");click("rehome-confirm");check(!d.fish(another.fish)&&d.state().wallet.coins==old+11,"Rehome payout differs from Keep");
+ std::cout<<"PASS compact popover, live growth, quote review, favorite, Keep, Rehome and display storage "<<width<<'x'<<height<<'\n';
 }
 }
-int main(int argc,char** argv){try{if(argc!=2)throw std::runtime_error("Usage: aquarium_details_tests ASSETS");for(auto [w,h]:{std::pair{669,506},std::pair{804,415},std::pair{852,393},std::pair{667,375},std::pair{1024,768},std::pair{1210,834}})run(argv[1],w,h);return 0;}catch(const std::exception& e){std::cerr<<"FAIL "<<e.what()<<'\n';return 1;}}
+int main(int argc,char** argv){try{if(argc!=2)return 2;for(auto [w,h]:{std::pair{667,375},std::pair{852,393},std::pair{1024,768},std::pair{1210,834},std::pair{1338,1002}})run(argv[1],w,h);return 0;}catch(const std::exception& e){std::cerr<<"FAIL "<<e.what()<<'\n';return 1;}}

@@ -9,12 +9,14 @@ try:
     content=json.loads((ROOT/'assets/content.json').read_text())
     species=content.get('species',content.get('catalog',[]))
     if isinstance(species,dict):species=list(species.values())
-    if len(species)!=46:errors.append(f'Expected 46 definitions, found {len(species)}')
+    if len(species)!=99:errors.append(f'Expected 99 v4 definitions, found {len(species)}')
     hashes={}
     for s in species:
         sid=s['id']
         p=ROOT/'assets/species'/(sid+'.png')
-        if not p.exists():errors.append(f'Missing {p.relative_to(ROOT)}');continue
+        if not p.exists():
+            if s.get('art_ready',False):errors.append(f'Missing enabled artwork: {p.relative_to(ROOT)}')
+            continue
         with Image.open(p) as im:im.verify()
         with Image.open(p) as im:
             if 'A' not in im.getbands():errors.append(f'{sid}: image has no alpha channel');continue

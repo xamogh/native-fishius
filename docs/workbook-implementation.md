@@ -1,77 +1,47 @@
-# Workbook implementation
+# v4 implementation, steps 1 to 3
 
-The launch game now uses the retained workbook for its roster and mapped progression values. This pass excludes the tutorial, the Anniversary event date, and reward rules the workbook does not specify, as requested by the user. The Start guide entry is removed from Settings Help; unused tutorial code and saved state remain for compatibility.
+The active source is `design/aquarium_game_design_v4.xlsx`, copied from the supplied v4 workbook. The earlier `aquarium_game_master_model.xlsx` remains a historical reference. This record supersedes earlier implementation notes for these three steps.
 
-## Import and independent verification
+## 1. Content foundation
 
-The source is `design/aquarium_game_master_model.xlsx`. `tools/import_content.py` imports the catalog, XP curve, starters, tank schedules and dated events into `assets/content.json`. It calls the shared supplement importer to add quest rules, exact XP columns, mastery targets and missing-specification notes before writing the complete file atomically. `tools/import_supplement.py` remains a compatible standalone command.
+`tools/import_v4.py` generates the complete schema 4 `assets/content.json`. Each species and decor item retains its source sheet and row. The workbook hash, configuration identity, source sheets, schedules, role factors, account levels, exact level grants and 15 tank entitlements are included. Regeneration is deterministic and replaces the output only after validation succeeds.
 
-Each imported field records its source cell or derivation. `tools/check_catalog.py` independently reopens the workbook instead of relying on importer output as proof. The recorded run passed **1,672 comparisons**: 1,439 explicit fields and 233 derived fields, with no errors. See `evidence/workbook-catalog-check.log` for the result and unresolved source details.
+The catalog contains 72 coin fish, including 40 launch, 7 reserve and 25 future entries, plus 27 permanent companion definitions and 120 decor items. Shop and Collection show launch entries with available artwork through level 40. Missing artwork, reserve entries and unscheduled seasonal fish remain closed. Asset validation checks the ready images separately. New artwork for the promoted roadmap species remains needed before those offers can open.
 
-Reproduce the import and check from the repository root:
+`tools/check_catalog.py` checks workbook rows independently, using rational arithmetic for rewards. It reports cached rounding discrepancies in `evidence/v4-implementation/catalog-audit.json`. Rule R25 specifies half-up ROUND and FLOOR partial claims. The imported runtime follows that rule, while `cached_*` fields preserve original workbook values. Three base profit values and some derived partial payouts differ by one from the workbook cache. The source workbook is unchanged.
 
-```sh
-python3 tools/import_content.py design/aquarium_game_master_model.xlsx
-python3 tools/import_supplement.py
-python3 tools/check_catalog.py --content assets/content.json --workbook design/aquarium_game_master_model.xlsx
-```
+User decisions override the source where recorded in `overrides`: free feeding pauses growth when hungry, meals last half the total schedule capped at 12 hours, eggs hatch after six seconds, and there is no save migration or real backend.
 
-The launch runtime supports levels 1 through 40. The workbook's levels 41 through 70 are retained as future content.
+## 2. Local transaction foundation
 
-## Fish and Shop
+Each productive fish records its purchase level, configuration identity, schedule, actual principal, profit, XP, stage thresholds and feeding interval. Prices and rewards use the level at purchase. Later level or configuration changes do not reprice an owned fish.
 
-All **46 fish** use their workbook identities: 26 coin fish, 10 premium fish and 10 limited fish. Imported values include names, model IDs, unlock levels, price currency, purchase XP, growth and care intervals, stage sale rewards, and event rules. Where the workbook lacks explicit Limited Edition intermediate sale values, the importer records the calculation and its source inputs separately.
+Commands have request IDs and saved result receipts. Repeating a request returns its first result. Reusing an ID with different command data fails. Keep and Rehome also share one terminal settlement per fish, so different requests cannot collect both rewards. The ledger records each wallet and account XP change, its reason, source identity and resulting balance.
 
-A normal new game starts with hungry Baby Neon Tetra, Guppy, Platy and Molly, 250 coins, no Pearls and a 10-fish tank. The Level 2 Pearl grant comes from the workbook. Existing saves retain their fish and wallet. Screenshot fixtures remain separate review states and are not the normal starting roster.
+`Session::command` commits the entire candidate save before returning success. A failed write rolls back the fish, wallet, receipt, progress and emitted events. The callback on `Domain::execute` is the boundary for a future authoritative service. The current game runs commands on one local game thread; it does not claim server security or cross-device concurrency support.
 
-The Shop lists the catalog in group and unlock order, with Coin, Premium and Limited filters. Cards show unlock level, rarity, stage and feeding intervals, price, and seasonal dates where configured. Button labels explain level, event, capacity, currency and claim blockers. The domain checks those same restrictions again before a purchase changes state.
+Schema 4 saves use `save-v4.json`. They require explicit current fields and reconcile the wallet against the ledger. No older-save migration, token conversion or legacy egg recovery is implemented.
 
-## Quests and mastery
+## 3. Fish lifecycle and compact UI
 
-| Objective | Target | Unlock | Status |
-|---|---|---:|---|
-| Feed Caretaker | Feed 8 times while no living, unstashed fish is sick | Level 2 | Exact XP claim enabled; sickness resets incomplete progress; completed goals stay ready |
-| Junior Seller | Sell 2 eligible fish | Level 2 | Exact XP claim enabled |
-| Adult Harvest | Sell 1 Adult fish | Level 3 | Exact XP claim enabled |
-| Tank Stylist | Place 1 decor item | Level 3 | Exact XP claim enabled |
-| Collection Chapter | Complete the source's five-fish collection objective | Level 8 | Deferred pending themes, membership and rewards |
-| Neighbor Helper | Send 5 gifts | Level 5 | Deferred pending gift rules and rewards |
+- A normal new game has two Neon Tetras, one Guppy and one Platy, 250 coins, zero XP and a 10-slot growing tank. Gifted starters have zero refundable principal.
+- Eggs hatch after six seconds and start hungry. Those six seconds count toward the total growth schedule. Growth after hatching advances only while fed. There is no sickness, death, upkeep or revival charge.
+- Schedules total 20 minutes, 2 hours, 8 hours, 20 hours or 44 hours. After hatching, Baby, Junior, Young, Mature and Adult use 0%, 25%, 55%, 80% and 100% of the total duration. A meal covers half the schedule, capped at 12 hours.
+- Food remains in the aquarium toolbar and uses the existing pellet interaction. It costs nothing and grants no coins or XP.
+- Rehome shows the actual current-stage coin and XP payout. Eggs and Babies return only the paid principal, with zero profit and XP. Intermediate stages use the saved principal refund and partial profit rules.
+- At adulthood, Keep and Rehome pay the same reward exactly once. Both free the growing slot. Keep creates a separate nonproducing display fish. Each tank has eight display slots; if those are full, Keep stores the fish in Bag. Display fish can be moved, fed, stored and restored without producing rewards.
+- Premium fish are permanent companions. Bubble Eye Goldfish is a free, once-only level 2 companion. Buying fish or decor gives zero account XP. Rarity does not multiply production.
+- Tapping a fish or using the net opens a compact popover. It shows stage, total progress, hunger or remaining fed growth, current coins and XP, and the adult comparison. Adult actions use Keep and Rehome icons. Rehome requires a second tap in the same popover. If its payout changes while open, the confirmation refreshes before allowing settlement. A favorite prevents rehome. No Feed icon or care penalty appears in the popover.
+- Tank entitlements use the exact level gates and either the coin or pearl price, with 10, 15 and 20 growing slots per tank and 100 across five tanks. Account XP caps at level 40; lifetime XP can continue. Level grants are paid once at each crossed level.
 
-Quest XP comes from the named columns in `Quest Scaling` and refreshes when the player levels up. The estimated daily coin pool is stored separately; it is not a per-quest payout. Daily and weekly claim resets use the calendar rules in `assumptions.md`.
+Daily quest pools, mastery rewards, collection chapters, projects, event catch-up, the new scripted onboarding, ads, purchases through a store provider and server deployment remain later steps. Their workbook data is retained. Their previous economic grants are disabled.
 
-Collection tracks discovery across all 46 species. Mastery counts fish reaching Adult, once per fish, with badges at **5, 25 and 100 Adults per species**. Selling a fish does not add Adult mastery. The new `adultRaised` save field and target-specific claim keys preserve progress. Old sales history is retained without converting it into unproven Adult growth.
+## Verification
 
-Mastery XP, statue rewards and collection chapter rewards remain deferred. The badges do not grant invented currency.
+Run the CMake desktop test preset, `python3 tools/test_content_import.py`, `python3 tools/check_catalog.py` and `python3 tools/validate_assets.py`. The new lifecycle suite covers saved quotes, rounding boundaries, six-second hatch, hunger, offline time, Keep/Rehome races, replay after reload, save failure, display capacity, tank prices and account XP caps. Existing native UI suites cover mouse and touch input, menus, purchases, movement, decor and rendering under the current rules.
 
-## Tanks
+Phone and tablet popover captures are in `evidence/v4-implementation`. This implementation has desktop build and software-renderer checks. This turn does not verify physical iOS or Android devices or deploy a server.
 
-The workbook's five tank unlock levels are 1, 7, 16, 25 and 34. Each tank progresses through 10, 20, 30 and 40 slots. On the solo path, each step requires **coins plus Gift Tokens** from the corresponding source entries. The friend-assist alternative is unavailable; there is no Pearl conversion.
+The new icon assets have generation records in `assets/ui/provenance/keep.json` and `assets/ui/provenance/rehome.json`. Their source pixels are preserved.
 
-The source names Medium and Large unlock beats but does not map every capacity step to an unlock level. Those entries are retained as unconfirmed metadata. The runtime enforces the clear tank unlock, ownership, capacity and cost rules without inventing missing expansion gates.
-
-The existing local decor catalog remains available, with its unsourced numeric defaults listed in `assumptions.md`.
-
-## Events and deferred grants
-
-Nine limited fish have explicit source date windows. Endpoints are inclusive, including Frost Angelfish's window across New Year. Anniversary Rainbowfish has no specified calendar dates, so it stays unavailable until configured.
-
-The old invented daily NPC token grant and egg exchange have been removed. Gift Tokens already present in a save remain valid. New gifts, Daily Egg Basket rewards, weekly collection rewards, Neighbor Helper rewards and other unspecified payouts remain unavailable. The user deferred these rules instead of requesting invented replacements.
-
-## Species art
-
-The canonical location is `assets/species/<species-id>.png`. The roster uses six suitable existing species sprites and 40 new species-specific generated sprites. Final asset and visual checks are tracked separately from the domain results. Prompts, source paths and visual acceptance notes are stored under `assets/species/provenance`.
-
-The runtime normalizes sprites to face left, crops to their visible alpha bounds, caps the long edge at 512 pixels, and creates matching mask and desaturated dead-fish textures. These are runtime derivatives; the original PNGs remain unchanged. The tank, Shop, inventory and collection use the same canonical species art, avoiding unrelated fish substitutions.
-
-## Recorded verification
-
-- The independent catalog audit passed 1,672 workbook comparisons.
-- The domain and storage suite passed 29 of 29 cases.
-- The importer suite passed all 3 tests, including atomic failure and deterministic re-import.
-- Asset validation passed all 46 canonical PNGs. Native renderer tests checked all 138 normal, mask and dead variants.
-- Native touch tests passed at 804x415, 852x393 and 667x375. They cover every Shop and Collection entry, purchase gates, mastery, the modal backdrop, tank expansion with both currencies, placement, food, move, stash, restore and sale.
-- The iPhone 17 Pro simulator build was installed and reviewed in landscape. The Shop and Collection rendered the real catalog, backdrop taps did not activate Food, and a Neon Tetra purchase charged 7 coins and granted 2 XP on placement.
-
-Logs and screenshots are in `evidence/workbook-*`. Compact captures of all eight Shop pages and all Collection pages are in `evidence/workbook-catalog/667x375`. Visual review found and corrected whole-day rounding in Shop schedule labels.
-
-This records simulator and desktop-native checks. Physical iPhone and Android testing and sustained mobile performance measurements remain separate work.
+Verified results are recorded in `evidence/v4-implementation/verification.json`: 19 desktop suites, five ASan/UBSan core suites, two importer regressions, 2,093 independent catalog checks and the decor audit. Follow-up suites cover the final save and layout adjustments. Leak detection is unavailable on this host and was disabled.

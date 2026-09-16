@@ -62,15 +62,19 @@
       "passed": true
     },
     {
-      "name": "stash preserves identity and all remaining clocks",
+      "name": "fish and eggs cannot be stashed",
       "passed": true
     },
     {
-      "name": "egg storage pauses hatching",
+      "name": "legacy stored fish preserve identity and all remaining clocks",
       "passed": true
     },
     {
-      "name": "five exact workbook tank schedules without invented pearl conversion",
+      "name": "legacy stored eggs retain remaining hatch time",
+      "passed": true
+    },
+    {
+      "name": "five exact workbook Coin and Pearl tank schedules",
       "passed": true
     },
     {
@@ -78,7 +82,7 @@
       "passed": true
     },
     {
-      "name": "every tank step consumes source coins plus solo tokens atomically",
+      "name": "every tank step consumes source Coins plus Pearls atomically",
       "passed": true
     },
     {
@@ -107,6 +111,10 @@
     },
     {
       "name": "save round-trip, unknown IDs, duplicate IDs and future schemas",
+      "passed": true
+    },
+    {
+      "name": "legacy Gift Token balance converts to Pearls once",
       "passed": true
     },
     {

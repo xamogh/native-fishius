@@ -1,27 +1,15 @@
 # Architecture
 
-## Authoritative domain
+`Content` holds schema 4 configuration from the v4 workbook. `Domain` owns the game state, care clocks, movement, free food and accepted commands. `src/economy.cpp` owns integer quote calculations, request receipts, the ledger and terminal Keep/Rehome settlements. `src/decor.cpp` owns decorative placement and ownership. These modules have no SDL or filesystem dependency.
 
-`domain.hpp` and `domain.cpp` contain content records, state, lifecycle calculations, movement, food consumption, transactions, and local progression. The domain receives simulation durations and calendar values. It does not open files, read an operating-system clock, create an SDL object, or decide how to draw a screen.
+A productive fish carries a purchase snapshot. Its future reward does not depend on the current catalog or account level. A companion has a separate ownership record without economic production fields. Both use the same visual movement through a temporary render representation. Care advances across owned tanks; only the active tank moves visually. The movement step is 20 milliseconds, while growth uses exact millisecond intervals.
 
-The Session owns one Domain. Presentation reads state and submits Commands. A command returns a structured Result. The command wrapper restores its saved pre-command state on an expected failure or an exception. Receipts and sounds are consequences of successful commands, never the cause of wallet mutations.
+`Session` supplies elapsed time and local persistence. An economic command succeeds only after its complete candidate save is committed. Failed commits roll back state and emitted events. `Domain::execute` accepts a commit callback, which provides a clear boundary for a future server. Execution is currently serial on the game thread.
 
-Fish IDs survive stashing, restoration, saving, and revival. Container indices and renderer pointers are not persistent identity. Currency arithmetic is checked and bounded. The explicit revival overflow exception is separate from ordinary capacity gates.
+`Storage` serializes explicit version 4 fields, validates decoded candidates, reconciles balances and uses temporary-file replacement with backups. There is no legacy migration. Offline growth consumes only the remaining meal duration and is applied once per saved wall-time interval.
 
-## Time
+`View` owns menus, tools, gesture ownership, temporary purchase offers, popover selection and confirmations. It retains IDs across commands, then looks them up again. `Canvas` owns SDL resources, fonts, texture caches and rendering. Rehome previews use the domain reward function and require confirmation of the displayed amount. Opening or drawing a popover cannot settle a fish.
 
-Lifecycle advancement operates on exact millisecond deadlines. Hatching, starvation pause, sickness, and death are not rounded to movement ticks. Movement uses a fixed 20-millisecond step. Long frame recovery bounds movement work without intentionally dropping care time. Cosmetic mesh waves do not choose which fish eats food.
+Fish details use an anchored compact popover with no dark backdrop. The aquarium Food tool remains available. Full menus and dialogs retain their existing input ownership, spring motion and Reduced Motion behavior. Growing and display counts are shown separately. Missing artwork and deferred catalog releases are excluded from preloading and live offers.
 
-Only the active tank has visible movement and loose food. Care advances in all owned tanks. Stashed fish retain paused deadlines. Loose food is transient and is cleared on tank changes and suspension.
-
-## Persistence and session
-
-Storage encodes explicit JSON fields and validates a temporary candidate before installation. Session coordinates elapsed time, suspension, offline catch-up, commands, and save checkpoints. It is the boundary between the pure domain and operating-system time or storage.
-
-## Presentation
-
-View owns the panel and tool state, gesture ownership, pressed states, tool animations, receipts, and toasts. It keeps entity IDs instead of references across mutations. Canvas owns SDL resources, font and texture caches, drawing operations, native text, and the deforming fish mesh.
-
-Rendering never computes a sale reward. Scene pixels never become the authoritative location of an inventory item or the authoritative wallet balance.
-
-The implementation uses a small number of modules rather than a general-purpose engine or an entity-component framework. Some classes and functions should receive a further maintainability review before production use; source presence alone is not an AAA-quality certification.
+Daily quest rewards, mastery rewards, projects, event catch-up, new onboarding, store checkout and online services remain separate later steps. Retained data or disabled prototype types do not mean those features are implemented.

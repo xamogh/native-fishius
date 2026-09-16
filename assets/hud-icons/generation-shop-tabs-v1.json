@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "date": "2026-09-15",
+  "tool": "image_gen.imagegen",
+  "reference": "Screenshot 2026-09-15 at 9.45.03 PM.png",
+  "notes": "Only tab illustrations are image assets. Panels, buttons, waves and bubbles are rendered in code. Original image alpha is preserved.",
+  "assets": [
+    {
+      "category": "fish",
+      "path": "hud-icons/shop-tab-fish-v1.png",
+      "source": "/Users/amoghrijal/.codex/generated_images/01a0a344-c13d-7622-bdc0-d5c3860244aa/exec-0d615597-67c9-46e6-8f1a-c0abd555ea47.png",
+      "prompt": "Use case: stylized-concept. Asset type: single transparent shop category illustration for a mobile aquarium game.\nReference image: style and subject reference only. Create ONLY the isolated illustration from the fish top tab in the reference. FISH tab: a friendly chubby orange goldfish facing left with one big kind eye, golden scales indicated sparingly, pale golden flowing fins and an orange split tail.\nMatch the selected mockup closely: charming clean hand-painted cartoon, readable silhouette, thin dark warm outlines, broad soft dimensional shading, restrained highlights. Clear at 80px. Same warm, inviting style as the four existing reference illustrations. Whole subject visible centered on square canvas with 8 percent transparent margin, illustration fills most of canvas. Genuine transparent background with alpha, output RGBA PNG. No tab panel, no button frame, no text, no letters, no wallpaper, no glow, no extra scene elements, no checkerboard.",
+      "alpha_bounds": [
+        88,
+        177,
+        1222,
+        1031
+      ],
+      "transparency": "Original RGBA alpha, no background removal or image edits"
+    },
+    {
+      "category": "plants",
+      "path": "hud-icons/shop-tab-plants-v1.png",
+      "source": "/Users/amoghrijal/.codex/generated_images/01a0a344-c13d-7622-bdc0-d5c3860244aa/exec-946954e0-1048-4b9a-8c7d-2d836909c40f.png",
+      "prompt": "Use case: stylized-concept. Asset type: single transparent shop category illustration for a mobile aquarium game.\nReference image: style and subject reference only. Create ONLY the isolated illustration from the plants top tab in the reference. PLANTS tab: one compact upright bunch of lush broad green aquatic leaves rooted in a small pale sand patch with three tiny pebbles.\nMatch the selected mockup closely: charming clean hand-painted cartoon, readable silhouette, thin dark warm outlines, broad soft dimensional shading, restrained highlights. Clear at 80px. Same warm, inviting style as the four existing reference illustrations. Whole subject visible centered on square canvas with 8 percent transparent margin, illustration fills most of canvas. Genuine transparent background with alpha, output RGBA PNG. No tab panel, no button frame, no text, no letters, no wallpaper, no glow, no extra scene elements, no checkerboard.",
+      "alpha_bounds": [
+        99,
+        61,
+        1181,
+        1177
+      ],
+      "transparency": "Original RGBA alpha, no background removal or image edits"
+    },
+    {
+      "category": "decorations",
+      "path": "hud-icons/shop-tab-decorations-v1.png",
+      "source": "/Users/amoghrijal/.codex/generated_images/01a0a344-c13d-7622-bdc0-d5c3860244aa/exec-1e103711-5bba-4c8c-a992-cb73b63e8f57.png",
+      "prompt": "Use case: stylized-concept. Asset type: single transparent shop category illustration for a mobile aquarium game.\nReference image: style and subject reference only. Create ONLY the isolated illustration from the decorations top tab in the reference. DECORATIONS tab: a small arch made of smooth gray river stones, two small pink coral branches at either side, and a little muted green moss.\nMatch the selected mockup closely: charming clean hand-painted cartoon, readable silhouette, thin dark warm outlines, broad soft dimensional shading, restrained highlights. Clear at 80px. Same warm, inviting style as the four existing reference illustrations. Whole subject visible centered on square canvas with 8 percent transparent margin, illustration fills most of canvas. Genuine transparent background with alpha, output RGBA PNG. No tab panel, no button frame, no text, no letters, no wallpaper, no glow, no extra scene elements, no checkerboard.",
+      "alpha_bounds": [
+        43,
+        291,
+        1219,
+        1004
+      ],
+      "transparency": "Original RGBA alpha, no background removal or image edits"
+    },
+    {
+      "category": "treasure",
+      "path": "hud-icons/shop-tab-treasure-v1.png",
+      "source": "/Users/amoghrijal/.codex/generated_images/01a0a344-c13d-7622-bdc0-d5c3860244aa/exec-3298668b-039b-474e-993d-406e822a8d6d.png",
+      "prompt": "Use case: stylized-concept. Asset type: single transparent shop category illustration for a mobile aquarium game.\nReference image: style and subject reference only. Create ONLY the isolated illustration from the treasure top tab in the reference. TREASURE tab: one open compact wooden chest with warm golden trim containing a few gold coins and one pastel lavender-blue pearl, two loose coins beside it.\nMatch the selected mockup closely: charming clean hand-painted cartoon, readable silhouette, thin dark warm outlines, broad soft dimensional shading, restrained highlights. Clear at 80px. Same warm, inviting style as the four existing reference illustrations. Whole subject visible centered on square canvas with 8 percent transparent margin, illustration fills most of canvas. Genuine transparent background with alpha, output RGBA PNG. No tab panel, no button frame, no text, no letters, no wallpaper, no glow, no extra scene elements, no checkerboard.",
+      "regeneration_prompt": "Generate this aquarium game treasure chest illustration again with a genuine transparent alpha background. The supplied reference has an incorrect checkerboard baked into its pixels. The output must have no background pixels around the object, true transparency, RGBA PNG. Preserve the attractive wooden chest, gold coins and pastel pearl, warm slim outlines and simple cartoon shading. Isolated single icon centered on square canvas, full object visible with generous transparent margin. No panel, no text, no pattern, no white or gray background. Set background transparent.",
+      "initial_source": "/Users/amoghrijal/.codex/generated_images/01a0a344-c13d-7622-bdc0-d5c3860244aa/exec-653ca806-912a-45d9-8e44-a94ffe19ad0b.png",
+      "alpha_bounds": [
+        35,
+        129,
+        1219,
+        1111
+      ],
+      "transparency": "Original RGBA alpha from regenerated image, no post-processing"
+    }
+  ]
+}

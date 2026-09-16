@@ -1,36 +1,77 @@
 #include "aquarium/view.hpp"
+#include "aquarium/ui_renderer.hpp"
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
 
 namespace aq {
-void View::prepareMenus(){
- // Prepare the actual current layouts before the first interactive frame.
- // A separate view warms shared Canvas art and glyph caches without changing
- // the player's selection, filters, gestures, events or saved game.
+bool View::prepareMenus(const PreparationProgress& progress){
+ // Render the real layouts into a separate view. No actions, simulation,
+ // event draining or changes to the player's selection occur during loading.
  View preview(canvas_,session_);
- canvas_.begin();preview.ui();
- for(const auto panel:{Panel::Tanks,Panel::Settings,Panel::Inventory,Panel::Quests,Panel::Gifts,Panel::Shop,Panel::Collection}){
-  preview.panel_=panel;preview.panelMotion_.visible=true;preview.panelMotion_.settle();
-  preview.buttons_.clear();preview.panelButtonStart_=0;preview.panel();
+ struct Work {std::string_view stage;std::function<void()> run;};
+ std::vector<Work> work;
+ canvas_.begin();
+ for(bool mask:{false,true})for(const auto& species:session_.domain().content().species){
+  if(!species.artReady||species.releaseGate!="Launch"||species.level>40)continue;
+  const auto art=fishArt(species.id);
+  const auto name=mask?art.substr(0,art.size()-4)+"-mask.png":art;
+  work.push_back({mask?"Preparing your collection":"Welcoming your fish",[&,name]{canvas_.preload(name);}});
  }
+ work.push_back({"Bringing your reef to life",[&]{
+  const auto& d=session_.domain();canvas_.scene(d,0,0,preview.tool_,{},true);
+  // Prime the alternate mesh path and render target used by fish details.
+  canvas_.softenScene();
+ }});
+ auto page=[&](Panel panel,int category,int number,std::string_view stage){
+  work.push_back({stage,[&,panel,category,number]{
+   preview.panel_=panel;preview.category_=category;preview.page_=number;
+   preview.panelMotion_.visible=true;preview.panelMotion_.settle();
+   preview.buttons_.clear();preview.panelButtonStart_=0;preview.panel();
+  }});
+ };
+ for(const auto panel:{Panel::Tanks,Panel::Settings,Panel::Inventory,Panel::Quests,Panel::Gifts,Panel::CurrencyShop})page(panel,0,0,"Preparing your menus");
+ work.push_back({"Preparing your dialogs",[&]{
+  for(const auto art:{"general-dialog/frame.png","general-dialog/coins.png","general-dialog/pearls.png","general-dialog/open-shop.png","general-dialog/button.png","general-dialog/close.png"})canvas_.preload(art);
+  preview.fundsCurrency_=Currency::Coins;preview.fundsDialog_=CurrencyShortfall{};preview.fundsDialog();
+  preview.fundsCurrency_=Currency::Pearls;preview.fundsDialog();
+  preview.fundsCurrency_.reset();preview.fundsDialog();
+  preview.fundsDialog_.reset();preview.helpDialog();
+ }});
+ for(int category=0;category<5;++category)
+  for(int number=0;number<shopPageCount(category);++number)page(Panel::Shop,category,number,"Stocking your shop");
+ for(int number=0;number<std::max(1,(int(session_.domain().content().species.size())+7)/8);++number)
+  page(Panel::Collection,0,number,"Preparing your collection");
  const auto& state=session_.domain().state();
  const auto fish=std::find_if(state.fish.begin(),state.fish.end(),[&](const Fish& f){return !f.stashed&&f.tank==state.activeTank;});
  if(fish!=state.fish.end()){
-  preview.panel_=Panel::Details;preview.selected_=fish->id;preview.buttons_.clear();preview.panel();
+  preview.selected_=fish->id;page(Panel::Details,0,0,"Getting your fish ready");
  }
- // The smaller tool menu uses different label sizes from the main panels.
- preview.panel_=Panel::None;preview.selectMenu(true);for(auto& motion:preview.selectMotion_)motion.settle();preview.ui();
- SDL_FlushRenderer(canvas_.renderer());
+ work.push_back({"Adding the finishing touches",[&]{
+  preview.panel_=Panel::None;preview.ui();
+  canvas_.preload("controls/stash.png");canvas_.preload("controls/move.png");
+  canvas_.preload("ui/keep.png");canvas_.preload("ui/rehome.png");
+  canvas_.toolCursor(Tool::Food,{0,0},-1,true);canvas_.toolCursor(Tool::Sell,{0,0},-1,true);
+ }});
+ for(std::size_t i=0;i<work.size();++i){
+  if(progress&&!progress(float(i)/float(work.size()),work[i].stage))return false;
+  // The progress callback presents a loading frame. Restore the offscreen
+  // target before continuing, and keep its changing percentage unretained.
+  canvas_.begin();canvas_.retainPreparedText(true);
+  try{work[i].run();SDL_FlushRenderer(canvas_.renderer());}
+  catch(...){canvas_.retainPreparedText(false);throw;}
+  canvas_.retainPreparedText(false);
+ }
  canvas_.begin();
+ return !progress||progress(1,"Your reef is ready");
 }
 
 MenuMotion::Sample MenuMotion::sample(double now)const{
  const double t=std::max(0.,now-changed),target=visible?1.:0.,offset=from-target;
- if(t>=(visible?.58:.32))return {target,0};
+ if(t>=(visible?openingDuration:.32))return {target,0};
  if(visible){
   // A damped spring gives one soft overshoot and a small settling bounce.
-  constexpr double damping=13,frequency=19;
+  const double damping=openingDamping,frequency=openingFrequency;
   const double b=(velocity+damping*offset)/frequency;
   const double wave=offset*std::cos(frequency*t)+b*std::sin(frequency*t),decay=std::exp(-damping*t);
   return {target+decay*wave,decay*((-offset*frequency*std::sin(frequency*t)+b*frequency*std::cos(frequency*t))-damping*wave)};
@@ -73,14 +114,71 @@ MenuPose View::menuPose(const MenuMotion& motion,SDL_FPoint anchor)const{
  const float value=float(motion.sample(now_).value);
  return {anchor,.84f+.16f*value,.80f+.20f*value,24*(1-value),std::clamp(value*1.8f,0.f,1.f)};
 }
-void View::selectMenu(bool visible){
- selectMenuOpen_=visible;
- for(std::size_t i=0;i<selectMotion_.size();++i){
-  auto& motion=selectMotion_[i];motion.show(visible,now_);
-  if(visible&&motion.from==0&&motion.velocity==0)motion.changed+=double(i)*.045;
+
+void View::renderDialog(DialogAnimation& animation,bool visible,void(View::*draw)(),Uint8 shade){
+ if(&animation==&fundsAnimation_&&uiProject()){const auto& m=uiProject()->dialogMotion;animation.motion.openingDuration=m.duration;animation.motion.openingDamping=m.damping*.6/m.duration;animation.motion.openingFrequency=m.frequency*.6/m.duration;}
+ animation.motion.show(visible,now_);
+ if(visible){
+  buttons_.clear();
+  if(!animation.layer)animation.layer=std::make_unique<Texture>();
+  canvas_.beginMenuLayer(*animation.layer);
+  (this->*draw)();
+  canvas_.endMenuLayer();
+  animation.width=canvas_.width();animation.height=canvas_.height();
  }
+ if(!animation.layer)return;
+ const auto r=animation.bounds;
+ animation.pose=menuPose(animation.motion,{r.x+r.w*.5f,r.y+r.h*.55f});
+ if(&animation==&fundsAnimation_&&uiProject()&&!reducedMotion()){const auto& m=uiProject()->dialogMotion;const float value=float(animation.motion.sample(now_).value);animation.pose={{r.x+r.w*.5f,r.y+r.h*.55f},m.scale+(1-m.scale)*value,m.scale+(1-m.scale)*value,m.rise*(1-value),std::clamp(value*1.8f,0.f,1.f)};}
+ if(&animation==&fundsAnimation_&&uiLayout_)for(auto& e:uiLayout_->elements)e.box=animation.pose.apply(e.box);
+ if(!visible&&(animation.pose.alpha<=0||animation.width!=canvas_.width()||animation.height!=canvas_.height())){
+  animation.layer.reset();return;
+ }
+ // Keep the backdrop fixed while the dialog springs. Its hit targets follow
+ // the same transform, and a fading snapshot never exposes controls beneath it.
+ if(visible&&animation.pose.alpha>0)for(auto& button:buttons_){
+  const auto target=animation.pose.apply(button.area);
+  const float ex=std::max(0.f,(canvas_.minimumTouchSize()-target.w)*.5f),ey=std::max(0.f,(canvas_.minimumTouchSize()-target.h)*.5f);
+  button.area={target.x-ex,target.y-ey,target.w+2*ex,target.h+2*ey};
+ }
+ else buttons_.clear();
+ canvas_.fill({0,0,canvas_.width(),canvas_.height()},{0,20,48,Uint8(shade*animation.pose.alpha)});
+ canvas_.menuLayer(*animation.layer,animation.pose);
 }
-void View::closeSelectMenu(){selectMenu(false);}
+
+void View::dialogs(){
+ renderDialog(helpAnimation_,helpOpen_,&View::helpDialog,156);
+ renderDialog(fundsAnimation_,fundsDialog_||noticeDialog_,&View::fundsDialog,170);
+ renderDialog(levelAnimation_,!levelUps_.empty(),&View::levelUp,156);
+ if(dialogBlocking())canvas_.cursor(CursorKind::Arrow);
+}
+
+bool View::dialogBlocking()const{
+ return helpOpen_||fundsDialog_||noticeDialog_||!levelUps_.empty()||helpAnimation_.layer||fundsAnimation_.layer||levelAnimation_.layer;
+}
+
+void View::showHelp(){
+ cancelGesture();buttons_.clear();helpOpen_=true;helpAnimation_.motion.show(true,now_);
+}
+void View::dismissHelp(){
+ cancelGesture();buttons_.clear();helpOpen_=false;helpAnimation_.motion.show(false,now_);
+}
+void View::helpDialog(){
+ constexpr Color white{7,83,166,255};
+ const auto safe=canvas_.safeInsets();
+ const float width=canvas_.width()-safe.left-safe.right,height=canvas_.height()-safe.top-safe.bottom;
+ const float u=std::min({1.f,(width-48)/790.f,(height-48)/380.f});
+ const float h=std::max(55*u,canvas_.minimumTouchSize());
+ const float dialogHeight=std::min(height-48,std::max(380*u,246*u+h));
+ const Rect p{safe.left+(width-790*u)*.5f,safe.top+(height-dialogHeight)*.5f,790*u,dialogHeight};
+ helpAnimation_.bounds=p;
+ canvas_.skin("panel",p,48*u);
+ titleSign({p.x+155*u,p.y-22*u,480*u,93*u},"Aquarium help");
+ canvas_.text("Food is free. Tap FOOD, then tap the water.",p.x+395*u,p.y+97*u,24*u,white,true,712*u);
+ canvas_.text("Shop purchases place eggs. Bag restores stored fish.",p.x+395*u,p.y+137*u,23*u,white,true,712*u);
+ canvas_.text("Your progress stays on this device. Online support is not connected.",p.x+395*u,p.y+177*u,20*u,{7,83,166,255},true,712*u);
+ glassButton("help-close",{p.x+293*u,p.y+p.h-h-28*u,204*u,h},"Got it",[this]{dismissHelp();},"green",26*u);
+}
 float View::buttonScale(std::string_view id)const{
  if(reducedMotion())return pressed_==id?.97f:1.f;
  const auto found=presses_.find(std::string(id));if(found==presses_.end())return 1;

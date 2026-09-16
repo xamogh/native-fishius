@@ -1,3 +1,4 @@
+#include "fixtures.hpp"
 #include "aquarium/storage.hpp"
 #include <algorithm>
 #include <chrono>
@@ -14,7 +15,7 @@ namespace {
 void expect(bool ok,const char* msg){if(!ok)throw std::runtime_error(msg);}
 #define CHECK(x) expect(bool(x),#x)
 Millis date(int year,int month,int day){using namespace std::chrono;return duration_cast<milliseconds>(sys_days{std::chrono::year{year}/std::chrono::month{unsigned(month)}/std::chrono::day{unsigned(day)}}.time_since_epoch()).count();}
-Domain rich(const Content& c){Domain d(c,date(2026,1,1),17);State s=d.state();s.wallet={1'000'000'000,1'000'000};s.giftTokens=10000;s.xp=c.levels[39];s.highestRewardedLevel=40;s.fish.clear();s.tanks={{{1},40}};d.install(std::move(s));return d;}
+Domain rich(const Content& c){Domain d(c,date(2026,1,1),17);State s=d.state();s.wallet={1'000'000'000,1'000'000};s.xp=c.levels[39];s.highestRewardedLevel=40;s.fish.clear();s.tanks={{{1},20}};testing::openingBalances(s);d.install(std::move(s));return d;}
 template<class F>void rejects(F fn){bool threw=false;try{fn();}catch(const std::exception&){threw=true;}CHECK(threw);}
 }
 int main(int argc,char** argv){
@@ -22,75 +23,65 @@ int main(int argc,char** argv){
   if(argc<2)throw std::runtime_error("Pass assets/content.json");std::ifstream in(argv[1]);Content content=Content::fromJson(Json::parse(in));
   using Test=std::pair<std::string,std::function<void()>>;std::vector<Test> tests;
   auto test=[&](std::string name,std::function<void()> f){tests.emplace_back(std::move(name),std::move(f));};
-  test("catalog counts and exact imported duration",[&]{CHECK(content.species.size()==46);int coin=0,premium=0,limited=0;for(auto& s:content.species){if(s.modelId.starts_with("CF"))++coin;if(s.modelId.starts_with("PF"))++premium;if(s.modelId.starts_with("LE"))++limited;CHECK(s.stageMs>0);CHECK(s.feedMs>0);CHECK(s.saleCoins[0]==0);}CHECK(coin==26);CHECK(premium==10);CHECK(limited==10);CHECK(content.find("neonTetra")->stageMs==298800);CHECK(content.find("neonTetra")->price==7);CHECK(content.find("guppy")->price==35);});
-  test("four hungry starter babies",[&]{Domain d(content);CHECK(d.state().wallet.coins==250);CHECK(d.state().wallet.pearls==0);CHECK(d.state().xp==0);CHECK(d.level()==1);CHECK(d.state().fish.size()==4);std::vector<std::string> names;for(auto& f:d.state().fish){CHECK(!f.egg&&f.age==0);CHECK(careOf(*content.find(f.species),f,0)==Care::Hungry);names.push_back(f.species);}CHECK((names==std::vector<std::string>{"neonTetra","guppy","platy","molly"}));d.advanceCare(100);for(auto& f:d.state().fish)CHECK(f.growthMs==0);});
-  test("all catalog purchase and four stage rewards",[&]{int checked=0;for(auto& sp:content.species)if(sp.eventConfigured)for(int age=1;age<=4;++age){++checked;auto d=rich(content);if(sp.eventStart)d.setCalendar(date(2026,sp.eventStart/100,sp.eventStart%100));auto before=d.state();auto r=d.execute({Action::Buy,{}, {},sp.id,{400,300}});CHECK(r);CHECK(d.state().xp==before.xp+sp.buyXp);CHECK(d.state().wallet.coins==before.wallet.coins-(sp.currency==Currency::Coins?sp.price:0));CHECK(d.state().wallet.pearls==before.wallet.pearls-(sp.currency==Currency::Pearls?sp.price:0));State s=d.state();auto& f=s.fish.back();f.egg=false;f.age=age;f.growthMs=0;f.lastFedAt=s.simNow;d.install(s);Amount coins=s.wallet.coins,xp=s.xp;auto sale=d.execute({Action::Sell,r.fish});if(sp.nonResellable){CHECK(!sale);CHECK(d.state().wallet.coins==coins);}else{CHECK(sale);CHECK(d.state().wallet.coins==coins+sp.saleCoins[age]);CHECK(d.state().xp==xp+sp.saleXp[age]);CHECK(!d.execute({Action::Sell,r.fish}));CHECK(d.state().wallet.coins==coins+sp.saleCoins[age]);}}CHECK(checked==45*4);});
-  test("six-second hatch and hungry newborn",[&]{auto d=rich(content);auto r=d.execute({Action::Buy,{}, {},"neonTetra",{400,300}});CHECK(r);d.advanceCare(5999);CHECK(d.fish(r.fish)->egg);d.advanceCare(1);const auto* f=d.fish(r.fish);CHECK(!f->egg);CHECK(f->growthMs==0);CHECK(careOf(*content.find(f->species),*f,d.state().simNow)==Care::Hungry);});
-  test("free feeding pauses and resumes exact growth",[&]{Domain d(content);FishId id=d.state().fish[0].id;const Species& s=*content.find(d.fish(id)->species);auto coins=d.state().wallet.coins,xp=d.state().xp;CHECK(d.execute({Action::Feed,id}));CHECK(d.state().wallet.coins==coins&&d.state().xp==xp);d.advanceCare(s.feedMs*3/4);CHECK(careOf(s,*d.fish(id),d.state().simNow)==Care::Hungry);auto growth=d.fish(id)->growthMs;auto age=d.fish(id)->age;d.advanceCare(s.feedMs/10);CHECK(d.fish(id)->growthMs==growth&&d.fish(id)->age==age);CHECK(d.execute({Action::Feed,id}));d.advanceCare(1000);CHECK(d.fish(id)->growthMs==growth+1000);});
-  test("sickness and death boundaries; feeding cannot revive",[&]{Domain d(content);auto id=d.state().fish[0].id;auto& s=*content.find(d.fish(id)->species);CHECK(d.execute({Action::Feed,id}));d.advanceCare(s.feedMs-1);CHECK(careOf(s,*d.fish(id),d.state().simNow)!=Care::Sick);d.advanceCare(1);CHECK(careOf(s,*d.fish(id),d.state().simNow)==Care::Sick);CHECK(d.execute({Action::Feed,id}));d.advanceCare(s.feedMs+s.graceMs-1);CHECK(!d.fish(id)->dead);d.advanceCare(1);CHECK(d.fish(id)->dead);CHECK(!d.execute({Action::Feed,id}));});
   test("large and small lifecycle advances agree",[&]{Domain a(content),b(content);for(auto& f:a.state().fish)a.execute({Action::Feed,f.id});for(auto& f:b.state().fish)b.execute({Action::Feed,f.id});constexpr Millis total=7*86400000LL;a.advanceCare(total);for(Millis i=0;i<total;i+=60000)b.advanceCare(std::min<Millis>(60000,total-i));CHECK(encode(a.state())==encode(b.state()));});
   test("purchase rejection is atomic",[&]{Domain d(content);auto before=encode(d.state());CHECK(!d.execute({Action::Buy,{}, {},"unknown",{300,300}}));CHECK(encode(d.state())==before);CHECK(!d.execute({Action::Buy,{}, {},"guppy",{-1,300}}));CHECK(encode(d.state())==before);State s=d.state();s.wallet.coins=0;d.install(s);before=encode(d.state());CHECK(!d.execute({Action::Buy,{}, {},"guppy",{300,300}}));CHECK(encode(d.state())==before);});
   test("art gate precedes event and funds",[&]{auto c=content;c.species[0].artReady=false;Domain d(c);auto r=d.execute({Action::Buy,{}, {},c.species[0].id,{300,300}});CHECK(r.error==Error::NoArt);});
-  test("level-two pearl granted only once",[&]{Domain d(content);State s=d.state();s.xp=79;s.wallet.coins=10000;d.install(s);auto r=d.execute({Action::Buy,{}, {},"neonTetra",{350,300}});CHECK(r);CHECK(d.level()>=2);CHECK(d.state().wallet.pearls==1);CHECK(d.state().highestRewardedLevel>=2);auto restored=decodeAndValidate(encode(d.state()),content);d.install(restored);CHECK(d.execute({Action::Buy,{}, {},"neonTetra",{400,300}}));CHECK(d.state().wallet.pearls==1);});
-  test("repeatable tutorial premium fish",[&]{auto d=rich(content);CHECK(d.execute({Action::Buy,{}, {},"bubbleEyeGoldfish",{350,300}}));CHECK(d.execute({Action::Buy,{}, {},"bubbleEyeGoldfish",{450,300}}));});
-  test("quest XP uses exact columns and refreshes after level changes",[&]{
-   Domain d(content);CHECK(d.questDefinitions().size()==6);CHECK(d.execute({Action::ClaimQuest,{}, {},"daily-feed"}).error==Error::Level);
-   State s=d.state();s.xp=content.levels[1];s.highestRewardedLevel=2;s.quests["daily-feed"].count=8;d.install(s);
-   auto quest=[&](std::string_view id){return *std::find_if(d.questDefinitions().begin(),d.questDefinitions().end(),[&](auto& q){return q.id==id;});};
-   CHECK(quest("daily-feed").xp==5);CHECK(quest("daily-sell").xp==5);CHECK(quest("daily-adult").xp==6);CHECK(quest("daily-decor").xp==3);CHECK(quest("daily-feed").target==8);
-   const auto before=d.state();CHECK(d.execute({Action::ClaimQuest,{}, {},"daily-feed"}));CHECK(d.state().xp==before.xp+5);CHECK(d.state().wallet.coins==before.wallet.coins);CHECK(d.execute({Action::ClaimQuest,{}, {},"daily-feed"}).error==Error::Claimed);
-   CHECK(d.execute({Action::ClaimQuest,{}, {},"daily-adult"}).error==Error::Level);
-   s=d.state();s.xp=content.levels[7];s.highestRewardedLevel=8;d.install(s);CHECK(quest("daily-feed").xp==43);CHECK(quest("daily-sell").xp==48);CHECK(quest("weekly-collection").xp==779);
-   s=d.state();s.quests["weekly-collection"].count=5;d.install(s);CHECK(d.execute({Action::ClaimQuest,{}, {},"weekly-collection"}).error==Error::Unavailable);
+  test("tank sequencing and level gates apply to either currency",[&]{
+   for(auto currency:{Currency::Coins,Currency::Pearls}){Domain d(content);auto before=encode(d.state());CHECK(!d.execute({.action=Action::UnlockTank,.tank={3},.currency=currency}));CHECK(d.execute({.action=Action::UnlockTank,.tank={2},.currency=currency}).error==Error::Level);CHECK(encode(d.state())==before);}
   });
-  test("caretaker requires eight healthy feeds and sickness resets progress",[&]{
-   Domain d(content,date(2026,9,1));State s=d.state();s.xp=content.levels[1];s.highestRewardedLevel=2;d.install(s);
-   for(const auto& f:d.state().fish)CHECK(d.execute({Action::Feed,f.id}));CHECK(d.state().quests.at("daily-feed").count==4);
-   d.advanceCare(content.find("neonTetra")->feedMs);CHECK(d.state().quests.at("daily-feed").count==0);
-   CHECK(d.execute({Action::Feed,d.state().fish[0].id}));CHECK(d.state().quests.at("daily-feed").count==0);
-   for(int cycle=0;cycle<2;++cycle){s=d.state();for(auto& f:s.fish)f.lastFedAt=s.simNow-content.find(f.species)->feedMs*3/4;d.install(s);for(const auto& f:d.state().fish)CHECK(d.execute({Action::Feed,f.id}));}
-   CHECK(d.state().quests.at("daily-feed").count==8);d.advanceCare(content.find("neonTetra")->feedMs);CHECK(d.state().quests.at("daily-feed").count==8);
-   d.install(decodeAndValidate(encode(d.state()),content));d.advanceCare(content.find("neonTetra")->graceMs);CHECK(d.state().fish[0].dead);CHECK(d.state().quests.at("daily-feed").count==8);
-   CHECK(d.execute({Action::ClaimQuest,{}, {},"daily-feed"}));
-   d.setCalendar(date(2026,9,2));CHECK(!d.state().quests.at("daily-feed").claimed);CHECK(d.state().quests.at("daily-feed").count==0);
+  test("tank purchases reject unsupported currencies without charging",[&]{
+   auto d=rich(content);auto state=d.state();state.tanks[0].slots=10;d.install(state);const auto before=encode(d.state());
+   CHECK(d.execute({.action=Action::ExpandTank,.tank={1},.currency=Currency::Gift}).error==Error::Unavailable);
+   CHECK(d.execute({.action=Action::UnlockTank,.tank={2},.currency=Currency::Gift}).error==Error::Unavailable);CHECK(encode(d.state())==before);
   });
-  test("mastery counts Adult growth once and claims three persistent tiers",[&]{
-   Domain d(content);State s=d.state();s.fish.resize(1);auto& f=s.fish[0];f.age=3;f.growthMs=content.find(f.species)->stageMs-1;f.lastFedAt=s.simNow;s.mastery[f.species]=100;d.install(s);
-   const auto species=f.species;CHECK(d.masteryProgress(species).count==0);d.advanceCare(1);CHECK(d.masteryProgress(species).count==1);d.advanceCare(1000);CHECK(d.masteryProgress(species).count==1);
-   CHECK(d.execute({Action::Sell,d.state().fish[0].id}));CHECK(d.masteryProgress(species).count==1);
-   for(int goal:{5,25,100}){s=d.state();s.adultRaised[species]=goal;d.install(s);auto progress=d.masteryProgress(species);CHECK(progress.ready&&progress.target==goal);const auto before=d.state().wallet;const auto xp=d.state().xp;CHECK(d.execute({Action::ClaimMastery,{}, {},species}));CHECK(d.state().wallet.coins==before.coins&&d.state().wallet.pearls==before.pearls&&d.state().xp==xp);d.install(decodeAndValidate(encode(d.state()),content));}
-   CHECK(d.masteryProgress(species).complete);CHECK(d.execute({Action::ClaimMastery,{}, {},species}).error==Error::Claimed);
-  });
-  test("old sales counters do not become Adult mastery when a save upgrades",[&]{
-   Domain d(content);auto old=encode(d.state());old.erase("adultRaised");old["mastery"]["neonTetra"]=100;old["claims"].push_back("mastery:neonTetra");old["quests"]["daily-feed"]={{"count",5},{"claimed",false}};
-   auto state=decodeAndValidate(old,content);CHECK(state.mastery.at("neonTetra")==100);CHECK(state.adultRaised.empty());CHECK(state.quests.at("daily-feed").count==0);d.install(state);CHECK(d.masteryProgress("neonTetra").count==0);CHECK(d.masteryProgress("neonTetra").tier==0);
-  });
-  test("stash preserves identity and all remaining clocks",[&]{Domain d(content);auto id=d.state().fish[0].id;auto initial=*d.fish(id);CHECK(d.execute({Action::Stash,id}));d.advanceCare(20*86400000LL);CHECK(d.fish(id)->age==initial.age);CHECK(!d.fish(id)->dead);CHECK(d.execute({Action::Restore,id,{},"",{300,350}}));auto f=*d.fish(id);CHECK(f.id==id);CHECK(f.growthMs==initial.growthMs);CHECK(f.lastFedAt-initial.lastFedAt==20*86400000LL);CHECK(d.state().wallet.coins==250&&d.state().xp==0);});
-  test("egg storage pauses hatching",[&]{auto d=rich(content);auto r=d.execute({Action::Buy,{}, {},"neonTetra",{350,300}});d.advanceCare(2000);CHECK(d.execute({Action::Stash,r.fish}));d.advanceCare(86400000);CHECK(d.execute({Action::Restore,r.fish,{},"",{400,300}}));d.advanceCare(3999);CHECK(d.fish(r.fish)->egg);d.advanceCare(1);CHECK(!d.fish(r.fish)->egg);});
-  test("five exact workbook tank schedules without invented pearl conversion",[&]{auto d=rich(content);CHECK(d.execute({Action::UnlockTank,{}, {2},"",{},Currency::Coins}));CHECK(d.state().activeTank.value==2);CHECK(d.tank({2})->slots==10);auto before=d.state().wallet.coins;CHECK(d.execute({Action::ExpandTank,{}, {2},"",{},Currency::Pearls}).error==Error::Unavailable);CHECK(d.execute({Action::ExpandTank,{}, {2}}));CHECK(before-d.state().wallet.coins==6000);CHECK(d.tank({2})->slots==20);CHECK(d.execute({Action::ExpandTank,{}, {2}}));CHECK(d.execute({Action::ExpandTank,{}, {2}}));auto snapshot=encode(d.state());CHECK(!d.execute({Action::ExpandTank,{}, {2}}));CHECK(snapshot==encode(d.state()));CHECK(content.tankCosts[0][1]==250);CHECK(content.tankCosts[1][0]==2500);CHECK(content.tankCosts[4][3]==600000);CHECK(content.tankTokens[4][3]==150);CHECK(content.tankLevels[2]==16);});
-  test("tank sequencing and level gates",[&]{Domain d(content);auto before=encode(d.state());CHECK(d.execute({Action::UnlockTank,{}, {3}}).error==Error::PreviousTank);CHECK(d.execute({Action::UnlockTank,{}, {2}}).error==Error::Level);CHECK(encode(d.state())==before);});
-  test("every tank step consumes source coins plus solo tokens atomically",[&]{
-   auto d=rich(content);State s=d.state();s.tanks[0].slots=10;d.install(s);
-   for(int tank=1;tank<=5;++tank){
-    if(tank>1){const auto before=d.state();CHECK(d.execute({Action::UnlockTank,{}, {tank},"",{},Currency::Gift}));CHECK(before.wallet.coins-d.state().wallet.coins==content.tankCosts[tank-1][0]);CHECK(before.giftTokens-d.state().giftTokens==content.tankTokens[tank-1][0]);}
-    for(int step=1;step<4;++step){
-     const auto before=d.state();CHECK(d.execute({Action::ExpandTank,{}, {tank},"",{},Currency::Gift}));CHECK(before.wallet.coins-d.state().wallet.coins==content.tankCosts[tank-1][step]);CHECK(before.giftTokens-d.state().giftTokens==content.tankTokens[tank-1][step]);CHECK(d.tank({tank})->slots==10*(step+1));
-    }
-   }
-   for(bool missingCoins:{false,true}){
-    auto poor=rich(content);s=poor.state();s.tanks[0].slots=10;s.wallet.coins=missingCoins?0:10000;s.giftTokens=missingCoins?1000:0;poor.install(s);const auto before=encode(poor.state());
-    CHECK(poor.execute({Action::ExpandTank,{}, {1},"",{},Currency::Gift}).error==Error::Funds);CHECK(encode(poor.state())==before);
-    CHECK(poor.execute({Action::UnlockTank,{}, {2},"",{},Currency::Gift}).error==Error::Funds);CHECK(encode(poor.state())==before);
-   }
-  });
-  test("revival overflow allowed, purchase and restore blocked",[&]{auto d=rich(content);State s=d.state();s.tanks[0].slots=10;d.install(s);std::vector<FishId> ids;for(int i=0;i<10;++i){auto r=d.execute({Action::Buy,{}, {},"neonTetra",{100.+i*50.,300}});CHECK(r);ids.push_back(r.fish);}s=d.state();s.fish[0].egg=false;s.fish[0].dead=true;d.install(s);CHECK(d.execute({Action::Buy,{}, {},"neonTetra",{700,300}}));CHECK(d.living({1})==10);CHECK(d.execute({Action::Revive,ids[0]}));CHECK(d.living({1})==11);CHECK(d.execute({Action::Buy,{}, {},"neonTetra",{750,300}}).error==Error::Full);auto restored=decodeAndValidate(encode(d.state()),content);CHECK(restored.fish.size()==11);});
-  test("atomic bulk revival and corpse removal",[&]{Domain d(content);State s=d.state();for(auto& f:s.fish)f.dead=true;s.wallet.pearls=3;d.install(s);auto before=encode(d.state());CHECK(d.execute({Action::ReviveAll}).error==Error::Funds);CHECK(encode(d.state())==before);s.wallet.pearls=4;d.install(s);CHECK(d.execute({Action::ReviveAll}));CHECK(d.state().wallet.pearls==0);CHECK(!d.execute({Action::ReviveAll}));s=d.state();s.fish[0].dead=true;d.install(s);Amount coins=s.wallet.coins,xp=s.xp;CHECK(d.execute({Action::RemoveAll}));CHECK(d.state().wallet.coins==coins&&d.state().xp==xp);});
   test("one pellet feeds exactly one fish after its notice delay",[&]{Domain d(content);State s=d.state();s.fish.resize(2);for(auto& f:s.fish){f.position={400,300};f.motion.previous=f.position;f.motion.noticeDelay=.02;f.motion.direction=1;f.motion.cruise=30;}d.install(s);CHECK(d.execute({Action::DropFood,{}, {},"",{400,300}}));for(int i=0;i<100&&!d.pellets().empty();++i)d.stepMovement(.02,Tool::Food);CHECK(d.pellets().empty());int fed=0;for(const auto& f:d.state().fish)fed+=careOf(*content.find(f.species),f,d.state().simNow)==Care::Fed;CHECK(fed==1);CHECK(d.state().totalEvents.at("feed")==1);});
+  test("full tank accepts fish actions and preserves lower positions in saves",[&]{
+   auto d=rich(content);
+   for(const WorldPoint p:std::array{WorldPoint{0,0},WorldPoint{1088,635},WorldPoint{544,600}}){
+    CHECK(inTank(p)&&inPlacementWater(p));
+    const auto bought=d.execute({.action=Action::Buy,.key="guppy",.point=p});CHECK(bought);
+    CHECK(d.fish(bought.fish)->position.y==p.y);
+    CHECK(d.execute({.action=Action::Move,.fish=bought.fish,.point={544,634}}));
+    auto grown=d.state();testing::stage(grown.fish.back(),4);d.install(grown);
+    CHECK(d.execute({.action=Action::Keep,.fish=bought.fish}));
+    CHECK(d.execute({.action=Action::Stash,.fish=bought.fish}));
+    CHECK(d.execute({.action=Action::Restore,.fish=bought.fish,.point=p}));
+    const auto saved=encode(d.state());CHECK(encode(decodeAndValidate(saved,content))==saved);
+    CHECK(d.execute({.action=Action::DropFood,.point=p}));
+   }
+   const auto id=d.state().companions.back().id;
+   for(const WorldPoint p:std::array{WorldPoint{-1,600},WorldPoint{1089,600},WorldPoint{544,636}}){
+    const auto before=encode(d.state());const auto food=d.pellets().size();
+    CHECK(!inTank(p)&&!inPlacementWater(p));
+    CHECK(d.execute({.action=Action::Buy,.key="guppy",.point=p}).error==Error::InvalidPosition);
+    CHECK(d.execute({.action=Action::Move,.fish=id,.point=p}).error==Error::InvalidPosition);
+    CHECK(d.execute({.action=Action::DropFood,.point=p}).error==Error::InvalidPosition);
+    CHECK(encode(d.state())==before&&d.pellets().size()==food);
+    auto invalid=before;invalid["fish"][0]["position"]={p.x,p.y};rejects([&]{decodeAndValidate(invalid,content);});
+   }
+  });
+  test("food and eggs sink through the old cutoff to the tank floor",[&]{
+   auto d=rich(content);const auto egg=d.execute({.action=Action::Buy,.key="guppy",.point={544,400}});CHECK(egg);
+   CHECK(d.execute({.action=Action::DropFood,.point={544,400}}));
+   for(int i=0;i<300;++i)d.stepMovement(.02,Tool::Select);
+   CHECK(d.fish(egg.fish)->position.y>620&&d.fish(egg.fish)->position.y<635);
+   CHECK(d.pellets().size()==1&&d.pellets().front().position.y>625&&d.pellets().front().position.y<635);
+  });
+  test("fish swim and eat in the lower tank",[&]{
+   Domain d(content);auto state=d.state();state.fish.resize(1);auto& fish=state.fish.front();const auto id=fish.id;
+   fish.position={544,550};fish.motion.previous=fish.position;fish.motion.targetY=620;fish.motion.retarget=100;fish.lastFedAt=state.simNow;
+   d.install(state);for(int i=0;i<300;++i)d.stepMovement(.02,Tool::Select);
+   CHECK(d.fish(id)->position.y>590&&d.fish(id)->position.y<635);
+   state=d.state();state.fish.front().position={544,600};state.fish.front().lastFedAt=state.simNow-content.find(state.fish.front().species)->feedMs;
+   d.install(state);CHECK(d.execute({.action=Action::DropFood,.point={544,630}}));
+   for(int i=0;i<300&&!d.pellets().empty();++i)d.stepMovement(.02,Tool::Food);
+   CHECK(d.pellets().empty());CHECK(careOf(*content.find(d.fish(id)->species),*d.fish(id),d.state().simNow)==Care::Fed);
+   CHECK(d.fish(id)->position.y>580);
+  });
   test("food is bounded and cleared on tank switch",[&]{auto d=rich(content);for(int i=0;i<48;++i)CHECK(d.execute({Action::DropFood,{}, {},"",{400,300}}));CHECK(d.execute({Action::DropFood,{}, {},"",{400,300}}).error==Error::NoFoodRoom);CHECK(d.execute({Action::UnlockTank,{}, {2}}));CHECK(d.pellets().empty());});
-  test("year-crossing events and annual claims",[&]{auto* frost=content.find("frostAngelfish");CHECK(frost);CHECK(eventOpen(*frost,calendarAt(date(2026,1,2))));CHECK(eventOpen(*frost,calendarAt(date(2026,12,15))));CHECK(!eventOpen(*frost,calendarAt(date(2026,7,2))));auto c=content;auto* anniversary=const_cast<Species*>(c.find("anniversaryRainbowfish"));CHECK(anniversary);CHECK(!anniversary->eventConfigured);auto blocked=rich(c);CHECK(blocked.execute({Action::Buy,{}, {},anniversary->id,{400,300}}).error==Error::EventClosed);anniversary->eventConfigured=true;anniversary->eventStart=901;anniversary->eventEnd=907;auto d=rich(c);d.setCalendar(date(2026,9,2));CHECK(d.execute({Action::Buy,{}, {},anniversary->id,{400,300}}));CHECK(d.execute({Action::Buy,{}, {},anniversary->id,{500,300}}).error==Error::Claimed);d.setCalendar(date(2027,9,2));CHECK(d.execute({Action::Buy,{}, {},anniversary->id,{500,300}}));});
   test("deferred gifts and egg rewards preserve state and enforce source unlocks",[&]{
    Domain d(content,date(2026,9,8));auto before=encode(d.state());CHECK(d.execute({Action::SendGift}).error==Error::Level);CHECK(d.execute({Action::DailyEgg}).error==Error::Level);CHECK(encode(d.state())==before);
-   State s=d.state();s.xp=content.levels[4];s.highestRewardedLevel=5;s.giftTokens=10;d.install(s);before=encode(d.state());CHECK(d.execute({Action::SendGift}).error==Error::Unavailable);CHECK(d.execute({Action::DailyEgg}).error==Error::Level);CHECK(encode(d.state())==before);
+   State s=d.state();s.xp=content.levels[4];s.highestRewardedLevel=5;d.install(s);before=encode(d.state());CHECK(d.execute({Action::SendGift}).error==Error::Unavailable);CHECK(d.execute({Action::DailyEgg}).error==Error::Level);CHECK(encode(d.state())==before);
    s=d.state();s.xp=content.levels[5];s.highestRewardedLevel=6;d.install(s);before=encode(d.state());CHECK(d.execute({Action::DailyEgg}).error==Error::Unavailable);CHECK(encode(d.state())==before);
   });
   test("save round-trip, unknown IDs, duplicate IDs and future schemas",[&]{Domain d(content);auto j=encode(d.state());CHECK(encode(decodeAndValidate(j,content))==j);auto corrupt=j;corrupt["fish"][1]["id"]=corrupt["fish"][0]["id"];rejects([&]{decodeAndValidate(corrupt,content);});corrupt=j;corrupt["version"]=999;rejects([&]{decodeAndValidate(corrupt,content);});corrupt=j;corrupt["fish"][0]["species"]="missing";rejects([&]{decodeAndValidate(corrupt,content);});corrupt=j;corrupt["coins"]=-1;rejects([&]{decodeAndValidate(corrupt,content);});});
