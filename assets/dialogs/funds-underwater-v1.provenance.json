@@ -1,0 +1,25 @@
+{
+  "asset": "funds-underwater-v1.png",
+  "created_at_utc": "2026-09-17T09:11:14.830Z",
+  "generation_mode": "built-in",
+  "tool": "image_gen.imagegen",
+  "use_case": "precise-object-edit",
+  "prompt": "Use case: precise-object-edit.\nAsset type: Production background PNG for a native aquarium game currency dialog.\nInput image 1 is the approved dialog mockup. Use it as the style and color reference, and extract/recreate ONLY its inner cream and pale aqua underwater background.\n\nCreate ONE full-bleed rectangular image exactly 1536 pixels wide by 1104 pixels high, approximately aspect ratio 824:592. The image is only the body background, with no outer frame, no header, no close control, and no rounded panel edge.\n\nRecreate the reference background's soft polished casual game illustration style and very subtle cream/aqua palette. Upper 20% is warm ivory and clear for dynamic amount text that will be added by the application. From about 25% to 67% height, use a very pale aqua wash toward the side margins, with softly blurred distant turquoise coral silhouettes only near the far left and right edges. Keep the wide central area almost empty and low contrast. A soft pale sandy seabed gently curves across the image around 65% to 78% height. The lower 20% returns to quiet warm cream, clear and simple for a live button that will be added by the application. Keep the colors, softness, and overall understated setting close to the input. Fill the entire image to all four edges.\n\nRemove ALL foreground subjects and ALL UI from the reference. Absolutely no octopus, animal, character, coin, pearl, currency, shell shop, building, foreground coral, foreground plants, rocks, labels, letters, words, numbers, buttons, icons, borders, panels, header, X, watermark, or other focal objects. Do not include the \"101 coins needed\" text or the \"OPEN SHOP\" button. No circular spotlight or decorative container. The future octopus is a separate transparent layer and MUST NOT appear in this image. This output is background only.",
+  "reference_path": "/Users/amoghrijal/.codex/generated_images/01a0ae7e-72c0-7691-8586-a191aecc3ed4/exec-9e0829d3-d7d5-4be3-8b5b-d5f4b0b1a641.png",
+  "generated_source_path": "/Users/amoghrijal/.codex/generated_images/01a0aea0-4b6c-7901-98de-ae033e1aa824/exec-8b260a31-6142-4bdc-8dbf-57906e774592.png",
+  "final_path": "/Users/amoghrijal/amogh/aquarium-native/assets/dialogs/funds-underwater-v1.png",
+  "requested_dimensions": {
+    "width": 1536,
+    "height": 1104
+  },
+  "actual_dimensions": {
+    "width": 1479,
+    "height": 1063
+  },
+  "processing": "Copied the original generated PNG byte-for-byte. No programmatic image editing, resizing, or cropping.",
+  "verification": {
+    "inspected_visually": true,
+    "content": "Full-bleed cream and pale aqua underwater background, softly blurred coral silhouettes at side margins, sandy seabed, quiet lower cream area. No UI, text, character, currency, or foreground objects.",
+    "dimension_mismatch": "Built-in ImageGen returned 1479x1063 instead of the requested 1536x1104. Aspect ratio is nearly identical: 1.391345 instead of 1.391304."
+  }
+}

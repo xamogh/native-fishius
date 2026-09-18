@@ -1,0 +1,28 @@
+{
+  "asset": "funds-octopus-pearls-v1.png",
+  "generated_at_date": "2026-09-17",
+  "tool": "image_gen.imagegen",
+  "mode": "built-in",
+  "use_case": "precise-object-edit",
+  "source_image_role": "Finished coin dialog inner-body artwork, edit target",
+  "source_image": "/Users/amoghrijal/amogh/aquarium-native/assets/dialogs/funds-octopus-coins-v1.png",
+  "original_approved_mockup": "/Users/amoghrijal/.codex/generated_images/01a0ae7e-72c0-7691-8586-a191aecc3ed4/exec-9e0829d3-d7d5-4be3-8b5b-d5f4b0b1a641.png",
+  "generated_image": "/Users/amoghrijal/.codex/generated_images/01a0aea0-11f2-7662-ac79-b660f91a0981/exec-a973bb76-3e69-42c0-914b-1dc30d5a25a4.png",
+  "saved_image": "/Users/amoghrijal/amogh/aquarium-native/assets/dialogs/funds-octopus-pearls-v1.png",
+  "dimensions": {
+    "width": 1478,
+    "height": 1064
+  },
+  "format": "PNG",
+  "has_alpha": false,
+  "prompt": "Use case: precise-object-edit.\nAsset type: one opaque background artwork plate for the pearl currency dialog in a mobile game.\nInput image 1 is the finished coin dialog inner-body artwork and the edit target. Make ONE very localized change: replace ONLY the gold star coin held by the octopus's raised tentacle on the right side of the image with one smooth round luminous iridescent white pearl. The pearl is in precisely the coin's position, of approximately the same diameter, and is naturally held by the unchanged curled tentacle in front of it. Show beautiful subtle lavender, pink and aqua highlights on the white pearl. It is a solid pearl sphere with gentle pearlescent shine, not a bubble or transparent object.\nPreserve the entire rest of the image exactly: same composition and framing, same opaque cream/aqua underwater background, same orange octopus identity, orange spotted glossy head, large teal eyes, face, smile, brows and lashes, head tilt, body and every tentacle pose and suction cup. Keep every coral, sponge, plant, rock, sand patch and background bubble in the same place. Keep identical lighting, color and painterly game illustration style. Keep the complete quiet blank top and bottom spaces unchanged for native UI overlays.\nMatch the input canvas dimensions 1479x1064 and aspect ratio. Do not crop, zoom, stretch or reposition anything.\nThe replacement pearl must have NO star, NO embossed pattern, NO lettering, NO gold or metallic rim, NO coin silhouette, NO shell and NO extra currency. Absolutely no text, numbers, button, frame, header, close icon, checkerboard or transparency. Change only the held coin to the pearl.",
+  "postprocessing": "None. Original generated PNG copied unchanged.",
+  "inspection": {
+    "no_text": true,
+    "no_button": true,
+    "no_frame": true,
+    "no_checkerboard": true,
+    "quiet_top_and_bottom_regions": true,
+    "note": "Held star coin changed to a smooth iridescent pearl. Composition, character and control spacing visually match coin plate. Generated width is one pixel narrower than source (1478 rather than 1479); no visible composition drift."
+  }
+}

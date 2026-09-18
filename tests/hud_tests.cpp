@@ -27,9 +27,6 @@ HudLayout viewport(float w,float h,Insets safe={}){
  }
 
  const auto shopPage=layoutShop(width,height,in);
- const auto tankCards=layoutTankCards(shopPage);
- for(int i=0;i<6;++i){const auto card=tankCards[i];check(card.w>0&&card.h>0&&card.y>=shopPage.title.y&&card.y+card.h<=shopPage.footer.y,"Tank card outside content area");check(std::abs(card.w-tankCards[0].w)<.5f&&std::abs(card.h-tankCards[0].h)<.5f,"Tank cards have unequal sizes");if(i%3)check(card.x>tankCards[i-1].x+tankCards[i-1].w,"Tank columns overlap");if(i>=3)check(card.y>tankCards[i-3].y+tankCards[i-3].h,"Tank rows overlap");}
-
  check(shopPage.page.w==width&&shopPage.page.h==height,"Shop is not full screen");
  check(std::abs(shopPage.close.w/shopPage.unit-64)<.01f&&std::abs(shopPage.close.h/shopPage.unit-64)<.01f,"Shop close button is not 64 by 64");
  check(shopPage.close.x+shopPage.close.w<=width-in.right&&shopPage.close.y>=in.top,"Shop close crosses safe area");
@@ -157,6 +154,34 @@ int main(int argc,char** argv){try{
    }
   };
   verifyOffers();auto high=domain.state();high.xp=domain.content().levels[9];domain.install(high);verifyOffers();
+  const auto beforeTreasure=encode(domain.state());
+  const std::array<std::string,5> sizes{"Pocket","Pile","Bag","Box","Chest"};
+  const std::array<std::string,5> coinPrices{"$0.99","$2.99","$4.99","$9.99","$19.99"},pearlPrices{"$1.99","$4.99","$9.99","$19.99","$29.99"};
+  const std::array<std::string,5> coinAmounts{"3,161","10,748","18,968","41,096","88,515"},pearlAmounts{"20","55","120","260","420"};
+  for(int tab=0;tab<2;++tab){
+   ShopState treasure{ShopCategory::Treasure,tab};const auto offers=shopItems(domain,treasure);check(offers.size()==5,"Treasure does not have five offers per currency");
+   for(int i=0;i<5;++i){const auto& offer=offers[i];const std::string currency=tab?" Pearls":" Coins";check(offer.name==sizes[i]+" of"+currency,"Wrong Treasure tier name");check(offer.detail==(tab?pearlAmounts[i]:coinAmounts[i])+currency&&offer.price==(tab?pearlPrices[i]:coinPrices[i]),"Treasure shows the wrong amount or USD price");check(!offer.treasureId.empty()&&!offer.fish&&!offer.locked,"Treasure card is not a currency offer");}
+  }
+  check(encode(domain.state())==beforeTreasure,"Browsing Treasure changes the wallet or progress");
+  if(argc>2){
+   const std::filesystem::path captures=argv[2];std::filesystem::create_directories(captures);
+   for(const auto [width,height]:std::array{std::pair{1608,908},std::pair{667,375},std::pair{1024,768}}){
+    Canvas canvas(argv[1],width,height,true);
+    for(int tab=0;tab<2;++tab){
+     canvas.begin();paintShop(canvas,domain,layoutShop(canvas.width(),canvas.height(),canvas.safeInsets(),canvas.minimumTouchSize()),{ShopCategory::Treasure,tab});
+     const auto name=std::string(tab?"pearls-":"coins-")+std::to_string(width)+"x"+std::to_string(height)+".png";
+     check(canvas.capture(captures/name),"Cannot capture Treasure page");
+    }
+   }
+  }
+  Domain beginner(domain.content());std::vector<std::string> treasureAssets;
+  for(int tab=0;tab<2;++tab)for(const auto& offer:shopItems(beginner,{ShopCategory::Treasure,tab})){
+   check(!offer.locked,"A Treasure pack is locked for a new player");
+   check(!offer.asset.empty()&&std::filesystem::is_regular_file(std::filesystem::path(argv[1])/offer.asset),"Treasure artwork is missing");
+   check(std::find(treasureAssets.begin(),treasureAssets.end(),offer.asset)==treasureAssets.end(),"Treasure tiers reuse the same artwork");
+   treasureAssets.push_back(offer.asset);
+  }
+  std::cout<<"PASS ten unlocked Treasure offers, distinct artwork, exact amounts, prices and unchanged wallet\n";
   const auto page=layoutShop(1608,908,{});fishState.scroll=.5f;
   const auto card=page.cards[0];const float stride=page.cards[1].x-card.x;
   const auto scrolled=shopCardBounds(page,fishState,1),info=shopInfoBounds(scrolled,page.unit);
@@ -194,6 +219,26 @@ int main(int argc,char** argv){try{
   }
   check(shopControl(shop,{shop.currencyHud[HudPart::CoinPlus].x+1,shop.currencyHud[HudPart::CoinPlus].y+1})==-1,"Hidden Shop plus remains clickable");
  }
+ std::ifstream envContent(std::filesystem::path(argc>1?argv[1]:"assets")/"content.json");
+ Domain environmentDomain(Content::fromJson(Json::parse(envContent)));
+ ShopState environment{ShopCategory::Environment};
+ auto backgrounds=shopItems(environmentDomain,environment);check(backgrounds.size()==2,"Background catalog missing");
+ check(backgrounds.front().environmentId=="sunlit-lagoon"&&backgrounds.front().price=="Selected","Default background not selected");
+ check(backgrounds.back().environmentId=="coral-garden"&&backgrounds.back().price=="1,200 Coins","Background price incorrect");
+ activateShopControl(environment,5);auto owned=shopItems(environmentDomain,environment);
+ check(owned.size()==1&&owned.front().environmentId=="sunlit-lagoon","Owned filter includes an unowned background");
+ environmentDomain.fixture("performance");
+ check(bool(environmentDomain.execute({.action=Action::PurchaseEnvironment,.tank={1},.key="coral-garden"})),"Background purchase failed");
+ owned=shopItems(environmentDomain,environment);check(owned.size()==2&&owned.back().price=="Use background"&&owned.front().price=="Selected","Shop ownership does not refresh after purchase");
+ const auto envLayout=layoutShop(1608,908,{},44);const auto envTab=envLayout.tabs[4];
+ check(shopControl(envLayout,{envTab.x+envTab.w/2,envTab.y+envTab.h/2})==7,"Environment tab not clickable");
+ for(std::size_t i=0;i<backgrounds.size();++i){
+  const auto card=shopCardBounds(envLayout,environment,i);
+  check(shopCardAt(envLayout,environment,backgrounds.size(),{card.x+card.w/2,card.y+card.h/2})==i,"Background preview does not match purchase hit area");
+ }
+ scrollShop(environment,100,2);check(environment.scroll==0,"Two backgrounds should fit without scrolling");
+ scrollShop(environment,100,3);check(environment.scroll==1,"Background gallery scroll limit incorrect");
+ activateShopControl(environment,7);check(environment.subtab==0&&environment.category==ShopCategory::Environment,"Environment tab failed");
  ShopState state;scrollShop(state,100,12);check(state.scroll==7,"Shop scroll exceeds last card");
  activateShopControl(state,0);check(state.category==ShopCategory::Fish&&state.scroll==0&&state.subtab==0,"Category switch does not reset scroll");
  activateShopControl(state,5);check(state.subtab==1,"Shop subtab does not switch");

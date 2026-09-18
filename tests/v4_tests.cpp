@@ -39,6 +39,22 @@ int main(int argc,char** argv){
   CHECK(purchaseQuote(content,*content.find("guppy"),1).profit==39);
   CHECK(purchaseQuote(content,*content.find("molly"),1).profit==607);
  });
+ test("Treasure quotes use level reference income and exact whole-coin rounding",[&]{
+  const std::array<int,5> coinPrices{99,299,499,999,1999},pearlPrices{199,499,999,1999,2999};
+  const std::array<Amount,5> level5{1328,4514,7965,17258,37170},level10{3161,10748,18968,41096,88515},level40{20663,70253,123975,268613,578550},pearls{20,55,120,260,420};
+  int coinIndex=0,pearlIndex=0,bundles=0;
+  for(const auto& offer:content.treasureOffers){
+   CHECK(offer.level==0);CHECK(!offer.asset.empty());
+   if(offer.kind==TreasureKind::Coins){const int i=coinIndex++;CHECK(offer.priceUsdCents==coinPrices.at(i));CHECK(treasureContents(content,offer,5).coins==level5.at(i));CHECK(treasureContents(content,offer,10).coins==level10.at(i));CHECK(treasureContents(content,offer,40).coins==level40.at(i));CHECK(treasureContents(content,offer,10).pearls==0);}
+   else if(offer.kind==TreasureKind::Pearls){const int i=pearlIndex++;CHECK(offer.priceUsdCents==pearlPrices.at(i));for(int level:{1,5,10,40}){const auto reward=treasureContents(content,offer,level);CHECK(reward.coins==0&&reward.pearls==pearls.at(i));}}
+   else{++bundles;CHECK(offer.oncePerAccount&&offer.permanentFrame&&offer.priceUsdCents==399);const auto reward=treasureContents(content,offer,10);CHECK(reward.coins==3161&&reward.pearls==35);}
+   rejects([&]{treasureContents(content,offer,0);});rejects([&]{treasureContents(content,offer,41);});
+  }
+  CHECK(coinIndex==5&&pearlIndex==5&&bundles==1);
+  auto malformed=json;malformed["treasure"]["offers"][0]["price_usd_cents"]=0;rejects([&]{Content::fromJson(malformed);});
+  malformed=json;malformed["treasure"]["offers"].erase(0);rejects([&]{Content::fromJson(malformed);});
+  malformed=json;malformed["treasure"]["offers"][0]["level"]=-1;rejects([&]{Content::fromJson(malformed);});
+ });
  test("purchase snapshot survives level and configuration changes",[&]{
   Domain d(content);const auto id=buy(d);const auto snapshot=d.fish(id)->purchase;
   CHECK(snapshot.level==1&&snapshot.principal==5&&snapshot.profit==6&&snapshot.xp==2);CHECK(d.state().xp==0&&d.state().wallet.coins==245);
@@ -51,10 +67,37 @@ int main(int argc,char** argv){
   d.advanceCare(600000);CHECK(d.fish(id)->growthMs==606000);d.advanceCare(600000);CHECK(d.fish(id)->growthMs==606000);CHECK(d.state().wallet.coins==paid.coins&&d.state().wallet.pearls==paid.pearls);
   CHECK(d.execute({.action=Action::Feed,.fish=id}));d.advanceCare(594000);CHECK(d.fish(id)->age==4&&d.fish(id)->growthMs==1200000);d.advanceCare(30*86400000LL);CHECK(d.fish(id)->growthMs==1200000);CHECK(d.state().xp==0);roundTrip(d);
  });
- test("stage boundaries, partial floor rounding and cancellation",[&]{
+ test("stage boundaries and partial floor rounding from Junior onward",[&]{
   for(int stage=1;stage<=4;++stage){const auto q=purchaseQuote(content,*content.find("neonTetra"),1);const auto boundary=q.durationMs*q.stages[stage]/10000;CHECK(growthStage(q,boundary-1)==stage-1);CHECK(growthStage(q,boundary)==stage);}
-  for(int stage=0;stage<=4;++stage){Domain d(content);const auto id=buy(d);age(d,id,stage);auto reward=d.execute({.action=Action::Sell,.fish=id});CHECK(reward);CHECK((reward.coins==std::array<Amount,5>{5,4,6,8,11}[stage]));CHECK((reward.xp==std::array<Amount,5>{0,0,0,1,2}[stage]));roundTrip(d);}
-  Domain d(content);const auto id=buy(d);CHECK(d.execute({.action=Action::Sell,.fish=id}).coins==5);CHECK(d.state().xp==0&&d.state().wallet.coins==250);
+  for(int stage=1;stage<=4;++stage){Domain d(content);const auto id=buy(d);age(d,id,stage);CHECK(sellable(*content.find("neonTetra"),*d.fish(id)));auto reward=d.execute({.action=Action::Sell,.fish=id});CHECK(reward);CHECK((reward.coins==std::array<Amount,5>{0,4,6,8,11}[stage]));CHECK((reward.xp==std::array<Amount,5>{0,0,0,1,2}[stage]));roundTrip(d);}
+ });
+ test("eggs and Babies cannot settle; selling unlocks exactly at Junior",[&]{
+  Domain d(content);const auto id=buy(d);d.takeEvents();
+  const auto blocked=[&]{d.takeEvents();const auto before=encode(d.state());CHECK(!sellable(*content.find("neonTetra"),*d.fish(id)));CHECK(d.execute({.action=Action::Sell,.fish=id,.requestId="young-sale"}).error==Error::NotReady);CHECK(encode(d.state())==before&&d.takeEvents().empty());roundTrip(d);};
+  blocked();d.advanceCare(content.hatchMs);CHECK(!d.fish(id)->egg&&d.fish(id)->age==0);blocked();
+  CHECK(d.execute({.action=Action::Feed,.fish=id}));d.takeEvents();
+  const auto& q=d.fish(id)->purchase;const auto junior=q.durationMs*q.stages[1]/10000;
+  d.advanceCare(junior-content.hatchMs-1);blocked();d.advanceCare(1);CHECK(d.fish(id)->age==1);
+  CHECK(d.execute({.action=Action::Sell,.fish=id,.requestId="young-sale"}));roundTrip(d);
+ });
+ test("next-stage meter follows uneven saved thresholds and resets at each stage",[&]{
+  Fish f;f.purchase.durationMs=10003;f.purchase.stages={0,2500,5500,8000,10000};
+  const std::array<Millis,5> boundaries{0,2500,5501,8002,10003};
+  for(int stage=0;stage<4;++stage){
+   f.age=stage;f.growthMs=boundaries[stage];CHECK(nextStageProgress(f)==0.);
+   f.growthMs=(boundaries[stage]+boundaries[stage+1])/2;CHECK(nextStageProgress(f)>.499&&nextStageProgress(f)<.501);
+   f.growthMs=boundaries[stage+1]-1;CHECK(nextStageProgress(f)>.99&&nextStageProgress(f)<1.);
+   ++f.growthMs;f.age=growthStage(f.purchase,f.growthMs);CHECK(f.age==stage+1);CHECK(nextStageProgress(f)==(f.age==4?1.:0.));
+  }
+  f.egg=true;f.age=0;f.boughtAt=1000;f.hatchAt=7000;f.growthMs=3000;CHECK(nextStageProgress(f)==.5);
+  CHECK(nextStageProgress(companionVisual(Companion{}))==1.);
+ });
+ test("historical baby refunds still validate and replay",[&]{
+  for(bool egg:{false,true}){Domain d(content);const auto id=buy(d);age(d,id,4);auto state=d.state();auto& f=state.fish.back();f.purchase.profit=0;f.purchase.xp=0;d.install(state);
+   const Command claim{.action=Action::Sell,.fish=id,.requestId="historical-refund"};const auto settled=d.execute(claim);CHECK(settled.coins==5&&settled.xp==0);
+   auto saved=encode(d.state());auto& receipt=saved["settlements"][std::to_string(id.value)];receipt["stage"]=0;receipt["egg"]=egg;
+   d.install(decodeAndValidate(saved,content));const auto before=encode(d.state());CHECK(d.execute(claim).replayed);CHECK(encode(d.state())==before);
+  }
  });
  test("purchase retries, changed request payload and stale offers",[&]{
   Domain d(content);Command c{.action=Action::Buy,.key="neonTetra",.point={400,300},.requestId="purchase-1",.offer=d.quote(*content.find("neonTetra"))};const auto first=d.execute(c);CHECK(first);const auto saved=encode(d.state());CHECK(d.execute(c).replayed);CHECK(encode(d.state())==saved);c.key="guppy";CHECK(d.execute(c).error==Error::Conflict);CHECK(encode(d.state())==saved);

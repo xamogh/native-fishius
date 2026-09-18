@@ -21,6 +21,7 @@ def audit(workbook, content):
         checks+=1
         if actual!=expected: errors.append(dict(field=field,actual=actual,expected=expected))
     equal('schema',content['schema'],4)
+    equal('minimum sell age',content['overrides']['minimum_sell_age'],1)
     equal('workbook_sha256',content['workbook_sha256'],hashlib.sha256(workbook.read_bytes()).hexdigest())
     equal('species count',len(content['species']),99)
     equal('launch coin count',sum(s['release_gate']=='Launch' and not s['companion'] for s in content['species']),40)
@@ -31,6 +32,8 @@ def audit(workbook, content):
         if s['companion']:
             equal(s['id']+'.price',s['price'],r[6]);equal(s['id']+'.rewards',s['sale_coins']+s['sale_xp'],[0]*10)
             continue
+        equal(s['id']+'.baby sale coins',s['sale_coins'][0],0)
+        equal(s['id']+'.baby sale XP',s['sale_xp'][0],0)
         # Separate rational arithmetic, including each rounding boundary.
         duration=Fraction(str(r[9]))/24
         schedule=next(x for x in sheets['Schedules'][4:] if x[0]==r[5])
@@ -56,6 +59,24 @@ def audit(workbook, content):
     equal('XP curve',content['levels'],[r[7] for r in sheets['XP & Unlocks'][4:44]])
     equal('level rewards',content['level_rewards'],[dict(coins=r[8],pearls=r[9]) for r in sheets['XP & Unlocks'][4:44]])
     equal('tank entitlements',content['tank_entitlements'],[dict(id=r[0],tank=r[1],level=r[2],added_slots=r[3],coins=r[4],pearls=r[5],prerequisite='' if r[6]=='None' else r[6],slots=r[8]) for r in sheets['Tanks'][4:] if r[0]])
+    offers=content['treasure']['offers']
+    for offer in offers:
+        row=sheets['Shop'][offer['source']['row']-1]
+        equal(offer['id']+'.unlock level',offer['level'],0)
+        equal(offer['id']+'.eligibility',offer['eligibility'],row[7])
+        equal(offer['id']+'.available from start',row[7],'Level 0; available from start')
+    for kind in ('coins','pearls'):
+        group=[offer for offer in offers if offer['kind']==kind]
+        equal(kind+' pack count',len(group),5)
+        previous=None
+        for offer in group:
+            row=sheets['Shop'][offer['source']['row']-1]
+            for key,index in [('id',0),('name',2),('pearls',4)]:equal(offer['id']+'.'+key,offer[key],row[index])
+            equal(offer['id']+'.price cents',offer['price_usd_cents'],halfup(Fraction(str(row[3]))*100))
+            equal(offer['id']+'.coin days',offer['coin_days_bps'],halfup(Fraction(str(row[5]))*10000))
+            value=Fraction(offer['pearls'] if kind=='pearls' else offer['coin_days_bps'],offer['price_usd_cents'])
+            if previous is not None:equal(offer['id']+'.better value',value>previous,True)
+            previous=value
     return dict(checks=checks,errors=errors,rounding_corrections=corrections)
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--workbook',type=Path,default=ROOT/'design/aquarium_game_design_v4.xlsx');p.add_argument('--content',type=Path,default=ROOT/'assets/content.json');p.add_argument('--out',type=Path,default=ROOT/'evidence/v4-implementation/catalog-audit.json');args=p.parse_args()

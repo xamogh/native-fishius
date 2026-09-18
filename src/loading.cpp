@@ -1,8 +1,28 @@
-#include "aquarium/view.hpp"
+#include "aquarium/loading.hpp"
+#include "aquarium/hud_tanks.hpp"
 #include <algorithm>
 #include <cmath>
 
 namespace aq {
+bool prepareMenus(Canvas& canvas,const Domain& domain,const std::function<bool(float,std::string_view)>& progress){
+ if(!progress(0,"Preparing your tanks"))return false;
+ canvas.begin();
+ TankSwitcherState switcher;switcher.open=true;
+ paintTankSwitcher(canvas,domain,layoutHud(canvas.width(),canvas.height(),canvas.safeInsets(),canvas.minimumTouchSize()),switcher,{-1,-1});
+ SDL_FlushRenderer(canvas.renderer());
+
+ if(!progress(1.f/3,"Preparing Tank Shop"))return false;
+ canvas.begin();
+ paintShop(canvas,domain,layoutShop(canvas.width(),canvas.height(),canvas.safeInsets(),canvas.minimumTouchSize()),ShopState{ShopCategory::Tanks});
+ SDL_FlushRenderer(canvas.renderer());
+
+ if(!progress(2.f/3,"Preparing Shop"))return false;
+ canvas.begin();
+ paintShop(canvas,domain,layoutShop(canvas.width(),canvas.height(),canvas.safeInsets(),canvas.minimumTouchSize()),ShopState{});
+ SDL_FlushRenderer(canvas.renderer());
+ return progress(1,"Opening your aquarium");
+}
+
 void Canvas::loadingScreen(float progress,std::string_view stage,double seconds,bool artwork,bool reduced){
  begin();progress=std::clamp(progress,0.f,1.f);
  const float w=width_,h=height_,cx=w*.5f;
@@ -10,9 +30,7 @@ void Canvas::loadingScreen(float progress,std::string_view stage,double seconds,
  const double time=reduced?0:seconds;
  fill({0,0,w,h},{3,51,88,255});
  if(artwork){
-  auto* reef=texture("lagoon/reef.png");
-  const float cover=std::max(w/reef->width,h/reef->height);
-  image("lagoon/reef.png",{(w-reef->width*cover)*.5f,h-reef->height*cover,reef->width*cover,reef->height*cover});
+  environment({0,0,w,h});
  }
  // A soft bottom shade keeps the tip and progress readable over the sand.
  const SDL_FColor top{2/255.f,25/255.f,58/255.f,.035f},bottom{2/255.f,25/255.f,58/255.f,.6f};

@@ -1,4 +1,4 @@
-#include "aquarium/view.hpp"
+#include "aquarium/canvas.hpp"
 #include <algorithm>
 #include <cmath>
 #include <fstream>
@@ -74,6 +74,19 @@ void checkFrames(const std::filesystem::path& assets){
   auto frame=read(canvas.renderer());const float sx=float(frame->w)/canvas.width(),sy=float(frame->h)/canvas.height();
   for(int y=int(24*sy);y<int(40*sy);++y)for(int x=int(24*sx);x<int(40*sx);++x){auto* p=pixel(*frame,x,y);check(std::abs(int(p[0])-128)<=2&&p[1]==0&&p[2]==0,"Minified art shimmers or has a transparent-color fringe");}
  }
+ // Rounded dialog artwork must leave the frame visible at all four corners.
+ canvas.begin();canvas.fill({0,0,canvas.width(),canvas.height()},{0,0,0,255});
+ canvas.origin(100,50);canvas.roundedImage(pattern.string(),{20,20,80,60},20);canvas.origin(0);
+ auto rounded=read(canvas.renderer());const float sx=float(rounded->w)/canvas.width(),sy=float(rounded->h)/canvas.height();
+ for(auto p:{SDL_FPoint{121,71},SDL_FPoint{198,71},SDL_FPoint{121,128},SDL_FPoint{198,128}}){
+  const auto* corner=pixel(*rounded,int(p.x*sx),int(p.y*sy));check(corner[0]==0&&corner[1]==0&&corner[2]==0,"Rounded artwork covers a dialog corner");
+ }
+ const auto* middle=pixel(*rounded,int(160*sx),int(100*sy));
+ check(std::abs(int(middle[0])-128)<=2&&middle[1]==0&&middle[2]==0,"Rounded artwork loses texture filtering or origin alignment");
+ canvas.begin();canvas.fill({0,0,canvas.width(),canvas.height()},{0,0,0,255});
+ canvas.roundedImage(pattern.string(),{120,70,80,60},12,12);auto feathered=read(canvas.renderer());
+ const auto* edge=pixel(*feathered,int(122*sx),int(100*sy));const auto* solid=pixel(*feathered,int(160*sx),int(100*sy));
+ check(edge[0]>0&&edge[0]<70&&std::abs(int(solid[0])-128)<=2,"Artwork feather does not blend its edge while preserving its center");
  auto textFrame=[&]{
   canvas.begin();canvas.fill({0,0,canvas.width(),canvas.height()},{0,0,0,255});
   canvas.text("Molly 250",30,30,30,{255,0,0,255});canvas.text("Molly 250",330,30,30,{0,80,255,255});

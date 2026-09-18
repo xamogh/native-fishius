@@ -1,4 +1,4 @@
-#include "aquarium/view.hpp"
+#include "aquarium/canvas.hpp"
 #include <algorithm>
 #include <cmath>
 

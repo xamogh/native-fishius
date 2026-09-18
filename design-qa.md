@@ -1,3 +1,115 @@
+# Live fish growth percentage, 17 September 2026
+
+final result: passed
+
+Growth now displays two decimal places and updates with the live simulation. The number area fits 100.00%. A growing Neon Tetra advances from 9.99% to 10.00% within the same open popover; paused growth stays fixed, and 99.99% reaches 100.00% only at completion.
+
+Previous and updated phone views were reviewed together, followed by portrait, tablet and desktop captures. Both builds, care checks, HUD layout and rendering checks pass. No actionable P0/P1/P2 finding remains. See the [full review](evidence/fish-live-percent/design-qa.md). Earlier reviews follow.
+
+# Fish unlock badge, 17 September 2026
+
+final result: passed
+
+The adult back/profit line is removed. Eggs and Babies show Unlocks at Junior in a lavender badge above the growth timer. The two badge rows have room between them at phone, portrait and desktop sizes. Existing button colors, padlocks and immediate selling are retained.
+
+The previous and updated Baby views were reviewed together at 667 by 375 pixels, 1x native density. A favorite Molly fixture follows the supplied screenshot's 17% growth and adult reward values. Both builds, the care suite, HUD layout and rendering checks pass. No actionable P0/P1/P2 finding remains. See the [full review](evidence/fish-unlock-badge/design-qa.md) and [updated Molly](evidence/fish-unlock-badge/final/1672x941/molly-growing.png). Earlier reviews follow.
+
+# Fish actions and growth badges, 17 September 2026
+
+final result: passed
+
+Keep is coral red on the left. Sell is green on the right, replacing Rehome, and sells immediately without a confirmation page. Growing fish and eggs show timer badges; hungry fish show Growth paused in amber. Locked actions use muted colors and a padlock, with the reason shown above the badge.
+
+The approved compact mockup, previous native adult view and [updated adult view](evidence/fish-actions-badges/final-direct-sell/cowfish-1642x958.png) were reviewed together at 1642 by 958 pixels, 1x native density. Phone, portrait and tablet captures cover growth, hatching, locks, favorites, immediate selling and kept fish. Both native builds and all 15 test suites pass. No actionable P0/P1/P2 finding remains. See the [full review](evidence/fish-actions-badges/design-qa.md). Earlier reviews follow.
+
+# Compact fish popover, 17 September 2026
+
+final result: passed
+
+Implemented the [approved compact layout](design/mockups/fish-popover-2026-09-17/02-palette-and-rewards.png) with growth stages, a shared coin/XP payout, Keep, Favorite and confirmed Rehome. The frame follows the selected fish and stays within safe edges. Existing fonts, theme surfaces, button colors, coin/net artwork and the shared XP badge are reused. No new runtime image, icon or font assets remain.
+
+The [native adult capture](evidence/fish-popover-compact/final/cowfish-1642x958.png) and source were reviewed together at 1642 × 958 pixels, 1x density, with matching adult Cowfish rewards. [Full](evidence/fish-popover-compact/comparison-full-final.png) and [focused](evidence/fish-popover-compact/comparison-details-final.png) comparisons cover typography, layout, colors, image quality and copy. The native frame is 469.7 × 314.5 pixels. Phone, tablet, portrait and action states were also checked. Earlier crowded labels, uneven marker spacing and a missing heart glyph are fixed.
+
+Desktop and iOS simulator builds and all 15 desktop test suites pass. The [full QA report](evidence/fish-popover-compact/design-qa.md) records comparison history, accepted asset/font differences and validation limits. Earlier reviews follow.
+
+# Tank shop matched to Fish, 17 September 2026
+
+final result: passed
+
+The user's Fish shop screenshots now govern the tank layout. Tanks keeps its wider cards and shares Fish's filter styling, enclosing frame, card surfaces, text sizes, spacing, price controls and bottom scrollbar. A selected All filter is included. Cards clip inside the frame at both scroll limits, and portrait card text remains readable.
+
+The [Fish reference](evidence/tank-shop-consistency/final/fish-reference.png) and [updated Tanks view](evidence/tank-shop-consistency/final/tanks-matched.png) were reviewed together at 1088 by 635 pixels, 1x native SDL density, in the same level-1 state with 45 coins and 0 pearls. CSS dimensions do not apply. Typography, spacing, colors, image quality and copy were checked, along with phone, tablet, portrait and scrolled views. Earlier frame, filter, styling, clipping and portrait type issues are fixed. No actionable P0/P1/P2 finding remains.
+
+Desktop and iOS simulator builds and all 15 desktop test suites pass. The [full review](evidence/tank-shop-consistency/design-qa.md) records evidence, fixes and validation limits. Earlier reviews follow.
+
+# Tank shop cards and consistent height, 17 September 2026
+
+final result: passed
+
+Implemented the [approved tank card mockup](design/mockups/tank-shop-cards-2026-09-17/tank-shop-cards-v3.png), with slots above the artwork and side-by-side purchase choices. The later height request is included: Tanks shares the same card top edge and height as Fish, Plants, Decorations and Treasure. The scrollbar sits above the cards, and the Tanks tab remains after Decorations.
+
+The source and [final native rendering](evidence/tank-shop-cards/consistent-height/cards-approved.png) were opened together at 1643 by 957 pixels, 1x density, in the same level-7 state. Native SDL coordinates apply; CSS dimensions do not. Full-size text and artwork were readable without detail crops. The [Decorations comparison](evidence/tank-shop-cards/consistent-height/height-decorations.png) confirms the shared vertical bounds. Phone, tablet, portrait, compact and scrolled states were also reviewed.
+
+Typography, spacing, colors, image quality and copy pass. Earlier P2 findings in heading sizes, card treatment, button art and phone spacing were fixed and recaptured. There are no remaining actionable P0/P1/P2 findings. Minor font and illustration differences remain acceptable P3 polish. Both desktop and iOS simulator builds pass, as do all 15 desktop test suites. The native window automation tool timed out, so no manual window-interaction pass is claimed. Production SDL screenshots and event tests provide the validation evidence.
+
+The [full QA report](evidence/tank-shop-cards/design-qa.md) records the comparison history, screenshots, interactions and limits. Earlier reviews follow.
+
+# Octopus coin and pearl dialogs, 17 September 2026
+
+final result: passed
+
+Both funds dialogs now use the selected orange octopus. The live amount is above the artwork, the header is blank, and the shop hint is removed. The existing outline and controls remain. The pearl version holds an iridescent pearl and uses a purple amount.
+
+Source visual truth: [approved mockup](design/mockups/funds-octopus-2026-09-17/approved-coins.png), 1391 × 1131 pixels. Actual game screenshots: [coins](evidence/funds-octopus/coins-1088x635.png) and [pearls](evidence/funds-octopus/pearls-1088x635.png), each 1088 × 635 pixels. The idle states show 101 coins and 12 pearls.
+
+[Coin](evidence/funds-octopus/comparison-coins.png) and [pearl](evidence/funds-octopus/comparison-pearls.png) comparison boards put the source and production native rendering together at equal 840-pixel frame widths. The boards are 1840 × 830 pixels at 1× native SDL density. The production layout uses a 1608 × 908 logical viewport. CSS dimensions do not apply. Text and control details are readable at this scale, so separate detail crops were not needed.
+
+The five required surfaces passed review: typography, spacing, colors, image quality and copy. The first 320 × 240 review found a P2 overlap between tentacles and Open Shop. Scene scaling and bounds constraints fixed it; the [final compact capture](evidence/funds-octopus/coins-320x240.png) and layout tests confirm the fix. No actionable P0/P1/P2 finding remains. Minor font, antialiasing and illustration color differences from the generated mockup are recorded as P3 polish. The original native frame and controls are intentionally preserved.
+
+The desktop build and the funds interaction/layout and rendering suites pass. Both artwork versions were checked at six viewport sizes. The [full QA report](evidence/funds-octopus/design-qa.md) records the evidence, comparison history, controls tested and limits. Earlier reviews follow.
+
+# All six tanks in the switcher, 17 September 2026
+
+final result: passed
+
+The expanded switcher now always shows all six tanks. The active tank has a Current badge, owned tanks switch directly, and locked tanks open their highlighted Shop card. Tank 6 remains Coming soon. Eight relevant test suites pass. [Native captures and validation](evidence/tank-switcher-all/design-qa.md) cover the updated states. Earlier reviews follow.
+
+# Larger porthole tank switcher, 17 September 2026
+
+final result: passed
+
+Implemented the selected larger porthole switcher in the Clay HUD. The original Tank button stays in place, owned tanks switch directly, and buying and upgrading move to Shop's Tanks tab. Tank 6 shows Coming soon without a price or purchase action. The native build and seven relevant test suites pass. [Source comparison, state captures and validation](evidence/tank-switcher/design-qa.md) document the visual review and minor remaining illustration differences. Previous reviews follow.
+
+# Smaller sell reward ribbon, 17 September 2026
+
+final result: passed
+
+The coin and XP ribbon beneath each fish now uses 50% of its previous width and height, including live text, icon artwork and spacing. Reviewed `evidence/half-size-rewards/1672x941/ribbon-tank.png` and `evidence/half-size-rewards/667x375/stage-1.png`. Existing care and selling checks pass at four viewport sizes. Previous reviews follow.
+
+# Small fish stage meter, 17 September 2026
+
+final result: passed
+
+Implemented the accepted compact meter with a stage number, progress to the next stage and a lock for fish that cannot sell. The large Growing badge and footer helper are absent. See [native stage meter QA](evidence/stage-meter/design-qa.md). Previous reviews follow.
+
+# Exact sell ribbon review, 17 September 2026
+
+final result: passed
+
+Shape scaling and text alignment are corrected. The user accepted the current appearance, so no further source-art extraction is needed. See [revision review](evidence/sell-ribbon-revision/design-qa.md). Prior reviews follow.
+
+# Sell reward ribbon update, 17 September 2026
+
+final result: passed
+
+The selected cream and teal ribbon is implemented with live reward text and the shared Done button. See [native ribbon QA](evidence/sell-ribbon/design-qa.md). Previous reviews are preserved below.
+
+# Clay tank grid update, 16 September 2026
+
+final result: passed
+
+The selected six-card design is implemented in the current Clay HUD, with the user’s later shop-style and locked-state changes. Review: [tank grid QA](evidence/tank-grid/design-qa.md). Previous reviews are preserved below.
+
 # Fish popover reference update
 
 final result: passed

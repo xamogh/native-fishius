@@ -1,0 +1,295 @@
+{
+  "generator": "Built-in Image Gen",
+  "reference": "/Users/amoghrijal/.codex/generated_images/01a0ae02-50d1-76f2-92f5-bbbde8afa966/exec-7b7cd511-f8e3-45e9-860b-f1f9565fd59f.png",
+  "boundsConvention": "[left,top,rightExclusive,bottomExclusive]",
+  "fitRecommendation": "Fit alphaAtLeast8 bounds to the destination sprite rectangle; overlay should be fitted by its own bounds to the same rectangle. Render live numbers near x=0.50, y=0.875 of that rectangle.",
+  "assets": [
+    {
+      "filename": "tank-1-goldfish.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaNonzeroBounds": [
+        97,
+        50,
+        1192,
+        1228
+      ],
+      "alphaAtLeast8Bounds": [
+        154,
+        129,
+        1097,
+        1098
+      ],
+      "alphaAtLeast128Bounds": [
+        155,
+        130,
+        1096,
+        1097
+      ],
+      "centerAlpha": 253,
+      "bytes": 953867
+    },
+    {
+      "filename": "tank-2-clownfish.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaNonzeroBounds": [
+        0,
+        22,
+        1195,
+        1199
+      ],
+      "alphaAtLeast8Bounds": [
+        62,
+        25,
+        1192,
+        1172
+      ],
+      "alphaAtLeast128Bounds": [
+        63,
+        25,
+        1191,
+        1172
+      ],
+      "centerAlpha": 253,
+      "bytes": 1307462,
+      "fishDirection": "right",
+      "source": "/Users/amoghrijal/.codex/generated_images/01a0ae27-7937-73b2-9a27-4d718a5575e6/exec-5a23e3cf-5cbc-4e8a-9343-0a0261f61f8c.png"
+    },
+    {
+      "filename": "tank-3-blue-tang.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaNonzeroBounds": [
+        0,
+        32,
+        1208,
+        1186
+      ],
+      "alphaAtLeast8Bounds": [
+        118,
+        95,
+        1132,
+        1133
+      ],
+      "alphaAtLeast128Bounds": [
+        119,
+        96,
+        1131,
+        1133
+      ],
+      "centerAlpha": 253,
+      "bytes": 1071375
+    },
+    {
+      "filename": "tank-4-pink-fish.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaNonzeroBounds": [
+        33,
+        52,
+        1222,
+        1206
+      ],
+      "alphaAtLeast8Bounds": [
+        153,
+        123,
+        1098,
+        1098
+      ],
+      "alphaAtLeast128Bounds": [
+        154,
+        124,
+        1097,
+        1096
+      ],
+      "centerAlpha": 253,
+      "bytes": 954784
+    },
+    {
+      "filename": "tank-5-yellow-fish.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaNonzeroBounds": [
+        0,
+        19,
+        1202,
+        1226
+      ],
+      "alphaAtLeast8Bounds": [
+        122,
+        100,
+        1127,
+        1132
+      ],
+      "alphaAtLeast128Bounds": [
+        123,
+        101,
+        1126,
+        1131
+      ],
+      "centerAlpha": 253,
+      "bytes": 1056392
+    },
+    {
+      "filename": "tank-6-purple-fish.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaNonzeroBounds": [
+        41,
+        19,
+        1222,
+        1228
+      ],
+      "alphaAtLeast8Bounds": [
+        110,
+        83,
+        1141,
+        1145
+      ],
+      "alphaAtLeast128Bounds": [
+        111,
+        84,
+        1141,
+        1145
+      ],
+      "centerAlpha": 253,
+      "bytes": 1118330
+    },
+    {
+      "filename": "tank-selected-overlay.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaNonzeroBounds": [
+        105,
+        40,
+        1199,
+        1230
+      ],
+      "alphaAtLeast8Bounds": [
+        153,
+        127,
+        1098,
+        1097
+      ],
+      "alphaAtLeast128Bounds": [
+        154,
+        128,
+        1097,
+        1096
+      ],
+      "centerAlpha": 0,
+      "bytes": 466880
+    },
+    {
+      "filename": "header.png",
+      "width": 1944,
+      "height": 809,
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaNonzeroBounds": [
+        53,
+        34,
+        1924,
+        783
+      ],
+      "alphaAtLeast8Bounds": [
+        98,
+        265,
+        1845,
+        530
+      ],
+      "alphaAtLeast128Bounds": [
+        101,
+        266,
+        1843,
+        529
+      ],
+      "requestedTargetRatio": [
+        242,
+        40
+      ],
+      "requestedCountSegmentWidth": 56,
+      "suggestedTextCentersNormalized": {
+        "title": [
+          0.38,
+          0.48
+        ],
+        "count": [
+          0.875,
+          0.48
+        ]
+      },
+      "bytes": 461158
+    },
+    {
+      "filename": "normal-rim.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaNonzeroBounds": [
+        37,
+        50,
+        1224,
+        1230
+      ],
+      "alphaAtLeast8Bounds": [
+        120,
+        87,
+        1132,
+        1133
+      ],
+      "alphaAtLeast128Bounds": [
+        121,
+        88,
+        1131,
+        1132
+      ],
+      "centerAlpha": 0,
+      "bytes": 530644,
+      "source": "/Users/amoghrijal/.codex/generated_images/01a0ae27-7937-73b2-9a27-4d718a5575e6/exec-f8a5b3cc-a4cf-4b2b-9d39-22f13263ec25.png"
+    }
+  ]
+}

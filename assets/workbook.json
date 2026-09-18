@@ -1,5 +1,5 @@
 {
-  "sha256": "88610c8a1334f7db97dc5ec3ac6e439b07ce099e56075e6e10e6b3c77663e846",
+  "sha256": "8759dd1341e9ebf43ecf7f9f9c8ec244af1fcc1d5a0ac706a94c2ed1361da81c",
   "sheets": {
     "Read Me": [
       {
@@ -4264,7 +4264,7 @@
           {
             "cell": "G8",
             "column": 7,
-            "value": "Zero XP on cancellation; adult has highest normalized settlement rate.",
+            "value": "Selling starts at Junior; eggs and Babies cannot settle. Adult has highest normalized settlement rate.",
             "formula": null
           },
           {
@@ -7104,7 +7104,7 @@
           {
             "cell": "B9",
             "column": 2,
-            "value": "Partial rehome",
+            "value": "Selling from Junior",
             "formula": null
           },
           {
@@ -7116,19 +7116,19 @@
           {
             "cell": "D9",
             "column": 4,
-            "value": "Egg cancel: actual principal only, zero XP. Junior / Young / Mature return FLOOR(95% principal) + FLOOR(10/40/70% profit); XP FLOOR(10/40/70% total). Instance is consumed.",
+            "value": "Eggs and Babies cannot be sold. Selling unlocks at Junior (age 1 / 25% growth). Junior / Young / Mature return FLOOR(95% principal) + FLOOR(10/40/70% profit); XP FLOOR(10/40/70% total). Adult pays the maximum. Instance is consumed once.",
             "formula": null
           },
           {
             "cell": "E9",
             "column": 5,
-            "value": "Inputs; Coin Fish",
+            "value": "User decision 2026-09-17; Inputs; Coin Fish",
             "formula": null
           },
           {
             "cell": "F9",
             "column": 6,
-            "value": "Boundary timestamps 25/55/80%; never also adult-claim",
+            "value": "Reject eggs and age 0 without changes; allow age 1 onward; never also adult-claim",
             "formula": null
           }
         ]
@@ -8780,7 +8780,7 @@
           {
             "cell": "D20",
             "column": 4,
-            "value": "Principal returned on partial rehome; egg cancellation 100%.",
+            "value": "Principal returned on Junior / Young / Mature rehome. Eggs and Babies cannot be sold.",
             "formula": null
           },
           {
@@ -42069,7 +42069,7 @@
           {
             "cell": "C5",
             "column": 3,
-            "value": "Small pearl pack",
+            "value": "Pocket of Pearls",
             "formula": null
           },
           {
@@ -42099,7 +42099,7 @@
           {
             "cell": "H5",
             "column": 8,
-            "value": "Always after tutorial",
+            "value": "Level 0; available from start",
             "formula": null
           },
           {
@@ -42117,7 +42117,7 @@
           {
             "cell": "K5",
             "column": 11,
-            "value": "Covers a useful entry premium purchase; show exact pearls and local store price.",
+            "value": "20 guaranteed pearls. Entry pearl pack. Show exact contents and localized price; no random rewards.",
             "formula": null
           },
           {
@@ -42146,7 +42146,7 @@
           {
             "cell": "C6",
             "column": 3,
-            "value": "Medium pearl pack",
+            "value": "Pile of Pearls",
             "formula": null
           },
           {
@@ -42176,7 +42176,7 @@
           {
             "cell": "H6",
             "column": 8,
-            "value": "Always after tutorial",
+            "value": "Level 0; available from start",
             "formula": null
           },
           {
@@ -42194,7 +42194,7 @@
           {
             "cell": "K6",
             "column": 11,
-            "value": "More pearls per USD than small; no misleading crossed-out price.",
+            "value": "55 guaranteed pearls. More pearls per USD than the previous tier. Show exact contents and localized price; no random rewards.",
             "formula": null
           },
           {
@@ -42223,7 +42223,7 @@
           {
             "cell": "C7",
             "column": 3,
-            "value": "Large pearl pack",
+            "value": "Bag of Pearls",
             "formula": null
           },
           {
@@ -42253,7 +42253,7 @@
           {
             "cell": "H7",
             "column": 8,
-            "value": "Always after tutorial",
+            "value": "Level 0; available from start",
             "formula": null
           },
           {
@@ -42271,7 +42271,7 @@
           {
             "cell": "K7",
             "column": 11,
-            "value": "Best of these three per-pearl rates; spending is optional.",
+            "value": "120 guaranteed pearls. More pearls per USD than the previous tier. Show exact contents and localized price; no random rewards.",
             "formula": null
           },
           {
@@ -42288,49 +42288,49 @@
           {
             "cell": "A8",
             "column": 1,
-            "value": "COIN-S",
+            "value": "PEARL-XL",
             "formula": null
           },
           {
             "cell": "B8",
             "column": 2,
-            "value": "Coins",
+            "value": "Pearls",
             "formula": null
           },
           {
             "cell": "C8",
             "column": 3,
-            "value": "Small coin pack",
+            "value": "Box of Pearls",
             "formula": null
           },
           {
             "cell": "D8",
             "column": 4,
-            "value": 0.99,
+            "value": 19.99,
             "formula": null
           },
           {
             "cell": "E8",
             "column": 5,
-            "value": 0,
+            "value": 260,
             "formula": null
           },
           {
             "cell": "F8",
             "column": 6,
-            "value": 0.25,
+            "value": 0,
             "formula": null
           },
           {
             "cell": "G8",
             "column": 7,
-            "value": 0,
+            "value": 13.006503251625814,
             "formula": "=IF(B8=\"Pearls\",E8/D8,0)"
           },
           {
             "cell": "H8",
             "column": 8,
-            "value": "L5; player explicitly opens shop",
+            "value": "Level 0; available from start",
             "formula": null
           },
           {
@@ -42348,7 +42348,7 @@
           {
             "cell": "K8",
             "column": 11,
-            "value": "Coins snapshot current account reference income; disclose amount before store confirmation.",
+            "value": "260 guaranteed pearls. More pearls per USD than the previous tier. Show exact contents and localized price; no random rewards.",
             "formula": null
           },
           {
@@ -42365,49 +42365,49 @@
           {
             "cell": "A9",
             "column": 1,
-            "value": "COIN-M",
+            "value": "PEARL-XXL",
             "formula": null
           },
           {
             "cell": "B9",
             "column": 2,
-            "value": "Coins",
+            "value": "Pearls",
             "formula": null
           },
           {
             "cell": "C9",
             "column": 3,
-            "value": "Medium coin pack",
+            "value": "Chest of Pearls",
             "formula": null
           },
           {
             "cell": "D9",
             "column": 4,
-            "value": 2.99,
+            "value": 29.99,
             "formula": null
           },
           {
             "cell": "E9",
             "column": 5,
-            "value": 0,
+            "value": 420,
             "formula": null
           },
           {
             "cell": "F9",
             "column": 6,
-            "value": 0.85,
+            "value": 0,
             "formula": null
           },
           {
             "cell": "G9",
             "column": 7,
-            "value": 0,
+            "value": 14.004668222740914,
             "formula": "=IF(B9=\"Pearls\",E9/D9,0)"
           },
           {
             "cell": "H9",
             "column": 8,
-            "value": "L5; player explicitly opens shop",
+            "value": "Level 0; available from start",
             "formula": null
           },
           {
@@ -42425,7 +42425,7 @@
           {
             "cell": "K9",
             "column": 11,
-            "value": "Coin amount uses reference income, not highest payer income; price cannot change after authorization.",
+            "value": "420 guaranteed pearls. Best per-pearl rate of these five packs. Show exact contents and localized price; no random rewards.",
             "formula": null
           },
           {
@@ -42442,7 +42442,7 @@
           {
             "cell": "A10",
             "column": 1,
-            "value": "COIN-L",
+            "value": "COIN-S",
             "formula": null
           },
           {
@@ -42454,13 +42454,13 @@
           {
             "cell": "C10",
             "column": 3,
-            "value": "Large coin pack",
+            "value": "Pocket of Coins",
             "formula": null
           },
           {
             "cell": "D10",
             "column": 4,
-            "value": 4.99,
+            "value": 0.99,
             "formula": null
           },
           {
@@ -42472,7 +42472,7 @@
           {
             "cell": "F10",
             "column": 6,
-            "value": 1.5,
+            "value": 0.25,
             "formula": null
           },
           {
@@ -42484,7 +42484,7 @@
           {
             "cell": "H10",
             "column": 8,
-            "value": "L5; player explicitly opens shop",
+            "value": "Level 0; available from start",
             "formula": null
           },
           {
@@ -42502,7 +42502,7 @@
           {
             "cell": "K10",
             "column": 11,
-            "value": "No forced low-balance upsell; cancel returns to play.",
+            "value": "0.25 reference coin-days at the account level. Round the final coin amount half up to a whole coin and display it before confirmation. Freeze the amount and price for the offer.",
             "formula": null
           },
           {
@@ -42519,37 +42519,37 @@
           {
             "cell": "A11",
             "column": 1,
-            "value": "STARTER",
+            "value": "COIN-M",
             "formula": null
           },
           {
             "cell": "B11",
             "column": 2,
-            "value": "Bundle",
+            "value": "Coins",
             "formula": null
           },
           {
             "cell": "C11",
             "column": 3,
-            "value": "Starter keepsake bundle",
+            "value": "Pile of Coins",
             "formula": null
           },
           {
             "cell": "D11",
             "column": 4,
-            "value": 3.99,
+            "value": 2.99,
             "formula": null
           },
           {
             "cell": "E11",
             "column": 5,
-            "value": 35,
+            "value": 0,
             "formula": null
           },
           {
             "cell": "F11",
             "column": 6,
-            "value": 0.25,
+            "value": 0.85,
             "formula": null
           },
           {
@@ -42561,25 +42561,25 @@
           {
             "cell": "H11",
             "column": 8,
-            "value": "After first return; model purchases Day 3",
+            "value": "Level 0; available from start",
             "formula": null
           },
           {
             "cell": "I11",
             "column": 9,
-            "value": "Lifetime once/account",
+            "value": "Repeatable",
             "formula": null
           },
           {
             "cell": "J11",
             "column": 10,
-            "value": 1,
+            "value": 0,
             "formula": null
           },
           {
             "cell": "K11",
             "column": 11,
-            "value": "35 pearls + quarter reference coin-day + exclusive-to-bundle permanent frame. No purchase deadline; no percentage discount claim.",
+            "value": "0.85 reference coin-days at the account level. Round the final coin amount half up to a whole coin and display it before confirmation. Freeze the amount and price for the offer.",
             "formula": null
           },
           {
@@ -42596,25 +42596,25 @@
           {
             "cell": "A12",
             "column": 1,
-            "value": "AD-COIN",
+            "value": "COIN-L",
             "formula": null
           },
           {
             "cell": "B12",
             "column": 2,
-            "value": "Rewarded ad",
+            "value": "Coins",
             "formula": null
           },
           {
             "cell": "C12",
             "column": 3,
-            "value": "Optional coin bonus",
+            "value": "Bag of Coins",
             "formula": null
           },
           {
             "cell": "D12",
             "column": 4,
-            "value": 0,
+            "value": 4.99,
             "formula": null
           },
           {
@@ -42626,7 +42626,7 @@
           {
             "cell": "F12",
             "column": 6,
-            "value": 0.02,
+            "value": 1.5,
             "formula": null
           },
           {
@@ -42638,13 +42638,13 @@
           {
             "cell": "H12",
             "column": 8,
-            "value": "L5; not tutorial",
+            "value": "Level 0; available from start",
             "formula": null
           },
           {
             "cell": "I12",
             "column": 9,
-            "value": "3 grants/server day",
+            "value": "Repeatable",
             "formula": null
           },
           {
@@ -42656,7 +42656,7 @@
           {
             "cell": "K12",
             "column": 11,
-            "value": "Guaranteed displayed coin reward on verified completion; 2-minute cooldown; no XP/pearls or forced interstitials.",
+            "value": "1.5 reference coin-days at the account level. Round the final coin amount half up to a whole coin and display it before confirmation. Freeze the amount and price for the offer.",
             "formula": null
           },
           {
@@ -42673,25 +42673,25 @@
           {
             "cell": "A13",
             "column": 1,
-            "value": "COMPANION",
+            "value": "COIN-XL",
             "formula": null
           },
           {
             "cell": "B13",
             "column": 2,
-            "value": "Direct pearl spend",
+            "value": "Coins",
             "formula": null
           },
           {
             "cell": "C13",
             "column": 3,
-            "value": "Permanent companion",
+            "value": "Box of Coins",
             "formula": null
           },
           {
             "cell": "D13",
             "column": 4,
-            "value": 0,
+            "value": 9.99,
             "formula": null
           },
           {
@@ -42703,7 +42703,7 @@
           {
             "cell": "F13",
             "column": 6,
-            "value": 0,
+            "value": 3.25,
             "formula": null
           },
           {
@@ -42715,13 +42715,13 @@
           {
             "cell": "H13",
             "column": 8,
-            "value": "Catalog level gate",
+            "value": "Level 0; available from start",
             "formula": null
           },
           {
             "cell": "I13",
             "column": 9,
-            "value": "Ownership once/item",
+            "value": "Repeatable",
             "formula": null
           },
           {
@@ -42733,7 +42733,7 @@
           {
             "cell": "K13",
             "column": 11,
-            "value": "Exact pearl price in Fish Collectibles. Cosmetic-only; no coins, XP, productive capacity or randomized outcome.",
+            "value": "3.25 reference coin-days at the account level. Round the final coin amount half up to a whole coin and display it before confirmation. Freeze the amount and price for the offer.",
             "formula": null
           },
           {
@@ -42750,25 +42750,25 @@
           {
             "cell": "A14",
             "column": 1,
-            "value": "CAPACITY",
+            "value": "COIN-XXL",
             "formula": null
           },
           {
             "cell": "B14",
             "column": 2,
-            "value": "Capacity alternative",
+            "value": "Coins",
             "formula": null
           },
           {
             "cell": "C14",
             "column": 3,
-            "value": "Tank entitlement via pearls",
+            "value": "Chest of Coins",
             "formula": null
           },
           {
             "cell": "D14",
             "column": 4,
-            "value": 0,
+            "value": 19.99,
             "formula": null
           },
           {
@@ -42780,7 +42780,7 @@
           {
             "cell": "F14",
             "column": 6,
-            "value": 0,
+            "value": 7,
             "formula": null
           },
           {
@@ -42792,13 +42792,13 @@
           {
             "cell": "H14",
             "column": 8,
-            "value": "Same level and prerequisites as coin path",
+            "value": "Level 0; available from start",
             "formula": null
           },
           {
             "cell": "I14",
             "column": 9,
-            "value": "Once/entitlement",
+            "value": "Repeatable",
             "formula": null
           },
           {
@@ -42810,11 +42810,319 @@
           {
             "cell": "K14",
             "column": 11,
-            "value": "This IS paid convenience that substitutes for coin spending, not a purely cosmetic product. It does not bypass level gates.",
+            "value": "7 reference coin-days at the account level. Round the final coin amount half up to a whole coin and display it before confirmation. Freeze the amount and price for the offer.",
             "formula": null
           },
           {
             "cell": "L14",
+            "column": 12,
+            "value": "Server offer snapshot + verified store receipt / ad completion + atomic grant. Restore permanent entitlements; consumables reconciled against ledger.",
+            "formula": null
+          }
+        ]
+      },
+      {
+        "row": 15,
+        "cells": [
+          {
+            "cell": "A15",
+            "column": 1,
+            "value": "STARTER",
+            "formula": null
+          },
+          {
+            "cell": "B15",
+            "column": 2,
+            "value": "Bundle",
+            "formula": null
+          },
+          {
+            "cell": "C15",
+            "column": 3,
+            "value": "Starter keepsake bundle",
+            "formula": null
+          },
+          {
+            "cell": "D15",
+            "column": 4,
+            "value": 3.99,
+            "formula": null
+          },
+          {
+            "cell": "E15",
+            "column": 5,
+            "value": 35,
+            "formula": null
+          },
+          {
+            "cell": "F15",
+            "column": 6,
+            "value": 0.25,
+            "formula": null
+          },
+          {
+            "cell": "G15",
+            "column": 7,
+            "value": 0,
+            "formula": "=IF(B15=\"Pearls\",E15/D15,0)"
+          },
+          {
+            "cell": "H15",
+            "column": 8,
+            "value": "Level 0; available from start",
+            "formula": null
+          },
+          {
+            "cell": "I15",
+            "column": 9,
+            "value": "Lifetime once/account",
+            "formula": null
+          },
+          {
+            "cell": "J15",
+            "column": 10,
+            "value": 1,
+            "formula": null
+          },
+          {
+            "cell": "K15",
+            "column": 11,
+            "value": "35 pearls + quarter reference coin-day + exclusive-to-bundle permanent frame. No purchase deadline; no percentage discount claim.",
+            "formula": null
+          },
+          {
+            "cell": "L15",
+            "column": 12,
+            "value": "Server offer snapshot + verified store receipt / ad completion + atomic grant. Restore permanent entitlements; consumables reconciled against ledger.",
+            "formula": null
+          }
+        ]
+      },
+      {
+        "row": 16,
+        "cells": [
+          {
+            "cell": "A16",
+            "column": 1,
+            "value": "AD-COIN",
+            "formula": null
+          },
+          {
+            "cell": "B16",
+            "column": 2,
+            "value": "Rewarded ad",
+            "formula": null
+          },
+          {
+            "cell": "C16",
+            "column": 3,
+            "value": "Optional coin bonus",
+            "formula": null
+          },
+          {
+            "cell": "D16",
+            "column": 4,
+            "value": 0,
+            "formula": null
+          },
+          {
+            "cell": "E16",
+            "column": 5,
+            "value": 0,
+            "formula": null
+          },
+          {
+            "cell": "F16",
+            "column": 6,
+            "value": 0.02,
+            "formula": null
+          },
+          {
+            "cell": "G16",
+            "column": 7,
+            "value": 0,
+            "formula": "=IF(B16=\"Pearls\",E16/D16,0)"
+          },
+          {
+            "cell": "H16",
+            "column": 8,
+            "value": "L5; not tutorial",
+            "formula": null
+          },
+          {
+            "cell": "I16",
+            "column": 9,
+            "value": "3 grants/server day",
+            "formula": null
+          },
+          {
+            "cell": "J16",
+            "column": 10,
+            "value": 0,
+            "formula": null
+          },
+          {
+            "cell": "K16",
+            "column": 11,
+            "value": "Guaranteed displayed coin reward on verified completion; 2-minute cooldown; no XP/pearls or forced interstitials.",
+            "formula": null
+          },
+          {
+            "cell": "L16",
+            "column": 12,
+            "value": "Server offer snapshot + verified store receipt / ad completion + atomic grant. Restore permanent entitlements; consumables reconciled against ledger.",
+            "formula": null
+          }
+        ]
+      },
+      {
+        "row": 17,
+        "cells": [
+          {
+            "cell": "A17",
+            "column": 1,
+            "value": "COMPANION",
+            "formula": null
+          },
+          {
+            "cell": "B17",
+            "column": 2,
+            "value": "Direct pearl spend",
+            "formula": null
+          },
+          {
+            "cell": "C17",
+            "column": 3,
+            "value": "Permanent companion",
+            "formula": null
+          },
+          {
+            "cell": "D17",
+            "column": 4,
+            "value": 0,
+            "formula": null
+          },
+          {
+            "cell": "E17",
+            "column": 5,
+            "value": 0,
+            "formula": null
+          },
+          {
+            "cell": "F17",
+            "column": 6,
+            "value": 0,
+            "formula": null
+          },
+          {
+            "cell": "G17",
+            "column": 7,
+            "value": 0,
+            "formula": "=IF(B17=\"Pearls\",E17/D17,0)"
+          },
+          {
+            "cell": "H17",
+            "column": 8,
+            "value": "Catalog level gate",
+            "formula": null
+          },
+          {
+            "cell": "I17",
+            "column": 9,
+            "value": "Ownership once/item",
+            "formula": null
+          },
+          {
+            "cell": "J17",
+            "column": 10,
+            "value": 0,
+            "formula": null
+          },
+          {
+            "cell": "K17",
+            "column": 11,
+            "value": "Exact pearl price in Fish Collectibles. Cosmetic-only; no coins, XP, productive capacity or randomized outcome.",
+            "formula": null
+          },
+          {
+            "cell": "L17",
+            "column": 12,
+            "value": "Server offer snapshot + verified store receipt / ad completion + atomic grant. Restore permanent entitlements; consumables reconciled against ledger.",
+            "formula": null
+          }
+        ]
+      },
+      {
+        "row": 18,
+        "cells": [
+          {
+            "cell": "A18",
+            "column": 1,
+            "value": "CAPACITY",
+            "formula": null
+          },
+          {
+            "cell": "B18",
+            "column": 2,
+            "value": "Capacity alternative",
+            "formula": null
+          },
+          {
+            "cell": "C18",
+            "column": 3,
+            "value": "Tank entitlement via pearls",
+            "formula": null
+          },
+          {
+            "cell": "D18",
+            "column": 4,
+            "value": 0,
+            "formula": null
+          },
+          {
+            "cell": "E18",
+            "column": 5,
+            "value": 0,
+            "formula": null
+          },
+          {
+            "cell": "F18",
+            "column": 6,
+            "value": 0,
+            "formula": null
+          },
+          {
+            "cell": "G18",
+            "column": 7,
+            "value": 0,
+            "formula": "=IF(B18=\"Pearls\",E18/D18,0)"
+          },
+          {
+            "cell": "H18",
+            "column": 8,
+            "value": "Same level and prerequisites as coin path",
+            "formula": null
+          },
+          {
+            "cell": "I18",
+            "column": 9,
+            "value": "Once/entitlement",
+            "formula": null
+          },
+          {
+            "cell": "J18",
+            "column": 10,
+            "value": 0,
+            "formula": null
+          },
+          {
+            "cell": "K18",
+            "column": 11,
+            "value": "This IS paid convenience that substitutes for coin spending, not a purely cosmetic product. It does not bypass level gates.",
+            "formula": null
+          },
+          {
+            "cell": "L18",
             "column": 12,
             "value": "Server offer snapshot + verified store receipt / ad completion + atomic grant. Restore permanent entitlements; consumables reconciled against ledger.",
             "formula": null
@@ -268627,13 +268935,13 @@
           {
             "cell": "G12",
             "column": 7,
-            "value": "Cancellation earns zero XP.",
+            "value": "Purchase earns zero XP. Eggs and Babies cannot be sold.",
             "formula": null
           },
           {
             "cell": "H12",
             "column": 8,
-            "value": "Runtime test required for actual refund path.",
+            "value": "Runtime test: reject eggs / age 0; allow Junior onward; preserve historical refunds.",
             "formula": null
           }
         ]
@@ -269511,7 +269819,7 @@
             "cell": "D29",
             "column": 4,
             "value": true,
-            "formula": "=AND(Shop!G6>Shop!G5,Shop!G7>Shop!G6)"
+            "formula": "=AND(Shop!G6>Shop!G5,Shop!G7>Shop!G6,Shop!G8>Shop!G7,Shop!G9>Shop!G8)"
           },
           {
             "cell": "E29",
@@ -269528,7 +269836,7 @@
           {
             "cell": "G29",
             "column": 7,
-            "value": "Repeatable pearl packs only; starter is lifetime-once.",
+            "value": "All five repeatable pearl packs; starter remains lifetime-once.",
             "formula": null
           },
           {
@@ -274791,7 +275099,7 @@
           {
             "cell": "D7",
             "column": 4,
-            "value": "Status growing\u2192settled OR canceled; exactly one terminal transition. Actual paid basis immutable; free gift basis=0.",
+            "value": "Status growing to settled, exactly once. Selling starts at Junior; reject eggs and Babies. Paid basis immutable; gift basis=0. Preserve historical cancellation receipts.",
             "formula": null
           },
           {

@@ -1,4 +1,4 @@
-#include "aquarium/view.hpp"
+#include "aquarium/canvas.hpp"
 #include <algorithm>
 #include <cmath>
 #include <cstdlib>
@@ -68,12 +68,9 @@ FishPose fishPose(const Fish& f,double interpolation){
  if(!m.hasPrevious)return {f.position,m.phase,m.pitch,motionFacing(m),m.speed};
  return {{mix(m.previous.x,f.position.x),mix(m.previous.y,f.position.y)},mix(m.previousPhase,m.phase),mix(m.previousPitch,m.pitch),mix(m.previousFacing,motionFacing(m)),mix(m.previousSpeed,m.speed)};
 }
+std::string fishArt(std::string_view id){return "species/"+std::string(id)+".png";}
 std::string compact(Amount n){std::string s=std::to_string(n);std::size_t sign=s[0]=='-'?1:0;for(std::ptrdiff_t i=static_cast<std::ptrdiff_t>(s.size())-3;i>static_cast<std::ptrdiff_t>(sign);i-=3)s.insert(static_cast<std::size_t>(i),",");return s;}
-std::string durationText(Millis ms){if(ms<0)ms=0;if(ms<60000)return std::to_string((ms+999)/1000)+"s";if(ms<3600000)return std::to_string((ms+30000)/60000)+"m";if(ms<86400000)return std::to_string((ms+1800000)/3600000)+"h";return std::to_string((ms+43200000)/86400000)+"d";}
-double bezierOvershoot(double progress){
- const double x=std::clamp(progress,0.,1.);auto sample=[](double t,double a,double b){double u=1-t;return 3*u*u*t*a+3*u*t*t*b+t*t*t;};double lo=0,hi=1,t=x;
- for(int i=0;i<20;++i){if(sample(t,.34,.64)<x)lo=t;else hi=t;t=(lo+hi)*.5;}return sample(t,1.56,1.);
-}
+std::string usdPrice(int cents){return "$"+std::to_string(cents/100)+"."+(cents%100<10?"0":"")+std::to_string(cents%100);}
 Canvas::Canvas(std::filesystem::path assets,int w,int h,bool software):assets_(std::move(assets)){
  if(!SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO))throw std::runtime_error(SDL_GetError());if(!TTF_Init())throw std::runtime_error(SDL_GetError());
  SDL_SetHint(SDL_HINT_ORIENTATIONS,"LandscapeLeft LandscapeRight");
@@ -82,7 +79,7 @@ Canvas::Canvas(std::filesystem::path assets,int w,int h,bool software):assets_(s
  fontPath_=pickFont(assets_,false);displayFontPath_=pickFont(assets_,true);if(fontPath_.empty())throw std::runtime_error("No native font found. Run tools/setup_fonts.py or set AQUARIUM_BODY_FONT.");if(displayFontPath_.empty())displayFontPath_=fontPath_;
  SDL_AudioSpec spec{SDL_AUDIO_F32,1,44100};audio_=SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK,&spec,nullptr,nullptr);if(audio_)SDL_ResumeAudioStreamDevice(audio_);begin();
 }
-Canvas::~Canvas(){SDL_ShowCursor();SDL_SetCursor(SDL_GetDefaultCursor());if(moveCursor_)SDL_DestroyCursor(moveCursor_);if(stashCursor_)SDL_DestroyCursor(stashCursor_);if(softTexture_)SDL_DestroyTexture(softTexture_);if(frameTexture_)SDL_DestroyTexture(frameTexture_);textCache_.clear();textures_.clear();for(auto& [_,f]:fonts_)TTF_CloseFont(f);if(audio_)SDL_DestroyAudioStream(audio_);if(renderer_)SDL_DestroyRenderer(renderer_);if(window_)SDL_DestroyWindow(window_);TTF_Quit();SDL_Quit();}
+Canvas::~Canvas(){SDL_ShowCursor();SDL_SetCursor(SDL_GetDefaultCursor());if(frameTexture_)SDL_DestroyTexture(frameTexture_);textCache_.clear();textures_.clear();for(auto& [_,f]:fonts_)TTF_CloseFont(f);if(audio_)SDL_DestroyAudioStream(audio_);if(renderer_)SDL_DestroyRenderer(renderer_);if(window_)SDL_DestroyWindow(window_);TTF_Quit();SDL_Quit();}
 void Canvas::begin(bool fitViewport){
  int w=1,h=1;SDL_GetWindowSize(window_,&w,&h);
  if(previewViewport_){w=previewViewport_->width;h=previewViewport_->height;}
@@ -107,20 +104,6 @@ void Canvas::begin(bool fitViewport){
  if(!frameTexture_){frameTexture_=SDL_CreateTexture(renderer_,SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,needW,needH);if(!frameTexture_)throw std::runtime_error(SDL_GetError());SDL_SetTextureScaleMode(frameTexture_,SDL_SCALEMODE_LINEAR);frameWidth_=needW;frameHeight_=needH;}
  SDL_SetRenderTarget(renderer_,frameTexture_);SDL_SetRenderScale(renderer_,pixelScaleX_,pixelScaleY_);SDL_SetRenderDrawColor(renderer_,0,130,190,255);SDL_RenderClear(renderer_);++frame_;
 }
-void Canvas::softenScene(){
- const int w=std::max(1,int(width_/2)),h=std::max(1,int(height_/2));
- if(softTexture_&&(softWidth_!=w||softHeight_!=h)){SDL_DestroyTexture(softTexture_);softTexture_=nullptr;}
- if(!softTexture_){softTexture_=SDL_CreateTexture(renderer_,SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,w,h);if(!softTexture_)throw std::runtime_error(SDL_GetError());softWidth_=w;softHeight_=h;SDL_SetTextureScaleMode(softTexture_,SDL_SCALEMODE_LINEAR);}
- constexpr std::array<float,5> weights{.06136f,.24477f,.38774f,.24477f,.06136f};
- SDL_SetRenderTarget(renderer_,softTexture_);SDL_SetRenderScale(renderer_,1,1);SDL_SetRenderDrawColor(renderer_,0,0,0,255);SDL_RenderClear(renderer_);
- SDL_SetTextureBlendMode(frameTexture_,SDL_BLENDMODE_ADD);
- for(int i=0;i<5;++i){SDL_SetTextureAlphaModFloat(frameTexture_,weights[i]);SDL_FRect r{float(i-2)*.8f,0,float(w),float(h)};SDL_RenderTexture(renderer_,frameTexture_,nullptr,&r);}
- SDL_SetTextureAlphaModFloat(frameTexture_,1);SDL_SetTextureBlendMode(frameTexture_,SDL_BLENDMODE_NONE);
- SDL_SetRenderTarget(renderer_,frameTexture_);SDL_SetRenderScale(renderer_,pixelScaleX_,pixelScaleY_);SDL_SetRenderDrawColor(renderer_,0,0,0,255);SDL_RenderClear(renderer_);
- SDL_SetTextureBlendMode(softTexture_,SDL_BLENDMODE_ADD);
- for(int i=0;i<5;++i){SDL_SetTextureAlphaModFloat(softTexture_,weights[i]);SDL_FRect r{0,float(i-2)*1.6f,width_,height_};SDL_RenderTexture(renderer_,softTexture_,nullptr,&r);}
- SDL_SetTextureAlphaModFloat(softTexture_,1);SDL_SetTextureBlendMode(softTexture_,SDL_BLENDMODE_NONE);
-}
 void Canvas::composeWindow(){
  SDL_SetRenderTarget(renderer_,nullptr);int pw=1,ph=1;SDL_GetWindowSizeInPixels(window_,&pw,&ph);SDL_SetRenderScale(renderer_,float(pw)/windowWidth_,float(ph)/windowHeight_);
  SDL_SetRenderDrawColor(renderer_,0,91,139,255);SDL_RenderClear(renderer_);
@@ -141,6 +124,11 @@ SDL_FPoint Canvas::inputPoint(float x,float y,bool normalized)const{
 WorldPoint Canvas::toWorld(float x,float y)const{return {double(x/width_)*waterWidth,double(y/height_)*tankHeight};}
 SDL_FPoint Canvas::toScreen(WorldPoint p)const{return {float(p.x/waterWidth)*width_,float(p.y/tankHeight)*height_};}
 void Canvas::fill(Rect r,Color c){r.x+=originX_;r.y+=originY_;SDL_SetRenderDrawColor(renderer_,c.r,c.g,c.b,c.a);SDL_FRect rect{r.x,r.y,r.w,r.h};SDL_RenderFillRect(renderer_,&rect);}
+void Canvas::triangle(const std::array<SDL_FPoint,3>& points,Color tint){
+ std::array<SDL_Vertex,3> vertices{};
+ for(std::size_t i=0;i<points.size();++i)vertices[i]={{points[i].x+originX_,points[i].y+originY_},color(tint),{}};
+ constexpr std::array<int,3> indices{0,1,2};mesh(nullptr,vertices,indices);
+}
 void Canvas::clip(Rect r){
  SDL_Rect clip{int(std::floor(r.x+originX_)),int(std::floor(r.y+originY_)),int(std::ceil(r.w)),int(std::ceil(r.h))};
  if(!SDL_SetRenderClipRect(renderer_,&clip))throw std::runtime_error(SDL_GetError());
@@ -253,13 +241,13 @@ Texture* Canvas::texture(std::string_view key){
   for(int y=0;y<rgba->h;++y)for(int x=0;x<rgba->w;++x){auto* p=static_cast<Uint8*>(rgba->pixels)+y*rgba->pitch+x*4;p[0]=p[1]=p[2]=255;}
   surface=std::move(rgba);
  }
- if(species||key.starts_with("details/")){
+ if(species){
   // Keep approved source PNGs intact. Normalize their transparent padding and
   // orientation at load time so every UI and swimming mesh uses the same art.
   Surface rgba(SDL_ConvertSurface(surface.get(),SDL_PIXELFORMAT_RGBA32),SDL_DestroySurface);
   if(!rgba)throw std::runtime_error(SDL_GetError());
   int left=rgba->w,top=rgba->h,right=-1,bottom=-1;
-  const int threshold=species?4:8;
+  const int threshold=4;
   for(int y=0;y<rgba->h;++y){const auto* row=static_cast<const Uint8*>(rgba->pixels)+y*rgba->pitch;for(int x=0;x<rgba->w;++x)if(row[x*4+3]>threshold){left=std::min(left,x);right=std::max(right,x);top=std::min(top,y);bottom=std::max(bottom,y);}}
   if(right<left)throw std::runtime_error("Species artwork is empty: "+source);
   left=std::max(0,left-2);top=std::max(0,top-2);right=std::min(rgba->w-1,right+2);bottom=std::min(rgba->h-1,bottom+2);
@@ -274,7 +262,7 @@ Texture* Canvas::texture(std::string_view key){
   }
   // 512 pixels exceeds the largest displayed fish card while bounding GPU
   // memory when all 46 species and their outlines have been viewed.
-  if(key!="details/frame.png"&&key!="details/popover-frame.png"&&std::max(cropped->w,cropped->h)>512){
+  if(std::max(cropped->w,cropped->h)>512){
    while(std::max(cropped->w,cropped->h)>1024)cropped=halfSize(*cropped);
    const float finalScale=512.f/float(std::max(cropped->w,cropped->h));
    Surface scaled(SDL_CreateSurface(std::max(1,int(std::lround(cropped->w*finalScale))),std::max(1,int(std::lround(cropped->h*finalScale))),SDL_PIXELFORMAT_RGBA32),SDL_DestroySurface);
@@ -286,21 +274,16 @@ Texture* Canvas::texture(std::string_view key){
  auto value=std::make_unique<Texture>();value->width=surface->w;value->height=surface->h;value->value=upload(renderer_,surface.get());
  Surface level(SDL_ConvertSurface(surface.get(),SDL_PIXELFORMAT_RGBA32),SDL_DestroySurface);if(!level)throw std::runtime_error(SDL_GetError());
  while(std::min(level->w,level->h)>16){level=halfSize(*level);value->levels.push_back(upload(renderer_,level.get()));}
- auto* result=value.get();textures_.emplace(key,std::move(value));++textureLoads_;return result;
+ auto* result=value.get();textures_.emplace(key,std::move(value));return result;
 }
-void Canvas::preload(std::string_view name){texture(name);}
-void Canvas::retainPreparedText(bool enabled){retainText_=enabled;}
 TTF_Font* Canvas::font(int pixels,bool display,bool reference,bool medium,bool rounded,bool heavy){int key=pixels+(heavy?5000:rounded?4000:medium?3000:reference?2000:display?1000:0);auto i=fonts_.find(key);if(i!=fonts_.end())return i->second;auto path=heavy?assets_/"fonts/Nunito-ExtraBold.ttf":rounded?assets_/"fonts/Baloo2-ExtraBold.ttf":medium?assets_/"fonts/Nunito-Medium.ttf":reference?assets_/"fonts/LuckiestGuy-Regular.ttf":display?displayFontPath_:fontPath_;auto* f=TTF_OpenFont(path.string().c_str(),float(pixels));if(!f)throw std::runtime_error(SDL_GetError());fonts_[key]=f;return f;}
 float Canvas::textWidth(std::string_view label,float size,bool display,bool medium,bool rounded,bool heavy,bool reference){
  int w{},h{};const int pixels=std::clamp(int(std::round(size)),9,256);
  if(!TTF_GetStringSize(font(pixels,display,reference,medium,rounded,heavy),label.data(),label.size(),&w,&h))throw std::runtime_error(SDL_GetError());
  return float(w);
 }
-void Canvas::text(std::string_view label,float x,float y,float size,Color c,bool center,float maxWidth,bool display,bool reference,bool gold,bool medium,double angle,float horizontalScale,bool rounded,bool heavy){
+void Canvas::text(std::string_view label,float x,float y,float size,Color c,bool center,float maxWidth,bool display,bool reference,bool gold,bool medium,double angle,float horizontalScale,bool rounded,bool heavy,float renderScale){
  if(label.empty())return;
- // The larger catalog layout needs room for all labels at 3x phone density.
- // This is a ceiling, not an allocation; smaller screens use less memory.
- constexpr std::size_t preparedTextBudget=192*1024*1024;
  x+=originX_;y+=originY_;const int pixels=std::clamp(static_cast<int>(std::round(size)),9,256);
  // Rasterize above the physical display density, then filter once into the
  // native frame. Reuse the same white glyphs for every outline and tint.
@@ -313,24 +296,22 @@ void Canvas::text(std::string_view label,float x,float y,float size,Color c,bool
   Surface level(SDL_ConvertSurface(sf,SDL_PIXELFORMAT_RGBA32),SDL_DestroySurface);SDL_DestroySurface(sf);if(!level)throw std::runtime_error(SDL_GetError());
   while(std::min(level->w,level->h)>8){level=halfSize(*level);t->levels.push_back(upload(renderer_,level.get()));}
   const auto bytes=t->bytes();
-  // Keep prepared catalog labels separate from changing timers and receipts.
-  // Otherwise visiting later pages evicts the labels loaded at startup.
-  const bool retain=retainText_&&retainedTextBytes_+bytes<=preparedTextBudget;
-  while(!retain&&textBytes_-retainedTextBytes_+bytes>32*1024*1024){
+  // Bound changing timers, receipts and shop labels to the same cache budget.
+  while(textBytes_+bytes>32*1024*1024){
    auto oldest=textCache_.end();
    for(auto entry=textCache_.begin();entry!=textCache_.end();++entry)
-    if(!entry->second.retained&&(oldest==textCache_.end()||entry->second.used<oldest->second.used))oldest=entry;
+    if(oldest==textCache_.end()||entry->second.used<oldest->second.used)oldest=entry;
    if(oldest==textCache_.end())break;
    textBytes_-=oldest->second.texture->bytes();textCache_.erase(oldest);
   }
-  textBytes_+=bytes;if(retain)retainedTextBytes_+=bytes;
-  it=textCache_.emplace(key,TextEntry{std::move(t),frame_,float(logicalW),float(logicalH),retain}).first;++textRasterizations_;
+  textBytes_+=bytes;
+  it=textCache_.emplace(key,TextEntry{std::move(t),frame_,float(logicalW),float(logicalH)}).first;
+  ++textRasterizations_;
  }
- if(retainText_&&!it->second.retained&&retainedTextBytes_+it->second.texture->bytes()<=preparedTextBudget){it->second.retained=true;retainedTextBytes_+=it->second.texture->bytes();}
  it->second.used=frame_;auto& entry=it->second;auto& t=*entry.texture;
- const float width=entry.width*std::clamp(horizontalScale,.5f,2.f);
+ const float width=entry.width*std::clamp(horizontalScale,.5f,2.f)*renderScale;
  const float factor=maxWidth>0&&width>maxWidth?maxWidth/width:1.f;
- SDL_FRect dst{x-(center?width*factor*.5f:0),y,width*factor,entry.height*factor};
+ SDL_FRect dst{x-(center?width*factor*.5f:0),y,width*factor,entry.height*factor*renderScale};
  auto* glyphs=t.sampled(dst.w*pixelScaleX_*1.25f,dst.h*pixelScaleY_*1.25f);
  SDL_SetTextureColorMod(glyphs,gold?255:c.r,gold?255:c.g,gold?255:c.b);SDL_SetTextureAlphaMod(glyphs,c.a);
  if(gold){const auto top=color({255,255,163,c.a}),bottom=color({255,170,0,c.a});std::array<SDL_Vertex,4> v{{{{dst.x,dst.y},top,{0,0}},{{dst.x+dst.w,dst.y},top,{1,0}},{{dst.x+dst.w,dst.y+dst.h},bottom,{1,1}},{{dst.x,dst.y+dst.h},bottom,{0,1}}}};const std::array<int,6> indices{0,1,2,0,2,3};mesh(glyphs,v,indices);}
@@ -338,29 +319,51 @@ void Canvas::text(std::string_view label,float x,float y,float size,Color c,bool
  else SDL_RenderTexture(renderer_,glyphs,nullptr,&dst);
 }
 void Canvas::image(std::string_view name,Rect r,double angle,SDL_FPoint pivot,float alpha,bool flip,Color tint){r.x+=originX_;r.y+=originY_;auto* t=texture(name);float sx{},sy{};SDL_GetRenderScale(renderer_,&sx,&sy);auto* sampled=t->sampled(r.w*sx,r.h*sy);SDL_FRect dst{r.x,r.y,r.w,r.h};SDL_FPoint p{pivot.x*r.w,pivot.y*r.h};SDL_SetTextureColorMod(sampled,tint.r,tint.g,tint.b);SDL_SetTextureAlphaModFloat(sampled,std::clamp(alpha*tint.a/255.f,0.f,1.f));SDL_RenderTextureRotated(renderer_,sampled,nullptr,&dst,angle,&p,flip?SDL_FLIP_HORIZONTAL:SDL_FLIP_NONE);SDL_SetTextureAlphaModFloat(sampled,1.f);SDL_SetTextureColorMod(sampled,255,255,255);}
-void Canvas::imageRows(std::string_view name,Rect r,std::span<const SDL_FPoint> rows){
- if(r.w<=0||r.h<=0||rows.size()<2)return;
+void Canvas::roundedImage(std::string_view name,Rect rect,float radius,float feather){
+ if(rect.w<=0||rect.h<=0)return;
+ radius=std::clamp(radius,0.f,std::min(rect.w,rect.h)*.5f);
+ if(radius==0){image(name,rect);return;}
+ rect.x+=originX_;rect.y+=originY_;
  auto* t=texture(name);float sx{},sy{};SDL_GetRenderScale(renderer_,&sx,&sy);
- const float scale=r.h/t->height;
- std::vector<SDL_Vertex> vertices;std::vector<int> indices;
- vertices.reserve(rows.size()*2);indices.reserve((rows.size()-1)*6);
- for(std::size_t i=0;i<rows.size();++i){
-  const float y=r.y+originY_+rows[i].y*scale,v=rows[i].x/t->height;
-  vertices.push_back({{r.x+originX_,y},{1,1,1,1},{0,v}});
-  vertices.push_back({{r.x+originX_+r.w,y},{1,1,1,1},{1,v}});
-  if(i+1<rows.size()){const int k=int(i)*2;indices.insert(indices.end(),{k,k+1,k+2,k+1,k+3,k+2});}
+ auto* sampled=t->sampled(rect.w*sx,rect.h*sy);
+ constexpr int segments=16,ring=4*(segments+1);
+ feather=std::clamp(feather,0.f,radius);
+ const float fringe=feather>0?feather:1.f/std::max(pixelScaleX_,pixelScaleY_);
+ auto vertex=[&](float x,float y,float alpha){return SDL_Vertex{{x,y},{1,1,1,alpha},{std::clamp((x-rect.x)/rect.w,0.f,1.f),std::clamp((y-rect.y)/rect.h,0.f,1.f)}};};
+ std::array<SDL_Vertex,1+ring*2> vertices{};
+ vertices[0]=vertex(rect.x+rect.w*.5f,rect.y+rect.h*.5f,1);
+ const std::array<SDL_FPoint,4> centers{{{rect.x+rect.w-radius,rect.y+radius},{rect.x+rect.w-radius,rect.y+rect.h-radius},{rect.x+radius,rect.y+rect.h-radius},{rect.x+radius,rect.y+radius}}};
+ radius-=feather;
+ for(int corner=0;corner<4;++corner)for(int step=0;step<=segments;++step){
+  const double angle=(-90.+corner*90.+step*90./segments)*pi/180.;
+  const float nx=float(std::cos(angle)),ny=float(std::sin(angle));
+  const float x=centers[corner].x+nx*radius,y=centers[corner].y+ny*radius;
+  const int i=1+corner*(segments+1)+step;
+  vertices[i]=vertex(x,y,1);vertices[i+ring]=vertex(x+nx*fringe,y+ny*fringe,0);
  }
- // Shared edges keep adjacent bands seamless at fractional display scales.
- mesh(t->sampled(r.w*sx,r.h*sy),vertices,indices);
+ std::array<int,ring*9> indices{};
+ for(int i=1;i<=ring;++i){
+  const int next=i==ring?1:i+1;const std::array<int,9> triangle{0,i,next,i,next,i+ring,next,next+ring,i+ring};
+  std::copy(triangle.begin(),triangle.end(),indices.begin()+(i-1)*9);
+ }
+ mesh(sampled,vertices,indices);
+}
+void Canvas::icon(std::string_view name,Rect r,float alpha,bool flip,Color tint){
+ auto* t=texture(name);float scale=std::min(r.w/float(t->width),r.h/float(t->height));
+ image(name,{r.x+(r.w-float(t->width)*scale)*.5f,r.y+(r.h-float(t->height)*scale)*.5f,float(t->width)*scale,float(t->height)*scale},0,{.5f,.5f},alpha,flip,tint);
+}
+void Canvas::label(std::string_view s,float x,float y,float size,bool center,float maxWidth,Color c,float stroke,Color outline){
+ if(stroke>0){outline.a=c.a;for(int i=0;i<8;++i){float a=float(i)*.78539816f;text(s,x+std::cos(a)*stroke,y+std::sin(a)*stroke+1,size,outline,center,maxWidth,true);}}
+ text(s,x,y,size,c,center,maxWidth,true);
 }
 SDL_FPoint Canvas::fishSize(const Species& s,const Fish& f){
- auto name=fishArt(s.id,f.id.value);auto* art=texture(name);
+ auto name=fishArt(s.id);auto* art=texture(name);
  float w=float(s.nominalLength*ageScale(s,f)*worldScale()*2.);
  return {w,w*float(art->height)/float(art->width)};
 }
 void Canvas::fish(const Species& s,const Fish& f,double alpha,bool held,Color outline,bool selected,bool reduced,Care appearance,double time){
  const auto pose=fishPose(f,alpha);auto p=toScreen(pose.position);if(f.egg){if(!reduced)p.y+=float(std::sin(f.motion.drift*2.4+f.motion.phase)*1.6*height_/635.);float size=std::max(20.f,worldScale()*30.f);icon("ui/egg.png",{p.x-size*.5f,p.y-size*.5f,size,size});return;}
- const auto art=fishArt(s.id,f.id.value);auto* t=texture(art.substr(0,art.size()-4)+(f.dead?"-dead.png":".png"));auto size=fishSize(s,f);double width=size.x,height=size.y;double angle=f.dead?pi+pose.pitch:-pose.facing*pose.pitch;
+ const auto art=fishArt(s.id);auto* t=texture(art.substr(0,art.size()-4)+(f.dead?"-dead.png":".png"));auto size=fishSize(s,f);double width=size.x,height=size.y;double angle=f.dead?pi+pose.pitch:-pose.facing*pose.pitch;
  const bool sick=appearance==Care::Sick;
  const double amp=f.dead?0:width*.025*std::min(1.15,pose.speed/50.)*(held?.45:sick?.18:1.)*(reduced?.25:1.);
  const bool koi=s.id=="koi",flashlight=s.id=="flashlightFish"&&!f.dead&&!reduced;
@@ -397,7 +400,7 @@ void Canvas::fish(const Species& s,const Fish& f,double alpha,bool held,Color ou
  mesh(t->sampled(size.x*pixelScaleX_,size.y*pixelScaleY_),vertices,idx);
 }
 void Canvas::scene(const Domain& d,double interpolation,double time,Tool tool,FishId held,bool careBadges,FishId hidden,const Decoration* preview,std::uint64_t selectedDecor,bool previewHighlight,bool backgroundArtwork){
- if(backgroundArtwork){auto* background=texture("lagoon/reef.png");float cover=std::max(width_/float(background->width),height_/float(background->height));float bw=float(background->width)*cover,bh=float(background->height)*cover;image("lagoon/reef.png",{(width_-bw)*.5f,height_-bh,bw,bh});}
+ if(backgroundArtwork){const auto* tank=d.tank(d.state().activeTank);environment({0,0,width_,height_},tank?tank->backgroundId:"sunlit-lagoon");}
  if(d.state().settings.tankLook==1)fill({0,0,width_,height_},{232,174,141,27});if(d.state().settings.tankLook==2)fill({0,0,width_,height_},{57,49,112,45});
 
  std::vector<const Decoration*> decor;for(const auto& item:d.state().decor)if(item.tank==d.state().activeTank&&!item.stored&&(!preview||preview->id!=item.id))decor.push_back(&item);
@@ -423,7 +426,7 @@ void Canvas::scene(const Domain& d,double interpolation,double time,Tool tool,Fi
   decoration(def,*item,time,motion,newPreview?.92f:1.f,&fxBudget,allow,(item==preview&&previewHighlight)||item->id==selectedDecor);
  }
  clearClip();
- const auto drawFish=[&](const Fish& f){if(!f.stashed&&f.tank==d.state().activeTank&&f.id!=hidden){auto& s=*d.content().find(f.species);Color outline{0,0,0,0};if(tool==Tool::Sell&&sellable(s,f))outline={255,219,119,255};if(f.id==held)outline={183,255,249,255};fish(s,f,interpolation,f.id==held,outline,f.id==held,d.state().settings.reducedMotion,careOf(s,f,d.state().simNow),time);
+ const auto drawFish=[&](const Fish& f){if(!f.stashed&&f.tank==d.state().activeTank&&f.id!=hidden){auto& s=*d.content().find(f.species);Color outline{0,0,0,0};if(tool==Tool::Sell&&sellable(s,f))outline={255,219,119,255};if(f.id==held&&tool!=Tool::Select)outline={183,255,249,255};fish(s,f,interpolation,f.id==held,outline,f.id==held,d.state().settings.reducedMotion,careOf(s,f,d.state().simNow),time);
   Care care=careOf(s,f,d.state().simNow);if(careBadges&&!f.egg&&!f.dead&&care!=Care::Fed&&f.id!=held){const auto pose=fishPose(f,interpolation);auto p=toScreen(pose.position);float offset=float(s.nominalLength*ageScale(s,f)*.44)*worldScale();float x=std::clamp(p.x-float(pose.facing*std::cos(pose.pitch))*offset,38.f,width_-38.f);float y=p.y+float(std::sin(pose.pitch)*std::abs(pose.facing))*offset-28;bool ill=care==Care::Sick;round({x-28,y,56,18},ill?Color{178,218,127,255}:care==Care::Urgent?Color{248,158,115,255}:Color{248,220,125,255},9,{65,102,100,255},1,false);text(ill?"SICK":"HUNGRY",x,y+1,10,{54,79,83,255},true,50,true);}
  }};
  for(const auto& fish:d.state().fish)drawFish(fish);

@@ -16,13 +16,9 @@ Food starts at 38 units per second, accelerates at 34, caps at 105, rests for 30
 
 ## Presentation
 
-Menu motion is defined in `src/menu_motion.cpp`. Panels grow from 84 percent width and 80 percent height, rise 24 logical units, and fade in. The spring peaks near 165 milliseconds and finishes settling by 580 milliseconds. Closing uses critical damping and finishes within 320 milliseconds. Reversing an opening or closing menu preserves its current position and velocity.
+The current HUD uses Clay bounds from `hud.cpp` and the four-unit tokens in `hud_tokens.hpp`. `shop_theme.cpp` draws the shared Shop and dialog surfaces. The tank switcher and Shop tank cards use the bounds in `hud_tank_switcher.cpp`. The old panel spring animation and menu preparation path have been removed.
 
-Tanks expands from its lower left corner. Fish details expand from the pointer beside the selected fish. Select options open 45 milliseconds apart. Buttons compress to 95 percent over 75 milliseconds and spring back on release. Reduced Motion shows menus immediately and disables the spring effects.
-
-The renderer draws a panel and its text into one layer at the native display resolution. Tap targets use the same transform. A closing panel retains only its artwork, with no active controls, and releases the layer when the exit ends. The Shop backdrop fades with the panel and consumes dismissal taps.
-
-`View::prepareMenus` prepares the initial menu layouts, artwork and text before the first interactive frame. This prevents the first Shop or Mastery tap from decoding images and rasterizing labels. It uses a separate view and does not change saved state. Startup preparation time is reported as `menu_preparation_ms` by `--report`. The `menu_motion` test checks first-open cache reuse, animation timing, tap targets and Reduced Motion on phone and tablet layouts.
+Render tests cover the current layout at phone, tablet, desktop and portrait sizes. `tests/startup_smoke.cmake` checks default startup, bundled assets, Shop variants and review saves. Startup time is available in the `startup_ms` report field.
 
 The jar pivots around its mouth. The net pivots around its hoop. Receipts last 800 milliseconds. Repeated actions use a bounded effect queue.
 
@@ -32,4 +28,4 @@ Use `--fixture`, `--capture`, `--sequence`, and `--report` for controlled review
 
 Fish images are transparent PNGs with matching true grayscale corpse images and alpha masks for outlines. Required metadata includes stable ID, pixel dimensions, logical dimensions, pivot, provenance, and hash. White-alpha masks must preserve the exact source silhouette. An unseen species interpretation is not an original-game asset.
 
-The generated-art tool contains species shape and palette decisions. Review every changed species at both shop size and aquarium size. Do not accept an import just because every filename exists.
+Canonical source artwork and its provenance are stored in `assets/species`. Review every changed species at both shop size and aquarium size. Do not accept an import just because every filename exists.

@@ -1,0 +1,56 @@
+{
+  "mode": "built-in image_gen",
+  "prompt": "Generate a transparent image with real alpha. A single isolated 2D painted cartoon game UI reward ribbon, following the reward ribbons below the fish in the reference screenshot. Only the ribbon asset, no screenshot, fish, water, or interface. Wide horizontal asset artwork aspect 4.3:1, at least 860 by 200 pixels artwork, centered tight transparent padding. Cream parchment main ribbon occupies left 60%, with forked fishtail left edge, subtle warm ivory gradient, thin warm brown/gold outline, softly highlighted top rim and minimal shadow. Gold circular coin medallion overlaps the cream ribbon near x16%, almost full height, embossed five-point gold star and orange gold rim exactly like reference. Blank cream number field between medallion and x60%. Attached deep turquoise teal ribbon extends from x58% to right100%, swallowtail fork at far right, gold edge, dark teal lower shading and bright teal top highlight. Blank teal field for later game text. No text, no numbers, no letters anywhere. Coin star is only symbol. Match the reference's hand painted friendly casual aquarium game aesthetic and the exact cream/gold/teal ribbon silhouette. Absolutely transparent background, no white, no checkerboard, no ground plane, no background rectangle. Flat front-facing crisp production sprite.",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a0ade3-a615-76c2-9439-a8f6e60ffaaf/exec-f2aec94d-c6c5-44ed-9e89-2696f630bc32.png",
+  "reference": "/Users/amoghrijal/.codex/generated_images/01a0a995-f596-7003-bdeb-49f43557c584/exec-baf91aeb-d858-49c4-875e-9bd8557f5c85.png",
+  "dimensions": [
+    1923,
+    818
+  ],
+  "mode_png": "RGBA",
+  "alpha_range": [
+    0,
+    255
+  ],
+  "alpha_bounds": [
+    48,
+    21,
+    1891,
+    777
+  ],
+  "visible_alpha_128_bounds": [
+    50,
+    224,
+    1888,
+    599
+  ],
+  "source_rectangle": {
+    "x": 50,
+    "y": 224,
+    "width": 1838,
+    "height": 375
+  },
+  "text_zones_original_pixels": {
+    "coins": {
+      "left": 550,
+      "top": 310,
+      "right": 1090,
+      "bottom": 530,
+      "center": [
+        820,
+        420
+      ]
+    },
+    "xp": {
+      "left": 1210,
+      "top": 330,
+      "right": 1770,
+      "bottom": 520,
+      "center": [
+        1490,
+        425
+      ]
+    }
+  },
+  "processing": "Original PNG copied unchanged. No background removal or image editing."
+}

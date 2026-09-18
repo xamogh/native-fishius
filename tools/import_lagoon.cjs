@@ -5,14 +5,14 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const sharp = require(process.env.SHARP_MODULE || '/Users/amoghrijal/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/sharp');
 const root = path.resolve(__dirname, '..');
-const sizes = {panel:[1600,900], sign:[800,240], card:[504,866], buy:[696,231], banner:[1632,324], shop:[320,320], food:[320,320], reef:[2048,963]};
+const sizes = {food:[320,320]};
 
 async function main() {
  const source = JSON.parse(fs.readFileSync(path.join(root,'work/lagoon-redesign/generation.json')));
  const manifestPath = path.join(root,'assets/manifest.json');
  const manifest = JSON.parse(fs.readFileSync(manifestPath));
  const records = [];
- for (const asset of source.assets) {
+ for (const asset of source.assets.filter(asset => asset.name === 'food')) {
   const meta = await sharp(asset.source).metadata();
   const {data,info} = await sharp(asset.source).ensureAlpha().raw().toBuffer({resolveWithObject:true});
   const {width:w,height:h} = info;

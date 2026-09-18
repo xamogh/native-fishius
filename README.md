@@ -2,11 +2,7 @@
 
 The game uses native SDL rendering, textured fish meshes, an event-driven care model, physical food, a local wallet, tanks, growing and display fish, inventory, and JSON saves. The supplied behavior contract is the movement and interaction reference. The supplied spreadsheet is the catalog source. No original game source or running application is required.
 
-Open [Run Aquarium Studio.command](Run%20Aquarium%20Studio.command) to edit the
-general dialog, currency shop cards, tank upgrade panel and currency HUD.
-The editor shares the game renderer and supports reusable components, layout
-rules, direct text editing, comparisons, purchase tests and recoverable drafts.
-See the [Studio guide](docs/aquarium-studio.md) for controls and verification.
+Open `Run Aquarium.command` to build and run the current interface with your saved game. The old interface and its Studio editor have been removed. `--hud-layout` remains a harmless alias for older launch commands; it no longer selects a different interface.
 
 ## Delivery status
 
@@ -56,23 +52,27 @@ The executable is named `aquarium` in the desktop build directory selected by `C
 
 Use `aquarium --help` to inspect the actual command-line options. `--fresh` opens an ephemeral new-game session. `--save PATH` selects an explicit local save. Do not use a production save when running review fixtures.
 
-## Startup
+## Startup and play
 
-Fishius shows a reef loading screen while it prepares fish artwork, all Shop and Collection pages, menu labels, tools, and the starting aquarium. Progress follows completed preparation steps. The Shop keeps prepared labels in a separate, bounded cache, so swipes do not trigger first-use image decoding or text rendering. Cards outside the visible area are skipped.
+The game restores your save, draws the current reef loading screen and prepares the opening Shop page, tank switcher and Tank Shop before opening the aquarium. Their artwork and labels are cached so the first click does not decode and upload menu artwork. Other catalog pages load as you browse. Build outputs replace their asset folders so deleted artwork cannot remain in a bundle.
 
-New development games use a separate `save-v4.json` file. Older saves are not migrated. Use `--loading-capture PATH` to capture the loading screen during a review run.
+- Open Shop to browse fish, plants, decorations, treasure, backgrounds and tanks. Fish cards select a species for placement. Each completed tap in the water buys and places an egg. Done or Escape cancels placement for free.
+- Choose Food or press F, then tap the water to feed. Choose the Rehome net or press S to sell eligible fish with one tap. Eggs and Babies cannot be sold. Opening a menu turns these tools off.
+- Tap a fish without a tool to see its care, growth and rewards. Keep retains an adult as a display fish and pays its one-time reward. Rehome from fish details asks for confirmation.
+- Tank opens the porthole switcher for owned tanks. Unlock and expand tanks from Shop's Tanks tab, using either Coins or Pearls. Tank 6 remains unavailable until its catalog rules are defined.
+- Buy or select a background from Shop. Each tank keeps its own background.
 
-## Play
+Bag, Projects, Rewards and Settings currently open empty dialogs. Plant and decoration cards show catalog prices, but their purchase and placement flows are not connected to the current interface. Treasure purchases are also unavailable. Stored items and settings remain in saves; removing the old screens does not erase that data.
 
-Open Shop and choose a fish to start egg placement. The egg follows the pointer, and each primary tap buys and places one egg at that spot. The hint shows the species and price per egg. Keep tapping to place more, or choose Done or press Escape to stop. Choosing a fish or cancelling placement costs nothing. A failed purchase ends placement without charging. Free Bubble Eye Goldfish and premium fish create permanent companions and stop after one placement.
+The launch script saves to `local-data/save.json`. Running the executable directly without `--save` uses its existing platform save location. Use `--fresh` or a fixture for reviews that must not change a player's save.
 
-Food drops pellets. Opening another menu turns off Food or Sell and returns to normal selection. Closing the menu keeps those tools off. Hungry fish notice and pursue them at individual times. Tap a fish to open its details. Use Arrange tank from Bag to enter decorate mode, then tap a plant or decoration to select it. Drag it to preview a move, then press the green tick to save the position. The red X cancels the move. Stash stores the selected copy. Growing fish and eggs cannot be stored. Kept adults and premium companions can be stored and restored through Bag. Bag also opens stored decor so you can place it in the active tank without buying it again. Selecting a plant or decoration in Shop opens a draggable preview. Only the green tick purchases and places it. The red X cancels for free. Stored items use the same controls. The net opens the compact fish popover. Rehome shows the exact current coins and XP, with a small inline confirmation. At adulthood, Keep gives the same reward and retains a nonproducing display fish.
+```sh
+./build/desktop/aquarium --assets ./assets --fixture shop --ui-variant fish
+./build/desktop/aquarium --assets ./assets --fixture tanks
+./build/desktop/aquarium --assets ./assets --fixture tank-switcher
+```
 
-Tank controls switch owned tanks, unlock the next tank, and buy the next capacity step using either the workbook coin price or the pearl price. Each price button charges only its own currency. Growing capacity is 10, 15 or 20 per tank. Display fish have eight separate slots per tank. Keep stores excess display fish in Bag. Feeding is free, and hunger only pauses growth. Eggs still hatch after six seconds. Decor uses its own placement limit.
-
-Keyboard shortcuts: F for Food, S for Sell, B for Shop, I for inventory, and Escape to close or cancel. Mouse and touch use the same ownership rules.
-
-Each level-up pays its exact one-time v4 grant. Buying fish or decor gives no account XP. Keep and Rehome settle a saved purchase quote once, even after a retry or reload. See `docs/workbook-implementation.md` for the completed steps and deferred systems.
+See [the current interface guide](docs/clay-hud.md) for controls and [the feature matrix](docs/feature-matrix.md) for remaining work.
 
 ## Tests
 

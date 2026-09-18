@@ -12,7 +12,7 @@ def allowed(path):
  rel=path.relative_to(ROOT)
  if any(part in excluded_dirs for part in rel.parts):return False
  if path.suffix.lower() in font_ext or path.name in private_files:return False
- if rel.parts[0]=='third_party' and len(rel.parts)>1 and rel.parts[1] not in {'nlohmann','mobile-dependency-lock.json'}:return False
+ if rel.parts[0]=='third_party' and len(rel.parts)>1 and rel.parts[1] not in {'nlohmann','clay','mobile-dependency-lock.json'}:return False
  if path.name.startswith('.env') or path.suffix.lower() in {'.keystore','.jks','.p12','.mobileprovision'}:return False
  return path.is_file()
 results=[]
@@ -21,7 +21,7 @@ if p.exists():
  try:results=json.loads(p.read_text())
  except Exception:results=[]
 # Record expected-but-absent stages as not run instead of omitting their absence.
-expected=['configure-domain','test-domain','configure-desktop','capture-tanks','capture-shop','capture-collection','capture-settings','performance-40-fish','configure-sanitize','test-sanitize','asset-integrity']
+expected=['configure-domain','test-domain','configure-desktop','capture-tanks','capture-shop','capture-tank-switcher','capture-settings','performance-40-fish','configure-sanitize','test-sanitize','asset-integrity']
 for name in expected:
  if not any(x.get('step')==name for x in results):results.append({'step':name,'status':'not run or no result recorded','exit_code':None})
 source_files=[p for p in ROOT.rglob('*') if allowed(p)]

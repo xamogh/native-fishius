@@ -6,7 +6,7 @@
 namespace aq {
 FishPlacementLayout layoutFishPlacement(float w,float h,Insets safe,float minimumTouch){
  const float u=std::min(w/1608.f,h/908.f);
- Rect banner{(w-480*u)*.5f,h-safe.bottom-96*u,480*u,64*u};
+ Rect banner{(w-120*u)*.5f,h-safe.bottom-96*u,120*u,64*u};
  return {{0,0,w,h},{safe.left+24*u,safe.top+96*u,w-safe.left-safe.right-48*u,h-safe.top-safe.bottom-120*u},banner,{banner.x+banner.w-120*u,banner.y,120*u,64*u},u,layoutHud(w,h,safe,minimumTouch)};
 }
 namespace {
@@ -14,8 +14,8 @@ bool canPlace(const FishPlacementLayout& l,SDL_FPoint p){
  if(!l.water.has(p.x,p.y)||l.banner.has(p.x,p.y)||hudHit(l.hud,p))return false;
  return true;
 }
-void finish(FishPlacement& state){state.species.clear();state.error.clear();state.pointerDown=state.cancelPressed=false;}
 }
+void cancelFishPlacement(FishPlacement& state){state.species.clear();state.error.clear();state.shortfall.reset();state.pointerDown=state.cancelPressed=false;}
 
 Result startFishPlacement(const Domain& domain,FishPlacement& state,std::string_view id){
  const auto* species=domain.content().find(id);
@@ -31,12 +31,13 @@ Result confirmFishPlacement(Session& session,FishPlacement& state,WorldPoint poi
   state.receipts.push_back({point,result.pearls<0?-result.pearls:-result.coins,result.xp,result.pearls<0,0});
   if(state.receipts.size()>24)state.receipts.erase(state.receipts.begin());
   if(const auto* species=session.domain().content().find(state.species))state.offer=session.domain().quote(*species);
- }else state.error=result.message.empty()?errorText(result.error):result.message;
+ }else if(result.error==Error::Funds){cancelFishPlacement(state);state.shortfall=result.shortfall;}
+ else state.error=result.message.empty()?errorText(result.error):result.message;
  return result;
 }
 PlacementEvent fishPlacementEvent(Session& session,FishPlacement& state,const FishPlacementLayout& l,const SDL_Event& event,SDL_FPoint point){
  if(!state.active())return PlacementEvent::None;
- if(event.type==SDL_EVENT_KEY_DOWN&&event.key.key==SDLK_ESCAPE){finish(state);return PlacementEvent::Cancelled;}
+ if(event.type==SDL_EVENT_KEY_DOWN&&event.key.key==SDLK_ESCAPE){cancelFishPlacement(state);return PlacementEvent::Cancelled;}
  if((event.type==SDL_EVENT_WINDOW_FOCUS_LOST||event.type==SDL_EVENT_WILL_ENTER_BACKGROUND)){state.pointerDown=state.cancelPressed=false;return PlacementEvent::None;}
  if(event.type==SDL_EVENT_MOUSE_MOTION&&canPlace(l,point))state.point={point.x/l.page.w*waterWidth,point.y/l.page.h*waterHeight};
  if(event.type==SDL_EVENT_MOUSE_BUTTON_DOWN&&event.button.button==SDL_BUTTON_LEFT){state.down=point;state.cancelPressed=l.cancel.has(point.x,point.y);state.pointerDown=canPlace(l,point);}
@@ -44,7 +45,7 @@ PlacementEvent fishPlacementEvent(Session& session,FishPlacement& state,const Fi
   const bool cancel=state.cancelPressed&&l.cancel.has(point.x,point.y);
   const bool place=state.pointerDown&&canPlace(l,point)&&std::hypot(point.x-state.down.x,point.y-state.down.y)<24*l.unit;
   state.pointerDown=state.cancelPressed=false;
-  if(cancel){finish(state);return PlacementEvent::Cancelled;}
+  if(cancel){cancelFishPlacement(state);return PlacementEvent::Cancelled;}
   if(place&&confirmFishPlacement(session,state,{point.x/l.page.w*waterWidth,point.y/l.page.h*waterHeight}))return PlacementEvent::Placed;
  }
  return PlacementEvent::None;
@@ -78,15 +79,14 @@ void paintPlacementReceipts(Canvas& canvas,const FishPlacement& state,float u){
 void paintFishPlacement(Canvas& canvas,const Domain& domain,const FishPlacement& state,const FishPlacementLayout& l){
  const auto* species=domain.content().find(state.species);if(!species)return;
  const float u=l.unit;const auto p=canvas.toScreen(state.point);
- canvas.outline({p.x-56*u,p.y-56*u,112*u,112*u},{212,255,176,230},56*u,4*u);
- canvas.icon(species->companion?species->asset:"ui/egg.png",{p.x-44*u,p.y-44*u,88*u,88*u},.85f);
- shopTheme::panel(canvas,l.banner,u,shopTheme::Surface::Button);
- const std::string instruction="Place "+species->name+(species->companion?"":" eggs");
- canvas.text(instruction,l.banner.x+24*u,l.banner.y+20*u,24*u,shopTheme::white,false,l.banner.w-160*u,true,true);
+ const float size=species->companion?88*u:std::max(20.f,canvas.worldScale()*30.f);
+ const float ring=size+16*u;
+ canvas.outline({p.x-ring*.5f,p.y-ring*.5f,ring,ring},{212,255,176,230},ring*.5f,4*u);
+ canvas.icon(species->companion?species->asset:"ui/egg.png",{p.x-size*.5f,p.y-size*.5f,size,size},.85f);
  shopTheme::panel(canvas,l.cancel,u,shopTheme::Surface::Buy,state.cancelPressed);
  canvas.text("Done",l.cancel.x+l.cancel.w*.5f,l.cancel.y+16*u,28*u,shopTheme::white,true,l.cancel.w,true,true);
  if(!state.error.empty()){
-  Rect note{l.banner.x-80*u,l.banner.y-64*u,l.banner.w+160*u,48*u};
+  Rect note{(l.page.w-640*u)*.5f,l.banner.y-64*u,640*u,48*u};
   canvas.gradient(note,{104,43,34,235},{104,43,34,235},8*u);
   canvas.text(state.error,note.x+note.w*.5f,note.y+12*u,24*u,shopTheme::white,true,note.w-24*u,true,true);
  }

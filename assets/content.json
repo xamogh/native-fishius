@@ -1,8 +1,8 @@
 {
   "schema": 4,
-  "config_version": "v4-fed-1-dbeeebddf8be",
-  "workbook_sha256": "88610c8a1334f7db97dc5ec3ac6e439b07ce099e56075e6e10e6b3c77663e846",
-  "config_checksum": "dbeeebddf8be9d7a8d81d9008bf9690ff99040af4b6c80cdb768b9f81c9adedd",
+  "config_version": "v4-fed-1-4282137c4f99",
+  "workbook_sha256": "8759dd1341e9ebf43ecf7f9f9c8ec244af1fcc1d5a0ac706a94c2ed1361da81c",
+  "config_checksum": "4282137c4f991f1d4f7dddcdbc45978a61569be970daf52af51b261180539b7d",
   "overrides": {
     "hatch_ms": 6000,
     "egg_counts_toward_growth": true,
@@ -15,8 +15,9 @@
     "purchase_xp": 0,
     "backend": "local",
     "legacy_save_migration": false,
-    "baby_cancel": "Return principal only; zero XP before Junior",
-    "source": "User decisions in this task, 14 September 2026"
+    "minimum_sell_age": 1,
+    "selling_rule": "Eggs and Babies cannot be sold; selling starts at Junior",
+    "source": "User decisions in this task, 14 and 17 September 2026"
   },
   "inputs": {
     "launch_cap": 40,
@@ -158,7 +159,7 @@
       "preview_xp": 2,
       "companion": false,
       "sale_coins": [
-        5,
+        0,
         4,
         6,
         8,
@@ -224,7 +225,7 @@
       "preview_xp": 10,
       "companion": false,
       "sale_coins": [
-        10,
+        0,
         12,
         24,
         36,
@@ -290,7 +291,7 @@
       "preview_xp": 80,
       "companion": false,
       "sale_coins": [
-        75,
+        0,
         101,
         191,
         281,
@@ -356,7 +357,7 @@
       "preview_xp": 162,
       "companion": false,
       "sale_coins": [
-        152,
+        0,
         204,
         386,
         568,
@@ -422,7 +423,7 @@
       "preview_xp": 46,
       "companion": false,
       "sale_coins": [
-        37,
+        0,
         49,
         93,
         137,
@@ -488,7 +489,7 @@
       "preview_xp": 2,
       "companion": false,
       "sale_coins": [
-        5,
+        0,
         4,
         7,
         9,
@@ -554,7 +555,7 @@
       "preview_xp": 44,
       "companion": false,
       "sale_coins": [
-        48,
+        0,
         64,
         121,
         178,
@@ -620,7 +621,7 @@
       "preview_xp": 86,
       "companion": false,
       "sale_coins": [
-        99,
+        0,
         133,
         252,
         370,
@@ -686,7 +687,7 @@
       "preview_xp": 50,
       "companion": false,
       "sale_coins": [
-        51,
+        0,
         68,
         129,
         190,
@@ -752,7 +753,7 @@
       "preview_xp": 180,
       "companion": false,
       "sale_coins": [
-        227,
+        0,
         305,
         578,
         850,
@@ -818,7 +819,7 @@
       "preview_xp": 13,
       "companion": false,
       "sale_coins": [
-        14,
+        0,
         18,
         35,
         52,
@@ -884,7 +885,7 @@
       "preview_xp": 43,
       "companion": false,
       "sale_coins": [
-        70,
+        0,
         94,
         178,
         262,
@@ -950,7 +951,7 @@
       "preview_xp": 92,
       "companion": false,
       "sale_coins": [
-        126,
+        0,
         169,
         320,
         471,
@@ -1016,7 +1017,7 @@
       "preview_xp": 188,
       "companion": false,
       "sale_coins": [
-        261,
+        0,
         351,
         664,
         977,
@@ -1082,7 +1083,7 @@
       "preview_xp": 95,
       "companion": false,
       "sale_coins": [
-        139,
+        0,
         187,
         354,
         521,
@@ -1148,7 +1149,7 @@
       "preview_xp": 87,
       "companion": false,
       "sale_coins": [
-        161,
+        0,
         216,
         408,
         601,
@@ -1214,7 +1215,7 @@
       "preview_xp": 199,
       "companion": false,
       "sale_coins": [
-        309,
+        0,
         416,
         787,
         1158,
@@ -1280,7 +1281,7 @@
       "preview_xp": 12,
       "companion": false,
       "sale_coins": [
-        23,
+        0,
         30,
         57,
         84,
@@ -1346,7 +1347,7 @@
       "preview_xp": 92,
       "companion": false,
       "sale_coins": [
-        187,
+        0,
         251,
         475,
         699,
@@ -1412,7 +1413,7 @@
       "preview_xp": 230,
       "companion": false,
       "sale_coins": [
-        315,
+        0,
         425,
         803,
         1181,
@@ -1478,7 +1479,7 @@
       "preview_xp": 2,
       "companion": false,
       "sale_coins": [
-        5,
+        0,
         5,
         10,
         15,
@@ -1544,7 +1545,7 @@
       "preview_xp": 55,
       "companion": false,
       "sale_coins": [
-        95,
+        0,
         128,
         242,
         356,
@@ -1610,7 +1611,7 @@
       "preview_xp": 217,
       "companion": false,
       "sale_coins": [
-        384,
+        0,
         517,
         978,
         1439,
@@ -1676,7 +1677,7 @@
       "preview_xp": 108,
       "companion": false,
       "sale_coins": [
-        193,
+        0,
         260,
         492,
         724,
@@ -1742,7 +1743,7 @@
       "preview_xp": 63,
       "companion": false,
       "sale_coins": [
-        94,
+        0,
         126,
         238,
         350,
@@ -1808,7 +1809,7 @@
       "preview_xp": 225,
       "companion": false,
       "sale_coins": [
-        418,
+        0,
         564,
         1066,
         1568,
@@ -1874,7 +1875,7 @@
       "preview_xp": 42,
       "companion": false,
       "sale_coins": [
-        43,
+        0,
         57,
         108,
         159,
@@ -1940,7 +1941,7 @@
       "preview_xp": 83,
       "companion": false,
       "sale_coins": [
-        89,
+        0,
         119,
         225,
         331,
@@ -2006,7 +2007,7 @@
       "preview_xp": 172,
       "companion": false,
       "sale_coins": [
-        193,
+        0,
         260,
         491,
         722,
@@ -2072,7 +2073,7 @@
       "preview_xp": 11,
       "companion": false,
       "sale_coins": [
-        13,
+        0,
         17,
         33,
         49,
@@ -2138,7 +2139,7 @@
       "preview_xp": 176,
       "companion": false,
       "sale_coins": [
-        213,
+        0,
         287,
         543,
         799,
@@ -2204,7 +2205,7 @@
       "preview_xp": 90,
       "companion": false,
       "sale_coins": [
-        116,
+        0,
         156,
         294,
         433,
@@ -2270,7 +2271,7 @@
       "preview_xp": 2,
       "companion": false,
       "sale_coins": [
-        5,
+        0,
         5,
         8,
         12,
@@ -2336,7 +2337,7 @@
       "preview_xp": 49,
       "companion": false,
       "sale_coins": [
-        71,
+        0,
         95,
         179,
         264,
@@ -2402,7 +2403,7 @@
       "preview_xp": 194,
       "companion": false,
       "sale_coins": [
-        289,
+        0,
         389,
         735,
         1081,
@@ -2468,7 +2469,7 @@
       "preview_xp": 98,
       "companion": false,
       "sale_coins": [
-        149,
+        0,
         200,
         379,
         558,
@@ -2534,7 +2535,7 @@
       "preview_xp": 13,
       "companion": false,
       "sale_coins": [
-        20,
+        0,
         27,
         51,
         75,
@@ -2600,7 +2601,7 @@
       "preview_xp": 52,
       "companion": false,
       "sale_coins": [
-        85,
+        0,
         113,
         215,
         317,
@@ -2666,7 +2667,7 @@
       "preview_xp": 53,
       "companion": false,
       "sale_coins": [
-        87,
+        0,
         116,
         220,
         324,
@@ -2732,7 +2733,7 @@
       "preview_xp": 210,
       "companion": false,
       "sale_coins": [
-        357,
+        0,
         481,
         909,
         1337,
@@ -2798,7 +2799,7 @@
       "preview_xp": 2,
       "companion": false,
       "sale_coins": [
-        5,
+        0,
         5,
         10,
         15,
@@ -2864,7 +2865,7 @@
       "preview_xp": 55,
       "companion": false,
       "sale_coins": [
-        97,
+        0,
         130,
         247,
         363,
@@ -2930,7 +2931,7 @@
       "preview_xp": 106,
       "companion": false,
       "sale_coins": [
-        187,
+        0,
         251,
         475,
         699,
@@ -2996,7 +2997,7 @@
       "preview_xp": 220,
       "companion": false,
       "sale_coins": [
-        398,
+        0,
         537,
         1014,
         1491,
@@ -3062,7 +3063,7 @@
       "preview_xp": 109,
       "companion": false,
       "sale_coins": [
-        197,
+        0,
         265,
         501,
         737,
@@ -3128,7 +3129,7 @@
       "preview_xp": 13,
       "companion": false,
       "sale_coins": [
-        29,
+        0,
         38,
         73,
         108,
@@ -3194,7 +3195,7 @@
       "preview_xp": 225,
       "companion": false,
       "sale_coins": [
-        418,
+        0,
         564,
         1066,
         1568,
@@ -3260,7 +3261,7 @@
       "preview_xp": 233,
       "companion": false,
       "sale_coins": [
-        452,
+        0,
         609,
         1152,
         1695,
@@ -3326,7 +3327,7 @@
       "preview_xp": 14,
       "companion": false,
       "sale_coins": [
-        33,
+        0,
         44,
         83,
         122,
@@ -3392,7 +3393,7 @@
       "preview_xp": 117,
       "companion": false,
       "sale_coins": [
-        230,
+        0,
         310,
         586,
         862,
@@ -3458,7 +3459,7 @@
       "preview_xp": 118,
       "companion": false,
       "sale_coins": [
-        234,
+        0,
         315,
         596,
         876,
@@ -3524,7 +3525,7 @@
       "preview_xp": 14,
       "companion": false,
       "sale_coins": [
-        34,
+        0,
         45,
         86,
         127,
@@ -3590,7 +3591,7 @@
       "preview_xp": 62,
       "companion": false,
       "sale_coins": [
-        127,
+        0,
         170,
         322,
         474,
@@ -3656,7 +3657,7 @@
       "preview_xp": 121,
       "companion": false,
       "sale_coins": [
-        247,
+        0,
         332,
         629,
         926,
@@ -3722,7 +3723,7 @@
       "preview_xp": 246,
       "companion": false,
       "sale_coins": [
-        507,
+        0,
         683,
         1292,
         1900,
@@ -3788,7 +3789,7 @@
       "preview_xp": 2,
       "companion": false,
       "sale_coins": [
-        6,
+        0,
         7,
         14,
         21,
@@ -3854,7 +3855,7 @@
       "preview_xp": 64,
       "companion": false,
       "sale_coins": [
-        134,
+        0,
         180,
         341,
         501,
@@ -3920,7 +3921,7 @@
       "preview_xp": 124,
       "companion": false,
       "sale_coins": [
-        261,
+        0,
         351,
         664,
         977,
@@ -3986,7 +3987,7 @@
       "preview_xp": 253,
       "companion": false,
       "sale_coins": [
-        534,
+        0,
         720,
         1361,
         2002,
@@ -4052,7 +4053,7 @@
       "preview_xp": 15,
       "companion": false,
       "sale_coins": [
-        38,
+        0,
         51,
         97,
         143,
@@ -4118,7 +4119,7 @@
       "preview_xp": 126,
       "companion": false,
       "sale_coins": [
-        271,
+        0,
         365,
         690,
         1015,
@@ -4184,7 +4185,7 @@
       "preview_xp": 127,
       "companion": false,
       "sale_coins": [
-        274,
+        0,
         369,
         698,
         1027,
@@ -4250,7 +4251,7 @@
       "preview_xp": 259,
       "companion": false,
       "sale_coins": [
-        562,
+        0,
         757,
         1431,
         2105,
@@ -4316,7 +4317,7 @@
       "preview_xp": 15,
       "companion": false,
       "sale_coins": [
-        40,
+        0,
         54,
         102,
         150,
@@ -4382,7 +4383,7 @@
       "preview_xp": 67,
       "companion": false,
       "sale_coins": [
-        148,
+        0,
         199,
         376,
         553,
@@ -4448,7 +4449,7 @@
       "preview_xp": 130,
       "companion": false,
       "sale_coins": [
-        288,
+        0,
         388,
         733,
         1078,
@@ -4514,7 +4515,7 @@
       "preview_xp": 266,
       "companion": false,
       "sale_coins": [
-        589,
+        0,
         794,
         1501,
         2208,
@@ -4580,7 +4581,7 @@
       "preview_xp": 2,
       "companion": false,
       "sale_coins": [
-        7,
+        0,
         8,
         16,
         24,
@@ -4646,7 +4647,7 @@
       "preview_xp": 69,
       "companion": false,
       "sale_coins": [
-        155,
+        0,
         208,
         394,
         580,
@@ -4712,7 +4713,7 @@
       "preview_xp": 134,
       "companion": false,
       "sale_coins": [
-        301,
+        0,
         405,
         767,
         1128,
@@ -4778,7 +4779,7 @@
       "preview_xp": 272,
       "companion": false,
       "sale_coins": [
-        616,
+        0,
         831,
         1571,
         2310,
@@ -4844,7 +4845,7 @@
       "preview_xp": 274,
       "companion": false,
       "sale_coins": [
-        623,
+        0,
         840,
         1588,
         2336,
@@ -6605,6 +6606,199 @@
       "slots": 20
     }
   ],
+  "treasure": {
+    "offers": [
+      {
+        "id": "PEARL-S",
+        "name": "Pocket of Pearls",
+        "kind": "pearls",
+        "asset": "treasure/pearl-pocket-v1.png",
+        "price_usd_cents": 199,
+        "pearls": 20,
+        "coin_days_bps": 0,
+        "level": 0,
+        "once_per_account": false,
+        "permanent_frame": false,
+        "eligibility": "Level 0; available from start",
+        "source": {
+          "sheet": "Shop",
+          "row": 5
+        }
+      },
+      {
+        "id": "PEARL-M",
+        "name": "Pile of Pearls",
+        "kind": "pearls",
+        "asset": "treasure/pearl-pile-v1.png",
+        "price_usd_cents": 499,
+        "pearls": 55,
+        "coin_days_bps": 0,
+        "level": 0,
+        "once_per_account": false,
+        "permanent_frame": false,
+        "eligibility": "Level 0; available from start",
+        "source": {
+          "sheet": "Shop",
+          "row": 6
+        }
+      },
+      {
+        "id": "PEARL-L",
+        "name": "Bag of Pearls",
+        "kind": "pearls",
+        "asset": "treasure/pearl-bag-v1.png",
+        "price_usd_cents": 999,
+        "pearls": 120,
+        "coin_days_bps": 0,
+        "level": 0,
+        "once_per_account": false,
+        "permanent_frame": false,
+        "eligibility": "Level 0; available from start",
+        "source": {
+          "sheet": "Shop",
+          "row": 7
+        }
+      },
+      {
+        "id": "PEARL-XL",
+        "name": "Box of Pearls",
+        "kind": "pearls",
+        "asset": "treasure/pearl-box-v1.png",
+        "price_usd_cents": 1999,
+        "pearls": 260,
+        "coin_days_bps": 0,
+        "level": 0,
+        "once_per_account": false,
+        "permanent_frame": false,
+        "eligibility": "Level 0; available from start",
+        "source": {
+          "sheet": "Shop",
+          "row": 8
+        }
+      },
+      {
+        "id": "PEARL-XXL",
+        "name": "Chest of Pearls",
+        "kind": "pearls",
+        "asset": "treasure/pearl-chest-v1.png",
+        "price_usd_cents": 2999,
+        "pearls": 420,
+        "coin_days_bps": 0,
+        "level": 0,
+        "once_per_account": false,
+        "permanent_frame": false,
+        "eligibility": "Level 0; available from start",
+        "source": {
+          "sheet": "Shop",
+          "row": 9
+        }
+      },
+      {
+        "id": "COIN-S",
+        "name": "Pocket of Coins",
+        "kind": "coins",
+        "asset": "treasure/coin-pocket-v1.png",
+        "price_usd_cents": 99,
+        "pearls": 0,
+        "coin_days_bps": 2500,
+        "level": 0,
+        "once_per_account": false,
+        "permanent_frame": false,
+        "eligibility": "Level 0; available from start",
+        "source": {
+          "sheet": "Shop",
+          "row": 10
+        }
+      },
+      {
+        "id": "COIN-M",
+        "name": "Pile of Coins",
+        "kind": "coins",
+        "asset": "treasure/coin-pile-v1.png",
+        "price_usd_cents": 299,
+        "pearls": 0,
+        "coin_days_bps": 8500,
+        "level": 0,
+        "once_per_account": false,
+        "permanent_frame": false,
+        "eligibility": "Level 0; available from start",
+        "source": {
+          "sheet": "Shop",
+          "row": 11
+        }
+      },
+      {
+        "id": "COIN-L",
+        "name": "Bag of Coins",
+        "kind": "coins",
+        "asset": "treasure/coin-bag-v1.png",
+        "price_usd_cents": 499,
+        "pearls": 0,
+        "coin_days_bps": 15000,
+        "level": 0,
+        "once_per_account": false,
+        "permanent_frame": false,
+        "eligibility": "Level 0; available from start",
+        "source": {
+          "sheet": "Shop",
+          "row": 12
+        }
+      },
+      {
+        "id": "COIN-XL",
+        "name": "Box of Coins",
+        "kind": "coins",
+        "asset": "treasure/coin-box-v1.png",
+        "price_usd_cents": 999,
+        "pearls": 0,
+        "coin_days_bps": 32500,
+        "level": 0,
+        "once_per_account": false,
+        "permanent_frame": false,
+        "eligibility": "Level 0; available from start",
+        "source": {
+          "sheet": "Shop",
+          "row": 13
+        }
+      },
+      {
+        "id": "COIN-XXL",
+        "name": "Chest of Coins",
+        "kind": "coins",
+        "asset": "treasure/coin-chest-v1.png",
+        "price_usd_cents": 1999,
+        "pearls": 0,
+        "coin_days_bps": 70000,
+        "level": 0,
+        "once_per_account": false,
+        "permanent_frame": false,
+        "eligibility": "Level 0; available from start",
+        "source": {
+          "sheet": "Shop",
+          "row": 14
+        }
+      },
+      {
+        "id": "STARTER",
+        "name": "Starter keepsake bundle",
+        "kind": "bundle",
+        "asset": "treasure/starter-bundle-v1.png",
+        "price_usd_cents": 399,
+        "pearls": 35,
+        "coin_days_bps": 2500,
+        "level": 0,
+        "once_per_account": true,
+        "permanent_frame": true,
+        "eligibility": "Level 0; available from start",
+        "source": {
+          "sheet": "Shop",
+          "row": 15
+        }
+      }
+    ],
+    "reference_utilization_numerator": 5,
+    "reference_utilization_denominator": 6
+  },
   "starter_species": [
     "neonTetra",
     "neonTetra",
@@ -14969,7 +15163,7 @@
         "Purchase XP plus early-stage XP",
         "Front-loaded XP can favor premature recycling; refund behavior was underspecified.",
         "No buy XP; staged reward shares below elapsed-time fractions; server settles once.",
-        "Zero XP on cancellation; adult has highest normalized settlement rate.",
+        "Selling starts at Junior; eggs and Babies cannot settle. Adult has highest normalized settlement rate.",
         "Observed numbers; exploit conditional",
         "Spec revised / verify runtime"
       ],
@@ -15550,11 +15744,11 @@
       ],
       [
         "R05",
-        "Partial rehome",
+        "Selling from Junior",
         "Inferior to waiting",
-        "Egg cancel: actual principal only, zero XP. Junior / Young / Mature return FLOOR(95% principal) + FLOOR(10/40/70% profit); XP FLOOR(10/40/70% total). Instance is consumed.",
-        "Inputs; Coin Fish",
-        "Boundary timestamps 25/55/80%; never also adult-claim"
+        "Eggs and Babies cannot be sold. Selling unlocks at Junior (age 1 / 25% growth). Junior / Young / Mature return FLOOR(95% principal) + FLOOR(10/40/70% profit); XP FLOOR(10/40/70% total). Adult pays the maximum. Instance is consumed once.",
+        "User decision 2026-09-17; Inputs; Coin Fish",
+        "Reject eggs and age 0 without changes; allow age 1 onward; never also adult-claim"
       ],
       [
         "R06",
@@ -15898,7 +16092,7 @@
         "early_refund_share",
         0.95,
         "fraction",
-        "Principal returned on partial rehome; egg cancellation 100%.",
+        "Principal returned on Junior / Young / Mature rehome. Eggs and Babies cannot be sold.",
         "Proposal / v4",
         16
       ],
@@ -22358,85 +22552,141 @@
       [
         "PEARL-S",
         "Pearls",
-        "Small pearl pack",
+        "Pocket of Pearls",
         1.99,
         20,
         0,
         10.050251256281408,
-        "Always after tutorial",
+        "Level 0; available from start",
         "Repeatable",
         0,
-        "Covers a useful entry premium purchase; show exact pearls and local store price.",
+        "20 guaranteed pearls. Entry pearl pack. Show exact contents and localized price; no random rewards.",
         "Server offer snapshot + verified store receipt / ad completion + atomic grant. Restore permanent entitlements; consumables reconciled against ledger."
       ],
       [
         "PEARL-M",
         "Pearls",
-        "Medium pearl pack",
+        "Pile of Pearls",
         4.99,
         55,
         0,
         11.022044088176353,
-        "Always after tutorial",
+        "Level 0; available from start",
         "Repeatable",
         0,
-        "More pearls per USD than small; no misleading crossed-out price.",
+        "55 guaranteed pearls. More pearls per USD than the previous tier. Show exact contents and localized price; no random rewards.",
         "Server offer snapshot + verified store receipt / ad completion + atomic grant. Restore permanent entitlements; consumables reconciled against ledger."
       ],
       [
         "PEARL-L",
         "Pearls",
-        "Large pearl pack",
+        "Bag of Pearls",
         9.99,
         120,
         0,
         12.012012012012011,
-        "Always after tutorial",
+        "Level 0; available from start",
         "Repeatable",
         0,
-        "Best of these three per-pearl rates; spending is optional.",
+        "120 guaranteed pearls. More pearls per USD than the previous tier. Show exact contents and localized price; no random rewards.",
+        "Server offer snapshot + verified store receipt / ad completion + atomic grant. Restore permanent entitlements; consumables reconciled against ledger."
+      ],
+      [
+        "PEARL-XL",
+        "Pearls",
+        "Box of Pearls",
+        19.99,
+        260,
+        0,
+        13.006503251625814,
+        "Level 0; available from start",
+        "Repeatable",
+        0,
+        "260 guaranteed pearls. More pearls per USD than the previous tier. Show exact contents and localized price; no random rewards.",
+        "Server offer snapshot + verified store receipt / ad completion + atomic grant. Restore permanent entitlements; consumables reconciled against ledger."
+      ],
+      [
+        "PEARL-XXL",
+        "Pearls",
+        "Chest of Pearls",
+        29.99,
+        420,
+        0,
+        14.004668222740914,
+        "Level 0; available from start",
+        "Repeatable",
+        0,
+        "420 guaranteed pearls. Best per-pearl rate of these five packs. Show exact contents and localized price; no random rewards.",
         "Server offer snapshot + verified store receipt / ad completion + atomic grant. Restore permanent entitlements; consumables reconciled against ledger."
       ],
       [
         "COIN-S",
         "Coins",
-        "Small coin pack",
+        "Pocket of Coins",
         0.99,
         0,
         0.25,
         0,
-        "L5; player explicitly opens shop",
+        "Level 0; available from start",
         "Repeatable",
         0,
-        "Coins snapshot current account reference income; disclose amount before store confirmation.",
+        "0.25 reference coin-days at the account level. Round the final coin amount half up to a whole coin and display it before confirmation. Freeze the amount and price for the offer.",
         "Server offer snapshot + verified store receipt / ad completion + atomic grant. Restore permanent entitlements; consumables reconciled against ledger."
       ],
       [
         "COIN-M",
         "Coins",
-        "Medium coin pack",
+        "Pile of Coins",
         2.99,
         0,
         0.85,
         0,
-        "L5; player explicitly opens shop",
+        "Level 0; available from start",
         "Repeatable",
         0,
-        "Coin amount uses reference income, not highest payer income; price cannot change after authorization.",
+        "0.85 reference coin-days at the account level. Round the final coin amount half up to a whole coin and display it before confirmation. Freeze the amount and price for the offer.",
         "Server offer snapshot + verified store receipt / ad completion + atomic grant. Restore permanent entitlements; consumables reconciled against ledger."
       ],
       [
         "COIN-L",
         "Coins",
-        "Large coin pack",
+        "Bag of Coins",
         4.99,
         0,
         1.5,
         0,
-        "L5; player explicitly opens shop",
+        "Level 0; available from start",
         "Repeatable",
         0,
-        "No forced low-balance upsell; cancel returns to play.",
+        "1.5 reference coin-days at the account level. Round the final coin amount half up to a whole coin and display it before confirmation. Freeze the amount and price for the offer.",
+        "Server offer snapshot + verified store receipt / ad completion + atomic grant. Restore permanent entitlements; consumables reconciled against ledger."
+      ],
+      [
+        "COIN-XL",
+        "Coins",
+        "Box of Coins",
+        9.99,
+        0,
+        3.25,
+        0,
+        "Level 0; available from start",
+        "Repeatable",
+        0,
+        "3.25 reference coin-days at the account level. Round the final coin amount half up to a whole coin and display it before confirmation. Freeze the amount and price for the offer.",
+        "Server offer snapshot + verified store receipt / ad completion + atomic grant. Restore permanent entitlements; consumables reconciled against ledger."
+      ],
+      [
+        "COIN-XXL",
+        "Coins",
+        "Chest of Coins",
+        19.99,
+        0,
+        7,
+        0,
+        "Level 0; available from start",
+        "Repeatable",
+        0,
+        "7 reference coin-days at the account level. Round the final coin amount half up to a whole coin and display it before confirmation. Freeze the amount and price for the offer.",
         "Server offer snapshot + verified store receipt / ad completion + atomic grant. Restore permanent entitlements; consumables reconciled against ledger."
       ],
       [
@@ -22447,7 +22697,7 @@
         35,
         0.25,
         0,
-        "After first return; model purchases Day 3",
+        "Level 0; available from start",
         "Lifetime once/account",
         1,
         "35 pearls + quarter reference coin-day + exclusive-to-bundle permanent frame. No purchase deadline; no percentage discount claim.",
@@ -62303,8 +62553,8 @@
         0,
         0,
         "PASS",
-        "Cancellation earns zero XP.",
-        "Runtime test required for actual refund path."
+        "Purchase earns zero XP. Eggs and Babies cannot be sold.",
+        "Runtime test: reject eggs / age 0; allow Junior onward; preserve historical refunds."
       ],
       [
         "B09",
@@ -62473,7 +62723,7 @@
         true,
         true,
         "PASS",
-        "Repeatable pearl packs only; starter is lifetime-once.",
+        "All five repeatable pearl packs; starter remains lifetime-once.",
         "Localized stores may change actual relative value."
       ],
       [
@@ -63647,7 +63897,7 @@
         "DC03",
         "Fish instance",
         "instance_id; species_id; purchase_level; config_version; principal_paid; profit_snapshot; xp_snapshot; purchased_at; ready_at; status",
-        "Status growing→settled OR canceled; exactly one terminal transition. Actual paid basis immutable; free gift basis=0.",
+        "Status growing to settled, exactly once. Selling starts at Junior; reject eggs and Babies. Paid basis immutable; gift basis=0. Preserve historical cancellation receipts.",
         "Concurrent adult, partial rehome and batch requests lock the same instance."
       ],
       [

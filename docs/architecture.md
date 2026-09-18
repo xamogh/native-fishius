@@ -8,8 +8,10 @@ A productive fish carries a purchase snapshot. Its future reward does not depend
 
 `Storage` serializes explicit version 4 fields, validates decoded candidates, reconciles balances and uses temporary-file replacement with backups. There is no legacy migration. Offline growth consumes only the remaining meal duration and is applied once per saved wall-time interval.
 
-`View` owns menus, tools, gesture ownership, temporary purchase offers, popover selection and confirmations. It retains IDs across commands, then looks them up again. `Canvas` owns SDL resources, fonts, texture caches and rendering. Rehome previews use the domain reward function and require confirmation of the displayed amount. Opening or drawing a popover cannot settle a fish.
+The game has one interface. `main.cpp` connects the current HUD, Shop, tank switcher, dialogs and egg placement. `HudCare` owns feeding, rehoming, fish selection and confirmation. `hud_placement.cpp` owns egg placement. `hud_tank_switcher.cpp` owns the porthole switcher and tank purchases in Shop. Each action uses `Session`, so the UI cannot bypass save or economy checks.
 
-Fish details use an anchored compact popover with no dark backdrop. The aquarium Food tool remains available. Full menus and dialogs retain their existing input ownership, spring motion and Reduced Motion behavior. Growing and display counts are shown separately. Missing artwork and deferred catalog releases are excluded from preloading and live offers.
+`Canvas`, declared in `canvas.hpp`, owns SDL resources, fonts, texture caches and drawing. Clay computes the current HUD and dialog bounds. Rendering and input use those same bounds. `fish_details.cpp` supplies the current care dialog's reward and growth text. The old `View`, panel skins, standalone tank dialog and Studio editor have been removed from source and the build.
+
+`--hud-layout` is accepted for compatibility and does not select an alternate UI. `--scene-only` remains a rendering preview. Review fixtures use an ephemeral session. Normal desktop, iOS and Android launches enter the same current interface.
 
 Daily quest rewards, mastery rewards, projects, event catch-up, new onboarding, store checkout and online services remain separate later steps. Retained data or disabled prototype types do not mean those features are implemented.

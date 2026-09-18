@@ -77,15 +77,15 @@ def main():
     if ok:run('test-domain',['ctest','--preset','domain','--output-on-failure'],120)
     ok=build_target('desktop')
     if ok:
-        candidates=[p for p in (ROOT/'build').rglob('aquarium') if p.is_file() and os.access(p,os.X_OK)]
+        candidates=[ROOT/'build/desktop/aquarium'] if (ROOT/'build/desktop/aquarium').is_file() else []
         if candidates:
             exe=candidates[0]
             env=os.environ.copy();env.update(SDL_VIDEODRIVER='dummy',SDL_AUDIODRIVER='dummy')
-            for state in ['tanks','shop','collection','settings']:
+            for state in ['tanks','shop','tank-switcher','settings']:
                 run('capture-'+state,[str(exe),'--software','--fixture',state,'--width','1088','--height','635','--frames','20','--capture',str(E/(state+'.png'))],90,env)
             for w,h in [(640,360),(667,375),(844,390),(932,430),(1024,768)]:
                 run(f'layout-{w}x{h}',[str(exe),'--software','--fixture','shop','--width',str(w),'--height',str(h),'--frames','10','--capture',str(E/f'shop-{w}x{h}.png')],90,env)
-            run('performance-40-fish',[str(exe),'--software','--fixture','perf','--width','1088','--height','635','--frames','600','--report',str(E/'performance-40-fish.json')],120,env)
+            run('performance-40-fish',[str(exe),'--software','--fixture','performance','--width','1088','--height','635','--frames','600','--report',str(E/'performance-40-fish.json')],120,env)
             for state in ['aquarium','care']:
                 dest=E/('motion-'+state);dest.mkdir(exist_ok=True)
                 run('motion-'+state,[str(exe),'--software','--fixture',state,'--width','844','--height','490','--frames','120','--sequence',str(dest)],120,env)

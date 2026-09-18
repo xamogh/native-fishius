@@ -3,6 +3,7 @@ set -euo pipefail
 PROJECT_DIR="${0:A:h}"
 DEVICE_ID="E83F00A3-74DE-4021-92B0-3C3BD4E59DE1"
 APP_PATH="$PROJECT_DIR/build/ios-simulator/aquarium.app"
+"$PROJECT_DIR/tools/build_game.sh" ios-simulator
 
 if [[ ! -d "$APP_PATH" ]]; then
   print -u2 "The iPhone simulator build is missing. See LOCAL-SETUP.md."

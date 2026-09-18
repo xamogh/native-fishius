@@ -44,6 +44,11 @@ struct GrowthSnapshot {
 };
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(GrowthSnapshot,level,configVersion,scheduleId,principal,profit,xp,durationMs,feedMs,stages,rewards,earlyRefundBps)
 struct TankEntitlement {std::string id,prerequisite;TankId tank;int level{},slots{},addedSlots{};Money cost;};
+enum class TreasureKind {Coins,Pearls,Bundle};
+struct TreasureOffer {
+ std::string id,name,eligibility,asset;TreasureKind kind{TreasureKind::Coins};
+ int priceUsdCents{},coinDaysBps{},level{};Amount pearls{};bool oncePerAccount{},permanentFrame{};
+};
 struct DecorDef {
  std::string id,name;Amount price{};int score{};std::string source;
  std::string category,subcategory,theme,edition,rarity,size,layer,releaseGate,event,availability,asset;
@@ -55,6 +60,7 @@ struct DecorTuning {int placedLimit{32},animatedLimit{6},emitterLimit{2},particl
 struct Content {
  std::string configVersion;Economy economy;int displaySlots{8};Millis hatchMs{6000};
  std::vector<TankEntitlement> tankEntitlements;std::array<Money,40> levelRewards{};
+ std::vector<TreasureOffer> treasureOffers;int referenceUtilizationNumerator{5},referenceUtilizationDenominator{6};
  std::vector<Species> species;std::array<Amount,40> levels{};Json workbook;Json supplement;
  std::array<std::array<Amount,4>,5> tankCosts{};
  std::array<std::array<Amount,4>,5> tankPearlCosts{};
@@ -90,11 +96,16 @@ struct Companion {
 };
 Fish companionVisual(const Companion&);
 GrowthSnapshot purchaseQuote(const Content&,const Species&,int level,bool gift=false);
+Money treasureContents(const Content&,const TreasureOffer&,int level);
 struct FishReward {Amount principal{},profit{},xp{};Amount coins()const{return principal+profit;}};
 FishReward fishReward(const Fish&);
 int growthStage(const GrowthSnapshot&,Millis elapsed);
 double growthProgress(const Fish&);
-struct Tank {TankId id;int slots{10};};
+double nextStageProgress(const Fish&);
+struct EnvironmentStyle {std::string id,name;Amount price;std::string asset;};
+std::span<const EnvironmentStyle> environmentCatalog();
+const EnvironmentStyle* findEnvironment(std::string_view);
+struct Tank {TankId id;int slots{10};std::string backgroundId{"sunlit-lagoon"};};
 struct Pellet {std::uint64_t id{};WorldPoint position;double speed{38},phase{},rotation{},rest{};WorldPoint previous{};bool hasPrevious{};};
 struct Decoration {std::uint64_t id{};std::string kind;TankId tank;WorldPoint position;bool stored{},flipped{};double sizeMul{1};};
 // Gameplay and the visible tank share the full world rectangle.
@@ -118,6 +129,7 @@ struct State {
  int highestRewardedLevel{1};TankId activeTank;std::vector<Tank> tanks{{TankId{1},10}};
  std::vector<Fish> fish;std::vector<Decoration> decor;std::uint64_t nextFishId{1},nextDecorId{1},rngState{0x94239abd};
  std::vector<std::string> decorOwned;bool decorOnboardingComplete{};
+ std::vector<std::string> environmentOwned;
  // Cancelling legacy decor placement stores the paid copy.
  std::string pendingDecor;
  std::vector<std::string> claims;std::map<std::string,ObjectiveProgress> quests;
@@ -135,7 +147,7 @@ enum class Error {None,Unknown,NoArt,EventClosed,Level,Claimed,Full,Funds,Invali
 struct CurrencyShortfall {Amount coins{},pearls{};};
 struct Result {Error error{Error::None};FishId fish{};Amount coins{},xp{},pearls{};std::string message;CurrencyShortfall shortfall{};bool replayed{};std::uint64_t revision{};explicit operator bool()const{return error==Error::None;}};
 struct Event {std::string kind;FishId fish{};WorldPoint position;Amount coins{},xp{},pearls{};std::string text;int reachedLevel{};};
-enum class Action {Buy,Feed,Sell,Stash,Restore,Move,Revive,Remove,ReviveAll,RemoveAll,UnlockTank,ExpandTank,SwitchTank,DropFood,BuyDecor,ClaimQuest,SendGift,DailyEgg,ClaimMastery,Tutorial,SetLook,SetReducedMotion,SetSound,SetMusic,SetVolume,MoveDecor,StoreDecor,RestoreDecor,FlipDecor,PurchaseDecor,PlaceDecor,CancelDecor,ResizeDecor,Keep,Favorite};
+enum class Action {Buy,Feed,Sell,Stash,Restore,Move,Revive,Remove,ReviveAll,RemoveAll,UnlockTank,ExpandTank,SwitchTank,DropFood,BuyDecor,ClaimQuest,SendGift,DailyEgg,ClaimMastery,Tutorial,SetLook,SetReducedMotion,SetSound,SetMusic,SetVolume,MoveDecor,StoreDecor,RestoreDecor,FlipDecor,PurchaseDecor,PlaceDecor,CancelDecor,ResizeDecor,Keep,Favorite,PurchaseEnvironment,EquipEnvironment};
 struct Command {Action action;FishId fish{};TankId tank{};std::string key;WorldPoint point{};Currency currency{Currency::Coins};double value{};std::uint64_t decor{};std::string requestId;std::optional<GrowthSnapshot> offer;};
 struct Calendar {std::int64_t day{},week{};int year{},monthDay{};};
 Calendar calendarAt(Millis unixMs);
@@ -166,6 +178,7 @@ class Domain {
  const std::vector<Quest>& questDefinitions()const{return questDefs_;}
  MasteryProgress masteryProgress(std::string_view species)const;
  const Fish* fish(FishId)const;const Tank* tank(TankId)const;
+ bool ownsEnvironment(std::string_view)const;
  const Companion* companion(FishId)const;std::size_t displaying(TankId)const;
  const TankEntitlement* nextTankEntitlement(TankId)const;
  GrowthSnapshot quote(const Species& s)const{return purchaseQuote(content_,s,level());}
@@ -186,6 +199,7 @@ class Domain {
  void beginTurn(Fish&,int direction);void configureExtras();void tutorialEvent(std::string_view);
  Result executeImpl(const Command&);Result tutorial();Result claimQuest(std::string_view);Result sendGift();Result dailyEgg();
  Result executeDecor(const Command&);
+ Result executeEnvironment(const Command&);
  Result settle(const Command&);Result spend(Amount coins,Amount pearls=0);
  void ledger(std::string currency,Amount delta,Amount balance,std::string reason,std::string source);
  std::string requestId_,reason_,source_;

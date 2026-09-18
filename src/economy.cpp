@@ -24,6 +24,14 @@ Result replay(const Json& j){
 Json receipt(const Result& r){return {{"fish",r.fish.value},{"coins",r.coins},{"xp",r.xp},{"pearls",r.pearls},{"message",r.message},{"revision",r.revision}};}
 }
 
+Money treasureContents(const Content& content,const TreasureOffer& offer,int level){
+ if(level<1||level>40)throw std::invalid_argument("Invalid Treasure offer level");
+ Amount slots=0;for(const auto& entitlement:content.tankEntitlements)if(entitlement.level<=level)slots+=entitlement.addedSlots;
+ const auto& e=content.economy;
+ return {product({e.baseCoinDay,10000+e.coinSlopeBps*(level-1),slots,content.referenceUtilizationNumerator,offer.coinDaysBps},
+                 {10000,content.referenceUtilizationDenominator,10000}),offer.pearls};
+}
+
 GrowthSnapshot purchaseQuote(const Content& content,const Species& s,int level,bool gift){
  if(level<1||level>40)throw std::invalid_argument("Invalid purchase level");
  GrowthSnapshot q;q.level=level;q.configVersion=content.configVersion;q.scheduleId=s.scheduleId;
@@ -37,8 +45,19 @@ int growthStage(const GrowthSnapshot& q,Millis elapsed){
  int stage=0;for(int i=1;i<5;++i)if(elapsed>=q.durationMs/10000*q.stages[i]+q.durationMs%10000*q.stages[i]/10000)stage=i;return stage;
 }
 double growthProgress(const Fish& f){return f.purchase.durationMs>0?std::clamp(double(f.growthMs)/double(f.purchase.durationMs),0.,1.):1.;}
+double nextStageProgress(const Fish& f){
+ if(f.egg){const auto hatch=f.hatchAt-f.boughtAt;return hatch>0?std::clamp(double(f.growthMs)/double(hatch),0.,1.):0.;}
+ if(f.age>=4||f.purchase.durationMs<=0)return 1.;
+ const auto& q=f.purchase;const int stage=std::clamp(f.age,0,3);
+ // Use the saved, uneven stage thresholds and the same rounding as growthStage.
+ const auto boundary=[&](int i){return q.durationMs/10000*q.stages[i]+q.durationMs%10000*q.stages[i]/10000;};
+ const auto start=boundary(stage),end=boundary(stage+1);
+ return end>start?std::clamp(double(f.growthMs-start)/double(end-start),0.,1.):1.;
+}
 FishReward fishReward(const Fish& f){
  const auto& q=f.purchase;
+ // Retain the old cancellation quote for validating historical settlements.
+ // New egg and Baby sales are rejected by settle before any payout.
  if(f.egg||f.age==0)return {q.principal,0,0};
  if(f.age==4)return {q.principal,q.profit,f.scripted?0:q.xp};
  return {ratio(q.principal,q.earlyRefundBps),ratio(q.profit,q.rewards.at(f.age)),f.scripted?0:ratio(q.xp,q.rewards.at(f.age))};
@@ -71,6 +90,7 @@ Result Domain::settle(const Command& c){
  auto* f=mutableFish(c.fish);if(!f||f->stashed||f->tank!=state_.activeTank)return {.error=Error::InvalidFish};
  if(c.action==Action::Keep&&(f->egg||f->age<4))return {.error=Error::NotReady,.message="Keep becomes available at adulthood."};
  if(c.action==Action::Sell&&f->favorite)return {.error=Error::Protected,.message="Unfavorite this fish before rehoming it."};
+ if(c.action==Action::Sell&&(f->egg||f->age<1))return {.error=Error::NotReady,.message="Selling unlocks at Junior."};
  const auto fishCopy=*f;const auto reward=fishReward(fishCopy);
  reason_="fish_settlement";source_=id;
  auto result=grant(reward.coins(),reward.xp);if(!result)return result;
@@ -79,7 +99,7 @@ Result Domain::settle(const Command& c){
   const bool stored=displaying(fishCopy.tank)>=static_cast<std::size_t>(content_.displaySlots);
   state_.companions.push_back({fishCopy.id,fishCopy.id,fishCopy.species,fishCopy.tank,fishCopy.position,fishCopy.motion,stored,fishCopy.favorite,fishCopy.lastFedAt});
   result.message=stored?"Reward collected. Your fish is safe in Bag.":"Reward collected. Your fish stays with you.";
- }else result.message=fishCopy.egg?"Egg cancelled.":"Fish rehomed.";
+ }else result.message="Fish rehomed.";
  if(fishCopy.age==4&&!fishCopy.scripted){++state_.adultRaised[fishCopy.species];count("adult-settlement");}
  std::erase_if(state_.fish,[&](const auto& fish){return fish.id==c.fish;});
  result.revision=state_.revision+1;

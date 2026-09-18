@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import org.libsdl.app.SDLActivity;
 
 /** SDL owns lifecycle dispatch and touch translation. The Java host only installs
@@ -45,6 +48,12 @@ public final class AquariumActivity extends SDLActivity {
         if (children != null && children.length > 0) {
             if (!destination.isDirectory() && !destination.mkdirs()) throw new IOException("Cannot create " + destination);
             for (String child : children) copyTree(manager, relative.isEmpty() ? child : relative + "/" + child, new File(destination, child));
+            // This directory contains only bundled artwork, never player saves.
+            // Remove files that were retired from the current package.
+            Set<String> bundled = new HashSet<>(Arrays.asList(children));
+            File[] installed = destination.listFiles();
+            if (installed == null) throw new IOException("Cannot list " + destination);
+            for (File file : installed) if (!bundled.contains(file.getName())) removeTree(file);
             return;
         }
         File parent = destination.getParentFile();
@@ -58,5 +67,13 @@ public final class AquariumActivity extends SDLActivity {
         }
         if (destination.exists() && !destination.delete()) throw new IOException("Cannot replace " + destination);
         if (!temporary.renameTo(destination)) throw new IOException("Cannot commit " + destination);
+    }
+    private static void removeTree(File file) throws IOException {
+        if (file.isDirectory()) {
+            File[] children = file.listFiles();
+            if (children == null) throw new IOException("Cannot list " + file);
+            for (File child : children) removeTree(child);
+        }
+        if (!file.delete()) throw new IOException("Cannot remove retired asset " + file);
     }
 }

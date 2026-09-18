@@ -1,5 +1,5 @@
 #pragma once
-#include "aquarium/view.hpp"
+#include "aquarium/canvas.hpp"
 
 namespace aq {
 enum class DialogSize { Small,Medium,Large,Custom };
@@ -13,10 +13,11 @@ struct HudDialogLayout {
  float unit{};
 };
 struct DialogState { bool open{true},closePressed{},backdropPressed{}; };
+enum class DialogPresentation {Modal,Popover};
 // Custom dimensions are design units, rounded up to the four-unit grid.
 // Content is the padded area where callers can place their own Clay layout.
 HudDialogLayout layoutDialog(float width,float height,Insets safe,const DialogSpec&);
-void paintDialog(Canvas&,const HudDialogLayout&,const DialogSpec&,bool closeHovered=false,bool closePressed=false);
+void paintDialog(Canvas&,const HudDialogLayout&,const DialogSpec&,bool closeHovered=false,bool closePressed=false,DialogPresentation=DialogPresentation::Modal);
 // Consumes modal input, closes on X, Escape or a backdrop click, and blocks input to the screen below.
 bool dialogEvent(DialogState&,const HudDialogLayout&,const SDL_Event&,SDL_FPoint canvasPoint={});
 }

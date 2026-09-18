@@ -1,0 +1,27 @@
+{
+  "asset": "funds-octopus-coins-v1.png",
+  "generated_at_date": "2026-09-17",
+  "tool": "image_gen.imagegen",
+  "mode": "built-in",
+  "use_case": "precise-object-edit",
+  "source_image_role": "User-approved dialog mockup, edit target",
+  "source_image": "/Users/amoghrijal/.codex/generated_images/01a0ae7e-72c0-7691-8586-a191aecc3ed4/exec-9e0829d3-d7d5-4be3-8b5b-d5f4b0b1a641.png",
+  "generated_image": "/Users/amoghrijal/.codex/generated_images/01a0aea0-11f2-7662-ac79-b660f91a0981/exec-886795c0-0cc0-411b-9b93-d62495a2db60.png",
+  "saved_image": "/Users/amoghrijal/amogh/aquarium-native/assets/dialogs/funds-octopus-coins-v1.png",
+  "dimensions": {
+    "width": 1479,
+    "height": 1064
+  },
+  "format": "PNG",
+  "has_alpha": false,
+  "prompt": "Use case: precise-object-edit.\nAsset type: OPAQUE full rectangular inner-body artwork for a mobile game's currency dialog. This is a background illustration plate consumed by native UI, NOT a mockup with controls.\nInput image 1 is the approved dialog mockup and the edit target. Extract and expand ONLY the cream and pale-aqua interior scene. EXCLUDE the entire blue outer rim, blue header, red X, rounded frame and every UI control. The final canvas must be edge-to-edge opaque painted scene with square corners, requested dimensions 1536x1104, aspect ratio 824:592.\nRemove the amount text \"101 coins needed\" entirely and inpaint quiet matching cream background. Remove the entire green shop button, including all lettering, borders and shadows, and inpaint matching quiet cream background.\nPreserve the exact orange octopus character from the original reference: same large teal eyes, face, smile, eyebrows and lashes; same glossy orange spotted head, tilt, proportions, tentacle poses and pale suction cups. Preserve the single gold coin embossed with a five-point star in its raised right-side tentacle. Preserve the sandy ground, purple tube sponges and green fronds left, orange branching coral right, small grey rocks, and pale aqua underwater side scenery. Preserve the same polished painterly game illustration style, color and lighting. Do not redesign the character.\nCritical layout measured within the NEW image canvas: top 19% must be completely clear of foreground objects and text, using quiet cream background for a live amount label. Octopus crown sits at about 20% of full image height. The lowest tentacle and foreground coral/ground base end around 74% of image height. Octopus plus held coin and close foreground decorations together span approximately 66% of image width, centered horizontally. Bottom 22% must be quiet pale cream background with no foreground objects so the runtime can overlay a live green button. The pale aqua side scenery may remain in the middle sides, subtle and soft.\nOutput one clean artwork plate. No text anywhere. No numbers. No button or remnants. No rim, header, close icon, borders or frame. No checkerboard. No transparency. Do not stretch the octopus or objects.",
+  "postprocessing": "None. Original generated PNG copied unchanged.",
+  "inspection": {
+    "no_text": true,
+    "no_button": true,
+    "no_frame": true,
+    "no_checkerboard": true,
+    "quiet_top_and_bottom_regions": true,
+    "note": "Opaque body artwork for native rounded clipping and live text/button overlays. Crown near 22% image height and lowest foreground near 77%, slightly lower than requested 20%/74%."
+  }
+}

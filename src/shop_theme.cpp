@@ -18,7 +18,11 @@ Finish finish(Surface surface){
  case Surface::LockedFishCard:return {{241,238,221},{224,224,199},{94,141,133},{255,255,239,160}};
  case Surface::FastBadge:return {{241,164,91},{214,130,56},{162,94,47},{255,222,166,180}};
  case Surface::Buy:return {{98,226,111},{42,181,76},{39,137,70},{213,255,183,200}};
+ case Surface::PearlBuy:return {{215,204,250},{175,153,225},{87,65,124},{247,239,255,200}};
  case Surface::LockedPrice:return {{157,182,143},{115,153,116},{92,129,91},{220,237,191,140}};
+ case Surface::Keep:return {{255,181,165},{235,132,115},{166,77,66},{255,232,216,230}};
+ case Surface::DisabledButton:return {{218,225,216},{180,195,184},{118,144,135},{242,248,233,180}};
+ case Surface::PausedBadge:return {{255,226,118},{240,185,62},{163,116,34},{255,249,211,230}};
  }
  return {};
 }
@@ -52,6 +56,12 @@ void badge(Canvas& canvas,Rect bounds,float u,std::string_view label,Surface sty
  canvas.text(label,bounds.x+bounds.w*.5f,bounds.y+(bounds.h-24*u)*.5f,24*u,white,true,bounds.w-16*u,true,true);
 }
 
+void lockIcon(Canvas& canvas,Rect slot){
+ const Rect bounds{230,122,794,995};
+ const float scale=std::min(slot.w/bounds.w,slot.h/bounds.h);
+ canvas.image("tank-grid/lock.png",{slot.x+(slot.w-bounds.w*scale)*.5f-bounds.x*scale,slot.y+(slot.h-bounds.h*scale)*.5f-bounds.y*scale,1254*scale,1254*scale});
+}
+
 void clockIcon(Canvas& canvas,Rect bounds,Color clockInk){
  const float side=std::min(bounds.w,bounds.h),u=side/24;
  const float x=bounds.x+(bounds.w-side)*.5f,y=bounds.y+(bounds.h-side)*.5f;
@@ -61,20 +71,17 @@ void clockIcon(Canvas& canvas,Rect bounds,Color clockInk){
  canvas.gradient({x+11*u,y+11*u,7*u,2*u},clockInk,clockInk,u);
 }
 
+void blueHeader(Canvas& canvas,Rect bounds,float u,float radius){
+ canvas.gradient(bounds,{22,78,121},{11,48,88},radius);
+ const Rect water{bounds.x+8*u,bounds.y+8*u,bounds.w-16*u,bounds.h-16*u};
+ canvas.wave(water,{87,201,222,65},12*u,384*u,.3f,12*u);
+ canvas.wave(water,{158,225,250,35},8*u,560*u,2.1f,8*u);
+}
+
 void backdrop(Canvas& canvas,const ShopLayout& layout){
  const float u=layout.unit;
  const Rect header{0,0,layout.page.w,layout.title.y};
- canvas.gradient(header,{22,129,142},{10,85,105});
- // Place decoration in the empty space beside the tabs.
- const float left=layout.tabs.front().x;
- bubble(canvas,left*.2f,header.h*.2f,28*u);
- bubble(canvas,left*.3f,header.h*.48f,20*u);
- bubble(canvas,left*.22f,header.h*.7f,12*u);
- const float right=layout.tabs.back().x+layout.tabs.back().w;
- const float space=std::max(0.f,layout.close.x-right);
- bubble(canvas,right+space*.48f,header.h*.38f,24*u);
- bubble(canvas,right+space*.72f,header.h*.64f,32*u);
- bubble(canvas,right+space*.52f,header.h*.68f,12*u);
+ blueHeader(canvas,header,u);
  const Rect paper{0,header.h,layout.page.w,layout.footer.y-header.h};
  canvas.gradient(paper,{244,239,218},{244,243,226});
  const Rect light{paper.x,paper.y+12*u,paper.w,136*u};
@@ -112,6 +119,16 @@ void card(Canvas& canvas,Rect bounds,float u,bool locked){
  bubble(canvas,bounds.x+16*u,bounds.y+bounds.h-108*u,12*u);
  bubble(canvas,bounds.x+bounds.w-40*u,bounds.y+bounds.h-100*u,20*u);
  bubble(canvas,bounds.x+bounds.w-28*u,bounds.y+bounds.h-124*u,8*u);
+}
+
+void pricePanel(Canvas& canvas,Rect bounds,float u,bool pressed){
+ const Color top{41,132,148},bottom{19,89,109};
+ canvas.gradient(bounds,pressed?darken(top):top,pressed?darken(bottom):bottom,8*u);
+}
+
+void scrollbar(Canvas& canvas,Rect track,Rect thumb,float u){
+ canvas.gradient(track,{12,67,82},{12,67,82},4*u);
+ canvas.gradient(thumb,{168,239,182},{104,201,155},4*u);
 }
 
 void tabArt(Canvas& canvas,Rect box,int category){

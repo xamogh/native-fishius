@@ -6,6 +6,7 @@ Future catalogs remain data; release gates and artwork determine availability.
 """
 from pathlib import Path
 from decimal import Decimal, ROUND_HALF_UP
+from fractions import Fraction
 import argparse
 import hashlib
 import json
@@ -78,7 +79,7 @@ def build_content(path=DEFAULT_WORKBOOK, assets=ROOT / 'assets'):
         item['preview_profit']=payout('coin')
         item['preview_xp']=payout('xp')
         item['price']=max(int(inputs['min_egg_price']),rounded(Decimal(item['preview_profit'])*Decimal(str(inputs['working_capital_share']))))
-        item['sale_coins'][0]=item['price']
+        item['sale_coins'][0]=0  # Eggs and Babies are not eligible for settlement.
         item['sale_coins'][4]=item['price']+item['preview_profit']
         item['sale_xp'][4]=item['preview_xp']
         for stage,share in [(1,10),(2,40),(3,70)]:
@@ -134,11 +135,36 @@ def build_content(path=DEFAULT_WORKBOOK, assets=ROOT / 'assets'):
     levels=[r for r in sheets['XP & Unlocks'][4:] if isinstance(r[0],(int,float))]
     if [r[0] for r in levels]!=list(range(1,71)) or [r[7] for r in levels[:2]]!=[0,80]:
         raise ValueError('Invalid v4 XP curve')
+    treasure = []
+    treasure_assets = {
+        f'{currency}-{suffix}': f'treasure/{prefix}-{tier}-v1.png'
+        for currency, prefix in [('COIN', 'coin'), ('PEARL', 'pearl')]
+        for suffix, tier in zip(('S', 'M', 'L', 'XL', 'XXL'), ('pocket', 'pile', 'bag', 'box', 'chest'))
+    }
+    treasure_assets['STARTER'] = 'treasure/starter-bundle-v1.png'
+    for row, r in enumerate(sheets['Shop'][4:], 5):
+        if r[1] not in ('Coins', 'Pearls', 'Bundle'):
+            continue
+        unlock = re.match(r'^Level (\d+)(?:;|$)', str(r[7]))
+        if not unlock or not 0 <= int(unlock[1]) <= 40:
+            raise ValueError(f'Invalid Treasure unlock level: {r[0]}')
+        treasure.append(dict(id=r[0], name=r[2], kind=r[1].lower(),
+                             asset=treasure_assets[r[0]],
+                             price_usd_cents=rounded(Decimal(str(numeric(r[3], r[0])))*100),
+                             pearls=int(numeric(r[4], r[0])),
+                             coin_days_bps=rounded(Decimal(str(numeric(r[5], r[0])))*10000),
+                             level=int(unlock[1]),
+                             once_per_account=r[8]=='Lifetime once/account',
+                             permanent_frame=bool(r[9]), eligibility=r[7],
+                             source={'sheet':'Shop', 'row':row}))
+    if any(sum(o['kind']==kind for o in treasure)!=5 for kind in ('coins', 'pearls')):
+        raise ValueError('Expected five coin packs and five pearl packs')
+    utilization = Fraction(str(inputs['reference_utilization'])).limit_denominator(86400)
     overrides=dict(hatch_ms=6000,egg_counts_toward_growth=True,hatch_hungry=True,
                    feed_duration_share=.5,feed_duration_cap_ms=43200000,hungry_pauses_growth=True,
                    sickness=False,death=False,purchase_xp=0,backend='local',legacy_save_migration=False,
-                   baby_cancel='Return principal only; zero XP before Junior',
-                   source='User decisions in this task, 14 September 2026')
+                   minimum_sell_age=1,selling_rule='Eggs and Babies cannot be sold; selling starts at Junior',
+                   source='User decisions in this task, 14 and 17 September 2026')
     checksum=hashlib.sha256(path.read_bytes()).hexdigest()
     config_checksum=hashlib.sha256(json.dumps([checksum,overrides,'R25-exact-rounding-v1'],sort_keys=True).encode()).hexdigest()
     return dict(schema=4,config_version='v4-fed-1-'+config_checksum[:12],workbook_sha256=checksum,
@@ -152,6 +178,8 @@ def build_content(path=DEFAULT_WORKBOOK, assets=ROOT / 'assets'):
                 schedules=list(schedules.values()),species=species,counts={'coin':72,'companions':27,'launch_coin':40},
                 levels=[int(r[7]) for r in levels[:40]],future_levels=[int(r[7]) for r in levels[40:]],
                 level_rewards=[dict(coins=int(r[8]),pearls=int(r[9])) for r in levels[:40]],tank_entitlements=tanks,
+                treasure=dict(offers=treasure, reference_utilization_numerator=utilization.numerator,
+                              reference_utilization_denominator=utilization.denominator),
                 starter_species=['neonTetra','neonTetra','guppy','platy'],
                 decorations=dict(items=decorations,events=events,tuning=dict(placed_limit=32,animated_limit=6,emitter_limit=2,
                     particle_limit=6,launch_level_cap=40,tutorial_total_xp=0,tutorial_item='CP-01')),

@@ -34,10 +34,10 @@ void validatePurchase(const GrowthSnapshot& q){
 }
 Json encode(const State& s){
  Json j={{"version",s.version},{"contentVersion",s.contentVersion},{"simNow",s.simNow},{"wallAnchor",s.wallAnchor},{"calendarNow",s.calendarNow},{"coins",s.wallet.coins},{"pearls",s.wallet.pearls},{"xp",s.xp},{"lifetimeXp",s.lifetimeXp},{"highestRewardedLevel",s.highestRewardedLevel},{"activeTank",s.activeTank.value},{"nextFishId",s.nextFishId},{"nextDecorId",s.nextDecorId},{"rngState",s.rngState},{"claims",s.claims},{"collected",s.collected},{"mastery",s.mastery},{"totalEvents",s.totalEvents},{"tutorialStep",s.tutorialStep},{"tutorialClaims",s.tutorialClaims},{"dailyPeriod",s.dailyPeriod},{"weeklyPeriod",s.weeklyPeriod},{"giftDay",s.giftDay},{"eggDay",s.eggDay},
-  {"adultRaised",s.adultRaised},{"pendingDecor",s.pendingDecor},{"decorOwned",s.decorOwned},{"decorOnboardingComplete",s.decorOnboardingComplete},
+  {"adultRaised",s.adultRaised},{"pendingDecor",s.pendingDecor},{"decorOwned",s.decorOwned},{"environmentOwned",s.environmentOwned},{"decorOnboardingComplete",s.decorOnboardingComplete},
   {"receipts",s.receipts},{"settlements",s.settlements},{"ledger",s.ledger},{"nextRequestId",s.nextRequestId},{"revision",s.revision},{"careDays",s.careDays}};
  j["settings"]={{"reducedMotion",s.settings.reducedMotion},{"sound",s.settings.sound},{"music",s.settings.music},{"volume",s.settings.volume},{"tankLook",s.settings.tankLook}};
- j["tanks"]=Json::array();for(const auto& t:s.tanks)j["tanks"].push_back({{"id",t.id.value},{"slots",t.slots}});
+ j["tanks"]=Json::array();for(const auto& t:s.tanks)j["tanks"].push_back({{"id",t.id.value},{"slots",t.slots},{"backgroundId",t.backgroundId}});
  j["fish"]=Json::array();for(const auto& f:s.fish)j["fish"].push_back({{"id",f.id.value},{"species",f.species},{"tank",f.tank.value},{"position",point(f.position)},{"age",f.age},{"egg",f.egg},{"growthMs",f.growthMs},{"hatchAt",f.hatchAt},{"lastFedAt",f.lastFedAt},{"boughtAt",f.boughtAt},{"motion",motion(f.motion)},{"purchase",f.purchase},{"favorite",f.favorite},{"scripted",f.scripted}});
  j["companions"]=Json::array();for(const auto& f:s.companions)j["companions"].push_back({{"id",f.id.value},{"origin",f.origin.value},{"species",f.species},{"tank",f.tank.value},{"position",point(f.position)},{"stored",f.stored},{"favorite",f.favorite},{"lastFedAt",f.lastFedAt},{"motion",motion(f.motion)}});
  j["decor"]=Json::array();for(const auto& d:s.decor)j["decor"].push_back({{"id",d.id},{"kind",d.kind},{"tank",d.tank.value},{"position",point(d.position)},{"stored",d.stored},{"flipped",d.flipped},{"sizeMul",d.sizeMul}});
@@ -51,8 +51,35 @@ State decodeAndValidate(const Json& j,const Content& c){
  require(s.highestRewardedLevel==levelFor(c,s.xp),"Invalid level reward checkpoint");
  s.nextFishId=j.at("nextFishId");s.nextDecorId=j.at("nextDecorId");s.rngState=j.at("rngState");s.nextRequestId=j.at("nextRequestId");s.revision=j.at("revision");
  require(s.nextFishId>0&&s.nextDecorId>0&&s.rngState&&s.nextRequestId>0,"Invalid identity sequence");
+ // Convert the earlier separate reef/sand purchases into complete themes.
+ // Any paid legacy style grants Coral Garden, without charging again.
+ const auto owned=j.value("environmentOwned",std::vector<std::string>{});
+ std::set<std::string> oldIds,environmentIds;
+ for(const auto& id:owned){
+  require(oldIds.insert(id).second,"Duplicate environment ownership");
+  std::string mapped=id;
+  if(id=="starter-reef"||id=="golden-sand")mapped="sunlit-lagoon";
+  else if(id=="coral-arch"||id=="pearl-sand")mapped="coral-garden";
+  require(findEnvironment(mapped),"Invalid environment ownership");
+  if(environmentIds.insert(mapped).second)s.environmentOwned.push_back(mapped);
+ }
+ const auto validBackground=[&](const std::string& id){
+  const auto* style=findEnvironment(id);
+  return style&&(style->price==0||environmentIds.contains(id));
+ };
  s.tanks.clear();std::set<int> tanks;
- for(const auto& x:j.at("tanks")){Tank t{{x.at("id").get<int>()},x.at("slots").get<int>()};require(t.id.value>=1&&t.id.value<=5&&tanks.insert(t.id.value).second&&(t.slots==10||t.slots==15||t.slots==20),"Invalid tank capacity");s.tanks.push_back(t);}
+ for(const auto& x:j.at("tanks")){
+  Tank t{{x.at("id").get<int>()},x.at("slots").get<int>()};
+  require(t.id.value>=1&&t.id.value<=5&&tanks.insert(t.id.value).second&&(t.slots==10||t.slots==15||t.slots==20),"Invalid tank capacity");
+  if(x.contains("backgroundId"))t.backgroundId=x.at("backgroundId").get<std::string>();
+  else{
+   const auto reef=x.value("reefId",std::string{"starter-reef"}),sand=x.value("sandId",std::string{"golden-sand"});
+   require((reef=="starter-reef"||(reef=="coral-arch"&&oldIds.contains(reef)))&&
+           (sand=="golden-sand"||(sand=="pearl-sand"&&oldIds.contains(sand))),"Invalid legacy environment");
+   if(reef=="coral-arch"||sand=="pearl-sand")t.backgroundId="coral-garden";
+  }
+  require(validBackground(t.backgroundId),"Invalid equipped background");s.tanks.push_back(t);
+ }
  require(tanks.contains(1)&&tanks.contains(s.activeTank.value),"Missing tank");for(int id:tanks)require(id==1||tanks.contains(id-1),"Tank sequence has a gap");
  require(j.at("fish").is_array()&&j.at("fish").size()<=100,"Invalid growing collection");std::set<std::uint64_t> ids;
  for(const auto& x:j.at("fish")){

@@ -1,8 +1,14 @@
 # Run Aquarium on this Mac
 
-Double-click `Run Aquarium.command` to open the game. The launcher stores your progress in `local-data/save.json`.
+Double-click `Run Aquarium.command` to build and open the current game. The launcher stores your progress in `local-data/save.json`.
 
 The project remote is `https://github.com/xamogh/native-fishius`. The existing baseline was pushed to `main`; later workbook implementation changes remain local until a new push is authorized.
+
+## Current interface, 17 September 2026
+
+The current interface is the default on every host. The old View renderer, panel artwork and Aquarium Studio editor have been removed. `--hud-layout` is optional and selects no alternate version. Desktop and simulator launch scripts build the game before opening it.
+
+See `docs/clay-hud.md` for current controls and `docs/feature-matrix.md` for unfinished screens. Older setup and visual review records below are historical and may refer to removed screens.
 
 ## Build trees moved on 10 September 2026
 

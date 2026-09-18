@@ -73,6 +73,21 @@ Content Content::fromJson(const Json& j){
   slots+=t.addedSlots;const int step=(t.slots-10)/5;c.tankCosts[t.tank.value-1][step]=t.cost.coins;c.tankPearlCosts[t.tank.value-1][step]=t.cost.pearls;if(step==0)c.tankLevels[t.tank.value-1]=t.level;c.tankEntitlements.push_back(t);
  }
  check(c.tankEntitlements.size()==15&&slots==100,"Invalid total capacity");
+ const auto& treasure=j.at("treasure");
+ c.referenceUtilizationNumerator=treasure.at("reference_utilization_numerator");c.referenceUtilizationDenominator=treasure.at("reference_utilization_denominator");
+ check(c.referenceUtilizationNumerator>0&&c.referenceUtilizationNumerator<=c.referenceUtilizationDenominator&&c.referenceUtilizationDenominator<=86400,"Invalid reference utilization");
+ std::set<std::string> offerIds;std::array<int,3> offerCounts{};
+ for(const auto& x:treasure.at("offers")){
+  const std::string kind=x.at("kind");check(kind=="coins"||kind=="pearls"||kind=="bundle","Invalid Treasure offer kind");
+  TreasureOffer offer;offer.id=x.at("id");offer.name=x.at("name");offer.eligibility=x.at("eligibility");offer.kind=kind=="coins"?TreasureKind::Coins:kind=="pearls"?TreasureKind::Pearls:TreasureKind::Bundle;
+  offer.asset=x.at("asset");check(offer.asset.starts_with("treasure/")&&offer.asset.ends_with(".png")&&offer.asset.find("..") == std::string::npos,"Invalid Treasure artwork");
+  offer.priceUsdCents=x.at("price_usd_cents");offer.coinDaysBps=x.at("coin_days_bps");offer.level=x.at("level");offer.pearls=x.at("pearls");offer.oncePerAccount=x.at("once_per_account");offer.permanentFrame=x.at("permanent_frame");
+  check(!offer.id.empty()&&offerIds.insert(offer.id).second&&!offer.name.empty()&&offer.priceUsdCents>0&&offer.priceUsdCents<=100000&&offer.level>=0&&offer.level<=40,"Invalid Treasure offer identity or price");
+  check(offer.coinDaysBps>=0&&offer.coinDaysBps<=1000000&&offer.pearls>=0&&offer.pearls<=1000000,"Invalid Treasure contents");
+  check(offer.kind==TreasureKind::Coins?(offer.coinDaysBps>0&&offer.pearls==0):offer.kind==TreasureKind::Pearls?(offer.coinDaysBps==0&&offer.pearls>0):(offer.coinDaysBps>0&&offer.pearls>0&&offer.oncePerAccount),"Treasure contents do not match the offer kind");
+  ++offerCounts[int(offer.kind)];c.treasureOffers.push_back(std::move(offer));
+ }
+ check(offerCounts==std::array<int,3>{5,5,1},"Expected five coin packs, five pearl packs and one starter bundle");
  const auto& rewards=j.at("level_rewards");check(rewards.size()==40,"Expected 40 level rewards");
  for(int i=0;i<40;++i){c.levelRewards[i]={rewards[i].at("coins"),rewards[i].at("pearls")};check(c.levelRewards[i].coins>=0&&c.levelRewards[i].coins<limit/100&&c.levelRewards[i].pearls>=0&&c.levelRewards[i].pearls<limit/100,"Invalid level reward");}
  c.starters=j.at("starter_species").get<std::vector<std::string>>();for(const auto& id:c.starters)check(c.find(id)&&c.find(id)->level==1&&!c.find(id)->companion,"Invalid gifted starter fish");
@@ -87,7 +102,7 @@ bool eventOpen(const Species& s,const Calendar& c){if(!s.eventConfigured)return 
 int levelFor(const Content& c,Amount xp){return static_cast<int>(std::upper_bound(c.levels.begin(),c.levels.end(),xp)-c.levels.begin());}
 Money levelReward(const Content& c,int level){return level>=2&&level<=40?c.levelRewards[level-1]:Money{0,0};}
 Care careOf(const Species&,const Fish& f,Millis now){if(f.egg)return Care::Fed;return now-f.lastFedAt>=f.purchase.feedMs?Care::Hungry:Care::Fed;}
-bool sellable(const Species&,const Fish& f){return f.purchase.durationMs>0&&!f.stashed&&!f.favorite;}
+bool sellable(const Species&,const Fish& f){return f.purchase.durationMs>0&&!f.egg&&f.age>=1&&!f.stashed&&!f.favorite;}
 double ageScale(const Species&,const Fish& f){return .66+.41*growthProgress(f);}
 void advanceFish(const Species&,Fish& f,Millis from,Millis to){
  if(to<=from||f.stashed||f.age>=4)return;
@@ -100,7 +115,7 @@ void advanceFish(const Species&,Fish& f,Millis from,Millis to){
  if(end>from)f.growthMs=std::min(f.purchase.durationMs,f.growthMs+end-from);
  f.age=growthStage(f.purchase,f.growthMs);
 }
-std::string errorText(Error e){switch(e){case Error::Conflict:return "The offer changed. Please review it and try again.";case Error::SaveFailure:return "The action was not saved. Please retry.";case Error::Protected:return "Unfavorite this fish before rehoming it.";case Error::None:return "";case Error::Unknown:return "That item is not available.";case Error::NoArt:return "Artwork unavailable. Nothing was charged.";case Error::EventClosed:return "This seasonal event is closed.";case Error::Level:return "Reach the required level first.";case Error::Claimed:return "Already claimed for this period.";case Error::Full:return "The growing slots are full. Keep or rehome a fish, expand or switch tanks.";case Error::Funds:return "Not enough currency.";case Error::InvalidPosition:return "Place inside the aquarium.";case Error::InvalidFish:return "That fish is no longer here.";case Error::NotSellable:return "This fish cannot be rehomed.";case Error::Dead:return "A dead fish cannot be stored or fed.";case Error::NotDead:return "This fish is already alive.";case Error::NotStored:return "That fish is not in inventory.";case Error::AlreadyOwned:return "You already own this tank.";case Error::PreviousTank:return "Unlock the preceding tank first.";case Error::Maximum:return "Maximum capacity reached.";case Error::NoFoodRoom:return "There is enough food in the water already.";case Error::Unavailable:return "This external service is not connected.";case Error::NotReady:return "Complete the objective first.";case Error::Overflow:return "The transaction exceeds the supported save bounds.";}return "Unknown action.";}
+std::string errorText(Error e){switch(e){case Error::Conflict:return "The offer changed. Please review it and try again.";case Error::SaveFailure:return "The action was not saved. Please retry.";case Error::Protected:return "Unfavorite this fish before rehoming it.";case Error::None:return "";case Error::Unknown:return "That item is not available.";case Error::NoArt:return "Artwork unavailable. Nothing was charged.";case Error::EventClosed:return "This seasonal event is closed.";case Error::Level:return "Reach the required level first.";case Error::Claimed:return "Already claimed for this period.";case Error::Full:return "The growing slots are full. Keep or rehome a fish, expand or switch tanks.";case Error::Funds:return "Open the shop for more coins or pearls.";case Error::InvalidPosition:return "Place inside the aquarium.";case Error::InvalidFish:return "That fish is no longer here.";case Error::NotSellable:return "This fish cannot be rehomed.";case Error::Dead:return "A dead fish cannot be stored or fed.";case Error::NotDead:return "This fish is already alive.";case Error::NotStored:return "That fish is not in inventory.";case Error::AlreadyOwned:return "You already own this tank.";case Error::PreviousTank:return "Unlock the preceding tank first.";case Error::Maximum:return "Maximum capacity reached.";case Error::NoFoodRoom:return "There is enough food in the water already.";case Error::Unavailable:return "This external service is not connected.";case Error::NotReady:return "Complete the objective first.";case Error::Overflow:return "The transaction exceeds the supported save bounds.";}return "Unknown action.";}
 std::string stageName(const Fish& f){if(f.dead)return "Dead";if(f.egg)return "Egg";constexpr std::array<const char*,5> names{"Baby","Junior","Young","Mature","Adult"};return names[std::clamp(f.age,0,4)];}
 std::string careName(Care c){switch(c){case Care::Fed:return "Happy & fed";case Care::Hungry:return "Hungry";case Care::Urgent:return "Feed soon!";case Care::Sick:return "SICK";case Care::Dead:return "Needs revival";}return "";}
 Domain::Domain(Content content,Millis calendarMs,std::uint64_t seed):content_(std::move(content)){
@@ -125,7 +140,7 @@ Result Domain::blocker(const Species& s,bool includeCapacity)const{
 }
 Result Domain::requireFunds(Amount coins,Amount pearls)const{
  const CurrencyShortfall missing{std::max(Amount{},coins-state_.wallet.coins),std::max(Amount{},pearls-state_.wallet.pearls)};
- if(missing.coins||missing.pearls)return {.error=Error::Funds,.shortfall=missing};
+ if(missing.coins||missing.pearls)return {.error=Error::Funds,.message=missing.coins?(missing.pearls?"Not enough coins and pearls.":"Not enough coins."):"Not enough pearls.",.shortfall=missing};
  return {};
 }
 Result Domain::grant(Amount coins,Amount xp,Amount pearls){
@@ -204,6 +219,7 @@ void Domain::install(State candidate){state_=std::move(candidate);configureExtra
 Result Domain::executeImpl(const Command& c){
  Fish* f=mutableFish(c.fish);
  switch(c.action){
+ case Action::PurchaseEnvironment:case Action::EquipEnvironment:return executeEnvironment(c);
  case Action::Buy:{
   const auto* s=content_.find(c.key);if(!s)return bad(Error::Unknown);if(auto gate=blocker(*s);!gate)return gate;
   if(!validPoint(c.point))return bad(Error::InvalidPosition);

@@ -1,6 +1,7 @@
 #include "aquarium/hud.hpp"
 #include "aquarium/hud_dialog.hpp"
 #include "aquarium/hud_tokens.hpp"
+#include "aquarium/hud_tanks.hpp"
 #include "aquarium/shop_theme.hpp"
 #include "clay.h"
 #include <algorithm>
@@ -29,7 +30,7 @@ void paintCurrencyIcon(Canvas& canvas,Rect box,bool pearl){
  }
 }
 constexpr std::array controls{
- HudPart::CoinPlus,HudPart::PearlPlus,HudPart::Tank,HudPart::Projects,HudPart::Bag,HudPart::Settings,HudPart::Food,HudPart::Rewards,HudPart::Shop};
+ HudPart::CoinPlus,HudPart::PearlPlus,HudPart::Tank,HudPart::Projects,HudPart::Bag,HudPart::Settings,HudPart::Food,HudPart::Rehome,HudPart::Rewards,HudPart::Shop};
 struct ContextGuard {
  Clay_Context* previous{Clay_GetCurrentContext()};
  ~ContextGuard(){Clay_SetCurrentContext(previous);}
@@ -72,7 +73,8 @@ HudLayout layoutHud(float width,float height,Insets safe,float minimumTouch){
  const float imageAdvance=badge-hudTokens::overlap*density;
  const float primary=hudTokens::shop*u,bagWidth=hudTokens::bagWidth*u;
  auto tile=[&](HudPart part,HudPart icon,HudPart label,float w,float h){
-  CLAY(named(part,flow(CLAY_SIZING_FIXED(w),CLAY_SIZING_FIXED(h),CLAY_TOP_TO_BOTTOM,((part==HudPart::Food||part==HudPart::Rewards)?hudTokens::smallGap:hudTokens::overlap)*u,((part==HudPart::Food||part==HudPart::Rewards)?hudTokens::smallGap:hudTokens::padding)*u))){
+  const bool small=part==HudPart::Food||part==HudPart::Rewards||part==HudPart::Rehome;
+  CLAY(named(part,flow(CLAY_SIZING_FIXED(w),CLAY_SIZING_FIXED(h),CLAY_TOP_TO_BOTTOM,(small?hudTokens::smallGap:hudTokens::overlap)*u,(small?hudTokens::smallGap:hudTokens::padding)*u))){
    leaf(icon,CLAY_SIZING_GROW(),CLAY_SIZING_GROW());
    leaf(label,CLAY_SIZING_GROW(),CLAY_SIZING_FIXED(line));
   }
@@ -99,6 +101,7 @@ HudLayout layoutHud(float width,float height,Insets safe,float minimumTouch){
   auto column=flow(CLAY_SIZING_FIT(),CLAY_SIZING_FIT(),CLAY_TOP_TO_BOTTOM,gap);
   column.layout.childAlignment.x=CLAY_ALIGN_X_RIGHT;
   CLAY(column){
+   tile(HudPart::Rehome,HudPart::RehomeIcon,HudPart::RehomeLabel,hudTokens::food*u,hudTokens::food*u);
    tile(HudPart::Food,HudPart::FoodIcon,HudPart::FoodLabel,hudTokens::food*u,hudTokens::food*u);
    tile(HudPart::Projects,HudPart::ProjectsIcon,HudPart::ProjectsLabel,bagWidth,hudTokens::bagHeight*u);
    tile(HudPart::Bag,HudPart::BagIcon,HudPart::BagLabel,bagWidth,hudTokens::bagHeight*u);
@@ -168,7 +171,9 @@ ShopLayout layoutShop(float width,float height,Insets safe,float minimumTouch){
   auto header=flow(CLAY_SIZING_GROW(),CLAY_SIZING_FIXED(152*u),CLAY_LEFT_TO_RIGHT,8*u);header.layout.childAlignment.y=CLAY_ALIGN_Y_BOTTOM;
   CLAY(element(0,header)){
    box(30,CLAY_SIZING_FIXED(64*u),CLAY_SIZING_FIXED(0));spacer(CLAY_LEFT_TO_RIGHT);
-   for(int i=0;i<4;++i)box(10+i,CLAY_SIZING_FIXED(176*u),CLAY_SIZING_FIXED(128*u));
+   for(const auto category:{ShopCategory::Fish,ShopCategory::Plants,ShopCategory::Decorations,
+                            ShopCategory::Tanks,ShopCategory::Treasure,ShopCategory::Environment})
+    box(10+static_cast<int>(category),CLAY_SIZING_FIXED(176*u),CLAY_SIZING_FIXED(128*u));
    spacer(CLAY_LEFT_TO_RIGHT);
    auto close=flow(CLAY_SIZING_FIXED(64*u),CLAY_SIZING_FIXED(64*u),CLAY_LEFT_TO_RIGHT);close.floating.attachTo=CLAY_ATTACH_TO_PARENT;close.floating.attachPoints.parent=CLAY_ATTACH_POINT_RIGHT_TOP;close.floating.attachPoints.element=CLAY_ATTACH_POINT_RIGHT_TOP;
    CLAY(element(1,close)){}
@@ -176,7 +181,7 @@ ShopLayout layoutShop(float width,float height,Insets safe,float minimumTouch){
   }
   box(2,CLAY_SIZING_GROW(),CLAY_SIZING_FIXED(96*u));
   CLAY(flow(CLAY_SIZING_GROW(),CLAY_SIZING_FIXED(64*u),CLAY_LEFT_TO_RIGHT,12*u)){
-   spacer(CLAY_LEFT_TO_RIGHT);for(int i=0;i<2;++i)box(14+i,CLAY_SIZING_FIXED(240*u),CLAY_SIZING_FIXED(56*u));spacer(CLAY_LEFT_TO_RIGHT);
+   spacer(CLAY_LEFT_TO_RIGHT);for(int i=0;i<2;++i)box(40+i,CLAY_SIZING_FIXED(240*u),CLAY_SIZING_FIXED(56*u));spacer(CLAY_LEFT_TO_RIGHT);
   }
   CLAY(element(3,flow(CLAY_SIZING_GROW(),CLAY_SIZING_GROW(),CLAY_LEFT_TO_RIGHT,20*u,12*u))){
    for(int i=0;i<5;++i)box(20+i,CLAY_SIZING_GROW(),CLAY_SIZING_GROW());
@@ -188,11 +193,14 @@ ShopLayout layoutShop(float width,float height,Insets safe,float minimumTouch){
  }
  Clay_EndLayout();if(!state.error.empty())throw std::runtime_error(state.error);
  auto bounds=[&](int i){auto b=Clay_GetElementData(CLAY_IDI("shop",i)).boundingBox;return Rect{b.x,b.y,b.width,b.height};};
- ShopLayout result{};result.page={0,0,width,height};result.unit=u;
+ ShopLayout result{};result.page={0,0,width,height};result.unit=u;result.minimumTouch=minimumTouch;
  result.header=bounds(0);result.close=bounds(1);result.title=bounds(2);result.body=bounds(3);result.footer=bounds(4);
- for(int i=0;i<4;++i)result.tabs[i]=bounds(10+i);
- for(int i=0;i<2;++i){result.subtabs[i]=bounds(14+i);result.wallets[i]=bounds(16+i);}
+ result.scrollTrack={result.body.x+12*u,result.body.y+result.body.h-12*u,result.body.w-24*u,8*u};
+ for(int i=0;i<6;++i)result.tabs[i]=bounds(10+i);
+ for(int i=0;i<2;++i){result.subtabs[i]=bounds(40+i);result.wallets[i]=bounds(16+i);}
  for(int i=0;i<5;++i)result.cards[i]=bounds(20+i);
+ const float inset=result.cards[0].x-result.body.x;
+ result.cardViewport={result.cards[0].x,result.cards[0].y,result.body.w-2*inset,result.cards[0].h+4*u};
  // Reuse the exact main HUD layout, translating the currency group only.
  result.currencyHud=layoutHud(width,height,safe,minimumTouch);
  const auto left=result.currencyHud[HudPart::CoinIcon],right=result.currencyHud[HudPart::Pearls];
@@ -204,9 +212,21 @@ ShopLayout layoutShop(float width,float height,Insets safe,float minimumTouch){
 }
 std::vector<ShopItem> shopItems(const Domain& domain,const ShopState& state){
  std::vector<ShopItem> result;
+ if(state.category==ShopCategory::Tanks)return result;
  if(state.category==ShopCategory::Treasure){
-  const std::string resource=state.subtab==0?"Coins":"Pearls";
-  for(const auto name:{"Pocket of ","Pile of ","Bag of ","Box of ","Chest of "})result.push_back({name+resource,"",resource,"Coming soon",false});
+  const bool coins=state.subtab==0;
+  for(const auto& offer:domain.content().treasureOffers){
+   if(offer.kind!=(coins?TreasureKind::Coins:TreasureKind::Pearls))continue;
+   const auto amount=treasureContents(domain.content(),offer,domain.level());
+   result.push_back({offer.name,offer.asset,compact(coins?amount.coins:amount.pearls)+(coins?" Coins":" Pearls"),usdPrice(offer.priceUsdCents),domain.level()<offer.level,{},{},offer.id});
+  }
+ }else if(state.category==ShopCategory::Environment){
+  const auto* tank=domain.tank(domain.state().activeTank);
+  for(const auto& item:environmentCatalog()){
+   const bool owned=domain.ownsEnvironment(item.id);if(state.subtab==1&&!owned)continue;
+   const bool selected=tank&&tank->backgroundId==item.id;
+   result.push_back({item.name,item.asset,"",selected?"Selected":owned?"Use background":compact(item.price)+" Coins",false,{},item.id});
+  }
  }else if(state.category==ShopCategory::Fish){
   for(const auto& item:domain.content().species){
    if(!item.artReady||item.releaseGate!="Launch")continue;
@@ -225,7 +245,7 @@ std::vector<ShopItem> shopItems(const Domain& domain,const ShopState& state){
  return result;
 }
 namespace {
-void paintWallet(Canvas& canvas,const Domain& domain,const HudLayout& layout,std::optional<HudPart> hover={},std::optional<HudPart> pressed={},bool showPlus=true){
+void paintWallet(Canvas& canvas,const Domain& domain,const HudLayout& layout,std::optional<HudPart> hover={},std::optional<HudPart> pressed={},bool showPlus=true,const HudRewardDisplay* rewards=nullptr){
  const float u=layout.unit;
  for(bool pearl:{false,true}){
   const auto bar=layout[pearl?HudPart::Pearls:HudPart::Coins];
@@ -236,9 +256,15 @@ void paintWallet(Canvas& canvas,const Domain& domain,const HudLayout& layout,std
   canvas.round(bar,counterBase,12*u,counterEdge,4*u,false,false);
   canvas.round({bar.x+4*u,bar.y+4*u,bar.w-8*u,bar.h-12*u},counterFace,8*u,{},0,false,false);
   canvas.round({bar.x+12*u,bar.y+4*u,std::min(40*u,bar.w*.25f),4*u},{255,255,246,190},4*u,{},0,false,false);
+  const float pulse=!pearl&&rewards?rewards->coinPulse:0;
+  const float bounce=rewards&&!rewards->reducedMotion?pulse:0;
+  if(pulse>0)canvas.outline({bar.x-2*u,bar.y-2*u,bar.w+4*u,bar.h+4*u},{255,245,182,Uint8(220*pulse)},14*u,3*u);
   const auto amount=layout[pearl?HudPart::PearlAmount:HudPart::CoinAmount];
-  canvas.text(compact(pearl?domain.state().wallet.pearls:domain.state().wallet.coins),amount.x+amount.w*.5f,amount.y+(amount.h-hudTokens::textBody*u)*.5f,hudTokens::textBody*u,counterEdge,true,amount.w,true,true);
-  const auto icon=layout[pearl?HudPart::PearlIcon:HudPart::CoinIcon];
+  const float font=hudTokens::textBody*u*(1+.08f*bounce);
+  const Amount value=pearl?domain.state().wallet.pearls:rewards?rewards->coins:domain.state().wallet.coins;
+  canvas.text(compact(value),amount.x+amount.w*.5f,amount.y+(amount.h-font)*.5f,font,counterEdge,true,amount.w,true,true);
+  auto icon=layout[pearl?HudPart::PearlIcon:HudPart::CoinIcon];
+  const float grow=icon.w*.08f*bounce;icon={icon.x-grow,icon.y-grow,icon.w+2*grow,icon.h+2*grow};
   paintCurrencyIcon(canvas,icon,pearl);
   if(!showPlus)continue;
   const auto plus=pearl?HudPart::PearlPlus:HudPart::CoinPlus;
@@ -260,23 +286,35 @@ void paintWallet(Canvas& canvas,const Domain& domain,const HudLayout& layout,std
  }
 }
 }
-int shopControl(const ShopLayout& layout,SDL_FPoint point){
+Rect shopSubtabBounds(const ShopLayout& layout,ShopCategory category,int index){
+ if(index<0||index>=(category==ShopCategory::Tanks?1:2))return {};
+ auto bounds=layout.subtabs[index];
+ if(category==ShopCategory::Tanks)bounds.x=layout.title.x+(layout.title.w-bounds.w)*.5f;
+ return bounds;
+}
+int shopControl(const ShopLayout& layout,SDL_FPoint point,ShopCategory category){
  if(layout.close.has(point.x,point.y))return 6;
- for(int i=0;i<4;++i)if(layout.tabs[i].has(point.x,point.y))return i;
- for(int i=0;i<2;++i)if(layout.subtabs[i].has(point.x,point.y))return 4+i;
+ for(int i=0;i<6;++i)if(layout.tabs[i].has(point.x,point.y))return i>=4?i+3:i;
+ for(int i=0;i<(category==ShopCategory::Tanks?1:2);++i)if(shopSubtabBounds(layout,category,i).has(point.x,point.y))return 4+i;
  return -1;
 }
 void activateShopControl(ShopState& state,int control){
- if(control>=0&&control<4){state.category=static_cast<ShopCategory>(control);state.subtab=0;state.scroll=0;}
- else if(control==4||control==5){state.subtab=control-4;state.scroll=0;}
+ if(control==8){state.category=ShopCategory::Tanks;state.subtab=0;state.scroll=0;}
+ else if(control==7){state.category=ShopCategory::Environment;state.subtab=0;state.scroll=0;}
+ else if(control>=0&&control<4){state.category=static_cast<ShopCategory>(control);state.subtab=0;state.scroll=0;}
+ else if((control==4||control==5)&&!(state.category==ShopCategory::Tanks&&control==5)){state.subtab=control-4;state.scroll=0;}
 }
-void scrollShop(ShopState& state,float delta,std::size_t count){state.scroll=std::clamp(state.scroll+delta,0.f,std::max(0.f,float(count)-5));}
+void scrollShop(ShopState& state,float delta,std::size_t count){state.scroll=std::clamp(state.scroll+delta,0.f,std::max(0.f,float(count)-(state.category==ShopCategory::Environment?2:5)));}
 std::optional<std::size_t> shopCardAt(const ShopLayout& layout,const ShopState& state,std::size_t count,SDL_FPoint point){
- if(!layout.body.has(point.x,point.y))return {};
+ if(!layout.cardViewport.has(point.x,point.y))return {};
  for(std::size_t i=0;i<count;++i)if(shopCardBounds(layout,state,i).has(point.x,point.y))return i;
  return {};
 }
-Rect shopCardBounds(const ShopLayout& layout,const ShopState& state,std::size_t index){auto card=layout.cards[0];card.x+=(float(index)-state.scroll)*(layout.cards[1].x-layout.cards[0].x);return card;}
+Rect shopCardBounds(const ShopLayout& layout,const ShopState& state,std::size_t index){if(state.category==ShopCategory::Environment){
+ const float u=layout.unit,gap=28*u,height=layout.body.h-48*u;
+ const float width=std::min((layout.body.w-76*u)*.5f,(height-104*u)*1672.f/941.f+24*u);
+ return {layout.body.x+(layout.body.w-2*width-gap)*.5f+(float(index)-state.scroll)*(width+gap),layout.body.y+20*u,width,height};
+ }auto card=layout.cards[0];card.x+=(float(index)-state.scroll)*(layout.cards[1].x-layout.cards[0].x);return card;}
 Rect shopInfoBounds(Rect card,float u){return {card.x+8*u,card.y+8*u,40*u,40*u};}
 namespace {
 void paintMenuChrome(Canvas& canvas,const Domain& domain,const ShopLayout& l,int hover,int pressed){
@@ -287,67 +325,79 @@ void paintMenuChrome(Canvas& canvas,const Domain& domain,const ShopLayout& l,int
  shopTheme::panel(canvas,l.close,u,shopTheme::Surface::Close,pressed==6);if(hover==6)canvas.outline(l.close,white,12*u,4*u);label("X",l.close,40);
 }
 }
-std::array<Rect,6> layoutTankCards(const ShopLayout& menu){
- static thread_local HudContext state;ContextGuard guard;
- const float top=menu.title.y,u=menu.unit;
- Clay_SetCurrentContext(state.context);Clay_SetLayoutDimensions({menu.header.w,menu.footer.y-top});state.error.clear();
- Clay_BeginLayout();
- CLAY(flow(CLAY_SIZING_GROW(),CLAY_SIZING_GROW(),CLAY_TOP_TO_BOTTOM,24*u,24*u)){
-  for(int row=0;row<2;++row){
-   CLAY(flow(CLAY_SIZING_GROW(),CLAY_SIZING_GROW(),CLAY_LEFT_TO_RIGHT,24*u)){
-    for(int col=0;col<3;++col){
-     auto card=flow(CLAY_SIZING_GROW(),CLAY_SIZING_GROW(),CLAY_LEFT_TO_RIGHT);card.id=CLAY_IDI("tank-card",row*3+col);CLAY(card){}
-    }
-   }
-  }
- }
- Clay_EndLayout();if(!state.error.empty())throw std::runtime_error(state.error);
- std::array<Rect,6> cards{};
- for(int i=0;i<6;++i){const auto box=Clay_GetElementData(CLAY_IDI("tank-card",i)).boundingBox;cards[i]={menu.header.x+box.x,top+box.y,box.width,box.height};}
- return cards;
-}
-void paintTankMenu(Canvas& canvas,const Domain& domain,const ShopLayout& layout,int hover,int pressed){
- canvas.fill(layout.page,{234,232,217,255});
- canvas.fill({0,0,layout.page.w,layout.title.y},{15,38,46,255});
- for(const auto card:layoutTankCards(layout))canvas.round(card,{68,183,208,255},12*layout.unit,{24,44,48,255},4*layout.unit,true,true);
- paintMenuChrome(canvas,domain,layout,hover,pressed);
-}
-void paintShop(Canvas& canvas,const Domain& domain,const ShopLayout& l,const ShopState& state,int hover,int pressed){
+void paintShop(Canvas& canvas,const Domain& domain,const ShopLayout& l,const ShopState& state,int hover,int pressed,const TankShopState* tanks){
  const float u=l.unit;const auto ink=shopTheme::ink,white=shopTheme::white;
  using Surface=shopTheme::Surface;
- const std::array<std::string_view,4> names{"Fish","Plants","Decorations","Treasure"};
+ const std::array<std::string_view,6> names{"Fish","Plants","Decorations","Treasure","Backgrounds","Tanks"};
  auto label=[&](std::string_view text,Rect r,float size,Color color=shopTheme::white){canvas.text(text,r.x+r.w*.5f,r.y+(r.h-size*u)*.5f,size*u,color,true,r.w-12*u,true,true);};
  auto token=[&](Rect r,bool pearl){paintCurrencyIcon(canvas,r,pearl);};
  shopTheme::backdrop(canvas,l);
- for(int i=0;i<4;++i){
+ for(int i=0;i<6;++i){
+  const int control=i>=4?i+3:i;
   auto tab=l.tabs[i];const bool active=i==int(state.category);if(active){tab.y-=20*u;tab.h+=24*u;}
-  shopTheme::panel(canvas,tab,u,active?Surface::SelectedTab:Surface::Tab,pressed==i);
-  if(hover==i)canvas.outline(tab,white,12*u,4*u);
-  shopTheme::tabArt(canvas,{tab.x+16*u,tab.y+8*u,tab.w-32*u,tab.h-44*u},i);
+  shopTheme::panel(canvas,tab,u,active?Surface::SelectedTab:Surface::Tab,pressed==control);
+  if(hover==control)canvas.outline(tab,white,12*u,4*u);
+  if(i==4)canvas.icon("hud-icons/shop-tab-backgrounds-v1.png",{tab.x+16*u,tab.y+8*u,tab.w-32*u,tab.h-44*u});
+  else if(i==5)canvas.icon("tank-grid/active.png",{tab.x+4*u,tab.y+8*u,tab.w-8*u,tab.h-40*u});
+  else shopTheme::tabArt(canvas,{tab.x+16*u,tab.y+8*u,tab.w-32*u,tab.h-44*u},i);
   label(names[i],{tab.x,tab.y+tab.h-36*u,tab.w,32*u},24,ink);
  }
  label(names[int(state.category)],l.title,48,ink);
- for(int i=0;i<2;++i){shopTheme::panel(canvas,l.subtabs[i],u,state.subtab==i?Surface::Positive:Surface::Button,pressed==4+i);if(hover==4+i)canvas.outline(l.subtabs[i],white,12*u,4*u);label(state.category==ShopCategory::Treasure?(i==0?"Coins":"Pearls"):(i==0?"All":"Unlocked"),l.subtabs[i],28);}
+ if(state.category==ShopCategory::Treasure)label("USD prices · Coming soon",{l.title.x+l.title.w-360*u,l.title.y,360*u,l.title.h},18,ink);
+ for(int i=0;i<(state.category==ShopCategory::Tanks?1:2);++i){
+  const auto tab=shopSubtabBounds(l,state.category,i);
+  shopTheme::panel(canvas,tab,u,state.subtab==i?Surface::Positive:Surface::Button,pressed==4+i);
+  if(hover==4+i)canvas.outline(tab,white,12*u,4*u);
+  label(state.category==ShopCategory::Environment?(i==0?"All":"Owned"):state.category==ShopCategory::Treasure?(i==0?"Coins":"Pearls"):(i==0?"All":"Unlocked"),tab,28);
+ }
  shopTheme::panel(canvas,l.body,u,Surface::Well);
+ if(state.category==ShopCategory::Tanks){paintTankShop(canvas,domain,l,tanks?*tanks:TankShopState{});paintMenuChrome(canvas,domain,l,hover,pressed);return;}
  const auto items=shopItems(domain,state);
- canvas.clip(l.body);
+ canvas.clip(l.cardViewport);
  for(std::size_t i=0;i<items.size();++i){
   Rect card=shopCardBounds(l,state,i);if(card.x+card.w<l.body.x||card.x>l.body.x+l.body.w)continue;
   const auto& item=items[i];
-  if(item.fish)shopTheme::panel(canvas,card,u,item.locked?Surface::LockedFishCard:Surface::FishCard);
-  else shopTheme::card(canvas,card,u,item.locked);
-  label(item.name,{card.x+(item.fish?52:4)*u,card.y+12*u,card.w-(item.fish?60:8)*u,56*u},28,item.fish?shopTheme::fishInk:white);
+  if(!item.environmentId.empty()){
+   const bool selected=item.price=="Selected";
+   canvas.gradient({card.x,card.y+7*u,card.w,card.h},{8,62,76,150},{8,62,76,150},18*u);
+   canvas.gradient(card,{255,242,193},{223,185,112},16*u);
+   canvas.outline(card,{255,251,219},16*u,3*u);
+   const Rect art{card.x+12*u,card.y+12*u,card.w-24*u,card.h-104*u};
+   canvas.environment(art,item.environmentId);
+   canvas.outline(art,{37,111,120},2*u,3*u);
+   canvas.gradient({art.x,art.y,art.w,5*u},{255,255,241,110},{255,255,241,0});
+   const Rect footer{card.x+16*u,art.y+art.h+12*u,card.w-32*u,64*u};
+   const float buttonWidth=std::min(180*u,footer.w*.38f);
+   canvas.text(item.name,footer.x,footer.y+18*u,28*u,ink,false,footer.w-buttonWidth-12*u,true,true);
+   const Rect button{footer.x+footer.w-buttonWidth,footer.y+4*u,buttonWidth,56*u};
+   shopTheme::panel(canvas,button,u,selected?Surface::Button:Surface::Buy);
+   if(item.price.ends_with(" Coins")){
+    token({button.x+12*u,button.y+10*u,36*u,36*u},false);
+    label(item.price.substr(0,item.price.size()-6),{button.x+48*u,button.y,button.w-54*u,button.h},28);
+   }else label(selected?"Selected":"Use",button,24);
+   continue;
+  }
+  shopTheme::card(canvas,card,u,item.locked);
+  label(item.name,{card.x+(item.fish?52:4)*u,card.y+12*u,card.w-(item.fish?60:8)*u,56*u},28,white);
   if(item.fish){const auto info=shopInfoBounds(card,u);shopTheme::panel(canvas,info,u,Surface::Button);canvas.gradient({info.x+18*u,info.y+8*u,4*u,4*u},white,white,2*u);canvas.gradient({info.x+18*u,info.y+16*u,4*u,16*u},white,white,2*u);}
   if(!item.fish)label(item.detail,{card.x,card.y+72*u,card.w,40*u},28,item.locked?Color{235,229,194,255}:white);
-  else if(item.locked)label(item.detail,{card.x,card.y+60*u,card.w,28*u},20,shopTheme::fishInk);
+  else if(item.locked)label(item.detail,{card.x,card.y+60*u,card.w,28*u},20,Color{235,229,194,255});
   Rect art{card.x+24*u,card.y+124*u,card.w-48*u,std::max(32*u,card.h-224*u)};
   if(item.fish)art={card.x+24*u,card.y+80*u,card.w-48*u,std::max(24*u,card.h-288*u)};
-  if(!item.asset.empty())canvas.icon(item.asset,art,item.locked?.6f:1.f);
+  if(!item.environmentId.empty()){
+   const float previewHeight=std::min(art.h,art.w*941.f/1672.f);
+   canvas.environment({art.x,art.y+(art.h-previewHeight)*.5f,art.w,previewHeight},item.environmentId);
+  }else if(!item.asset.empty())canvas.icon(item.asset,art,item.locked?.6f:1.f);
   else{const float side=std::min(art.w,art.h)*.6f;token({art.x+(art.w-side)*.5f,art.y+(art.h-side)*.5f,side,side},state.subtab==1);}
+  if(item.locked){
+   const float lock=std::min(76*u,art.h*.6f);
+   shopTheme::lockIcon(canvas,{art.x+(art.w-lock)*.5f,art.y+(art.h-lock)*.5f,lock,lock});
+  }
+  if(!item.treasureId.empty())label("Coming soon",{card.x+8*u,card.y+card.h-102*u,card.w-16*u,26*u},18,white);
   if(item.fish){
    const auto& offer=*item.fish;const auto& q=offer.quote;
    const Rect info{card.x+12*u,card.y+card.h-196*u,card.w-24*u,80*u};
-   const auto textInk=shopTheme::fishInk;
+   const auto textInk=white;
    auto line=[&](std::string_view text,float y){canvas.text(text,info.x+info.w*.5f,y,24*u,textInk,true,info.w-8*u,true,true);};
    if(offer.companion){line("Already adult",info.y);line("No sale rewards",info.y+36*u);}
    else{
@@ -372,8 +422,7 @@ void paintShop(Canvas& canvas,const Domain& domain,const ShopLayout& l,const Sho
    }
   }
   Rect price{card.x+12*u,card.y+card.h-68*u,card.w-24*u,56*u};
-  if(item.fish)shopTheme::panel(canvas,price,u,item.locked?Surface::LockedPrice:Surface::Buy);
-  else canvas.gradient(price,{41,132,148},{19,89,109},8*u);
+  shopTheme::pricePanel(canvas,price,u);
   const bool pearlPrice=item.price.ends_with(" Pearls"),coinPrice=item.price.ends_with(" Coins");
   if(coinPrice||pearlPrice){
    const auto amount=item.price.substr(0,item.price.size()-(pearlPrice?7:6));
@@ -386,35 +435,58 @@ void paintShop(Canvas& canvas,const Domain& domain,const ShopLayout& l,const Sho
  }
  if(items.empty())label("No items available",l.body,32);
  canvas.clearClip();
- if(items.size()>5){const float available=l.body.w-24*u;canvas.gradient({l.body.x+12*u,l.body.y+l.body.h-12*u,available,8*u},{12,67,82},{12,67,82},4*u);canvas.gradient({l.body.x+12*u+available*state.scroll/items.size(),l.body.y+l.body.h-12*u,available*5/items.size(),8*u},{168,239,182},{104,201,155},4*u);}
+ const float visible=state.category==ShopCategory::Environment?2.f:5.f;
+ if(items.size()>visible){const auto track=l.scrollTrack;shopTheme::scrollbar(canvas,track,{track.x+track.w*state.scroll/items.size(),track.y,track.w*visible/items.size(),track.h},u);}
  paintMenuChrome(canvas,domain,l,hover,pressed);
 }
 
 void paintShopFishDetails(Canvas& canvas,const Domain& domain,const HudDialogLayout& layout,const Species& species){
- const float u=layout.unit;const auto r=layout.content;const auto ink=shopTheme::ink;
- const auto q=domain.quote(species);
- auto line=[&](std::string_view text,float x,float y,float width,float size=24){canvas.text(text,x,y,size*u,ink,false,width,true,true);};
- canvas.icon(species.asset,{r.x,r.y,220*u,156*u});
- const float x=r.x+244*u,w=r.w-244*u;
- line(species.companion?"Permanent display companion":"Raise this fish and collect its adult reward.",x,r.y,w);
- line("Price: "+compact(species.currency==Currency::Coins?q.principal:species.price)+(species.currency==Currency::Pearls?" pearls":" coins"),x,r.y+40*u,w,28);
- if(species.level>domain.level())line("Unlocks at level "+std::to_string(species.level),x,r.y+80*u,w);
- else line("Available at your level",x,r.y+80*u,w);
- line(species.companion?"Already adult. No coin or XP sale rewards.":"Growth times start at purchase and assume regular feeding.",r.x,r.y+176*u,r.w);
- line("Feed every "+shopDuration(species.companion?43200000:q.feedMs)+(species.companion?".":". Growth pauses when hungry."),r.x,r.y+208*u,r.w);
- if(species.companion){line("Uses a display slot. You can keep it in your aquarium.",r.x,r.y+260*u,r.w);return;}
- constexpr std::array<std::string_view,5> stages{"Baby","Junior","Young","Mature","Adult"};
- const float y=r.y+256*u,row=36*u;
- canvas.gradient({r.x,y-4*u,r.w,32*u},{193,222,205},{193,222,205},4*u);
- line("Stage",r.x+12*u,y,r.w*.23f);line("Time from purchase",r.x+r.w*.24f,y,r.w*.35f);line("Sale reward",r.x+r.w*.64f,y,r.w*.35f);
- for(int i=0;i<5;++i){
-  Fish fish;fish.age=i;fish.purchase=q;const auto reward=fishReward(fish);
-  const auto elapsed=q.durationMs/10000*q.stages[i]+q.durationMs%10000*q.stages[i]/10000;
-  const float top=y+(i+1)*row;
-  line(stages[i],r.x+12*u,top,r.w*.23f);
-  line(shopDuration(i==0?domain.content().hatchMs:elapsed),r.x+r.w*.24f,top,r.w*.35f);
-  line(compact(reward.coins())+" coins · "+compact(reward.xp)+" XP",r.x+r.w*.64f,top,r.w*.35f);
+ const float u=layout.unit;const auto r=layout.content;const auto q=domain.quote(species);
+ const Color ink{35,65,78,255},muted{78,109,115,255},white{249,255,247,255};
+ auto box=[&](float x,float y,float w,float h){return Rect{r.x+x*u,r.y+y*u,w*u,h*u};};
+ auto text=[&](std::string_view value,float x,float y,float w,float size,Color color,bool center=false,bool strong=false){
+  canvas.text(value,r.x+(x+(center?w*.5f:0))*u,r.y+y*u,size*u,color,center,w*u,strong,false);
+ };
+ const float width=r.w/u,height=r.h/u,left=width*.44f,right=left+32,rw=width-right;
+ // One generous portrait and a short, readable care card.
+ canvas.gradient(box(0,0,left,height),{136,222,222},{43,143,172},24*u);
+ canvas.outline(box(0,0,left,height),{225,255,241,255},24*u,3*u);
+ canvas.gradient(box(36,108,left-72,330),{198,250,230,100},{170,242,232,0},140*u);
+ for(int i=0;i<6;++i){const float d=12+(i%3)*10;canvas.outline(box(28+(i*89)%int(left-64),112+(i*63)%340,d,d),{227,255,247,100},d*u*.5f,2*u);}
+ std::string rarity=species.rarity;if(!rarity.empty()&&rarity.front()>='a'&&rarity.front()<='z')rarity.front()-=32;
+ canvas.round(box(24,24,176,48),{249,240,204,255},24*u,{255,255,238,255},2*u,false,false);
+ text(rarity,32,29,160,28,ink,true,true);
+ text("Lv. "+std::to_string(species.level),left-136,32,108,28,ink,true,true);
+ canvas.icon(species.asset,box(28,132,left-56,300));
+ text(species.companion?"Display companion":"Growing fish",24,height-110,left-48,34,white,true,true);
+ text(species.companion?"A permanent aquarium resident":"From tiny egg to fully grown",24,height-62,left-48,26,white,true);
+ text("Care guide",right,0,rw,40,ink,false,true);
+ text(species.companion?"Arrives fully grown. Uses 1 display slot.":"Hatches in "+shopDuration(domain.content().hatchMs)+". Uses 1 growing slot.",right,58,rw,27,muted);
+ auto row=[&](float y,std::string_view label,const std::string& value,bool clock){
+  canvas.round(box(right,y,rw,100),{255,253,238,255},16*u,{211,219,199,255},2*u,false,false);
+  if(clock)shopTheme::clockIcon(canvas,box(right+22,y+29,40,40),{58,129,139,255});
+  else canvas.icon("hud-icons/shop-tab-fish-v1.png",box(right+16,y+20,52,56));
+  text(label,right+82,y+12,rw-106,24,muted);
+  text(value,right+82,y+44,rw-106,34,ink,false,true);
+ };
+ row(116,"Feed every",shopDuration(species.companion?43200000:q.feedMs),true);
+ row(232,species.companion?"Growth":"Fully grown in",species.companion?"Already adult":shopDuration(q.durationMs),false);
+ text(species.companion?"Keep it fed and enjoy its company.":"Keep it fed. Growth pauses when hungry.",right,348,rw,26,muted);
+ const float rewardY=402;
+ canvas.round(box(right,rewardY,rw,112),{218,236,191,255},16*u,{156,183,123,255},2*u,false,false);
+ if(species.companion){
+  text("Yours to keep",right+22,rewardY+14,rw-44,32,ink,false,true);
+  text("No coin or XP sale rewards",right+22,rewardY+60,rw-44,26,muted);
+ }else{
+  text("Adult sale reward",right+22,rewardY+12,rw-44,25,muted);
+  paintCurrencyIcon(canvas,box(right+22,rewardY+54,40,40),false);
+  text(compact(q.principal+q.profit)+" coins  +  "+compact(q.xp)+" XP",right+76,rewardY+50,rw-98,34,ink,false,true);
  }
+ const auto cost=species.currency==Currency::Coins?(species.companion?species.price:q.principal):species.price;
+ const std::string price=species.currency==Currency::Gift?"Free gift":compact(cost)+(species.currency==Currency::Pearls?" pearls":" coins");
+ text("Shop price: "+price,right,height-80,rw,28,ink,false,true);
+ text(species.level>domain.level()?"Unlocks at level "+std::to_string(species.level):species.companion?"Requires an open display slot":"Adult sale includes your purchase cost",right,height-38,rw,24,muted);
+
 }
 
 HudDialogLayout layoutDialog(float width,float height,Insets safe,const DialogSpec& spec){
@@ -446,22 +518,22 @@ HudDialogLayout layoutDialog(float width,float height,Insets safe,const DialogSp
  auto bounds=[&](int index){const auto b=Clay_GetElementData(CLAY_IDI("standard-dialog",index)).boundingBox;return Rect{x+b.x,y+b.y,b.width,b.height};};
  return {{0,0,width,height},{x,y,w*u,h*u},bounds(0),bounds(1),bounds(2),bounds(3),bounds(5),u};
 }
-void paintDialog(Canvas& canvas,const HudDialogLayout& l,const DialogSpec& spec,bool hover,bool pressed){
- const float u=l.unit;const Color outline{8,36,67,255},white{255,255,246,255};
- canvas.fill(l.backdrop,{0,0,0,150});
+void paintDialog(Canvas& canvas,const HudDialogLayout& l,const DialogSpec& spec,bool hover,bool pressed,DialogPresentation presentation){
+ const bool popover=presentation==DialogPresentation::Popover;
+ const float u=l.unit;const Color outline=shopTheme::dialogEdge,white{255,255,246,255};
+ if(!popover)canvas.fill(l.backdrop,{0,0,0,150});
  canvas.gradient({l.frame.x,l.frame.y+4*u,l.frame.w,l.frame.h},{4,24,45,130},{4,24,45,130},20*u);
  canvas.gradient(l.frame,outline,outline,20*u);
  canvas.gradient({l.frame.x+4*u,l.frame.y+4*u,l.frame.w-8*u,l.frame.h-8*u},{35,111,153},{13,57,100},16*u);
  canvas.outline({l.frame.x+4*u,l.frame.y+4*u,l.frame.w-8*u,l.frame.h-8*u},{112,201,225,115},16*u,u);
- canvas.gradient(l.header,{22,78,121},{11,48,88},12*u);
- const Rect water{l.header.x+8*u,l.header.y+8*u,l.header.w-16*u,l.header.h-16*u};
- canvas.wave(water,{87,201,222,65},12*u,384*u,.3f,12*u);
- canvas.wave(water,{158,225,250,35},8*u,560*u,2.1f,8*u);
- canvas.round(l.body,{235,235,222,255},12*u,{},0,false,false);
+ shopTheme::blueHeader(canvas,l.header,u,12*u);
+ if(popover)canvas.gradient(l.body,shopTheme::dialogPaper,shopTheme::dialogPaper,12*u);
+ else canvas.round(l.body,shopTheme::dialogPaper,12*u,{},0,false,false);
  const float font=32*u;
- canvas.text(spec.title,l.title.x+l.title.w*.5f,l.title.y+(l.title.h-font)*.5f,font,white,true,l.title.w,true,true);
+ canvas.text(spec.title,l.title.x+(popover?0:l.title.w*.5f),l.title.y+(l.title.h-font)*.5f,font,white,!popover,l.title.w,true,true);
  canvas.round(l.close,pressed?Color{173,46,39,255}:Color{235,72,65,255},12*u,hover?white:outline,4*u,true,true);
- canvas.text("X",l.close.x+l.close.w*.5f,l.close.y+(l.close.h-40*u)*.5f,40*u,white,true,l.close.w,true,true);
+ const float closeFont=(popover?32:40)*u;
+ canvas.text("X",l.close.x+l.close.w*.5f,l.close.y+(l.close.h-closeFont)*.5f,closeFont,white,true,l.close.w,true,true);
 }
 bool dialogEvent(DialogState& state,const HudDialogLayout& layout,const SDL_Event& event,SDL_FPoint point){
  if(!state.open)return false;
@@ -478,7 +550,21 @@ std::optional<HudPart> hudHit(const HudLayout& layout,SDL_FPoint point){
  return {};
 }
 
-void paintHud(Canvas& canvas,const Domain& domain,const HudLayout& layout,std::optional<HudPart> hover,std::optional<HudPart> pressed){
+void paintXpBadge(Canvas& canvas,Rect xp,float u,float progress,std::string_view label,float textSize){
+ canvas.round({xp.x,xp.y+4*u,xp.w,xp.h},{9,37,47,100},12*u,{},0,false,false);
+ canvas.round(xp,{38,122,170,255},12*u,{16,56,91,255},4*u,false,false);
+ const Rect track{xp.x+4*u,xp.y+4*u,xp.w-8*u,xp.h-12*u};
+ canvas.round(track,{22,76,111,255},8*u,{},0,false,false);
+ if(progress>0){
+  const float fillWidth=track.w*std::clamp(progress,0.f,1.f);
+  canvas.round({track.x,track.y,fillWidth,track.h},{62,202,245,255},8*u,{},0,false,false);
+  if(fillWidth>8*u)canvas.round({track.x+4*u,track.y+4*u,fillWidth-8*u,4*u},{189,247,255,230},4*u,{},0,false,false);
+ }
+ canvas.round({xp.x+12*u,xp.y+4*u,std::min(40*u,xp.w-24*u),4*u},{206,247,255,150},4*u,{},0,false,false);
+ canvas.text(label,xp.x+xp.w*.5f,xp.y+(xp.h-textSize)*.5f,textSize,{245,253,255,255},true,xp.w,true,true);
+}
+
+void paintHud(Canvas& canvas,const Domain& domain,const HudLayout& layout,std::optional<HudPart> hover,std::optional<HudPart> pressed,const HudRewardDisplay* rewards){
  constexpr Color ink{18,49,65,255},cream{246,233,201,255},gold{255,207,74,255},white{245,253,255,255};
  const float u=layout.unit;
  const auto& state=domain.state();
@@ -502,25 +588,25 @@ void paintHud(Canvas& canvas,const Domain& domain,const HudLayout& layout,std::o
   const float dot=std::min(hudTokens::dot*u,side);
   canvas.round({box.x+(side-dot)*.5f,box.y+(side-dot)*.5f,dot,dot},{18,49,65,35},hudTokens::radius*u,{},0,false,false);
  };
- const int level=domain.level();const auto base=domain.content().levels[level-1];
+ const double displayedXp=rewards?rewards->xp:double(state.xp);
+ const Amount wholeXp=static_cast<Amount>(std::floor(displayedXp));
+ const int level=levelFor(domain.content(),wholeXp);const auto base=domain.content().levels[level-1];
  const bool maximum=level>=int(domain.content().levels.size());
  const auto next=maximum?base+1:domain.content().levels[level];
- const float progress=maximum?1.f:std::clamp(float(state.xp-base)/float(next-base),0.f,1.f);
- const auto xp=layout[HudPart::Xp];
- canvas.round({xp.x,xp.y+4*u,xp.w,xp.h},{9,37,47,100},12*u,{},0,false,false);
- canvas.round(xp,{38,122,170,255},12*u,{16,56,91,255},4*u,false,false);
- const Rect xpTrack{xp.x+4*u,xp.y+4*u,xp.w-8*u,xp.h-12*u};
- canvas.round(xpTrack,{22,76,111,255},8*u,{},0,false,false);
- // Keep the fill continuous while matching the solid currency-counter finish.
- if(progress>0){
-  const float fillWidth=xpTrack.w*progress;
-  canvas.round({xpTrack.x,xpTrack.y,fillWidth,xpTrack.h},{62,202,245,255},8*u,{},0,false,false);
-  if(fillWidth>8*u)canvas.round({xpTrack.x+4*u,xpTrack.y+4*u,fillWidth-8*u,4*u},{189,247,255,230},4*u,{},0,false,false);
+ const float progress=maximum?1.f:std::clamp(float(displayedXp-double(base))/float(next-base),0.f,1.f);
+ auto xp=layout[HudPart::Xp];
+ const float pulse=rewards?rewards->xpPulse:0,bounce=rewards&&!rewards->reducedMotion?pulse:0;
+ const float grow=3*u*bounce;xp.y-=grow;xp.h+=2*grow;
+ paintXpBadge(canvas,xp,u,progress,maximum?"MAX LEVEL":compact(wholeXp-base)+" / "+compact(next-base)+" XP",hudTokens::textSmall*u);
+ if(pulse>0)canvas.outline({xp.x-2*u,xp.y-2*u,xp.w+4*u,xp.h+4*u},{178,248,255,Uint8(230*pulse)},14*u,3*u);
+ panel(HudPart::Level,gold);text(HudPart::Level,std::to_string(level),hudTokens::textLarge*u,ink);
+ paintWallet(canvas,domain,layout,hover,pressed,true,rewards);
+ // Match the Settings button's bottom shadow beneath the generated artwork.
+ for(const auto part:{HudPart::Tank,HudPart::Shop,HudPart::Food,HudPart::Rehome,HudPart::Projects,HudPart::Bag,HudPart::Rewards}){
+  auto box=layout[part];
+  if(pressed==part){box.x+=2*u;box.y+=2*u;box.w-=4*u;box.h-=4*u;}
+  canvas.round({box.x,box.y+4*u,box.w,box.h},{9,37,47,100},box.w*.16f,{},0,false,false);
  }
- canvas.round({xp.x+12*u,xp.y+4*u,40*u,4*u},{206,247,255,150},4*u,{},0,false,false);
- text(HudPart::Xp,maximum?"MAX LEVEL":compact(state.xp-base)+" / "+compact(next-base)+" XP",hudTokens::textSmall*u,white);
- panel(HudPart::Level,gold);text(HudPart::Level,std::to_string(domain.level()),hudTokens::textLarge*u,ink);
- paintWallet(canvas,domain,layout,hover,pressed);
  auto projectsBox=layout[HudPart::Projects];
  if(pressed==HudPart::Projects){projectsBox.x+=2*u;projectsBox.y+=2*u;projectsBox.w-=4*u;projectsBox.h-=4*u;}
  // Fit the visible outline to the original 108-unit button.
@@ -536,6 +622,10 @@ void paintHud(Canvas& canvas,const Domain& domain,const HudLayout& layout,std::o
  // Fit the visible outline to the original 64-unit button.
  const float foodScaleX=foodBox.w/1116.f,foodScaleY=foodBox.h/1093.f;
  canvas.image("hud-icons/food-button-v3.png",{foodBox.x-68.f*foodScaleX,foodBox.y-70.f*foodScaleY,1254.f*foodScaleX,1254.f*foodScaleY});
+ auto rehomeBox=layout[HudPart::Rehome];
+ if(pressed==HudPart::Rehome){rehomeBox.x+=2*u;rehomeBox.y+=2*u;rehomeBox.w-=4*u;rehomeBox.h-=4*u;}
+ const float rehomeScaleX=rehomeBox.w/1081.f,rehomeScaleY=rehomeBox.h/1063.f;
+ canvas.image("hud-icons/rehome-button-v1.png",{rehomeBox.x-87.f*rehomeScaleX,rehomeBox.y-94.f*rehomeScaleY,1254.f*rehomeScaleX,1254.f*rehomeScaleY});
  auto rewardsBox=layout[HudPart::Rewards];
  if(pressed==HudPart::Rewards){rewardsBox.x+=2*u;rewardsBox.y+=2*u;rewardsBox.w-=4*u;rewardsBox.h-=4*u;}
  // Exclude transparent padding when fitting the 64-unit button.
