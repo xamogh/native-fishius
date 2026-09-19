@@ -1,0 +1,160 @@
+{
+  "source": "design/fish-animation/neonTetra-atlas-source.png",
+  "method": "Connected neutral matte removal and tight sprite slicing; enclosed paint preserved",
+  "parts": [
+    {
+      "name": "body",
+      "source_bounds": [
+        44,
+        147,
+        406,
+        211
+      ],
+      "size": [
+        412,
+        217
+      ],
+      "transparent": true
+    },
+    {
+      "name": "tail",
+      "source_bounds": [
+        465,
+        97,
+        248,
+        283
+      ],
+      "size": [
+        254,
+        289
+      ],
+      "transparent": true
+    },
+    {
+      "name": "dorsal",
+      "source_bounds": [
+        824,
+        155,
+        195,
+        191
+      ],
+      "size": [
+        201,
+        197
+      ],
+      "transparent": true
+    },
+    {
+      "name": "belly",
+      "source_bounds": [
+        120,
+        489,
+        182,
+        243
+      ],
+      "size": [
+        188,
+        249
+      ],
+      "transparent": true
+    },
+    {
+      "name": "near-open",
+      "source_bounds": [
+        437,
+        478,
+        238,
+        251
+      ],
+      "size": [
+        244,
+        257
+      ],
+      "transparent": true
+    },
+    {
+      "name": "near-closed",
+      "source_bounds": [
+        801,
+        481,
+        234,
+        248
+      ],
+      "size": [
+        240,
+        254
+      ],
+      "transparent": true
+    },
+    {
+      "name": "far-open",
+      "source_bounds": [
+        121,
+        865,
+        170,
+        158
+      ],
+      "size": [
+        176,
+        164
+      ],
+      "transparent": true
+    },
+    {
+      "name": "far-closed",
+      "source_bounds": [
+        488,
+        871,
+        155,
+        147
+      ],
+      "size": [
+        161,
+        153
+      ],
+      "transparent": true
+    },
+    {
+      "name": "mouth-closed",
+      "source_bounds": [
+        826,
+        885,
+        184,
+        122
+      ],
+      "size": [
+        190,
+        128
+      ],
+      "transparent": true
+    },
+    {
+      "name": "mouth-open",
+      "source_bounds": [
+        110,
+        1198,
+        186,
+        121
+      ],
+      "size": [
+        192,
+        127
+      ],
+      "transparent": true
+    },
+    {
+      "name": "side",
+      "source_bounds": [
+        468,
+        1211,
+        150,
+        134
+      ],
+      "size": [
+        156,
+        140
+      ],
+      "transparent": true
+    }
+  ]
+}

@@ -52,12 +52,14 @@ FundsDialogLayout layoutFundsDialog(float width,float height,Insets safe,float m
  const Rect illustration{scene.x+scene.w*.14f,scene.y+scene.h*.22f,scene.w*.72f,scene.h*.55f};
  return {dialog,illustration,message,shop,scene};
 }
-void paintFundsDialog(Canvas& canvas,const FundsDialogLayout& l,const FundsDialogState& state,SDL_FPoint pointer){
+void paintFundsDialog(Canvas& canvas,const FundsDialogLayout& l,const FundsDialogState& state,SDL_FPoint pointer,bool reducedMotion){
  if(!state.open())return;
  const bool pearls=fundsCurrency(state)==Currency::Pearls;
  const float u=l.dialog.unit;
  const char* title=state.shortfall.coins>0&&state.shortfall.pearls>0?"Not enough coins and pearls":pearls?"Not enough pearls":"Not enough coins";
- paintDialog(canvas,l.dialog,{title},l.dialog.close.has(pointer.x,pointer.y),state.dialog.closePressed);
+ const DialogPaint animation(canvas,state.dialog.motion,l.dialog.frame,reducedMotion);
+ pointer=state.dialog.motion.inputPoint(pointer);
+ paintDialog(canvas,l.dialog,{title},l.dialog.close.has(pointer.x,pointer.y),state.dialog.closePressed,DialogPresentation::ModalContent);
  const bool compact=l.scene.w<l.dialog.body.w-.1f;
  if(compact)canvas.roundedImage("dialogs/funds-underwater-v1.png",l.dialog.body,12*u);
  const float edge=compact?std::min(36*u,l.scene.w*.06f):12*u;
@@ -78,6 +80,7 @@ void paintFundsDialog(Canvas& canvas,const FundsDialogLayout& l,const FundsDialo
 }
 FundsDialogEvent fundsDialogEvent(FundsDialogState& state,const FundsDialogLayout& l,const SDL_Event& event,SDL_FPoint point){
  if(!state.open())return FundsDialogEvent::Ignored;
+ const auto screenPoint=point;point=state.dialog.motion.inputPoint(point);
  if(event.type==SDL_EVENT_WINDOW_FOCUS_LOST||event.type==SDL_EVENT_WILL_ENTER_BACKGROUND||event.type==SDL_EVENT_RENDER_DEVICE_RESET||event.type==SDL_EVENT_RENDER_TARGETS_RESET){
   state.shopPressed=state.dragged=state.dialog.closePressed=state.dialog.backdropPressed=false;
   return FundsDialogEvent::Ignored;
@@ -85,20 +88,20 @@ FundsDialogEvent fundsDialogEvent(FundsDialogState& state,const FundsDialogLayou
  if(event.type==SDL_EVENT_KEY_DOWN&&!event.key.repeat&&(event.key.key==SDLK_RETURN||event.key.key==SDLK_SPACE)){
   state.dialog.open=false;state.shopPressed=false;return FundsDialogEvent::OpenShop;
  }
- if(event.type==SDL_EVENT_MOUSE_BUTTON_DOWN&&event.button.button==SDL_BUTTON_LEFT){state.shopPressed=l.shop.has(point.x,point.y);state.pressPoint=point;state.dragged=false;}
- if(event.type==SDL_EVENT_MOUSE_MOTION&&std::hypot(point.x-state.pressPoint.x,point.y-state.pressPoint.y)>12*l.dialog.unit)state.dragged=true;
+ if(event.type==SDL_EVENT_MOUSE_BUTTON_DOWN&&event.button.button==SDL_BUTTON_LEFT){state.shopPressed=l.shop.has(point.x,point.y);state.pressPoint=screenPoint;state.dragged=false;}
+ if(event.type==SDL_EVENT_MOUSE_MOTION&&std::hypot(screenPoint.x-state.pressPoint.x,screenPoint.y-state.pressPoint.y)>12*l.dialog.unit)state.dragged=true;
  if(event.type==SDL_EVENT_MOUSE_BUTTON_UP&&event.button.button==SDL_BUTTON_LEFT){
-  const bool activate=state.shopPressed&&!state.dragged&&l.shop.has(point.x,point.y)&&std::hypot(point.x-state.pressPoint.x,point.y-state.pressPoint.y)<=12*l.dialog.unit;
+  const bool activate=state.shopPressed&&!state.dragged&&l.shop.has(point.x,point.y)&&std::hypot(screenPoint.x-state.pressPoint.x,screenPoint.y-state.pressPoint.y)<=12*l.dialog.unit;
   state.shopPressed=false;
   if(activate){state.dialog.open=false;return FundsDialogEvent::OpenShop;}
  }
- const bool handled=dialogEvent(state.dialog,l.dialog,event,point);
+ const bool handled=dialogEvent(state.dialog,l.dialog,event,screenPoint);
  if(!state.open())state.shopPressed=false;
  return handled?FundsDialogEvent::Handled:FundsDialogEvent::Ignored;
 }
 void FundsShopReturn::open(const FundsDialogState& funds,bool& shopOpen,ShopState& shop){
  previous=shopOpen?std::optional{shop}:std::nullopt;
- shop={ShopCategory::Treasure,fundsCurrency(funds)==Currency::Pearls?1:0,0};shopOpen=true;
+ shop={ShopCategory::Treasure,fundsCurrency(funds)==Currency::Pearls?2:1,0};shopOpen=true;
 }
 void FundsShopReturn::close(bool& shopOpen,ShopState& shop){
  if(const auto origin=std::exchange(previous,std::nullopt);shopOpen&&origin){shop=*origin;shopOpen=true;}

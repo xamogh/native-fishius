@@ -1,0 +1,60 @@
+{
+  "title": "Coral Promenade",
+  "created": "2026-09-18",
+  "revision": 3,
+  "direction": "Playful, relaxed aquarium music inspired by the user's FishVille reference.",
+  "description": "An original marimba and flute melody with nylon guitar, acoustic bass and light percussion. The revised harmony stays in C major with open chords and brief passing notes.",
+  "reference_url": "https://www.youtube.com/watch?v=yNFSeuLjWJM",
+  "reference_use": "Aesthetic reference only. No audio from FishVille is included or sampled. The melody and arrangement are newly written.",
+  "rendering": "Original note score rendered offline with AVAudioUnitSampler and the macOS General MIDI sound bank, followed by circular room reverb and mastering.",
+  "sound_bank": {
+    "path": "/System/Library/Components/CoreAudio.component/Contents/Resources/gs_instruments.dls",
+    "sha256": "739d277474bddeb120372625b70c83c653faaee44de26c3191848cc6c64bfb74",
+    "bundled": false
+  },
+  "generator": {
+    "path": "tools/generate_coral_music.py",
+    "sha256": "c3c966ee46f703bbc32ab8e0ac4941f0ef6da6a3784c70f353a2b75deacfeb97"
+  },
+  "renderer": {
+    "path": "tools/render_music_score.swift",
+    "sha256": "a9babc005d488e4bda3e61486b05e6e0ba195d6bab32dafd44c6c2a452745895"
+  },
+  "seed": 18092602,
+  "bpm": 96,
+  "meter": "4/4",
+  "tonal_center": "C major",
+  "bars": 32,
+  "duration_seconds": 80.0,
+  "sample_rate": 48000,
+  "channels": 2,
+  "pcm_bits": 16,
+  "loop_start_frame": 0,
+  "loop_end_frame_exclusive": 3840000,
+  "loop_method": "Full WAV buffer. Instrument tails and room reflections wrap across the boundary without a fade or gap.",
+  "verification": {
+    "integrated_loudness_lufs": -19.0,
+    "true_peak_dbtp": -4.87,
+    "loudness_range_lu": 1.8,
+    "seam_sample_step": 0.000335693359375,
+    "nearby_99th_percentile_step": 0.01040738821029663,
+    "clipped_samples": 0,
+    "review": "File, level and continuity checks. Preview supplied for listening review."
+  },
+  "files": {
+    "loop": {
+      "name": "coral-promenade-loop.wav",
+      "bytes": 15360044,
+      "sha256": "208c8696fdc7fef63ca6a446c5aed2f29d3f6e9afaf27fc99914fc6f2f6e6d8e"
+    },
+    "preview": {
+      "name": "coral-promenade-v3-preview.mp3",
+      "bytes": 1921627,
+      "sha256": "1a8b8b6483829aa07ebdca3dad179d61058486a0fc266fcc0152187accd2ab2d"
+    },
+    "score": {
+      "name": "coral-promenade-score.json",
+      "sha256": "3a743c09bfa7d752964c259340c1d798a0c3be65d7c184581a600338f0043bab"
+    }
+  }
+}

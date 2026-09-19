@@ -33,6 +33,8 @@ Release signing requires the application owner's key. No signing key, store iden
 
 Use macOS with Xcode and an iOS SDK. See [LOCAL-SETUP.md](../LOCAL-SETUP.md) for this Mac's build tools, dependencies, and simulator instructions.
 
+iOS builds require SDL 3.4.12 or newer. SDL 3.2.20 uses the older app lifecycle, which causes an immediate launch crash on iOS 27 when built with the iOS 27 SDK. SDL 3.4 provides the scene lifecycle required by [Apple's migration guide](https://developer.apple.com/documentation/uikit/transitioning-to-the-uikit-scene-based-life-cycle). CMake rejects older SDL source overrides. If an existing build sets `FETCHCONTENT_SOURCE_DIR_SDL3`, update it to the newer source directory or remove that cache entry with `cmake -U FETCHCONTENT_SOURCE_DIR_SDL3 -S . -B BUILD_DIRECTORY` to fetch the pinned release.
+
 ### Run on your iPhone
 
 The existing `build/ios-device` directory is configured for physical iPhones and iPads: arm64, the `iphoneos` SDK, and iOS 15 or later. It uses the local iOS libraries in `build/ios-device-deps`. Keep this build separate from `build/ios-simulator`.
@@ -70,4 +72,4 @@ The supplied property list declares landscape orientations for iPhone and iPad. 
 
 ## Verification limits
 
-A signed Debug build for physical iOS devices completed on 12 September 2026 using the existing development profile. The code signature passed verification, and the app was installed and launched on the connected iPhone 15 Pro Max. Manual visual and touch checks, interruptions, and sustained performance on the phone remain unverified. iOS simulator runs are recorded in `LOCAL-SETUP.md`. Android testing and store readiness remain unverified. The feature matrix lists additional host work.
+A signed Debug build was installed and launched on the iPhone 15 Pro Max running iOS 27 on 18 September 2026 after updating SDL and restoring the missing bundled body font. A device screenshot confirmed that the Shop screen rendered, and the app remained running. The desktop startup smoke test passed. Full visual and touch checks, interruptions, and sustained performance on the phone remain unverified. Earlier iOS simulator runs are recorded in `LOCAL-SETUP.md`; simulator runtime was not retested for this fix. Android testing and store readiness remain unverified. The feature matrix lists additional host work.

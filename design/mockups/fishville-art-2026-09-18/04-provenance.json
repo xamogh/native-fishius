@@ -1,0 +1,14 @@
+{
+  "created_at": "2026-09-18",
+  "mode": "built-in Image Gen",
+  "file": "04-softer-starter-fish.png",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a0b47c-3a29-7952-b05b-51c10ad5c42a/exec-e5a8b6fa-e319-423d-998f-7f696166e612.png",
+  "initial_generation": "/Users/amoghrijal/.codex/generated_images/01a0b47c-3a29-7952-b05b-51c10ad5c42a/exec-08d6893e-bfaf-43e5-8464-aebb74746c06.png",
+  "reference": "https://www.gameyum.com/fish-games/60124-review-facebooks-fishville/",
+  "reference_image": "https://img.bhs4.com/69/b/69bff34a3fd5b0de7b01885113863490700fd80b_large.jpg",
+  "reference_method": "Original shop screenshot inspected through browser and provided as a conversation image.",
+  "prompts": [
+    "04-softer-fish-prompt.md",
+    "04-softer-fish-refinement-prompt.md"
+  ]
+}

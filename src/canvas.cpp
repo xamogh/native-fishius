@@ -46,6 +46,13 @@ Surface halfSize(const SDL_Surface& source){
  }
  return result;
 }
+void opacityMask(SDL_Surface& surface){
+ // Multiplicative blending reads RGB even in fully transparent pixels.
+ // Store premultiplied white so every texture level follows its own alpha.
+ for(int y=0;y<surface.h;++y)for(int x=0;x<surface.w;++x){
+  auto* p=static_cast<Uint8*>(surface.pixels)+y*surface.pitch+x*4;p[0]=p[1]=p[2]=p[3];
+ }
+}
 SDL_Texture* upload(SDL_Renderer* renderer,SDL_Surface* surface){
  auto* texture=SDL_CreateTextureFromSurface(renderer,surface);if(!texture)throw std::runtime_error(SDL_GetError());
  SDL_SetTextureBlendMode(texture,SDL_BLENDMODE_BLEND);SDL_SetTextureScaleMode(texture,SDL_SCALEMODE_LINEAR);return texture;
@@ -79,7 +86,7 @@ Canvas::Canvas(std::filesystem::path assets,int w,int h,bool software):assets_(s
  fontPath_=pickFont(assets_,false);displayFontPath_=pickFont(assets_,true);if(fontPath_.empty())throw std::runtime_error("No native font found. Run tools/setup_fonts.py or set AQUARIUM_BODY_FONT.");if(displayFontPath_.empty())displayFontPath_=fontPath_;
  SDL_AudioSpec spec{SDL_AUDIO_F32,1,44100};audio_=SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK,&spec,nullptr,nullptr);if(audio_)SDL_ResumeAudioStreamDevice(audio_);begin();
 }
-Canvas::~Canvas(){SDL_ShowCursor();SDL_SetCursor(SDL_GetDefaultCursor());if(frameTexture_)SDL_DestroyTexture(frameTexture_);textCache_.clear();textures_.clear();for(auto& [_,f]:fonts_)TTF_CloseFont(f);if(audio_)SDL_DestroyAudioStream(audio_);if(renderer_)SDL_DestroyRenderer(renderer_);if(window_)SDL_DestroyWindow(window_);TTF_Quit();SDL_Quit();}
+Canvas::~Canvas(){SDL_ShowCursor();SDL_SetCursor(SDL_GetDefaultCursor());for(auto* target:focusTextures_)if(target)SDL_DestroyTexture(target);if(frameTexture_)SDL_DestroyTexture(frameTexture_);textCache_.clear();textures_.clear();for(auto& [_,f]:fonts_)TTF_CloseFont(f);if(audio_)SDL_DestroyAudioStream(audio_);if(renderer_)SDL_DestroyRenderer(renderer_);if(window_)SDL_DestroyWindow(window_);TTF_Quit();SDL_Quit();}
 void Canvas::begin(bool fitViewport){
  int w=1,h=1;SDL_GetWindowSize(window_,&w,&h);
  if(previewViewport_){w=previewViewport_->width;h=previewViewport_->height;}
@@ -238,7 +245,7 @@ Texture* Canvas::texture(std::string_view key){
  if(decorMask){
   Surface rgba(SDL_ConvertSurface(surface.get(),SDL_PIXELFORMAT_RGBA32),SDL_DestroySurface);
   if(!rgba)throw std::runtime_error(SDL_GetError());
-  for(int y=0;y<rgba->h;++y)for(int x=0;x<rgba->w;++x){auto* p=static_cast<Uint8*>(rgba->pixels)+y*rgba->pitch+x*4;p[0]=p[1]=p[2]=255;}
+  opacityMask(*rgba);
   surface=std::move(rgba);
  }
  if(species){
@@ -273,7 +280,7 @@ Texture* Canvas::texture(std::string_view key){
  }
  auto value=std::make_unique<Texture>();value->width=surface->w;value->height=surface->h;value->value=upload(renderer_,surface.get());
  Surface level(SDL_ConvertSurface(surface.get(),SDL_PIXELFORMAT_RGBA32),SDL_DestroySurface);if(!level)throw std::runtime_error(SDL_GetError());
- while(std::min(level->w,level->h)>16){level=halfSize(*level);value->levels.push_back(upload(renderer_,level.get()));}
+ while(std::min(level->w,level->h)>16){level=halfSize(*level);if(decorMask)opacityMask(*level);value->levels.push_back(upload(renderer_,level.get()));}
  auto* result=value.get();textures_.emplace(key,std::move(value));return result;
 }
 TTF_Font* Canvas::font(int pixels,bool display,bool reference,bool medium,bool rounded,bool heavy){int key=pixels+(heavy?5000:rounded?4000:medium?3000:reference?2000:display?1000:0);auto i=fonts_.find(key);if(i!=fonts_.end())return i->second;auto path=heavy?assets_/"fonts/Nunito-ExtraBold.ttf":rounded?assets_/"fonts/Baloo2-ExtraBold.ttf":medium?assets_/"fonts/Nunito-Medium.ttf":reference?assets_/"fonts/LuckiestGuy-Regular.ttf":display?displayFontPath_:fontPath_;auto* f=TTF_OpenFont(path.string().c_str(),float(pixels));if(!f)throw std::runtime_error(SDL_GetError());fonts_[key]=f;return f;}
@@ -296,8 +303,9 @@ void Canvas::text(std::string_view label,float x,float y,float size,Color c,bool
   Surface level(SDL_ConvertSurface(sf,SDL_PIXELFORMAT_RGBA32),SDL_DestroySurface);SDL_DestroySurface(sf);if(!level)throw std::runtime_error(SDL_GetError());
   while(std::min(level->w,level->h)>8){level=halfSize(*level);t->levels.push_back(upload(renderer_,level.get()));}
   const auto bytes=t->bytes();
-  // Bound changing timers, receipts and shop labels to the same cache budget.
-  while(textBytes_+bytes>32*1024*1024){
+  // Keep the prepared catalog resident at phone and tablet pixel densities, while still
+  // bounding changing timers and receipts. Evict only the least recently used.
+  while(textBytes_+bytes>96*1024*1024){
    auto oldest=textCache_.end();
    for(auto entry=textCache_.begin();entry!=textCache_.end();++entry)
     if(oldest==textCache_.end()||entry->second.used<oldest->second.used)oldest=entry;
@@ -319,34 +327,64 @@ void Canvas::text(std::string_view label,float x,float y,float size,Color c,bool
  else SDL_RenderTexture(renderer_,glyphs,nullptr,&dst);
 }
 void Canvas::image(std::string_view name,Rect r,double angle,SDL_FPoint pivot,float alpha,bool flip,Color tint){r.x+=originX_;r.y+=originY_;auto* t=texture(name);float sx{},sy{};SDL_GetRenderScale(renderer_,&sx,&sy);auto* sampled=t->sampled(r.w*sx,r.h*sy);SDL_FRect dst{r.x,r.y,r.w,r.h};SDL_FPoint p{pivot.x*r.w,pivot.y*r.h};SDL_SetTextureColorMod(sampled,tint.r,tint.g,tint.b);SDL_SetTextureAlphaModFloat(sampled,std::clamp(alpha*tint.a/255.f,0.f,1.f));SDL_RenderTextureRotated(renderer_,sampled,nullptr,&dst,angle,&p,flip?SDL_FLIP_HORIZONTAL:SDL_FLIP_NONE);SDL_SetTextureAlphaModFloat(sampled,1.f);SDL_SetTextureColorMod(sampled,255,255,255);}
-void Canvas::roundedImage(std::string_view name,Rect rect,float radius,float feather){
+void Canvas::roundedImage(std::string_view name,Rect rect,float radius,float feather,bool flip){
  if(rect.w<=0||rect.h<=0)return;
  radius=std::clamp(radius,0.f,std::min(rect.w,rect.h)*.5f);
- if(radius==0){image(name,rect);return;}
+ if(radius==0){image(name,rect,0,{.5f,.5f},1,flip);return;}
  rect.x+=originX_;rect.y+=originY_;
  auto* t=texture(name);float sx{},sy{};SDL_GetRenderScale(renderer_,&sx,&sy);
  auto* sampled=t->sampled(rect.w*sx,rect.h*sy);
- constexpr int segments=16,ring=4*(segments+1);
+ constexpr int segments=16;
  feather=std::clamp(feather,0.f,radius);
  const float fringe=feather>0?feather:1.f/std::max(pixelScaleX_,pixelScaleY_);
- auto vertex=[&](float x,float y,float alpha){return SDL_Vertex{{x,y},{1,1,1,alpha},{std::clamp((x-rect.x)/rect.w,0.f,1.f),std::clamp((y-rect.y)/rect.h,0.f,1.f)}};};
- std::array<SDL_Vertex,1+ring*2> vertices{};
- vertices[0]=vertex(rect.x+rect.w*.5f,rect.y+rect.h*.5f,1);
+ auto vertex=[&](float x,float y,float alpha){const float u=std::clamp((x-rect.x)/rect.w,0.f,1.f);return SDL_Vertex{{x,y},{1,1,1,alpha},{flip?1-u:u,std::clamp((y-rect.y)/rect.h,0.f,1.f)}};};
+ // Blit the opaque cross directly. Long, thin triangle fans can overflow the
+ // software renderer's texture interpolation on wide dialog backgrounds.
+ auto patch=[&](Rect r){
+  if(r.w<=0||r.h<=0)return;
+  SDL_FRect source{(r.x-rect.x)/rect.w*sampled->w,(r.y-rect.y)/rect.h*sampled->h,r.w/rect.w*sampled->w,r.h/rect.h*sampled->h};
+  if(flip)source.x=sampled->w-source.x-source.w;
+  SDL_FRect destination{r.x,r.y,r.w,r.h};SDL_RenderTextureRotated(renderer_,sampled,&source,&destination,0,nullptr,flip?SDL_FLIP_HORIZONTAL:SDL_FLIP_NONE);
+ };
+ // Overlap opaque joins by one physical pixel so fractional scales cannot
+ // leave hairline gaps between the blits and the rounded corner meshes.
+ const float join=std::min(radius-feather,1.f/std::max(pixelScaleX_,pixelScaleY_));
+ patch({rect.x+radius-join,rect.y+feather,rect.w-2*radius+2*join,rect.h-2*feather});
+ patch({rect.x+feather,rect.y+radius-join,radius-feather+join,rect.h-2*radius+2*join});
+ patch({rect.x+rect.w-radius-join,rect.y+radius-join,radius-feather+join,rect.h-2*radius+2*join});
+ auto band=[&](float x1,float y1,float x2,float y2,float dx,float dy){
+  // Keep the feather's triangles short too, avoiding interpolation streaks
+  // on the software renderer at portrait and small preview sizes.
+  const int pieces=std::max(1,int(std::ceil(std::max(std::abs(x2-x1),std::abs(y2-y1))/128.f)));
+  for(int i=0;i<pieces;++i){
+   const float a=float(i)/pieces,b=float(i+1)/pieces;
+   const float ax=x1+(x2-x1)*a,ay=y1+(y2-y1)*a,bx=x1+(x2-x1)*b,by=y1+(y2-y1)*b;
+   const std::array<SDL_Vertex,4> v{vertex(ax,ay,1),vertex(bx,by,1),vertex(bx+dx,by+dy,0),vertex(ax+dx,ay+dy,0)};
+   constexpr std::array<int,6> index{0,1,2,0,2,3};mesh(sampled,v,index);
+  }
+ };
+ band(rect.x+radius,rect.y+feather,rect.x+rect.w-radius,rect.y+feather,0,-fringe);
+ band(rect.x+radius,rect.y+rect.h-feather,rect.x+rect.w-radius,rect.y+rect.h-feather,0,fringe);
+ band(rect.x+feather,rect.y+radius,rect.x+feather,rect.y+rect.h-radius,-fringe,0);
+ band(rect.x+rect.w-feather,rect.y+radius,rect.x+rect.w-feather,rect.y+rect.h-radius,fringe,0);
  const std::array<SDL_FPoint,4> centers{{{rect.x+rect.w-radius,rect.y+radius},{rect.x+rect.w-radius,rect.y+rect.h-radius},{rect.x+radius,rect.y+rect.h-radius},{rect.x+radius,rect.y+radius}}};
  radius-=feather;
- for(int corner=0;corner<4;++corner)for(int step=0;step<=segments;++step){
-  const double angle=(-90.+corner*90.+step*90./segments)*pi/180.;
-  const float nx=float(std::cos(angle)),ny=float(std::sin(angle));
-  const float x=centers[corner].x+nx*radius,y=centers[corner].y+ny*radius;
-  const int i=1+corner*(segments+1)+step;
-  vertices[i]=vertex(x,y,1);vertices[i+ring]=vertex(x+nx*fringe,y+ny*fringe,0);
+ for(int corner=0;corner<4;++corner){
+  constexpr int count=segments+1;std::array<SDL_Vertex,1+count*2> vertices{};
+  vertices[0]=vertex(centers[corner].x,centers[corner].y,1);
+  for(int step=0;step<=segments;++step){
+   const double angle=(-90.+corner*90.+step*90./segments)*pi/180.;
+   const float nx=float(std::cos(angle)),ny=float(std::sin(angle));
+   const float x=centers[corner].x+nx*radius,y=centers[corner].y+ny*radius;
+   vertices[step+1]=vertex(x,y,1);vertices[step+1+count]=vertex(x+nx*fringe,y+ny*fringe,0);
+  }
+  std::array<int,segments*9> indices{};
+  for(int i=1;i<=segments;++i){
+   const std::array<int,9> triangle{0,i,i+1,i,i+1,i+count,i+1,i+1+count,i+count};
+   std::copy(triangle.begin(),triangle.end(),indices.begin()+(i-1)*9);
+  }
+  mesh(sampled,vertices,indices);
  }
- std::array<int,ring*9> indices{};
- for(int i=1;i<=ring;++i){
-  const int next=i==ring?1:i+1;const std::array<int,9> triangle{0,i,next,i,next,i+ring,next,next+ring,i+ring};
-  std::copy(triangle.begin(),triangle.end(),indices.begin()+(i-1)*9);
- }
- mesh(sampled,vertices,indices);
 }
 void Canvas::icon(std::string_view name,Rect r,float alpha,bool flip,Color tint){
  auto* t=texture(name);float scale=std::min(r.w/float(t->width),r.h/float(t->height));
@@ -358,11 +396,11 @@ void Canvas::label(std::string_view s,float x,float y,float size,bool center,flo
 }
 SDL_FPoint Canvas::fishSize(const Species& s,const Fish& f){
  auto name=fishArt(s.id);auto* art=texture(name);
- float w=float(s.nominalLength*ageScale(s,f)*worldScale()*2.);
+ float w=float(s.nominalLength*ageScale(s,f)*worldScale()*2.*tankArtScale);
  return {w,w*float(art->height)/float(art->width)};
 }
-void Canvas::fish(const Species& s,const Fish& f,double alpha,bool held,Color outline,bool selected,bool reduced,Care appearance,double time){
- const auto pose=fishPose(f,alpha);auto p=toScreen(pose.position);if(f.egg){if(!reduced)p.y+=float(std::sin(f.motion.drift*2.4+f.motion.phase)*1.6*height_/635.);float size=std::max(20.f,worldScale()*30.f);icon("ui/egg.png",{p.x-size*.5f,p.y-size*.5f,size,size});return;}
+void Canvas::fish(const Species& s,const Fish& f,double alpha,bool held,Color outline,bool selected,bool reduced,Care appearance,double time,float opacity){
+ const auto pose=fishPose(f,alpha);auto p=toScreen(pose.position);if(f.egg){if(!reduced)p.y+=float(std::sin(f.motion.drift*2.4+f.motion.phase)*1.6*height_/635.);float size=std::max(20.f,worldScale()*30.f);icon("ui/egg.png",{p.x-size*.5f,p.y-size*.5f,size,size},opacity);return;}
  const auto art=fishArt(s.id);auto* t=texture(art.substr(0,art.size()-4)+(f.dead?"-dead.png":".png"));auto size=fishSize(s,f);double width=size.x,height=size.y;double angle=f.dead?pi+pose.pitch:-pose.facing*pose.pitch;
  const bool sick=appearance==Care::Sick;
  const double amp=f.dead?0:width*.025*std::min(1.15,pose.speed/50.)*(held?.45:sick?.18:1.)*(reduced?.25:1.);
@@ -373,7 +411,7 @@ void Canvas::fish(const Species& s,const Fish& f,double alpha,bool held,Color ou
  const int rows=koi||flashlight?13:2;
  const double lamp=.5-.5*std::cos(std::max(0.,time)*2*pi/6+patternUnit(f.id.value)*2*pi);
  std::vector<SDL_Vertex> vertices;std::vector<int> idx;vertices.reserve(24*rows);idx.reserve(23*(rows-1)*6);
- const SDL_FColor careTint=sick?SDL_FColor{.62f,.82f,.45f,1}:SDL_FColor{1,1,1,1};
+ const SDL_FColor careTint=sick?SDL_FColor{.62f,.82f,.45f,opacity}:SDL_FColor{1,1,1,opacity};
  for(int i=0;i<24;++i){
   const double u=double(i)/23.,xx=(u-.5)*width*pose.facing,wave=std::sin(pose.phase-u*4.7)*amp*std::pow(u,1.4);
   for(int row=0;row<rows;++row){
@@ -396,42 +434,96 @@ void Canvas::fish(const Species& s,const Fish& f,double alpha,bool held,Color ou
    if(i<23&&row<rows-1){const int k=i*rows+row;idx.insert(idx.end(),{k,k+1,k+rows,k+1,k+rows+1,k+rows});}
   }
  }
+ outline.a=Uint8(outline.a*opacity);
  if(outline.a>0){auto* mask=texture(art.substr(0,art.size()-4)+"-mask.png");for(int j=0;j<8;++j){double a=double(j)*pi/4;auto v=vertices;float d=selected?2.5f:1.8f;for(auto& x:v){x.position.x+=float(std::cos(a))*d;x.position.y+=float(std::sin(a))*d;x.color=color(outline);}mesh(mask->sampled(size.x*pixelScaleX_,size.y*pixelScaleY_),v,idx);}}
  mesh(t->sampled(size.x*pixelScaleX_,size.y*pixelScaleY_),vertices,idx);
 }
+void Canvas::softenScene(){
+ // Reuse two small render targets. Progressive linear filtering keeps the
+ // moving background soft without a CPU readback or a full-size blur pass.
+ auto* source=frameTexture_;
+ for(std::size_t i=0;i<focusTextures_.size();++i){
+  const float divisor=i==0?2.f:6.f;
+  const int w=std::max(1,int(std::ceil(width_/divisor))),h=std::max(1,int(std::ceil(height_/divisor)));
+  auto*& target=focusTextures_[i];
+  if(target&&(target->w!=w||target->h!=h)){SDL_DestroyTexture(target);target=nullptr;}
+  if(!target){
+   target=SDL_CreateTexture(renderer_,SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,w,h);
+   if(!target)throw std::runtime_error(SDL_GetError());
+   SDL_SetTextureScaleMode(target,SDL_SCALEMODE_LINEAR);SDL_SetTextureBlendMode(target,SDL_BLENDMODE_NONE);
+  }
+  if(!SDL_SetRenderTarget(renderer_,target)||!SDL_SetRenderScale(renderer_,1,1)||!SDL_RenderTexture(renderer_,source,nullptr,nullptr))throw std::runtime_error(SDL_GetError());
+  source=target;
+ }
+ if(!SDL_SetRenderTarget(renderer_,frameTexture_)||!SDL_SetRenderScale(renderer_,pixelScaleX_,pixelScaleY_))throw std::runtime_error(SDL_GetError());
+ const SDL_FRect area{0,0,width_,height_};
+ if(!SDL_RenderTexture(renderer_,source,nullptr,&area))throw std::runtime_error(SDL_GetError());
+ fill({0,0,width_,height_},{12,42,52,64});
+}
 void Canvas::scene(const Domain& d,double interpolation,double time,Tool tool,FishId held,bool careBadges,FishId hidden,const Decoration* preview,std::uint64_t selectedDecor,bool previewHighlight,bool backgroundArtwork){
+ const bool focus=preview&&previewHighlight;
+ const bool selling=tool==Tool::Sell&&!focus;
  if(backgroundArtwork){const auto* tank=d.tank(d.state().activeTank);environment({0,0,width_,height_},tank?tank->backgroundId:"sunlit-lagoon");}
  if(d.state().settings.tankLook==1)fill({0,0,width_,height_},{232,174,141,27});if(d.state().settings.tankLook==2)fill({0,0,width_,height_},{57,49,112,45});
 
  std::vector<const Decoration*> decor;for(const auto& item:d.state().decor)if(item.tank==d.state().activeTank&&!item.stored&&(!preview||preview->id!=item.id))decor.push_back(&item);
  if(preview)decor.push_back(preview);
- auto layer=[&](const Decoration* item){const auto* def=d.content().findDecor(item->kind);return def&&def->layer=="Background"?0:def&&def->layer=="Foreground"?2:1;};
- std::stable_sort(decor.begin(),decor.end(),[&](const auto* a,const auto* b){const int aLayer=layer(a),bLayer=layer(b);return aLayer!=bLayer?aLayer<bLayer:a->position.y<b->position.y;});
+ std::sort(decor.begin(),decor.end(),[](const auto* a,const auto* b){return decorBehind(*a,*b);});
+ const Decoration* selection=focus?preview:nullptr;
+ if(!selection&&selectedDecor)for(const auto* item:decor)if(item->id==selectedDecor){selection=item;break;}
+ DecorDef legacy;legacy.width=1.1;legacy.height=.95;
+ const auto decorBounds=[&](const Decoration& item){const auto* def=d.content().findDecor(item.kind);return decorRect(def?*def:legacy,item.position,item.sizeMul);};
+ const Rect selectedBounds=selection?decorBounds(*selection):Rect{};
+ const auto coversSelection=[&](Rect r){return selection&&r.x<selectedBounds.x+selectedBounds.w&&r.x+r.w>selectedBounds.x&&r.y<selectedBounds.y+selectedBounds.h&&r.y+r.h>selectedBounds.y;};
  std::vector<std::uint64_t> animated;int emitters=0,fxBudget=d.content().decorTuning.particleLimit;
  if(!d.state().settings.reducedMotion){
   auto priority=decor;std::stable_sort(priority.begin(),priority.end(),[&](const auto* a,const auto* b){const auto* da=d.content().findDecor(a->kind);const auto* db=d.content().findDecor(b->kind);return (da&&da->art.value("motion_class","")=="Feature")>(db&&db->art.value("motion_class","")=="Feature");});
   for(const auto* item:priority){if(int(animated.size())>=d.content().decorTuning.animatedLimit)break;const auto* def=d.content().findDecor(item->kind);if(!def||def->art.value("motion_class","")=="Static")continue;const auto r=decorRect(*def,item->position,item->sizeMul);if(r.x+r.w<=0||r.y+r.h<=0||r.x>=width_||r.y>=height_)continue;animated.push_back(item->id);}
  }
- // Catalog layers determine decor depth. Bottom anchors sort within a layer,
- // including previews. Fish and eggs remain readable above every decor layer.
+ // Keep the selected item at its actual depth. Only overlapping items in
+ // front become translucent, so the player can see both the item and its layer.
  clip({0,0,width_,height_});
- for(const auto* item:decor){
+ const auto drawDecor=[&](const Decoration* item){
   const auto* source=d.content().findDecor(item->kind);DecorDef legacy;
   if(!source){legacy.id=item->kind;legacy.asset="decor/"+item->kind+".png";legacy.width=1.1;legacy.height=.95;legacy.art=Json::object();source=&legacy;}
   const auto& def=*source;const bool motion=std::find(animated.begin(),animated.end(),item->id)!=animated.end();
   const bool emitter=def.art.value("motion",Json::object()).value("kind","")=="bubble";
   const bool allow=!emitter||emitters<d.content().decorTuning.emitterLimit;if(motion&&emitter&&allow)++emitters;
-  if(item==preview&&previewHighlight)decorPlacementMarker(decorRect(def,item->position,item->sizeMul));
-  const bool newPreview=item==preview&&previewHighlight&&!d.decoration(item->id);
-  decoration(def,*item,time,motion,newPreview?.92f:1.f,&fxBudget,allow,(item==preview&&previewHighlight)||item->id==selectedDecor);
- }
+  const float opacity=selection&&decorBehind(*selection,*item)&&coversSelection(decorBounds(*item))?.22f:1.f;
+  decoration(def,*item,time,motion,opacity,&fxBudget,allow,item==selection);
+ };
+ for(const auto* item:decor)drawDecor(item);
  clearClip();
- const auto drawFish=[&](const Fish& f){if(!f.stashed&&f.tank==d.state().activeTank&&f.id!=hidden){auto& s=*d.content().find(f.species);Color outline{0,0,0,0};if(tool==Tool::Sell&&sellable(s,f))outline={255,219,119,255};if(f.id==held&&tool!=Tool::Select)outline={183,255,249,255};fish(s,f,interpolation,f.id==held,outline,f.id==held,d.state().settings.reducedMotion,careOf(s,f,d.state().simNow),time);
-  Care care=careOf(s,f,d.state().simNow);if(careBadges&&!f.egg&&!f.dead&&care!=Care::Fed&&f.id!=held){const auto pose=fishPose(f,interpolation);auto p=toScreen(pose.position);float offset=float(s.nominalLength*ageScale(s,f)*.44)*worldScale();float x=std::clamp(p.x-float(pose.facing*std::cos(pose.pitch))*offset,38.f,width_-38.f);float y=p.y+float(std::sin(pose.pitch)*std::abs(pose.facing))*offset-28;bool ill=care==Care::Sick;round({x-28,y,56,18},ill?Color{178,218,127,255}:care==Care::Urgent?Color{248,158,115,255}:Color{248,220,125,255},9,{65,102,100,255},1,false);text(ill?"SICK":"HUNGRY",x,y+1,10,{54,79,83,255},true,50,true);}
+ const auto drawPellets=[&]{
+  for(auto& p:d.pellets()){auto at=toScreen(p.hasPrevious?WorldPoint{p.previous.x+(p.position.x-p.previous.x)*interpolation,p.previous.y+(p.position.y-p.previous.y)*interpolation}:p.position);float radius=std::max(4.f,6*worldScale());float alpha=p.rest<=30?1.f:float((31.8-p.rest)/1.8);if(coversSelection({at.x-radius,at.y-radius,radius*2,radius*2}))alpha*=.22f;round({at.x-radius,at.y-radius,radius*2,radius*2},{166,105,65,static_cast<Uint8>(255*alpha)},radius,{113,77,53,static_cast<Uint8>(255*alpha)},1,false);}
+ };
+ // Sell keeps its own backdrop effect. Decoration placement stays sharp.
+ if(selling){drawPellets();softenScene();}
+ const auto drawFish=[&](const Fish& f){if(!f.stashed&&f.tank==d.state().activeTank&&f.id!=hidden){auto& s=*d.content().find(f.species);Color outline{0,0,0,0};if(tool==Tool::Sell&&sellable(s,f))outline={255,219,119,255};if(f.id==held&&tool!=Tool::Select)outline={183,255,249,255};
+  const auto pose=fishPose(f,interpolation);const auto at=toScreen(pose.position);const auto size=f.egg?SDL_FPoint{std::max(20.f,worldScale()*30.f),std::max(20.f,worldScale()*30.f)}:fishSize(s,f);
+  const float w=std::abs(float(std::cos(pose.pitch)))*size.x+std::abs(float(std::sin(pose.pitch)))*size.y;
+  const float h=std::abs(float(std::sin(pose.pitch)))*size.x+std::abs(float(std::cos(pose.pitch)))*size.y+size.x*.06f;
+  const float opacity=coversSelection({at.x-w*.5f,at.y-h*.5f,w,h})?.22f:1.f;
+  fish(s,f,interpolation,f.id==held,outline,f.id==held,d.state().settings.reducedMotion,careOf(s,f,d.state().simNow),time,opacity);
+  Care care=careOf(s,f,d.state().simNow);if(careBadges&&opacity==1&&!f.egg&&!f.dead&&care!=Care::Fed&&f.id!=held){auto p=toScreen(pose.position);float offset=fishSize(s,f).x*.22f;float x=std::clamp(p.x-float(pose.facing*std::cos(pose.pitch))*offset,38.f,width_-38.f);float y=p.y+float(std::sin(pose.pitch)*std::abs(pose.facing))*offset-28;bool ill=care==Care::Sick;round({x-28,y,56,18},ill?Color{178,218,127,255}:care==Care::Urgent?Color{248,158,115,255}:Color{248,220,125,255},9,{65,102,100,255},1,false);text(ill?"SICK":"HUNGRY",x,y+1,10,{54,79,83,255},true,50,true);}
  }};
  for(const auto& fish:d.state().fish)drawFish(fish);
- for(const auto& display:d.state().companions)drawFish(companionVisual(display));
- for(auto& p:d.pellets()){auto at=toScreen(p.hasPrevious?WorldPoint{p.previous.x+(p.position.x-p.previous.x)*interpolation,p.previous.y+(p.position.y-p.previous.y)*interpolation}:p.position);float radius=std::max(4.f,6*worldScale());float alpha=p.rest<=30?1.f:float((31.8-p.rest)/1.8);round({at.x-radius,at.y-radius,radius*2,radius*2},{166,105,65,static_cast<Uint8>(255*alpha)},radius,{113,77,53,static_cast<Uint8>(255*alpha)},1,false);}
+ if(!selling)drawPellets();
+ clip({0,0,width_,height_});
+ for(const auto& ripple:d.ripples()){
+  const auto at=toScreen(ripple.position);const bool reduced=d.state().settings.reducedMotion;
+  const double age=ripple.previousAge+(ripple.age-ripple.previousAge)*std::clamp(interpolation,0.,1.);
+  for(int ring=0;ring<(reduced?1:3);++ring){
+   const double progress=(age-ring*.15)/(reduced?WaterRipple::lifetime:1.);
+   if(progress<0||progress>=1)continue;
+   const float radius=float(reduced?30.:14.+114.*(1.-std::pow(1.-progress,2)))*worldScale();
+   const float opacity=float(1.-progress);
+   const Rect bounds{at.x-radius,at.y-radius,radius*2,radius*2};
+   outline(bounds,{13,99,143,Uint8(175*opacity)},radius,6.f*worldScale());
+   outline(bounds,{224,255,255,Uint8(245*opacity)},radius,3.f*worldScale());
+  }
+ }
+ clearClip();
 }
 bool Canvas::capture(const std::filesystem::path& path,bool windowPixels){
  // Both targets have the window's native pixel size, with no letterbox layer.

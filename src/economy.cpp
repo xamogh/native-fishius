@@ -26,7 +26,7 @@ Json receipt(const Result& r){return {{"fish",r.fish.value},{"coins",r.coins},{"
 
 Money treasureContents(const Content& content,const TreasureOffer& offer,int level){
  if(level<1||level>40)throw std::invalid_argument("Invalid Treasure offer level");
- Amount slots=0;for(const auto& entitlement:content.tankEntitlements)if(entitlement.level<=level)slots+=entitlement.addedSlots;
+ const Amount slots=content.referenceSlotsByLevel.at(level-1);
  const auto& e=content.economy;
  return {product({e.baseCoinDay,10000+e.coinSlopeBps*(level-1),slots,content.referenceUtilizationNumerator,offer.coinDaysBps},
                  {10000,content.referenceUtilizationDenominator,10000}),offer.pearls};
@@ -35,11 +35,11 @@ Money treasureContents(const Content& content,const TreasureOffer& offer,int lev
 GrowthSnapshot purchaseQuote(const Content& content,const Species& s,int level,bool gift){
  if(level<1||level>40)throw std::invalid_argument("Invalid purchase level");
  GrowthSnapshot q;q.level=level;q.configVersion=content.configVersion;q.scheduleId=s.scheduleId;
- if(s.companion)return q;
  const auto& e=content.economy;q.durationMs=s.durationMs;q.feedMs=s.feedMs;q.stages=e.stages;q.rewards=e.rewards;q.earlyRefundBps=e.earlyRefundBps;
  q.profit=product({e.baseCoinDay,10000+e.coinSlopeBps*(level-1),s.durationMs,s.coinFactorBps,s.coinWeightBps},{86400000,10000,10000,10000});
  q.xp=product({e.baseXpDay,10000+e.xpSlopeBps*(level-1),s.durationMs,s.xpFactorBps,s.xpWeightBps},{86400000,10000,10000,10000});
- q.principal=gift?0:std::max(e.minimumPrice,product({q.profit,e.principalShareBps},{10000}));return q;
+ // Sale principal only returns coins actually paid for the egg.
+ q.principal=gift||s.currency!=Currency::Coins?0:std::max(e.minimumPrice,product({q.profit,e.principalShareBps},{10000}));return q;
 }
 int growthStage(const GrowthSnapshot& q,Millis elapsed){
  int stage=0;for(int i=1;i<5;++i)if(elapsed>=q.durationMs/10000*q.stages[i]+q.durationMs%10000*q.stages[i]/10000)stage=i;return stage;
@@ -62,14 +62,14 @@ FishReward fishReward(const Fish& f){
  if(f.age==4)return {q.principal,q.profit,f.scripted?0:q.xp};
  return {ratio(q.principal,q.earlyRefundBps),ratio(q.profit,q.rewards.at(f.age)),f.scripted?0:ratio(q.xp,q.rewards.at(f.age))};
 }
-Fish companionVisual(const Companion& c){
- Fish f;f.id=c.id;f.species=c.species;f.tank=c.tank;f.position=c.position;f.motion=c.motion;f.age=4;f.stashed=c.stored;f.lastFedAt=c.lastFedAt;f.favorite=c.favorite;
- f.purchase.feedMs=43200000;return f;
+bool pearlSaleEligible(const Content& content,const Fish& fish){
+ const auto* species=content.find(fish.species);
+ return species&&species->currency==Currency::Coins&&!fish.egg&&fish.age==4&&!fish.scripted&&
+        (fish.purchase.profit>0||fish.purchase.xp>0);
 }
-const Companion* Domain::companion(FishId id)const{
- const auto i=std::find_if(state_.companions.begin(),state_.companions.end(),[&](const auto& f){return f.id==id;});return i==state_.companions.end()?nullptr:&*i;
+Amount Domain::adultCoinSales()const{
+ const auto it=state_.totalEvents.find("adult-coin-sale");return it==state_.totalEvents.end()?0:it->second;
 }
-std::size_t Domain::displaying(TankId id)const{return std::count_if(state_.companions.begin(),state_.companions.end(),[&](const auto& f){return f.tank==id&&!f.stored;});}
 const TankEntitlement* Domain::nextTankEntitlement(TankId id)const{
  const auto* owned=tank(id);const int current=owned?owned->slots:0;
  const TankEntitlement* next=nullptr;for(const auto& e:content_.tankEntitlements)if(e.tank==id&&e.slots>current&&(!next||e.slots<next->slots))next=&e;return next;
@@ -88,29 +88,33 @@ Result Domain::settle(const Command& c){
  const std::string id=std::to_string(c.fish.value);
  if(state_.settlements.contains(id))return replay(state_.settlements.at(id).at("result"));
  auto* f=mutableFish(c.fish);if(!f||f->stashed||f->tank!=state_.activeTank)return {.error=Error::InvalidFish};
- if(c.action==Action::Keep&&(f->egg||f->age<4))return {.error=Error::NotReady,.message="Keep becomes available at adulthood."};
- if(c.action==Action::Sell&&f->favorite)return {.error=Error::Protected,.message="Unfavorite this fish before rehoming it."};
- if(c.action==Action::Sell&&(f->egg||f->age<1))return {.error=Error::NotReady,.message="Selling unlocks at Junior."};
+ if(f->favorite)return {.error=Error::Protected,.message="Unfavorite this fish before selling it."};
+ if(f->egg||f->age<1)return {.error=Error::NotReady,.message="Selling unlocks at Junior."};
  const auto fishCopy=*f;const auto reward=fishReward(fishCopy);
+ const bool eligible=pearlSaleEligible(content_,fishCopy);
+ if(eligible&&adultCoinSales()>=maximum)throw std::overflow_error("Pearl progress exhausted");
+ const Amount saleNumber=eligible?adultCoinSales()+1:0;
+ const Amount pearls=eligible&&saleNumber%content_.pearlSalesTarget==0?content_.pearlSalesReward:0;
  reason_="fish_settlement";source_=id;
- auto result=grant(reward.coins(),reward.xp);if(!result)return result;
- result.fish=c.fish;result.coins=reward.coins();result.pearls=0;
- if(c.action==Action::Keep){
-  const bool stored=displaying(fishCopy.tank)>=static_cast<std::size_t>(content_.displaySlots);
-  state_.companions.push_back({fishCopy.id,fishCopy.id,fishCopy.species,fishCopy.tank,fishCopy.position,fishCopy.motion,stored,fishCopy.favorite,fishCopy.lastFedAt});
-  result.message=stored?"Reward collected. Your fish is safe in Bag.":"Reward collected. Your fish stays with you.";
- }else result.message="Fish rehomed.";
- if(fishCopy.age==4&&!fishCopy.scripted){++state_.adultRaised[fishCopy.species];count("adult-settlement");}
+ auto result=grant(reward.coins(),reward.xp,pearls);if(!result)return result;
+ result.fish=c.fish;result.coins=reward.coins();
+ result.message="Fish sold.";
+ if(fishCopy.age==4&&!fishCopy.scripted&&(reward.coins()>0||reward.xp>0)){++state_.adultRaised[fishCopy.species];count("adult-settlement");}
+ if(eligible)count("adult-coin-sale");
  std::erase_if(state_.fish,[&](const auto& fish){return fish.id==c.fish;});
  result.revision=state_.revision+1;
  state_.settlements[id]={{"result",receipt(result)},{"species",fishCopy.species},{"stage",fishCopy.age},{"egg",fishCopy.egg},{"scripted",fishCopy.scripted},
-     {"disposition",c.action==Action::Keep?"keep":"rehome"},{"principal",reward.principal},{"profit",reward.profit},
+     {"disposition","rehome"},{"principal",reward.principal},{"profit",reward.profit},
      {"purchase",fishCopy.purchase},{"request_id",requestId_},{"at",state_.calendarNow}};
- count("rehome-or-keep");emit({"sale",c.fish,fishCopy.position,reward.coins(),result.xp,0,result.message});return result;
+ // Freeze the milestone rule with the settlement, just like the fish quote.
+ // Old settlements have no such field and keep their original zero pearls.
+ if(eligible)state_.settlements[id]["pearl_reward"]={{"sale",saleNumber},{"target",content_.pearlSalesTarget},{"amount",content_.pearlSalesReward}};
+ count("sell");emit({"sale",c.fish,fishCopy.position,reward.coins(),result.xp,pearls,result.message});return result;
 }
 
 Result Domain::execute(const Command& c){return execute(c,[](const State&){return true;});}
 Result Domain::execute(const Command& supplied,const std::function<bool(const State&)>& commit){
+ if(int(supplied.action)==33)return {.error=Error::Unavailable,.message="Favorite the fish to protect it from selling."};
  const bool recorded=supplied.action!=Action::Move&&supplied.action!=Action::DropFood;
  Command c=supplied;
  if(c.requestId.size()>128)return {.error=Error::Conflict,.message="Invalid request identity."};
@@ -122,8 +126,8 @@ Result Domain::execute(const Command& supplied,const std::function<bool(const St
   if(previous.at("command")!=fingerprint)return {.error=Error::Conflict,.message="This request was already used for another action."};
   return replay(previous.at("result"));
  }
- State original=state_;auto oldPellets=pellets_;auto oldEvents=events_;auto oldNext=nextPellet_;
- auto rollback=[&]{state_=std::move(original);pellets_=std::move(oldPellets);events_=std::move(oldEvents);nextPellet_=oldNext;configureExtras();};
+ State original=state_;auto oldPellets=pellets_;auto oldRipples=ripples_;auto oldEvents=events_;auto oldNext=nextPellet_;
+ auto rollback=[&]{state_=std::move(original);pellets_=std::move(oldPellets);ripples_=std::move(oldRipples);events_=std::move(oldEvents);nextPellet_=oldNext;configureExtras();};
  try{
   if(recorded){
    if(state_.receipts.size()>=50000||state_.nextRequestId==UINT64_MAX)throw std::overflow_error("Receipt storage exhausted");

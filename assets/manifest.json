@@ -97,6 +97,18 @@
       "source": "New game illustration",
       "sha256": "050ba43fe1d55ff90b480fdfdcd3173f1f4d1245226e12f3f8930834d2cc5345"
     },
+    "hud-icons/layout-button-v1.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in image_gen. See hud-icons/generation-layout-v1.json. Original alpha preserved.",
+      "sha256": "3c553cb9b5546018e49f044711e9b3a31821f0fb0c5285dd0b3d12ac96276c35"
+    },
     "hud-icons/settings-v1.png": {
       "size": [
         1254,
@@ -288,6 +300,194 @@
       ],
       "source": "Built-in ImageGen; prompt and source in dialogs/funds-underwater-v1.provenance.json",
       "sha256": "1616490ef4fe1f00cb3c98b565107bcbea2f9cc575f50694ed7eea16edb94d37"
+    },
+    "dialogs/level-up-underwater-v1.png": {
+      "size": [
+        1716,
+        917
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in ImageGen; prompt and source in dialogs/level-up-underwater-v1.provenance.json",
+      "sha256": "4035856cd3bce62d3cb21f7d50187f385b57cc2b40e7575fc13a64f618965e29"
+    },
+    "dialogs/level-up-underwater-portrait-v1.png": {
+      "size": [
+        926,
+        1698
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in ImageGen; prompt and source in dialogs/level-up-underwater-portrait-v1.provenance.json",
+      "sha256": "d3815b061505cf761fa9cbeec0add2a04c2b4cd9a80fb784d79d226c0b7805bb"
+    },
+    "dialogs/level-up-badge-v1.png": {
+      "size": [
+        1774,
+        887
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in ImageGen; prompt and source in dialogs/level-up-badge-v1.provenance.json",
+      "sha256": "1fac2a3d6b94db3a0611222cb5fca006547ba31de56e905bb18479b8fbc1184e"
+    },
+    "hud-icons/favorite-heart-v1.png": {
+      "size": [
+        128,
+        112
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in ImageGen; prompt and source in hud-icons/favorite-heart-v1.provenance.json",
+      "sha256": "06c5d462bb6e312fe41edf0b3e95b775b4a01f011a08e6191a8eda5b0c30c6b8"
+    },
+    "dialogs/level-up-cabinet-background-v1.png": {
+      "size": [
+        1714,
+        918
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in Image Gen; see dialogs/level-up-cabinet-background-v1.provenance.json",
+      "sha256": "ed6544ad21ea57f50ca58c3692d96afaff749c8cc6d5066a4de8f36cb47cce8e"
+    },
+    "dialogs/level-up-cabinet-badge-v1.png": {
+      "size": [
+        1774,
+        887
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in Image Gen; see dialogs/level-up-cabinet-badge-v1.provenance.json",
+      "sha256": "84ff0df5e43f3091881c436b95b24ab761661283ce89b5fcc631dd3f841ab9f2"
+    },
+    "dialogs/level-up-cabinet-card-v1.png": {
+      "size": [
+        2112,
+        744
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in Image Gen; see dialogs/level-up-cabinet-card-v1.provenance.json",
+      "sha256": "2f7c550bf1aed33dc01073f65efc61d108cca5e25b07946ce71851d49affd8a8"
+    },
+    "dialogs/level-up-cabinet-next-v1.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in Image Gen; see dialogs/level-up-cabinet-next-v1.provenance.json",
+      "sha256": "f8650b621c8047b86fe4801216ab507bd4b7f8064de55897127526181428f7ba"
+    },
+    "dialogs/level-up-cabinet-background-portrait-v1.png": {
+      "size": [
+        911,
+        1726
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Built-in Image Gen; see dialogs/level-up-cabinet-background-portrait-v1.provenance.json",
+      "sha256": "e38be15120e39d5f5e204551e6ebffd1d267979321416bd9652a2ab381a34552"
+    },
+    "dialogs/level-up-mobile-background-v1.png": {
+      "size": [
+        2048,
+        768
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        704,
+        264
+      ],
+      "source": "Built-in imagegen; prompt and source in assets/dialogs/level-up-mobile-background-v1.provenance.json",
+      "sha256": "fddf6086619d1d794b8ddcf35aaeb3e28f61e802182eecad28b903b94669415f"
+    },
+    "dialogs/level-up-mobile-card-v1.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        184,
+        184
+      ],
+      "source": "Built-in imagegen; prompt and source in assets/dialogs/level-up-mobile-card-v1.provenance.json",
+      "sha256": "6ad86f43fb14bf21fac187aa9734cd6c98c971f91bc2e5561d47aa2a161a50ce"
+    },
+    "dialogs/level-up-mobile-badge-v1.png": {
+      "size": [
+        1774,
+        887
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "logical_size": [
+        188,
+        94
+      ],
+      "source": "Built-in imagegen; prompt and source in assets/dialogs/level-up-mobile-badge-v1.provenance.json",
+      "sha256": "632786eeece7eee157595f611667ae4ca91b5f8ff12a3e096a8dbe0ea6f88e85"
+    },
+    "environment/open-blue-cove-v1.png": {
+      "size": [
+        1672,
+        940
+      ],
+      "pivot": [
+        0.5,
+        1
+      ],
+      "logical_size": [
+        1672,
+        940
+      ],
+      "source": "Built-in imagegen edit of the approved background mock; environment/open-blue-cove-v1.provenance.json",
+      "sha256": "f6c9aee49511fe16d380f59c11ac0b6c24385b6b58e433382bc24796626d6d9b"
+    },
+    "environment/sage-lagoon-v1.png": {
+      "size": [
+        1672,
+        940
+      ],
+      "pivot": [
+        0.5,
+        1
+      ],
+      "logical_size": [
+        1672,
+        940
+      ],
+      "source": "Built-in imagegen edit of the approved background mock; environment/sage-lagoon-v1.provenance.json",
+      "sha256": "bcc2b48a6948dfccc7682b57b87ac4c840933bae48d462f3434b8d663ccbb77b"
     }
   }
 }

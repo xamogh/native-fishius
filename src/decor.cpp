@@ -35,7 +35,7 @@ int Domain::decorScore(TankId tankId)const{
  std::set<std::string> seen;int result=0;for(const auto& d:state_.decor)if(d.tank==tankId&&!d.stored&&seen.insert(d.kind).second)if(const auto* def=content_.findDecor(d.kind))result+=def->score;return result;
 }
 bool Domain::decorVisible(const DecorDef& d)const{return !d.legacy&&d.level<=content_.decorTuning.launchLevelCap;}
-Amount Domain::decorPurchaseXp(const DecorDef&)const{return 0;}
+Amount Domain::decorPurchaseXp(const DecorDef& def)const{return owns(state_,def.id)?0:def.buyXp;}
 bool inPlacementWater(WorldPoint p){return inTank(p);}
 bool inTank(WorldPoint p){return std::isfinite(p.x)&&std::isfinite(p.y)&&p.x>=0&&p.x<=waterWidth&&p.y>=0&&p.y<=tankHeight;}
 WorldPoint decorPlacementPoint(WorldPoint p){return {std::clamp(p.x,0.,waterWidth),std::clamp(p.y,0.,tankHeight)};}
@@ -45,12 +45,18 @@ double decorDepth(WorldPoint p){
  const double edge=std::min(1.,std::abs(at.x/waterWidth-.5)/.5);
  return std::clamp(std::pow(ny,.82)*(1-.44*std::pow(edge,1.6)),0.,1.);
 }
-double decorScale(WorldPoint p){return .42+(1.18-.42)*decorDepth(p);}
+bool decorBehind(const Decoration& a,const Decoration& b){
+ // Layer by the bottom anchor. Sideways perspective changes size, not order.
+ if(a.position.y!=b.position.y)return a.position.y<b.position.y;
+ // Identity keeps copies with equal base heights stable during a move or reload.
+ return a.id<b.id;
+}
+double decorScale(WorldPoint p){return tankArtScale*(.42+(1.18-.42)*decorDepth(p));}
 double decorHaze(WorldPoint p){return (1-decorDepth(p))*.26;}
 WorldPoint decorPlacementPoint(const DecorDef& d,WorldPoint p,double sizeMul){
  p=decorPlacementPoint(p);
- // Canvas uses the smaller of width/12 and height/7 for both axes. These
- // world-space bounds therefore contain the sprite at every viewport shape.
+ // Match the smaller of the authored scene's width/12 and height/7.
+ // The view also fits active placements within the currently visible crop.
  // Moving an anchor inward can increase its perspective scale, so repeat
  // until the larger footprint also fits. Oversized art stays bottom aligned.
  for(int i=0;i<256;++i){
@@ -79,7 +85,7 @@ Result Domain::blocker(const DecorDef& d)const{
   if(state_.calendarNow<it->startsAt||state_.calendarNow>=it->endsAt)return fail(Error::EventClosed);
  }
  if(!d.artReady)return fail(Error::NoArt);
- if(placedDecor(state_.activeTank)>=static_cast<std::size_t>(content_.decorTuning.placedLimit))return fail(Error::Maximum,"Store a decoration first. This tank has 32 placed items.");
+ if(placedDecor(state_.activeTank)>=static_cast<std::size_t>(content_.decorTuning.placedLimit))return {.error=Error::Maximum,.message="Store a decoration first. This tank has "+std::to_string(content_.decorTuning.placedLimit)+" placed items."};
  if(state_.decor.size()>=500)return fail(Error::Maximum);
  return requireFunds(d.currency==Currency::Pearls?0:d.price,d.currency==Currency::Pearls?d.price:0);
 }
@@ -119,7 +125,7 @@ Result Domain::executeDecor(const Command& command){
   if(queued)state_.pendingDecor=def.id;else state_.decor.push_back({state_.nextDecorId++,def.id,state_.activeTank,position});
   if(!owns(state_,def.id))state_.decorOwned.push_back(def.id);
   if(intro)state_.decorOnboardingComplete=true;
-  if(!queued)count("decor");emit({"decor",{},position,def.currency==Currency::Coins?-def.price:0,xp,def.currency==Currency::Pearls?-def.price:0,(queued?"Bought ":"Placed ")+def.name});
+  if(!queued)count("decor");emit({"decor",{},position,def.currency==Currency::Coins?-def.price:0,result.xp,def.currency==Currency::Pearls?-def.price:0,(queued?"Bought ":"Placed ")+def.name});
   result.coins=def.currency==Currency::Coins?-def.price:0;result.pearls-=def.currency==Currency::Pearls?def.price:0;return result;
  }
  auto it=std::find_if(state_.decor.begin(),state_.decor.end(),[&](const auto& d){return d.id==command.decor;});

@@ -1,0 +1,65 @@
+{
+  "asset": "error-toast-bottle-v1.png",
+  "status": "production_ready",
+  "created_at": "2026-09-18",
+  "method": "built-in image_gen followed by user-approved local background cleanup",
+  "use_case": "background-extraction",
+  "approved_reference": "../../design/mockups/error-toast-2026-09-18/creative-v2/03-bottle-post.png",
+  "selected_source": "/Users/amoghrijal/.codex/generated_images/01a0b276-3f3e-7d02-969f-a8d9e269ce28/exec-e2a1129c-913a-446e-be9c-ca74f1dde4f2.png",
+  "dimensions": {
+    "width": 2087,
+    "height": 754
+  },
+  "mode": "RGBA",
+  "has_alpha": true,
+  "alpha_bounds": {
+    "x": 98,
+    "y": 119,
+    "width": 1957,
+    "height": 447
+  },
+  "estimated_artwork_bounds": {
+    "x": 98,
+    "y": 120,
+    "width": 1954,
+    "height": 447
+  },
+  "estimated_text_safe_area": {
+    "x": 550,
+    "y": 260,
+    "width": 1220,
+    "height": 205
+  },
+  "estimated_close_x_bounds": {
+    "x": 1857,
+    "y": 265,
+    "width": 78,
+    "height": 80
+  },
+  "fidelity_concerns": [
+    "Generated shapes and palette follow the approved artwork, but some illustration details differ from the source mockup.",
+    "The cleanup changes only transparency and the outermost one-pixel RGB edge strip to remove checkerboard contamination."
+  ],
+  "attempts": [
+    {
+      "source": "/Users/amoghrijal/.codex/generated_images/01a0b276-3f3e-7d02-969f-a8d9e269ce28/exec-acb61eb0-06ca-447b-bf96-701f174709e3.png",
+      "prompt": "Use case: background-extraction\nAsset type: production transparent PNG game HUD sprite for the exact approved error toast.\nInput image 1 is the edit target, the approved full game mockup. Extract ONLY the illustrated bottle-and-parchment toast across the upper centre, approximately x493 to x1208 and y111 to y280 of the 1672 by 941 reference. This is a faithful cutout and text removal, not a redesign.\n\nPrimary request: Output that complete exact toast illustration alone at high resolution on actual RGBA transparency, with tight transparent padding. The visible asset is extremely wide, approximately 4.25:1. Enlarge the source toast cleanly to about 2860 pixels across while preserving every shape and their relative proportions.\nRemove ONLY the two printed message lines (\"This fish is a favourite\" and \"Unfavourite it before selling.\") and seamlessly restore the plain warm cream parchment texture underneath. Keep the small teal close X at the upper-right curl as part of the image.\nInvariants: Preserve the exact short squat tilted turquoise sea-green bottle on the left, thick rim, cork, translucent glass with pale blue edge highlights, vivid coral-red heart-shaped wax seal with the small cream padlock, the seaweed behind and below the bottle, scattered small pale bubbles at both ends, the long cream parchment with gold edge, the subtle curved upper and lower edges, the curled right end, the teal close X, all shadows, original friendly polished hand-painted 2D game art, lighting, colours and geometry. Bottle and scroll must remain the same scale relative to each other as the reference. Preserve the parchment's broad flat clear centre, since real UI labels will be drawn there later. Retain the original local shading of the bottle rather than adding the underwater scene inside it.\nScene/backdrop: Completely transparent, actual alpha channel, no aquarium, no water backdrop, no scene or HUD elements. No white or coloured matte and no checkerboard pixels.\nConstraints: Do not add, redesign, rearrange, change proportions, simplify, add text or add icons. No extra ornamental details. Keep the whole toast visible without clipping bubbles, cork, seaweed or roll. Minimal 8 to 16 pixel transparent margin around the complete sprite."
+    },
+    {
+      "source": "/Users/amoghrijal/.codex/generated_images/01a0b276-3f3e-7d02-969f-a8d9e269ce28/exec-e2a1129c-913a-446e-be9c-ca74f1dde4f2.png",
+      "prompt": "Use case: background-extraction.\nEdit target: input image 1, the extracted blank bottle-and-scroll game toast.\nSINGLE CHANGE: Remove every background pixel including the grey checkerboard and faint water line patterns. Export as a real RGBA PNG cutout with an actual alpha channel. Grey checkerboards must NEVER appear among the image's actual pixel colours. The bottle, scroll, bubbles, seaweed and their edges remain visually unchanged. Do not draw a backdrop of any colour. The existing checkered background is a mistake, not a design feature.\nKeep the exact art, proportions, size, colours and shape of the input asset. Do not add lettering; the cream parchment stays blank. Keep the teal X, coral heart-lock seal, cork, bottle, seaweed and bubbles. Trim the empty area to 8 px transparent padding beyond the visible objects on all sides. This is a production sprite with genuine transparency, no simulated transparency, no checkerboard, no white or solid colour background. Return PNG with RGBA mode, preserving native alpha."
+    }
+  ],
+  "cleanup": {
+    "script": "design/mockups/error-toast-2026-09-18/creative-v2/clean_bottle_alpha.py",
+    "source_sha256": "846848699a5f2d19566e51b3963a62d5b8fa38e89ac1aa52a5a2c57162d733fc",
+    "output_sha256": "30d72b0052b12a401f7d9218c3cb6829170bada6702820d74d68f7c03da20f80",
+    "user_approval": "The user replied 'okay cool!' to local background cleanup and requested a restart.",
+    "method": "Neutral channel-range mask (>12), retain white highlights (minimum channel >232), flood-fill enclosed holes, restore holes up to 64 pixels, discard foreground components below 24 pixels, erode the edge by one source pixel, Gaussian alpha smoothing at radius 0.6, extend adjacent clean interior RGB into the one-pixel edge strip.",
+    "canvas_preserved": true,
+    "foreground_components": 11,
+    "visible_pixels": 552122,
+    "opaque_pixels": 533216,
+    "validation": "Checked the full image and enlarged bottle/bubble edges against teal (#00919e) and dark (#08202b) backgrounds. The seaweed opening remains transparent and white highlights remain intact."
+  }
+}

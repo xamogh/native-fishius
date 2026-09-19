@@ -20,9 +20,10 @@ Finish finish(Surface surface){
  case Surface::Buy:return {{98,226,111},{42,181,76},{39,137,70},{213,255,183,200}};
  case Surface::PearlBuy:return {{215,204,250},{175,153,225},{87,65,124},{247,239,255,200}};
  case Surface::LockedPrice:return {{157,182,143},{115,153,116},{92,129,91},{220,237,191,140}};
- case Surface::Keep:return {{255,181,165},{235,132,115},{166,77,66},{255,232,216,230}};
  case Surface::DisabledButton:return {{218,225,216},{180,195,184},{118,144,135},{242,248,233,180}};
  case Surface::PausedBadge:return {{255,226,118},{240,185,62},{163,116,34},{255,249,211,230}};
+ case Surface::SettingsCard:return {{54,207,224},{35,187,214},{17,83,103},{159,250,240,230}};
+ case Surface::Amber:return {{255,228,117},{246,182,48},{155,97,29},{255,250,216,230}};
  }
  return {};
 }
@@ -80,31 +81,31 @@ void blueHeader(Canvas& canvas,Rect bounds,float u,float radius){
 
 void backdrop(Canvas& canvas,const ShopLayout& layout){
  const float u=layout.unit;
- const Rect header{0,0,layout.page.w,layout.title.y};
+ const Rect header{layout.page.x,layout.page.y,layout.page.w,layout.title.y-layout.page.y};
  blueHeader(canvas,header,u);
- const Rect paper{0,header.h,layout.page.w,layout.footer.y-header.h};
+ const float bottom=layout.inventory?layout.page.y+layout.page.h:layout.footer.y;
+ const Rect paper{layout.page.x,layout.title.y,layout.page.w,bottom-layout.title.y};
  canvas.gradient(paper,{244,239,218},{244,243,226});
  const Rect light{paper.x,paper.y+12*u,paper.w,136*u};
  canvas.wave(light,{255,255,247,105},20*u,720*u,.3f,28*u);
  canvas.wave(light,{255,255,247,75},24*u,912*u,2.6f,36*u);
- canvas.fill({0,paper.y,layout.page.w,4*u},{245,255,232,150});
+ canvas.fill({layout.page.x,paper.y,layout.page.w,4*u},{245,255,232,150});
 }
 
 void footer(Canvas& canvas,const ShopLayout& layout){
  const float u=layout.unit;
- const Rect bounds{0,layout.footer.y,layout.page.w,layout.page.h-layout.footer.y};
+ const Rect bounds{layout.page.x,layout.footer.y,layout.page.w,layout.page.y+layout.page.h-layout.footer.y};
  canvas.gradient(bounds,{146,224,196},{102,196,179});
- canvas.wave({0,bounds.y+8*u,bounds.w,bounds.h*.7f},{214,255,223,95},20*u,760*u,.2f,12*u);
- canvas.wave({0,bounds.y+28*u,bounds.w,bounds.h*.7f},{207,255,224,65},20*u,624*u,2.3f,12*u);
- canvas.fill({0,bounds.y,bounds.w,4*u},{237,255,217,210});
+ canvas.wave({bounds.x,bounds.y+8*u,bounds.w,bounds.h*.7f},{214,255,223,95},20*u,760*u,.2f,12*u);
+ canvas.wave({bounds.x,bounds.y+(layout.inventory?12:28)*u,bounds.w,bounds.h*.7f},{207,255,224,65},20*u,624*u,2.3f,12*u);
+ canvas.fill({bounds.x,bounds.y,bounds.w,4*u},{237,255,217,210});
  // Keep the wallet clear, with bubbles confined to the outer edges.
- const float left=layout.currencyHud[HudPart::CoinIcon].x;
- bubble(canvas,left*.2f,bounds.y+32*u,20*u);
- bubble(canvas,left*.28f,bounds.y+56*u,12*u);
- bubble(canvas,left*.76f,bounds.y+72*u,20*u);
+ const float left=layout.currencyHud[HudPart::CoinIcon].x-bounds.x;
+ bubble(canvas,bounds.x+left*.2f,bounds.y+32*u,20*u);
+ if(!layout.inventory){bubble(canvas,bounds.x+left*.28f,bounds.y+56*u,12*u);bubble(canvas,bounds.x+left*.76f,bounds.y+72*u,20*u);}
  const float right=layout.currencyHud[HudPart::Pearls].x+layout.currencyHud[HudPart::Pearls].w;
- const float space=bounds.w-right;
- bubble(canvas,right+space*.58f,bounds.y+52*u,16*u);
+ const float space=bounds.x+bounds.w-right;
+ if(!layout.inventory)bubble(canvas,right+space*.58f,bounds.y+52*u,16*u);
  bubble(canvas,right+space*.85f,bounds.y+32*u,12*u);
 }
 

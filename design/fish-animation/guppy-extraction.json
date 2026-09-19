@@ -1,0 +1,160 @@
+{
+  "source": "design/fish-animation/guppy-atlas-source.png",
+  "method": "Connected neutral matte removal and tight sprite slicing; enclosed paint preserved",
+  "parts": [
+    {
+      "name": "body",
+      "source_bounds": [
+        30,
+        141,
+        390,
+        202
+      ],
+      "size": [
+        396,
+        208
+      ],
+      "transparent": true
+    },
+    {
+      "name": "tail",
+      "source_bounds": [
+        426,
+        27,
+        284,
+        394
+      ],
+      "size": [
+        290,
+        400
+      ],
+      "transparent": true
+    },
+    {
+      "name": "dorsal",
+      "source_bounds": [
+        804,
+        131,
+        240,
+        192
+      ],
+      "size": [
+        246,
+        198
+      ],
+      "transparent": true
+    },
+    {
+      "name": "belly",
+      "source_bounds": [
+        96,
+        532,
+        186,
+        226
+      ],
+      "size": [
+        192,
+        232
+      ],
+      "transparent": true
+    },
+    {
+      "name": "near-open",
+      "source_bounds": [
+        437,
+        513,
+        233,
+        225
+      ],
+      "size": [
+        239,
+        231
+      ],
+      "transparent": true
+    },
+    {
+      "name": "near-closed",
+      "source_bounds": [
+        800,
+        513,
+        234,
+        233
+      ],
+      "size": [
+        240,
+        239
+      ],
+      "transparent": true
+    },
+    {
+      "name": "far-open",
+      "source_bounds": [
+        122,
+        895,
+        136,
+        138
+      ],
+      "size": [
+        142,
+        144
+      ],
+      "transparent": true
+    },
+    {
+      "name": "far-closed",
+      "source_bounds": [
+        468,
+        895,
+        136,
+        139
+      ],
+      "size": [
+        142,
+        145
+      ],
+      "transparent": true
+    },
+    {
+      "name": "mouth-closed",
+      "source_bounds": [
+        812,
+        901,
+        193,
+        125
+      ],
+      "size": [
+        199,
+        131
+      ],
+      "transparent": true
+    },
+    {
+      "name": "mouth-open",
+      "source_bounds": [
+        70,
+        1189,
+        188,
+        126
+      ],
+      "size": [
+        194,
+        132
+      ],
+      "transparent": true
+    },
+    {
+      "name": "side",
+      "source_bounds": [
+        437,
+        1179,
+        144,
+        187
+      ],
+      "size": [
+        150,
+        193
+      ],
+      "transparent": true
+    }
+  ]
+}

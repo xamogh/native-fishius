@@ -1,0 +1,30 @@
+{
+  "tool": "built-in image_gen",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a0b273-b5d7-7921-984c-ecc3811a9129/exec-adf124b2-657d-46aa-8c25-7dbb975929a3.png",
+  "asset": "level-up-badge-v1.png",
+  "dimensions": [
+    1774,
+    887
+  ],
+  "background": "Opaque warm cream matched to level-up-underwater-v1.png; rendered with Canvas.roundedImage feathering.",
+  "prompt": "Use case: precise-object-edit.\nAsset type: production raster badge illustration for a casual aquarium game's level-up dialog.\nInput image 1 is the badge SUBJECT and STYLE reference. Input image 2 is the exact intended dialog BACKGROUND and palette reference.\nCreate the badge from image 1 against a completely clean warm cream background that precisely matches the top center of image 2. Replace every grey checkerboard pixel in image 1 with this subtle warm ivory cream. There must be no checkerboard, no grey texture and no transparency simulation anywhere. Keep the same polished gold medallion, blank gold inner face, small teal kelp around the base, tiny grey base stones, two small gold stars and four subtle blue bubbles. The inner medallion face must be entirely unmarked and blank for a live level number later. All bubbles should have clean blue translucent-looking interiors over the warm cream, with no checkerboard texture.\nCanvas: 640 by 320 pixels, 2:1 landscape. Preserve generous clean cream margin of at least 10% on all four edges for blending in the game. Main round medallion centered at normalized x=0.5 and y=0.48, about 36% canvas width and 72% canvas height. Surrounding decorations remain close to medallion and within central 76% canvas width and 78% height. Subtle soft upper-left light and gentle shading. Soft warm cheerful style.\nCritical constraints: NO text, NO letters, NO numbers, NO digit, NO star embossed in center. NO label, banner, rays, harsh glow, halo, frame, buttons, full scene, sand platform or watermark. Background must remain matching warm cream and completely empty at all canvas edges.",
+  "placement": {
+    "medallion_face_center": [
+      0.495,
+      0.462
+    ],
+    "medallion_face_bounds": [
+      0.354,
+      0.184,
+      0.635,
+      0.741
+    ],
+    "medallion_outer_bounds": [
+      0.315,
+      0.11,
+      0.679,
+      0.831
+    ]
+  },
+  "notes": "Original generated image retained. No alpha extraction, checkerboard removal, pixel edits or resizing applied."
+}

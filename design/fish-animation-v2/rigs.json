@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "canvas": { "width": 640, "height": 420 },
+  "species": {
+    "neonTetra": {
+      "name": "Neon tetra",
+      "facing": "right",
+      "tailHz": 2.5,
+      "tailDegrees": 6,
+      "pivot": [365, 235],
+      "parts": {
+        "body": { "rect": [187, 120, 389, 224], "featherLeft": 25, "rootY": 107, "rootScale": 0.61 },
+        "tail": { "rect": [46, 118, 174, 201], "pivot": [0.96, 0.54] },
+        "dorsal": { "rect": [285, 63, 122, 98], "pivot": [0.55, 0.92] },
+        "belly": { "rect": [363, 328, 59, 41], "pivot": [0.72, 0.16] },
+        "side": { "rect": [268, 285, 56, 51], "pivot": [0.91, 0.42], "behind": true },
+        "near-closed": { "rect": [377, 139, 148, 157], "pivot": [0.5, 0.5] },
+        "far-closed": { "rect": [526, 168, 53, 84], "pivot": [0.5, 0.5] },
+        "mouth-open": { "rect": [521, 244, 53, 59], "pivot": [0.85, 0.5] }
+      }
+    },
+    "guppy": {
+      "name": "Guppy",
+      "facing": "left",
+      "tailHz": 1.5,
+      "tailDegrees": 4,
+      "pivot": [250, 240],
+      "parts": {
+        "body": { "rect": [70, 127, 366, 201], "featherRight": 18 },
+        "tail": { "rect": [365, 83, 239, 276], "pivot": [0.12, 0.51] },
+        "dorsal": { "rect": [240, 103, 115, 81], "pivot": [0.5, 0.9] },
+        "belly": { "rect": [242, 291, 49, 33], "pivot": [0.15, 0.16] },
+        "side": { "rect": [245, 250, 72, 63], "pivot": [0.08, 0.42] },
+        "near-closed": { "rect": [113, 146, 119, 124], "pivot": [0.5, 0.5] },
+        "far-closed": { "rect": [73, 182, 42, 60], "pivot": [0.5, 0.5] },
+        "mouth-open": { "rect": [69, 237, 59, 58], "pivot": [0.15, 0.5] }
+      }
+    }
+  }
+}

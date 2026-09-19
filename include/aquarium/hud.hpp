@@ -1,5 +1,6 @@
 #pragma once
 #include "aquarium/canvas.hpp"
+#include "aquarium/scroll.hpp"
 #include <span>
 
 namespace aq {
@@ -11,7 +12,7 @@ enum class HudPart {
  Projects,ProjectsIcon,ProjectsLabel,
  Bag,BagIcon,BagLabel,Settings,SettingsIcon,
  Rewards,RewardsIcon,RewardsLabel,
- Food,FoodIcon,FoodLabel,Rehome,RehomeIcon,RehomeLabel,Shop,ShopIcon,ShopLabel,Water,Count
+ Food,FoodIcon,FoodLabel,Rehome,RehomeIcon,RehomeLabel,Layout,LayoutIcon,LayoutLabel,Shop,ShopIcon,ShopLabel,Water,Count
 };
 struct HudLayout {
  std::array<Rect,static_cast<std::size_t>(HudPart::Count)> boxes{};
@@ -20,25 +21,28 @@ struct HudLayout {
 };
 // Presentation values only. Rewards have already been committed to the save.
 struct HudRewardDisplay {
- Amount coins{};double xp{};float coinPulse{},xpPulse{};bool reducedMotion{};
+ Amount coins{},pearls{};double xp{};float coinPulse{},pearlPulse{},xpPulse{};bool reducedMotion{};
 };
 
 enum class ShopCategory { Fish,Plants,Decorations,Treasure,Environment,Tanks };
-struct ShopState { ShopCategory category{ShopCategory::Treasure}; int subtab{}; float scroll{}; };
+struct ShopState { ShopCategory category{ShopCategory::Treasure}; int subtab{}; float scroll{}; ScrollMotion motion{}; };
 struct ShopFishOffer {
- std::string id; GrowthSnapshot quote; bool companion{};
+ std::string id; GrowthSnapshot quote;
  Millis firstGrowthMs()const{return quote.durationMs/10000*quote.stages[1]+quote.durationMs%10000*quote.stages[1]/10000;}
- bool fastGrowing()const{return !companion&&quote.durationMs>0&&firstGrowthMs()<=300000;}
+ bool fastGrowing()const{return quote.durationMs>0&&firstGrowthMs()<=300000;}
 };
-struct ShopItem { std::string name,asset,detail,price; bool locked{}; std::optional<ShopFishOffer> fish{}; std::string environmentId{}; std::string treasureId{}; };
+struct ShopItem { std::string name,asset,detail,price; bool locked{}; std::optional<ShopFishOffer> fish{}; std::string environmentId{}; std::string treasureId{}; std::string decorId{}; bool flipped{}; std::size_t quantity{1}; std::string purchaseReward{}; };
 struct ShopLayout {
  Rect page,header,close,title,body,footer,scrollTrack,cardViewport;
  HudLayout currencyHud;
  std::array<Rect,6> tabs;std::array<Rect,2> subtabs,wallets;
  std::array<Rect,5> cards;
  float unit,minimumTouch{44};
+ Rect dialog,dialogTitle,closeHit;
+ int visibleCards{5};bool inventory{};
 };
 ShopLayout layoutShop(float width,float height,Insets safe,float minimumTouch=44);
+ShopLayout layoutInventory(float width,float height,Insets safe,float minimumTouch=44);
 std::vector<ShopItem> shopItems(const Domain&,const ShopState&);
 std::optional<std::size_t> shopCardAt(const ShopLayout&,const ShopState&,std::size_t count,SDL_FPoint);
 Rect shopCardBounds(const ShopLayout&,const ShopState&,std::size_t index);
@@ -48,9 +52,11 @@ void paintShopFishDetails(Canvas&,const Domain&,const HudDialogLayout&,const Spe
 Rect shopSubtabBounds(const ShopLayout&,ShopCategory,int index);
 int shopControl(const ShopLayout&,SDL_FPoint,ShopCategory=ShopCategory::Fish);
 void activateShopControl(ShopState&,int);
-void scrollShop(ShopState&,float,std::size_t itemCount);
+void scrollShop(ShopState&,float,std::size_t itemCount,int visibleCards=0);
+float shopScrollLimit(const ShopState&,std::size_t itemCount,int visibleCards=0);
 struct TankShopState;
 void paintShop(Canvas&,const Domain&,const ShopLayout&,const ShopState&,int hover=-1,int pressed=-1,const TankShopState* tanks=nullptr);
+void paintInventory(Canvas&,const Domain&,const ShopLayout&,const ShopState&,std::span<const ShopItem>,int hover=-1,int pressed=-1,bool dimBackdrop=true);
 
 // Clay owns placement. The painter consumes the same bounds that input uses.
 HudLayout layoutHud(float width,float height,Insets safe,float minimumTouch);

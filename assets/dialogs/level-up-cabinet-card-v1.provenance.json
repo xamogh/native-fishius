@@ -1,0 +1,12 @@
+{
+  "tool": "built-in image_gen",
+  "generated_at": "2026-09-18",
+  "reference": "/Users/amoghrijal/amogh/aquarium-native/design/mockups/level-up-2026-09-18/horizontal-grid/approved.png",
+  "original_generated_path": "/Users/amoghrijal/.codex/generated_images/01a0b2e3-154a-7f30-83a3-f06a554af0f6/exec-7d322b37-f141-4acb-92f4-de2ff9cd667a.png",
+  "dimensions": {
+    "width": 2112,
+    "height": 744
+  },
+  "opaque": true,
+  "prompt": "Use case: stylized-concept\nAsset type: production full-bleed raster background texture for an aquarium game's horizontal unlock card.\nInput image 1 is the approved UI mockup, used only as a style reference. Match the blank interior scenery inside its first card at x218 y330 width452 height158.\nPrimary request: Generate one reusable EMPTY card interior at 1408 x 496 pixels, aspect ratio approximately 2.84:1. The entire canvas IS the card interior. Do not draw the card itself, border, frame, or surrounding interface.\nScene: Very pale mint and aqua water, almost white mint across upper half, subtly warmer pale aqua below. A tiny warm cream sand shelf runs along the very bottom 13 percent, with low smooth contours. Include a few very small muted underwater sea plants and bluish gray stones ONLY in the bottom-left corner and bottom-right corner. Those ornaments occupy at most 9 percent of width each and are at most 27 percent of height. Keep the remaining center and right-side text areas mostly empty, calm, and bright. Do not add plants anywhere else.\nStyle: soft clean casual aquarium game illustration matching the reference, low contrast, very restrained detail, muted sage green plants and soft gray-blue stones. The background must support real colorful item sprites and dark blue text drawn on top later. All scenery is gently shaded with diffuse light.\nConstraints: opaque full-bleed PNG. Flat rectangular texture with image content continuing to all four canvas edges. NO rounded corners, NO outline, NO card shape, NO border, NO margin, NO heavy shadow, NO shine, NO glossy highlight, NO light rays, NO bubbles, NO fish, NO item, NO tank, NO shell, NO flowers, NO coin, NO pearl, NO UI, NO label, NO letters, NO numbers, NO text, NO watermark. Do not reproduce the overall mockup. Create only the empty scenic card interior at the specified wide aspect ratio."
+}

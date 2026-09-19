@@ -1,0 +1,180 @@
+{
+  "neonTetra": {
+    "source": "source/neonTetra.png",
+    "width": 1254,
+    "height": 1254,
+    "transparentFraction": 0.7769319994200377,
+    "parts": {
+      "portrait": {
+        "file": "parts/neonTetra/portrait.png",
+        "bounds": {
+          "left": 21,
+          "top": 95,
+          "width": 457,
+          "height": 288
+        }
+      },
+      "body": {
+        "file": "parts/neonTetra/body.png",
+        "bounds": {
+          "left": 497,
+          "top": 149,
+          "width": 389,
+          "height": 224
+        }
+      },
+      "tail": {
+        "file": "parts/neonTetra/tail.png",
+        "bounds": {
+          "left": 968,
+          "top": 97,
+          "width": 260,
+          "height": 300
+        }
+      },
+      "dorsal": {
+        "file": "parts/neonTetra/dorsal.png",
+        "bounds": {
+          "left": 125,
+          "top": 539,
+          "width": 254,
+          "height": 204
+        }
+      },
+      "side": {
+        "file": "parts/neonTetra/side.png",
+        "bounds": {
+          "left": 579,
+          "top": 578,
+          "width": 163,
+          "height": 149
+        }
+      },
+      "belly": {
+        "file": "parts/neonTetra/belly.png",
+        "bounds": {
+          "left": 958,
+          "top": 603,
+          "width": 169,
+          "height": 117
+        }
+      },
+      "near-closed": {
+        "file": "parts/neonTetra/near-closed.png",
+        "bounds": {
+          "left": 95,
+          "top": 862,
+          "width": 301,
+          "height": 288
+        }
+      },
+      "far-closed": {
+        "file": "parts/neonTetra/far-closed.png",
+        "bounds": {
+          "left": 564,
+          "top": 913,
+          "width": 189,
+          "height": 184
+        }
+      },
+      "mouth-open": {
+        "file": "parts/neonTetra/mouth-open.png",
+        "bounds": {
+          "left": 999,
+          "top": 933,
+          "width": 138,
+          "height": 165
+        }
+      }
+    }
+  },
+  "guppy": {
+    "source": "source/guppy.png",
+    "width": 1254,
+    "height": 1254,
+    "transparentFraction": 0.736791231376978,
+    "parts": {
+      "portrait": {
+        "file": "parts/guppy/portrait.png",
+        "bounds": {
+          "left": 8,
+          "top": 104,
+          "width": 427,
+          "height": 289
+        }
+      },
+      "body": {
+        "file": "parts/guppy/body.png",
+        "bounds": {
+          "left": 462,
+          "top": 178,
+          "width": 366,
+          "height": 201
+        }
+      },
+      "tail": {
+        "file": "parts/guppy/tail.png",
+        "bounds": {
+          "left": 916,
+          "top": 75,
+          "width": 325,
+          "height": 375
+        }
+      },
+      "dorsal": {
+        "file": "parts/guppy/dorsal.png",
+        "bounds": {
+          "left": 96,
+          "top": 577,
+          "width": 287,
+          "height": 202
+        }
+      },
+      "side": {
+        "file": "parts/guppy/side.png",
+        "bounds": {
+          "left": 536,
+          "top": 594,
+          "width": 203,
+          "height": 178
+        }
+      },
+      "belly": {
+        "file": "parts/guppy/belly.png",
+        "bounds": {
+          "left": 966,
+          "top": 639,
+          "width": 153,
+          "height": 104
+        }
+      },
+      "near-closed": {
+        "file": "parts/guppy/near-closed.png",
+        "bounds": {
+          "left": 76,
+          "top": 900,
+          "width": 298,
+          "height": 273
+        }
+      },
+      "far-closed": {
+        "file": "parts/guppy/far-closed.png",
+        "bounds": {
+          "left": 529,
+          "top": 940,
+          "width": 229,
+          "height": 209
+        }
+      },
+      "mouth-open": {
+        "file": "parts/guppy/mouth-open.png",
+        "bounds": {
+          "left": 960,
+          "top": 942,
+          "width": 195,
+          "height": 210
+        }
+      }
+    }
+  }
+}

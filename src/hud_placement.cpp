@@ -32,6 +32,7 @@ Result confirmFishPlacement(Session& session,FishPlacement& state,WorldPoint poi
   if(state.receipts.size()>24)state.receipts.erase(state.receipts.begin());
   if(const auto* species=session.domain().content().find(state.species))state.offer=session.domain().quote(*species);
  }else if(result.error==Error::Funds){cancelFishPlacement(state);state.shortfall=result.shortfall;}
+ else if(result.error==Error::Full)cancelFishPlacement(state);
  else state.error=result.message.empty()?errorText(result.error):result.message;
  return result;
 }
@@ -46,22 +47,33 @@ PlacementEvent fishPlacementEvent(Session& session,FishPlacement& state,const Fi
   const bool place=state.pointerDown&&canPlace(l,point)&&std::hypot(point.x-state.down.x,point.y-state.down.y)<24*l.unit;
   state.pointerDown=state.cancelPressed=false;
   if(cancel){cancelFishPlacement(state);return PlacementEvent::Cancelled;}
-  if(place&&confirmFishPlacement(session,state,{point.x/l.page.w*waterWidth,point.y/l.page.h*waterHeight}))return PlacementEvent::Placed;
+  if(place){
+   const auto result=confirmFishPlacement(session,state,{point.x/l.page.w*waterWidth,point.y/l.page.h*waterHeight});
+   if(result)return PlacementEvent::Placed;
+   if(result.error==Error::Full)return PlacementEvent::TankFull;
+  }
  }
  return PlacementEvent::None;
 }
 void advanceFishPlacement(FishPlacement& state,double seconds){
- for(auto& receipt:state.receipts)receipt.age+=seconds;
- std::erase_if(state.receipts,[](const auto& receipt){return receipt.age>=1.6;});
+ advancePlacementReceipts(state.receipts,seconds);
 }
 void paintPlacementReceipts(Canvas& canvas,const FishPlacement& state,float u){
- for(const auto& receipt:state.receipts){
-  const auto p=canvas.toScreen(receipt.point);const float rise=float(receipt.age)*48*u;
+ paintPlacementReceipts(canvas,state.receipts,u);
+}
+void advancePlacementReceipts(std::vector<PlacementReceipt>& receipts,double seconds){
+ for(auto& receipt:receipts)receipt.age+=seconds;
+ std::erase_if(receipts,[](const auto& receipt){return receipt.age>=1.6;});
+}
+void paintPlacementReceipts(Canvas& canvas,std::span<const PlacementReceipt> receipts,float u){
+ for(const auto& receipt:receipts){
+  const auto p=receipt.decor?canvas.decorProjection().toScreen(receipt.point):canvas.toScreen(receipt.point);const float rise=float(receipt.age)*48*u;
   const Uint8 alpha=Uint8(255*std::clamp((1.6-receipt.age)/.4,0.,1.));
   const std::string cost="-"+compact(receipt.cost),xp="+"+compact(receipt.xp);
   const float size=28*u,icon=28*u;
-  const float costWidth=canvas.textWidth(cost,size,true,false,false,false,true),xpWidth=canvas.textWidth(xp,size,true,false,false,false,true);
-  const float width=costWidth+xpWidth+2*icon+20*u;
+  const float costWidth=canvas.textWidth(cost,size,true,false,false,false,true);
+  const float xpWidth=receipt.xp>0?canvas.textWidth(xp,size,true,false,false,false,true):0;
+  const float width=costWidth+icon+4*u+(receipt.xp>0?xpWidth+icon+16*u:0);
   const float x=std::clamp(p.x-width*.5f,8*u,canvas.width()-width-8*u),y=std::max(100*u,p.y-80*u-rise);
   auto amount=[&](std::string_view text,float left,Color color){
    canvas.text(text,left+u,y+u,size,{24,59,68,Uint8(alpha*.65f)},false,0,true,true);
@@ -69,6 +81,7 @@ void paintPlacementReceipts(Canvas& canvas,const FishPlacement& state,float u){
   };
   amount(cost,x,{255,91,85,alpha});
   canvas.icon(receipt.pearl?"hud-icons/pearl-v4.png":"hud-icons/coin-v4.png",{x+costWidth+4*u,y,icon,icon},float(alpha)/255);
+  if(receipt.xp<=0)continue;
   const float xpX=x+costWidth+icon+16*u;
   amount(xp,xpX,{112,255,112,alpha});
   const Rect badge{xpX+xpWidth+4*u,y,icon,icon};
@@ -79,10 +92,10 @@ void paintPlacementReceipts(Canvas& canvas,const FishPlacement& state,float u){
 void paintFishPlacement(Canvas& canvas,const Domain& domain,const FishPlacement& state,const FishPlacementLayout& l){
  const auto* species=domain.content().find(state.species);if(!species)return;
  const float u=l.unit;const auto p=canvas.toScreen(state.point);
- const float size=species->companion?88*u:std::max(20.f,canvas.worldScale()*30.f);
+ const float size=std::max(20.f,canvas.worldScale()*30.f);
  const float ring=size+16*u;
  canvas.outline({p.x-ring*.5f,p.y-ring*.5f,ring,ring},{212,255,176,230},ring*.5f,4*u);
- canvas.icon(species->companion?species->asset:"ui/egg.png",{p.x-size*.5f,p.y-size*.5f,size,size},.85f);
+ canvas.icon("ui/egg.png",{p.x-size*.5f,p.y-size*.5f,size,size},.85f);
  shopTheme::panel(canvas,l.cancel,u,shopTheme::Surface::Buy,state.cancelPressed);
  canvas.text("Done",l.cancel.x+l.cancel.w*.5f,l.cancel.y+16*u,28*u,shopTheme::white,true,l.cancel.w,true,true);
  if(!state.error.empty()){

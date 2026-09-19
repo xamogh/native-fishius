@@ -1,0 +1,8 @@
+{
+  "mode": "built-in Image Gen",
+  "purpose": "Interpret the user's request for more grotesque fish character designs with two degrees of exaggeration.",
+  "file": "05-oddball-starter-fish.png",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a0b47c-3a29-7952-b05b-51c10ad5c42a/exec-37f0d0ac-8fc2-44e7-9b77-a8cdce310a14.png",
+  "reference": "04-softer-starter-fish.png",
+  "prompt_file": "05-oddball-fish-prompt.md"
+}

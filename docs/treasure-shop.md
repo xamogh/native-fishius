@@ -2,6 +2,8 @@
 
 The active v4 workbook defines five coin packs and five pearl packs. Both the Clay Treasure page and the earlier currency shop read the same generated catalog.
 
+Treasure opens on All, which combines the ten currency packs. Coins and Pearls show only their matching packs. All three tabs sort by USD price from lowest to highest. The wallet buttons and currency shortage prompts open the matching currency tab directly.
+
 | Size | Reference coin-days | Coin price (USD) | Pearls | Pearl price (USD) |
 | --- | ---: | ---: | ---: | ---: |
 | Pocket | 0.25 | $0.99 | 20 | $1.99 |
@@ -14,7 +16,7 @@ These are proposed USD prices. Payment processing is not connected. Opening an o
 
 ## Coin amounts
 
-Coin packs use the reference income for the current account level. Reference capacity is the sum of all growing slots eligible at that level, whether the player owns them or not. Buying capacity does not increase a pack's value at the same level.
+Coin packs use the reference income for the current account level. Reference capacity follows the original workbook's level schedule, exported as `treasure.reference_slots_by_level`. It stays separate from owned-tank upgrade access and the new 40-fish capacity. Buying capacity does not increase a pack's value at the same level.
 
 Reference income is the base daily coin rate multiplied by the level factor, eligible slots and reference utilization. Multiply this income by the pack's coin-days, then round once to the nearest whole coin, with halves rounded up. The runtime uses integer fractions for this calculation. Cards display full amounts with thousands separators.
 

@@ -1,4 +1,5 @@
 #include "aquarium/hud.hpp"
+#include "aquarium/hud_care.hpp"
 #include "aquarium/hud_dialog.hpp"
 #include "aquarium/hud_placement.hpp"
 #include "aquarium/hud_tokens.hpp"
@@ -34,6 +35,17 @@ HudLayout viewport(float w,float h,Insets safe={}){
  for(int i=0;i<4;++i){const auto tab=shopPage.tabs[i];check(shopControl(shopPage,{tab.x+tab.w*.5f,tab.y+tab.h*.5f})==i,"Shop tab hit target mismatch");check(!overlaps(tab,shopPage.close),"Tab overlaps close button");}
  for(const auto card:shopPage.cards)check(card.w>0&&card.h>0&&card.y+card.h<=shopPage.footer.y,"Shop card crosses wallet bar");
  check(shopControl(shopPage,{shopPage.close.x+shopPage.close.w*.5f,shopPage.close.y+shopPage.close.h*.5f})==6,"Shop close target mismatch");
+ for(int i=0;i<3;++i){
+  const auto tab=shopSubtabBounds(shopPage,ShopCategory::Treasure,i);
+  check(tab.w>0&&tab.h>0&&tab.x>=in.left&&tab.x+tab.w<=width-in.right,"Treasure filter crosses safe area");
+  if(i>0)check(!overlaps(tab,shopSubtabBounds(shopPage,ShopCategory::Treasure,i-1)),"Treasure filters overlap");
+  ShopState treasure{ShopCategory::Treasure,0,3};
+  const int control=shopControl(shopPage,{tab.x+tab.w*.5f,tab.y+tab.h*.5f},treasure.category);
+  check(control>=0&&control!=6,"Treasure filter is missing or closes the shop");
+  activateShopControl(treasure,control);
+  check(treasure.category==ShopCategory::Treasure&&treasure.subtab==i&&treasure.scroll==0,"Treasure filter does not select its currency and reset scrolling");
+ }
+ check(shopSubtabBounds(shopPage,ShopCategory::Fish,2).w==0,"Third Treasure filter appears in another category");
  for(const auto box:layout.boxes){
   check(std::isfinite(box.x)&&std::isfinite(box.y)&&std::isfinite(box.w)&&std::isfinite(box.h),"Invalid HUD geometry");
   check(box.w>0&&box.h>0,"Empty HUD element");
@@ -73,6 +85,8 @@ HudLayout viewport(float w,float h,Insets safe={}){
  }
  check(!hudHit(layout,{-1,-1}),"A point outside the HUD activates a control");
  const auto food=layout[HudPart::Food];
+ const auto editor=layout[HudPart::Layout],sell=layout[HudPart::Rehome];
+ check(std::abs(editor.w-sell.w)<.5f&&std::abs(editor.h-sell.h)<.5f&&std::abs(editor.x-sell.x)<.5f&&editor.y+editor.h<sell.y,"Layout tool is not the same size as Sell directly above it");
  const auto rewards=layout[HudPart::Rewards];
  check(std::abs(rewards.w-food.w)<.5f&&std::abs(rewards.h-food.h)<.5f,"Rewards does not match Food size");
  check(rewards.x+rewards.w<shop.x&&std::abs(rewards.y+rewards.h-shop.y-shop.h)<.5f,"Rewards is not left of Shop and bottom aligned");
@@ -98,8 +112,7 @@ int main(int argc,char** argv){try{
  check(badgeOffer.firstGrowthMs()==300000&&badgeOffer.fastGrowing(),"Five-minute milestone is missing its badge");
  badgeOffer.quote.durationMs=1199996;check(badgeOffer.fastGrowing(),"Under-five-minute milestone is missing its badge");
  badgeOffer.quote.durationMs=1200004;check(!badgeOffer.fastGrowing(),"Over-five-minute milestone incorrectly has a badge");
- badgeOffer.quote.durationMs=1200000;badgeOffer.companion=true;check(!badgeOffer.fastGrowing(),"Companion incorrectly has a growth badge");
- badgeOffer.companion=false;badgeOffer.quote.durationMs=0;check(!badgeOffer.fastGrowing(),"Zero-duration offer incorrectly has a growth badge");
+ badgeOffer.quote.durationMs=0;check(!badgeOffer.fastGrowing(),"Zero-duration offer incorrectly has a growth badge");
  if(argc>1){
   std::ifstream input(std::filesystem::path(argv[1])/"content.json");
   Domain domain(Content::fromJson(Json::parse(input)),0);
@@ -139,6 +152,42 @@ int main(int argc,char** argv){try{
   poor.wallet.coins=1000;poor.tanks.front().slots=int(poor.fish.size());purchase.domain().install(poor);
   check(startFishPlacement(purchase.domain(),placement,"neonTetra").error==Error::Full,"Full tank permits placement");
   std::cout<<"PASS egg selection, placement purchase, cancellation, drag and purchase blockers\n";
+  {
+   Session pearl(domain.content(),"/tmp/clay-pearl-placement-unused.json",0,true);auto funded=pearl.domain().state();
+   funded.wallet={1000,2};funded.xp=domain.content().levels[1];funded.highestRewardedLevel=2;pearl.domain().install(funded);
+   FishPlacement eggs;check(bool(startFishPlacement(pearl.domain(),eggs,"bubbleEyeGoldfish")),"Cannot select Bubble Eye for pearl placement");
+   for(int i=0;i<2;++i){
+    const auto bought=confirmFishPlacement(pearl,eggs,{500.,300.});check(bool(bought)&&eggs.active()&&pearl.domain().fish(bought.fish)->egg,"Pearl placement does not create repeatable eggs");
+    check(eggs.receipts.back().pearl&&eggs.receipts.back().cost==1&&eggs.receipts.back().xp==0,"Pearl receipt shows the wrong price or currency");
+   }
+   check(pearl.domain().state().wallet.pearls==0&&pearl.domain().state().wallet.coins==1000,"Repeated Bubble Eye placement charges the wrong balance");
+   const auto saved=encode(pearl.domain().state());check(confirmFishPlacement(pearl,eggs,{500.,300.}).error==Error::Funds&&!eggs.active()&&encode(pearl.domain().state())==saved,"Empty pearl balance permits a free fish");
+  }
+  for(bool touch:{false,true}){
+   Session filling(domain.content(),"/tmp/clay-full-placement-unused.json",0,true);
+   auto funded=filling.domain().state();funded.wallet.coins=100000;filling.domain().install(funded);
+   FishPlacement eggs;HudPointer pointer;
+   check(bool(startFishPlacement(filling.domain(),eggs,"neonTetra")),"Cannot begin full-tank placement check");
+   auto tap=[&]{
+    PlacementEvent result=PlacementEvent::None;
+    for(bool down:{true,false}){
+     SDL_Event event{};
+     if(touch){event.type=down?SDL_EVENT_FINGER_DOWN:SDL_EVENT_FINGER_UP;event.tfinger.fingerID=7;event.tfinger.x=600/placementLayout.page.w;event.tfinger.y=350/placementLayout.page.h;}
+     else{event.type=down?SDL_EVENT_MOUSE_BUTTON_DOWN:SDL_EVENT_MOUSE_BUTTON_UP;event.button.button=SDL_BUTTON_LEFT;event.button.x=600;event.button.y=350;}
+     check(normalizeHudPointer(pointer,event,placementLayout.page.w,placementLayout.page.h),"Placement touch did not normalize");
+     result=fishPlacementEvent(filling,eggs,placementLayout,event,{event.button.x,event.button.y});
+    }
+    return result;
+   };
+   const auto tank=filling.domain().state().activeTank;
+   const auto room=std::size_t(filling.domain().tank(tank)->slots)-filling.domain().living(tank);
+   for(std::size_t i=0;i<room;++i)check(tap()==PlacementEvent::Placed&&eggs.active(),"An available growing slot was blocked");
+   const auto fullSave=encode(filling.domain().state());
+   check(tap()==PlacementEvent::TankFull&&!eggs.active()&&eggs.error.empty()&&!eggs.shortfall,"Full placement did not request the tank dialog and clear the error banner");
+   check(encode(filling.domain().state())==fullSave&&eggs.receipts.size()==room,"Full placement charged currency, added a fish or lost purchase receipts");
+   check(tap()==PlacementEvent::None&&encode(filling.domain().state())==fullSave,"Dialog input bought another egg");
+  }
+  std::cout<<"PASS mouse and touch full-tank placement opens tank prompt without charging\n";
   ShopState fishState{ShopCategory::Fish};
   auto verifyOffers=[&]{
    for(const auto& item:shopItems(domain,fishState)){
@@ -146,11 +195,13 @@ int main(int argc,char** argv){try{
     const auto* species=domain.content().find(item.fish->id);check(species!=nullptr,"Fish card species missing");
     const auto quote=domain.quote(*species);
     check(item.fish->quote==quote,"Fish card does not use live purchase quote");
-    check(item.fish->fastGrowing()==(!species->companion&&quote.durationMs>0&&quote.durationMs*quote.stages[1]/10000<=300000),"Catalog badge differs from first growth milestone");
-    check(item.price==compact(species->currency==Currency::Coins?quote.principal:species->price)+(species->currency==Currency::Pearls?" Pearls":" Coins"),"Fish card price differs from purchase price");
+    check(item.fish->fastGrowing()==(quote.durationMs>0&&quote.durationMs*quote.stages[1]/10000<=300000),"Catalog badge differs from first growth milestone");
+    const auto cost=species->currency==Currency::Coins?quote.principal:species->price;
+    check(item.price==compact(cost)+(species->currency==Currency::Pearls?(cost==1?" Pearl":" Pearls"):" Coins"),"Fish card price differs from purchase price");
     check(item.detail.empty()==!item.locked,"Unlocked fish shows an unlock requirement");
-    if(species->companion)check(item.fish->companion&&quote.durationMs==0&&quote.profit==0&&quote.xp==0,"Companion shows growth rewards");
-    else{Fish adult;adult.age=4;adult.purchase=quote;const auto reward=fishReward(adult);check(reward.coins()==quote.principal+quote.profit&&reward.xp==quote.xp,"Adult card reward differs from settlement");}
+    check(quote.durationMs>0&&quote.profit>0&&quote.xp>0,"Fish is missing growth or sale rewards");
+    if(species->id=="bubbleEyeGoldfish")check(item.price=="1 Pearl"&&quote.principal==0,"Bubble Eye is not priced at one pearl");
+    Fish adult;adult.age=4;adult.purchase=quote;const auto reward=fishReward(adult);check(reward.coins()==quote.principal+quote.profit&&reward.xp==quote.xp,"Adult card reward differs from settlement");
    }
   };
   verifyOffers();auto high=domain.state();high.xp=domain.content().levels[9];domain.install(high);verifyOffers();
@@ -159,29 +210,40 @@ int main(int argc,char** argv){try{
   const std::array<std::string,5> coinPrices{"$0.99","$2.99","$4.99","$9.99","$19.99"},pearlPrices{"$1.99","$4.99","$9.99","$19.99","$29.99"};
   const std::array<std::string,5> coinAmounts{"3,161","10,748","18,968","41,096","88,515"},pearlAmounts{"20","55","120","260","420"};
   for(int tab=0;tab<2;++tab){
-   ShopState treasure{ShopCategory::Treasure,tab};const auto offers=shopItems(domain,treasure);check(offers.size()==5,"Treasure does not have five offers per currency");
+   ShopState treasure{ShopCategory::Treasure,tab+1};const auto offers=shopItems(domain,treasure);check(offers.size()==5,"Treasure does not have five offers per currency");
    for(int i=0;i<5;++i){const auto& offer=offers[i];const std::string currency=tab?" Pearls":" Coins";check(offer.name==sizes[i]+" of"+currency,"Wrong Treasure tier name");check(offer.detail==(tab?pearlAmounts[i]:coinAmounts[i])+currency&&offer.price==(tab?pearlPrices[i]:coinPrices[i]),"Treasure shows the wrong amount or USD price");check(!offer.treasureId.empty()&&!offer.fish&&!offer.locked,"Treasure card is not a currency offer");}
   }
+  const std::array<std::string,10> allPrices{"$0.99","$1.99","$2.99","$4.99","$4.99","$9.99","$9.99","$19.99","$19.99","$29.99"};
+  const auto all=shopItems(domain,ShopState{});check(all.size()==10,"Treasure All does not include all ten currency packs by default");
+  for(std::size_t i=0;i<all.size();++i)check(all[i].price==allPrices[i],"Treasure All is not sorted by numeric USD price");
+  for(const auto& currency:{" Coins"," Pearls"})check(std::count_if(all.begin(),all.end(),[&](const auto& item){return item.detail.ends_with(currency);})==5,"Treasure All does not include both currencies");
+  auto reorderedContent=domain.content();std::reverse(reorderedContent.treasureOffers.begin(),reorderedContent.treasureOffers.end());Domain reordered(reorderedContent);
+  for(int tab=0;tab<3;++tab){
+   const auto offers=shopItems(reordered,{ShopCategory::Treasure,tab});check(offers.size()==(tab==0?10:5),"Treasure filter lost offers after catalog reordering");
+   for(std::size_t i=0;i<offers.size();++i)check(offers[i].price==(tab==0?allPrices[i]:tab==1?coinPrices[i]:pearlPrices[i]),"Treasure price sorting depends on catalog order");
+  }
+  ShopState treasure{ShopCategory::Treasure};scrollShop(treasure,100,all.size());
+  check(treasure.scroll==5,"Treasure All cannot scroll to the last currency pack");
   check(encode(domain.state())==beforeTreasure,"Browsing Treasure changes the wallet or progress");
   if(argc>2){
    const std::filesystem::path captures=argv[2];std::filesystem::create_directories(captures);
    for(const auto [width,height]:std::array{std::pair{1608,908},std::pair{667,375},std::pair{1024,768}}){
     Canvas canvas(argv[1],width,height,true);
-    for(int tab=0;tab<2;++tab){
+    for(int tab=0;tab<3;++tab){
      canvas.begin();paintShop(canvas,domain,layoutShop(canvas.width(),canvas.height(),canvas.safeInsets(),canvas.minimumTouchSize()),{ShopCategory::Treasure,tab});
-     const auto name=std::string(tab?"pearls-":"coins-")+std::to_string(width)+"x"+std::to_string(height)+".png";
+     const auto name=std::string(tab==0?"all-":tab==1?"coins-":"pearls-")+std::to_string(width)+"x"+std::to_string(height)+".png";
      check(canvas.capture(captures/name),"Cannot capture Treasure page");
     }
    }
   }
   Domain beginner(domain.content());std::vector<std::string> treasureAssets;
-  for(int tab=0;tab<2;++tab)for(const auto& offer:shopItems(beginner,{ShopCategory::Treasure,tab})){
+  for(const auto& offer:shopItems(beginner,{ShopCategory::Treasure})){
    check(!offer.locked,"A Treasure pack is locked for a new player");
    check(!offer.asset.empty()&&std::filesystem::is_regular_file(std::filesystem::path(argv[1])/offer.asset),"Treasure artwork is missing");
    check(std::find(treasureAssets.begin(),treasureAssets.end(),offer.asset)==treasureAssets.end(),"Treasure tiers reuse the same artwork");
    treasureAssets.push_back(offer.asset);
   }
-  std::cout<<"PASS ten unlocked Treasure offers, distinct artwork, exact amounts, prices and unchanged wallet\n";
+  std::cout<<"PASS Treasure All, Coins and Pearls filters, numeric price sorting, distinct artwork and unchanged wallet\n";
   const auto page=layoutShop(1608,908,{});fishState.scroll=.5f;
   const auto card=page.cards[0];const float stride=page.cards[1].x-card.x;
   const auto scrolled=shopCardBounds(page,fishState,1),info=shopInfoBounds(scrolled,page.unit);
@@ -189,7 +251,7 @@ int main(int argc,char** argv){try{
   check(shopCardAt(page,fishState,20,{card.x+stride*.5f+card.w*.5f,card.y+20})==1,"Scrolled fish hit target is wrong");
   check(!shopCardAt(page,fishState,20,{page.body.x-1,card.y+20}),"Clipped fish is clickable outside row");
   check(!shopCardAt(page,fishState,20,{card.x+stride*.5f-4,card.y+20}),"Card gap opens details");
-  std::cout<<"PASS live fish prices, adult rewards, companions and scrolled card targets\n";
+  std::cout<<"PASS live fish prices, adult rewards, pearl fish and scrolled card targets\n";
  }
  DialogSpec spec{"Test"};const auto dialog=layoutDialog(1608,908,{},spec);DialogState modal;
  SDL_Event event{};event.type=SDL_EVENT_MOUSE_BUTTON_DOWN;event.button.button=SDL_BUTTON_LEFT;

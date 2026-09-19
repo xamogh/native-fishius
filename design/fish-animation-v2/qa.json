@@ -1,0 +1,24 @@
+{
+  "alpha": true,
+  "noClippedFrames": true,
+  "loopEndpoints": {
+    "neonTetra/idle": {
+      "meanChannelError": 0,
+      "pass": true
+    },
+    "neonTetra/swim": {
+      "meanChannelError": 0,
+      "pass": true
+    },
+    "guppy/idle": {
+      "meanChannelError": 0,
+      "pass": true
+    },
+    "guppy/swim": {
+      "meanChannelError": 0,
+      "pass": true
+    }
+  },
+  "frameCount": 252,
+  "maxBorderAlpha": 0
+}

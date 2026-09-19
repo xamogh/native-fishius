@@ -1,0 +1,20 @@
+{
+  "created_at": "2026-09-18",
+  "mode": "built-in Image Gen",
+  "purpose": "FishVille-inspired artwork concepts for review",
+  "prompt_file": "PROMPTS.md",
+  "outputs": [
+    {
+      "file": "01-starter-fish.png",
+      "source": "/Users/amoghrijal/.codex/generated_images/01a0b47c-3a29-7952-b05b-51c10ad5c42a/exec-a5205652-e1eb-4743-8efe-6f7352ab3add.png"
+    },
+    {
+      "file": "02-plants-and-decor.png",
+      "source": "/Users/amoghrijal/.codex/generated_images/01a0b47c-3a29-7952-b05b-51c10ad5c42a/exec-3970f7bf-6ab5-4bfa-860e-9f73533dd79f.png"
+    },
+    {
+      "file": "03-tank-scene.png",
+      "source": "/Users/amoghrijal/.codex/generated_images/01a0b47c-3a29-7952-b05b-51c10ad5c42a/exec-ffd6fbf2-b1c9-43a1-b915-9a4310380165.png"
+    }
+  ]
+}

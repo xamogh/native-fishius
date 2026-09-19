@@ -1,0 +1,23 @@
+{
+  "mode": "built-in Image Gen",
+  "purpose": "Restore the user's desired eccentric big-eyed cartoon character while removing birdlike mouth and fin cues.",
+  "file": "08-eccentric-fish.png",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a0b47c-3a29-7952-b05b-51c10ad5c42a/exec-99646fbd-e500-4914-a162-ab83383c4f3f.png",
+  "initial_file": "08-eccentric-fish-initial.png",
+  "initial_source": "/Users/amoghrijal/.codex/generated_images/01a0b47c-3a29-7952-b05b-51c10ad5c42a/exec-da6dc766-60af-4f0c-b921-9b709a090522.png",
+  "initial_references": [
+    {
+      "file": "06-cartoon-starter-fish.png",
+      "role": "Primary reference for oversized eyes, eccentric expressions and cartoon style."
+    },
+    {
+      "file": "07-fish-silhouette.png",
+      "role": "Secondary reference for continuous fish bodies, compact fins, species colors and sheet layout."
+    }
+  ],
+  "initial_prompt_file": "08-eccentric-fish-prompt.md",
+  "refinement_reference": "08-eccentric-fish-initial.png",
+  "refinement_prompt_file": "08-eccentric-fish-refinement-prompt.md",
+  "scope": "Concept mockup only.",
+  "review": "Huge cream eyes, tiny pupils and eccentric expressions remain. Rounded mouths, gill curves and compact lower fins support fish anatomy. The guppy dorsal fin is simplified. Labels and whole silhouettes are present, with matching smaller previews. Some soft shading remains."
+}

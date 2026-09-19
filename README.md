@@ -1,12 +1,12 @@
 # Fishius: a native C++20 and SDL3 aquarium game
 
-The game uses native SDL rendering, textured fish meshes, an event-driven care model, physical food, a local wallet, tanks, growing and display fish, inventory, and JSON saves. The supplied behavior contract is the movement and interaction reference. The supplied spreadsheet is the catalog source. No original game source or running application is required.
+The game uses native SDL rendering, textured fish meshes, an event-driven care model, physical food, a local wallet, tanks, fish with growth stages, favorites, inventory, and JSON saves. The supplied behavior contract is the movement and interaction reference. The supplied spreadsheet is the catalog source. No original game source or running application is required.
 
 Open `Run Aquarium.command` to build and run the current interface with your saved game. The old interface and its Studio editor have been removed. `--hud-layout` remains a harmless alias for older launch commands; it no longer selects a different interface.
 
 ## Delivery status
 
-Read `docs/workbook-implementation.md` for the workbook and artwork integration, and `docs/workbook-fixes-2026-09-12.md` for the latest audit fixes and validation. These records distinguish implemented rules from the work the user deferred. `docs/verification.md` and `evidence/build-results.json` retain earlier build history. A feature being present in source is not proof that its tests passed or that it matches a reference image. Failed or unavailable checks are retained. The iPhone simulator build and landscape controls were tested on 10 September 2026. Physical device installation, Android testing, signing and sustained mobile performance are not verified here.
+Read `docs/workbook-implementation.md` for the workbook and artwork integration, and `docs/workbook-fixes-2026-09-12.md` for the latest audit fixes and validation. These records distinguish implemented rules from the work the user deferred. `docs/verification.md` and `evidence/build-results.json` retain earlier build history. A feature being present in source is not proof that its tests passed or that it matches a reference image. Failed or unavailable checks are retained. The iPhone simulator build and landscape controls were tested on 10 September 2026. A signed Debug build was installed and its game screen verified on an iPhone 15 Pro Max running iOS 27 on 18 September 2026. Android testing and sustained mobile performance remain unverified.
 
 This project must not be described as release-ready or as a verified complete reproduction while the outstanding items in `docs/feature-matrix.md` remain unresolved.
 
@@ -25,7 +25,7 @@ sudo apt-get install build-essential cmake ninja-build git pkg-config \
 
 On macOS, install the compiler command-line tools, CMake, Ninja, and FreeType. A native macOS build must be made on macOS. A Linux executable is not a macOS application.
 
-The CMake files pin SDL 3.2.20, SDL_image 3.2.4, SDL_ttf 3.2.2, and nlohmann/json 3.11.3 when fetching dependencies. Compatible locally installed dependencies may satisfy `find_package` first. The exact dependency chosen should be checked in the configuration log.
+The CMake files pin SDL 3.4.12 for iOS and SDL 3.2.20 for other platforms, plus SDL_image 3.2.4, SDL_ttf 3.2.2, and nlohmann/json 3.11.3 when fetching dependencies. iOS requires the newer SDL scene lifecycle to launch when built with the iOS 27 SDK. Compatible locally installed dependencies may satisfy `find_package` first. The exact dependency chosen should be checked in the configuration log.
 
 ## Fonts
 
@@ -54,15 +54,24 @@ Use `aquarium --help` to inspect the actual command-line options. `--fresh` open
 
 ## Startup and play
 
-The game restores your save, draws the current reef loading screen and prepares the opening Shop page, tank switcher and Tank Shop before opening the aquarium. Their artwork and labels are cached so the first click does not decode and upload menu artwork. Other catalog pages load as you browse. Build outputs replace their asset folders so deleted artwork cannot remain in a bundle.
+The game restores your save, draws the current reef loading screen and prepares the Shop catalog, tank switcher and Tank Shop before opening the aquarium. Artwork, smaller texture versions and card labels are cached before browsing, so scrolling does not decode images as cards enter view. Build outputs replace their asset folders so deleted artwork cannot remain in a bundle.
+
+Dialogs and popovers open with a short bounce. Their frames, artwork and controls move together, and clicks follow the visible controls during the animation. Reduce motion skips the bounce.
 
 - Open Shop to browse fish, plants, decorations, treasure, backgrounds and tanks. Fish cards select a species for placement. Each completed tap in the water buys and places an egg. Done or Escape cancels placement for free.
-- Choose Food or press F, then tap the water to feed. Choose the Rehome net or press S to sell eligible fish with one tap. Eggs and Babies cannot be sold. Opening a menu turns these tools off.
-- Tap a fish without a tool to see its care, growth and rewards. Keep retains an adult as a display fish and pays its one-time reward. Rehome from fish details asks for confirmation.
-- Tank opens the porthole switcher for owned tanks. Unlock and expand tanks from Shop's Tanks tab, using either Coins or Pearls. Tank 6 remains unavailable until its catalog rules are defined.
+- Choose a plant or decoration in Shop, then tap or drag in the tank to position its preview. The green tick buys and saves one copy at its Shop price, then shows the floating currency cost. The active item stays sharp above the lightly blurred tank. The red cross or Escape cancels for free. Both icons sit beside or below the preview.
+- Drag Food into the tank to pour a stream of free food. Keep dragging to scatter pellets through the water. Release to stop. You can also choose Food or press F, then drag within the water. Tapping the water does not drop food. Choose the Sell net or press S to sell eligible fish with one tap. Nearby fish gently make room for each other and settle close to where they were, clear of the edges and controls. Fish that already have room stay in place. Eggs and Babies cannot be sold. Opening a menu turns these tools off.
+- Choose the four-arrow button above Sell to enter Layout mode. Drag an item and release to save its position. The tick or an outside tap ends editing and keeps the item where you left it. The red remove button returns it to inventory. Exit leaves Layout mode. Bag groups stored plants and decorations into stacks such as ×3. Choose Place to bring one copy into the tank and edit it; the other copies stay stored.
+- Tap a fish without a tool to see its care, growth and sale value. Fish stay in the tank until sold. Use the heart to favorite a fish and protect it from selling. Sell pays the current coin and XP value once. Eggs, adults and premium fish share the tank capacity.
+- Tap empty water without a tool to make a ripple. Nearby fish briefly speed up along their current course, then return to their usual swimming. Reduced motion uses a fading ring and a gentler response.
+- Tank opens the porthole switcher for owned tanks. Buy new tanks at their required levels in Shop's Tanks tab. Owned tanks can expand from 10 to 40 fish in steps of five at any level, using either Coins or Pearls. Tank 6 remains unavailable until its catalog rules are defined.
 - Buy or select a background from Shop. Each tank keeps its own background.
 
-Bag, Projects, Rewards and Settings currently open empty dialogs. Plant and decoration cards show catalog prices, but their purchase and placement flows are not connected to the current interface. Treasure purchases are also unavailable. Stored items and settings remain in saves; removing the old screens does not erase that data.
+Settings opens the turquoise card menu with amber controls. Music, music volume, sound effects, reduced motion and vibration save as you change them. About & support includes version details and a button to copy support information. Music uses the Coral Promenade loop. Vibration uses the iPhone's haptic feedback when available. On iOS, reduced motion follows the device preference until you choose a setting in the game.
+
+Rewards shows progress toward one pearl for every twenty adult coin-fish sales. The pearl is credited automatically, and the reward can be earned repeatedly, including at level 40. Projects currently opens an empty dialog. Treasure purchases are also unavailable. Bag uses the Shop layout inside a dialog, with Plants and Decorations tabs for stored items; its fish inventory remains unavailable. Stored items and settings remain in saves; removing the old screens does not erase that data.
+
+New fish now use the [active-play economy](docs/active-economy.md), with faster XP gains, pearl fish priced from 1 to 14 pearls at launch, and smoother tank prices. Already owned fish retain their saved sale quotes.
 
 The launch script saves to `local-data/save.json`. Running the executable directly without `--save` uses its existing platform save location. Use `--fresh` or a fixture for reviews that must not change a player's save.
 

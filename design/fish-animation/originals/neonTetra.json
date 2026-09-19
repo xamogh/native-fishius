@@ -1,0 +1,9 @@
+{
+  "id": "neonTetra",
+  "source": "assets/skin/fish-neon.png",
+  "method": "Reused approved existing species illustration, copied unchanged",
+  "orientation": "right",
+  "runtime_orientation": "left",
+  "acceptance": "Existing full-body illustration visually matches species; Moorish Idol is the black, white and yellow fish with long dorsal pennant previously mislabeled angelfish.",
+  "sha256": "5d3bff2509600630d3da16bdaa25034f65f48b07915c4ff37444f8b8207134f6"
+}

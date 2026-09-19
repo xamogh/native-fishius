@@ -1,0 +1,34 @@
+{
+  "mode": "built-in Image Gen",
+  "reference": "../mockups/fishville-art-2026-09-18/08-eccentric-fish.png",
+  "purpose": "Create reusable animated neon tetra and guppy assets with the eccentric large-eyed character and compact fish anatomy of study 08.",
+  "sources": {
+    "neonTetra": {
+      "generatedFile": "source/neonTetra-generated.png",
+      "generatedSource": "/Users/amoghrijal/.codex/generated_images/01a0b47c-3a29-7952-b05b-51c10ad5c42a/exec-2726fbc3-877e-4cae-8c5f-8f1e649d9b79.png",
+      "prompt": "prompts/neonTetra.md",
+      "alphaFile": "source/neonTetra.png",
+      "alphaSource": "/Users/amoghrijal/.codex/generated_images/01a0b47c-3a29-7952-b05b-51c10ad5c42a/exec-31e3ecc9-33c8-4288-b90d-7ce312550228.png"
+    },
+    "guppy": {
+      "generatedFile": "source/guppy-generated.png",
+      "generatedSource": "/Users/amoghrijal/.codex/generated_images/01a0b47c-3a29-7952-b05b-51c10ad5c42a/exec-0cec0b5c-6820-4f24-ad1f-0996baa748e8.png",
+      "prompt": "prompts/guppy.md",
+      "alphaFile": "source/guppy.png",
+      "alphaSource": "/Users/amoghrijal/.codex/generated_images/01a0b47c-3a29-7952-b05b-51c10ad5c42a/exec-01c2039e-3a74-45f0-9a26-4afdb29fa62b.png"
+    }
+  },
+  "alphaPrompt": "prompts/transparency.md",
+  "preparation": "Crop reviewed sprite bounds and remove isolated alpha speckles without repainting retained colored pixels.",
+  "animation": "Layer transforms, tail attachment blending, painted eyelid reveal and painted mouth overlay. Shared deterministic Canvas renderer for browser and sprite/video export.",
+  "scope": "Animation assets and preview only; game runtime integration is separate.",
+  "deliverables": [
+    "fish-animation-preview.mp4",
+    "fish-animation-preview.gif",
+    "index.html",
+    "sprites/neonTetra.json",
+    "sprites/guppy.json",
+    "rigs.json",
+    "animation.mjs"
+  ]
+}

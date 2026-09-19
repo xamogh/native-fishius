@@ -1,3 +1,74 @@
+# Decoration alignment across devices, 18 September 2026
+
+final result: passed
+
+Backgrounds and decor now share one scene projection, including sprite size, drag coordinates, selection glow and purchase feedback. The same saved layout stays on the same scenery across phone and tablet viewports. Resizing does not modify the save. Scene edges and attached objects crop together, and new drops fit the visible crop.
+
+Both backgrounds were visually checked at phone and tablet sizes. The desktop and iOS simulator builds and six relevant test suites passed. The [review and captures](evidence/placement-alignment-2026-09-18/design-qa.md) record the regression, input and save checks, native captures and device-testing limits. Earlier reviews follow.
+
+# Selected aquarium backgrounds, 18 September 2026
+
+final result: passed
+
+Implemented the approved second and third concepts as Open Blue Cove and Sage Lagoon, with clean background artwork and the original selected colors. Saved background IDs, unlocks and prices carry over. The earlier runtime muting filter is removed.
+
+The [blue cove comparison](evidence/backgrounds-2026-09-18/comparison-blue-cove.png) and [sage lagoon comparison](evidence/backgrounds-2026-09-18/comparison-sage-lagoon.png) were reviewed against native captures at the same scene size and state. Desktop, phone and tablet views and the Backgrounds shop were checked. The desktop build and all five relevant suites passed. See the [full review](evidence/backgrounds-2026-09-18/design-qa.md) for the five fidelity surfaces, exact sources, captures, test coverage and limits. No physical-device or simulator check was performed. Earlier reviews follow.
+
+# Favorites and shared fish capacity, 18 September 2026
+
+final result: passed
+
+Removed the Keep action and its reward conversion. Fish stay until sold, and the heart protects favorites from sale. The fish panel has one Sell button; fish without sale rewards offer Feed fish. All eggs and fish share normal tank capacity. The landscape adult panel and portrait favorite panel were reviewed in `evidence/fish-favorites-2026-09-18`; care interactions pass at six viewport sizes.
+
+The source workbook now follows the same rules. All 39 sheets, existing prices, rewards, formulas other than the stale-status wording, and formatting are preserved. The retired extra fish allowance is zero. Baseline simulation snapshots are marked stale and require a rerun for shared capacity. The desktop build, all 21 software-renderer regression suites, two importer tests and 2,333 catalog checks pass. No physical-device check was performed in this pass. Earlier reviews follow.
+
+# Settings cards and amber controls, 18 September 2026
+
+final result: passed
+
+Menu follow-up: Removed How to play and its guide. About & support is now the
+only footer button and is centered beneath the cards. The desktop build and
+seven-viewport Settings suite passed. Landscape and portrait captures were
+checked, along with the About & support page.
+
+Font follow-up: Settings now uses the same Luckiest Guy font as Shop, fish
+details and shared dialog controls. The [updated phone screen](evidence/settings-2026-09-18/fonts/settings-phone.png)
+was checked against the current Shop in [the font comparison](evidence/settings-2026-09-18/fonts/font-comparison.png).
+Both builds and the seven-viewport Settings suite passed again.
+
+Implemented the approved four-card Settings screen with saved music, volume,
+sound effects, reduced motion and vibration controls. How to play and About &
+support open usable pages. The [approved reference](design/mockups/settings-2026-09-18/approved.png)
+and [native phone screen](evidence/settings-2026-09-18/settings-phone.png) were
+reviewed in the same [final comparison](evidence/settings-2026-09-18/comparison-final.png).
+The palette, padding and typography were corrected after the first comparison.
+Seven viewport layouts and interaction states pass. All 21 tests and both desktop
+and iOS simulator builds pass. Physical-device haptics remain unverified. See
+[the full review](evidence/settings-2026-09-18/design-qa.md) for evidence and limits.
+Earlier reviews follow.
+
+# Mobile-first level receipt, 18 September 2026
+
+final result: passed
+
+Implemented the selected first phone design: a fixed left receipt and Continue button, with square item cards that swipe horizontally on the right. The later copy request is included: currencies show only their icons and amounts. The shared frame, real credited rewards and 500 ms fly-to-HUD animation remain.
+
+The [selected mock](design/mockups/level-up-2026-09-18/mobile-first/approved.png) and [final phone view](evidence/level-up-mobile-first-2026-09-18/final/level-40-844x390-top.png) were opened together in the [normalized comparison](evidence/level-up-mobile-first-2026-09-18/comparison-final.png). A [running iPhone simulator capture](evidence/level-up-mobile-first-2026-09-18/iphone-simulator.png) confirms native rendering and safe-area fit. Seven viewport sizes and both scroll ends were captured. Both builds and all eight relevant test suites pass. The [full review](evidence/level-up-mobile-first-2026-09-18/design-qa.md) records visual corrections, asset prompts, test coverage and verification limits. Earlier reviews follow.
+
+# Level-up dialog, 18 September 2026
+
+final result: passed
+
+Implemented the approved first design, with “Added to your balance” and “Now available to buy” removed. The existing blue frame, wave header and red close control remain. The receipt shows real earned coins and pearls, pages through catalog unlocks, and dismisses without changing saved rewards.
+
+The [selected reference](design/mockups/level-up-2026-09-18/approved.png) and [rendered implementation](evidence/level-up-2026-09-18/level-2-1440x840-page-1.png) were reviewed in the same [combined comparison](evidence/level-up-2026-09-18/comparison-final.png), normalized to 1440 by 840 pixels. Native, phone, portrait, safe-area and later-level captures were also checked. Typography, spacing, colors, image fidelity and copy pass. Both builds and the relevant domain, UI and native rendering checks pass. See the [full review](evidence/level-up-2026-09-18/design-qa.md) for comparison history and validation limits. Earlier reviews follow.
+
+# Bottle error toast, 18 September 2026
+
+final result: passed
+
+The bottle toast is another 20 percent smaller and appears at the top right, just below Settings. It keeps the downward bounce, 3.5-second timeout and 44-point close target. Favourited fish, including kept fish, show a small heart only while Sell is active. The marker follows swimming and turns, clears the sell meter, and hides when Sell ends. Desktop and iOS simulator builds and native care checks pass. See the [visibility correction](evidence/bottle-toast/sell-only/design-qa.md) and [before and after views](evidence/bottle-toast/sell-only/comparison-full.png). The [toast and heart design review](evidence/bottle-toast/top-right/design-qa.md), [previous review](evidence/bottle-toast/compact/design-qa.md) and [original implementation review](evidence/bottle-toast/design-qa.md) retain the earlier iteration history. Earlier reviews follow.
+
 # Live fish growth percentage, 17 September 2026
 
 final result: passed

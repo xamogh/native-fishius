@@ -1,0 +1,20 @@
+{
+  "asset": "open-blue-cove-v1.png",
+  "title": "Open Blue Cove",
+  "version": 1,
+  "created_date": "2026-09-18",
+  "method": "built-in image_gen",
+  "use_case": "precise-object-edit",
+  "source_reference_path": "/Users/amoghrijal/amogh/aquarium-native/design/mockups/background-directions-2026-09-18/02-open-blue-cove.png",
+  "imagegen_origin_path": "/Users/amoghrijal/.codex/generated_images/01a0b4d5-b016-7f80-97b2-51ce76008117/exec-d78547f4-fbd9-43a4-8c18-83cdd59ccbe0.png",
+  "final_path": "/Users/amoghrijal/amogh/aquarium-native/assets/environment/open-blue-cove-v1.png",
+  "dimensions": {
+    "width": 1672,
+    "height": 940
+  },
+  "opaque": true,
+  "sha256": "f6c9aee49511fe16d380f59c11ac0b6c24385b6b58e433382bc24796626d6d9b",
+  "prompt": "Use case: precise-object-edit.\nAsset type: opaque full-screen landscape aquarium game background.\nEdit target: the single supplied image, the approved \"Open Blue Cove\" mockup. This is background extraction from that exact selected design, not a new interpretation.\n\nPrimary request: remove every UI element and every placed foreground fish, plant and decoration, filling their footprints with the background that would naturally lie behind them. Preserve the existing backdrop exactly.\n\nRemove all six fish everywhere in the image, including the black fish near upper center, the two orange goldfish, and the three colorful guppies. Remove all five placed foreground props and their shadows: grass tuft at lower left, broad-leaf plant lower center-left, dark gray pebbles with small leaves lower center, brown driftwood lower center-right, and tall detailed plant lower right.\nRemove every interface element: all status bars and numbers across top, the level box, coin and pearl icons, plus buttons, settings gear, all five right-edge buttons, bottom-left TANK button, bottom-right SHOP button, small chest button, text, labels, outlines and UI shadows. Reconstruct uncovered water, rocks or sand as appropriate.\n\nMust preserve: the exact clean, flat cartoon style, bright airy aqua-blue water, blue-violet angular rock layout on both sides, light-blue distant rock arch on the left, open central swimming area, existing simple pale surface-ripple shapes, distant flat seaweed silhouettes around the rocks, small scattered simple pale stones, and the pale sand floor at the same relative height. Preserve original palette, contrast, shape language, camera, composition and proportions. The seafloor begins near 69 percent of image height and continues to the bottom. Match original clean sand patterns where props and buttons are removed.\n\nOutput: opaque PNG landscape background, approximately 1672 x 940 pixels, at least 1600 x 900 pixels, same aspect ratio as input, edge-to-edge artwork.\nAvoid: any redesign, darkening, desaturation, blur, added detailed textures, extra objects, dramatic light, fish, detailed placed props, new seaweed, UI, icons, text, numbers, labels, borders, transparency, watermark. Only remove the specified overlays and objects and reconstruct their footprints with matching background.",
+  "visual_qa": "Verified no UI, text, fish, or placed foreground props remain. The blue-violet rocks, left distant arch, original flat seaweed silhouettes, open central water, simple surface ripples, scattered pale stones and sand floor remain in the selected style and composition.",
+  "limitation": "Areas originally hidden by fish, props and UI were reconstructed by image generation."
+}

@@ -1,0 +1,14 @@
+{
+  "tool": "built-in image_gen",
+  "generated_at": "2026-09-18",
+  "reference": "/Users/amoghrijal/amogh/aquarium-native/assets/dialogs/level-up-cabinet-background-v1.png",
+  "original_generated_path": "/Users/amoghrijal/.codex/generated_images/01a0b2e2-936d-7cc0-b099-7c3c4c2b3b2a/exec-ad283a3e-8472-4e37-9114-acfcbb5d960f.png",
+  "dimensions": {
+    "width": 911,
+    "height": 1726
+  },
+  "target_aspect_ratio": "19:36",
+  "opaque": true,
+  "postprocessing": "None. Original generated PNG copied unchanged.",
+  "prompt": "Use case: precise-object-edit\nAsset type: production PORTRAIT background texture for the body of a 2D aquarium game dialog on a phone.\nInput image: the supplied landscape background is the exact visual style and color reference.\nPrimary request: create a new portrait adaptation at 760 by 1440 pixels, aspect ratio 19:36, with the same quiet warm ivory center and very pale mint/aqua edges. Recompose for portrait rather than stretching the landscape. Keep bubbles perfectly circular, rocks naturally rounded, and kelp short and naturally proportioned.\nComposition: the central 80% of the image must remain entirely empty and softly colored for live interface content. Confine a tiny amount of decorative light green kelp and 2 or 3 small aqua bubbles to each extreme upper corner, within the uppermost 9% of image height. Use short hanging kelp, not tall trailing plants. Confine modest clusters of blue-gray stones, short green kelp, a little pale lavender coral, and a tiny pale sand patch to the two extreme bottom corners, within the bottom 12% of the image height. Leave the middle of every edge quiet and empty, and the bottom middle blank ivory. Compared with the landscape source, make corner decorations physically small enough for portrait, rather than filling a large fraction of the narrow width.\nStyle and colors: match the supplied polished soft casual-game painting exactly. Creamy pale ivory throughout the broad center, a soft pale aqua glow along outer edges, delicate green plants, muted blue-gray rocks. Very low contrast background. Full bleed rectangular image with no border and no frame.\nConstraints: opaque PNG. No cards, buttons, text, letters, numbers, labels, badges, fish, icons, foreground objects, UI controls, separator lines, horizon, floor line, long plants, light beams, caustics, dark vignettes or strong shadows. No texture or patterned details across the center. The result is a quiet empty dialog canvas with tiny corner decorations, not an underwater scene."
+}

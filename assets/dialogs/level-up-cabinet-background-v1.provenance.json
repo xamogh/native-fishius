@@ -1,0 +1,19 @@
+{
+  "tool": "built-in image_gen",
+  "generated_at": "2026-09-18",
+  "reference": "/Users/amoghrijal/amogh/aquarium-native/design/mockups/level-up-2026-09-18/horizontal-grid/approved.png",
+  "reference_region": {
+    "x": 176,
+    "y": 174,
+    "width": 1290,
+    "height": 690
+  },
+  "original_generated_path": "/Users/amoghrijal/.codex/generated_images/01a0b2e2-936d-7cc0-b099-7c3c4c2b3b2a/exec-5cad57e4-f1df-4d45-800c-6b83e806f54b.png",
+  "dimensions": {
+    "width": 1714,
+    "height": 918
+  },
+  "opaque": true,
+  "postprocessing": "None. Original generated PNG copied unchanged.",
+  "prompt": "Use case: precise-object-edit\nAsset type: opaque production background texture for the inside body of a 2D aquarium game dialog.\nInput image: the provided approved level-up screenshot is the exact visual reference, not a layout to reproduce.\nPrimary request: extract and reconstruct ONLY the quiet illustrated interior background that lies inside the dialog body. In the reference that body runs from x176 y174 to x1466 y864, with aspect ratio 1290:690. Output a full-bleed rectangular background at approximately 1720 by 920 pixels, aspect 1.8696:1.\nComposition: warm pale ivory center, fading softly into very pale mint/aqua along left and right edges. Leave the entire central 75% of the image completely empty and smooth, suitable for placing interface cards and text over it. Very small dangling light green kelp strands and a few soft aqua bubbles in the upper-left and upper-right corners. Modest corner arrangements of blue-gray rounded stones, short green kelp, and a couple of pale lavender coral branches in the lower-left and lower-right corners. Tiny pale yellow sand only immediately around these bottom corner stones, fading into the creamy background. Keep the corner illustrations at exactly the quiet density and scale of the supplied reference, hugging the outer corners, not spreading across the middle.\nStyle: polished hand-painted casual game illustration with softly shaded rounded shapes. Match the reference's warm ivory, soft aqua, gentle green, muted blue-gray stones, and low-contrast center precisely.\nRemove every interface element: absolutely no outer frame, no border, no header, no level badge, no card shapes or card outlines, no item artworks, no text or letters or numbers, no reward icons, no buttons, no divider lines, no scroll arrows, no HUD, no tank scenery outside the dialog.\nConstraints: full bleed opaque PNG. No perspective, no shadow vignette, no strong horizon or seafloor line through the middle or bottom, no underwater beams, no caustics, no harsh light, no busy texture. The result should read as a clean empty cream dialog canvas lightly decorated at its corners, not an underwater landscape."
+}

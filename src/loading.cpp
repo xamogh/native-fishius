@@ -10,16 +10,30 @@ bool prepareMenus(Canvas& canvas,const Domain& domain,const std::function<bool(f
  TankSwitcherState switcher;switcher.open=true;
  paintTankSwitcher(canvas,domain,layoutHud(canvas.width(),canvas.height(),canvas.safeInsets(),canvas.minimumTouchSize()),switcher,{-1,-1});
  SDL_FlushRenderer(canvas.renderer());
-
- if(!progress(1.f/3,"Preparing Tank Shop"))return false;
- canvas.begin();
- paintShop(canvas,domain,layoutShop(canvas.width(),canvas.height(),canvas.safeInsets(),canvas.minimumTouchSize()),ShopState{ShopCategory::Tanks});
- SDL_FlushRenderer(canvas.renderer());
-
- if(!progress(2.f/3,"Preparing Shop"))return false;
- canvas.begin();
- paintShop(canvas,domain,layoutShop(canvas.width(),canvas.height(),canvas.safeInsets(),canvas.minimumTouchSize()),ShopState{});
- SDL_FlushRenderer(canvas.renderer());
+ struct Page {ShopState state;std::string_view stage;};
+ std::vector<Page> pages;
+ const auto layout=layoutShop(canvas.width(),canvas.height(),canvas.safeInsets(),canvas.minimumTouchSize());
+ for(const auto [category,stage]:std::array{
+  std::pair{ShopCategory::Tanks,"Preparing Tank Shop"},
+  std::pair{ShopCategory::Fish,"Preparing fish"},
+  std::pair{ShopCategory::Plants,"Preparing plants"},
+  std::pair{ShopCategory::Decorations,"Preparing decorations"},
+  std::pair{ShopCategory::Environment,"Preparing backgrounds"},
+  std::pair{ShopCategory::Treasure,"Preparing treasure"}}){
+  ShopState state{category};const auto count=shopItems(domain,state).size();
+  const float limit=shopScrollLimit(state,count),step=category==ShopCategory::Environment?2.f:float(layout.visibleCards);
+  for(float position=0;position<limit;position+=step){state.scroll=position;pages.push_back({state,stage});}
+  state.scroll=limit;pages.push_back({state,stage});
+ }
+ // Use the real painters so images, mip levels and card labels are ready
+ // before a swipe brings them into view. Poll between pages for quit/suspend.
+ for(std::size_t i=0;i<pages.size();++i){
+  const auto& page=pages[i];
+  if(!progress(float(i+1)/float(pages.size()+1),page.stage))return false;
+  canvas.begin();
+  paintShop(canvas,domain,layoutShop(canvas.width(),canvas.height(),canvas.safeInsets(),canvas.minimumTouchSize()),page.state);
+  SDL_FlushRenderer(canvas.renderer());
+ }
  return progress(1,"Opening your aquarium");
 }
 

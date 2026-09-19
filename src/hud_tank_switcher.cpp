@@ -9,6 +9,11 @@ constexpr Color numberInk{12,48,63,255};
 bool cancelled(const SDL_Event& e){return e.type==SDL_EVENT_WINDOW_FOCUS_LOST||e.type==SDL_EVENT_WILL_ENTER_BACKGROUND||e.type==SDL_EVENT_RENDER_DEVICE_RESET||e.type==SDL_EVENT_RENDER_TARGETS_RESET;}
 bool leftButton(const SDL_Event& e){return (e.type==SDL_EVENT_MOUSE_BUTTON_DOWN||e.type==SDL_EVENT_MOUSE_BUTTON_UP)&&e.button.button==SDL_BUTTON_LEFT;}
 void label(Canvas& canvas,std::string_view text,Rect r,float size,Color color=numberInk){canvas.text(text,r.x+r.w*.5f,r.y+(r.h-size)*.5f,size,color,true,r.w,true,true);}
+void tankIllustration(Canvas& canvas,Rect art,bool owned,float alpha=1){
+ const Rect source=owned?Rect{48,87,1678,731}:Rect{47,86,1680,732};
+ const float scale=std::min(art.w/source.w,art.h/source.h);
+ canvas.image(owned?"tank-grid/active.png":"tank-grid/empty.png",{art.x+(art.w-source.w*scale)*.5f-source.x*scale,art.y+(art.h-source.h*scale)*.5f-source.y*scale,1774*scale,887*scale},0,{.5f,.5f},alpha);
+}
 void porthole(Canvas& canvas,Rect r,int index,bool selected,bool owned){
  static constexpr std::array<std::string_view,6> art{
   "tank-switcher/tank-1-goldfish.png","tank-switcher/tank-2-clownfish.png","tank-switcher/tank-3-blue-tang.png",
@@ -42,7 +47,7 @@ void porthole(Canvas& canvas,Rect r,int index,bool selected,bool owned){
 TankOffer tankOffer(const Domain& domain,TankId id){
  TankOffer result{domain.nextTankEntitlement(id),{}};
  if(!result.next)return result;
- if(domain.level()<result.next->level)result.requirement="Unlocks at Level "+std::to_string(result.next->level);
+ if(!domain.tank(id)&&domain.level()<result.next->level)result.requirement="Unlocks at Level "+std::to_string(result.next->level);
  if(!result.next->prerequisite.empty()){
   const auto& entries=domain.content().tankEntitlements;
   const auto prior=std::find_if(entries.begin(),entries.end(),[&](const auto& e){return e.id==result.next->prerequisite;});
@@ -96,7 +101,9 @@ bool tankSwitcherEvent(Session& session,TankSwitcherState& state,const HudLayout
   }
  }
  if(leftButton(e)){
-  const int control=tankSwitcherControl(l,p);
+  const auto point=state.open?state.motion.inputPoint(p):p;
+  const int animatedControl=tankSwitcherControl(l,point);
+  const int control=l.toggle.has(p.x,p.y)?6:animatedControl==6?7:animatedControl;
   if(e.type==SDL_EVENT_MOUSE_BUTTON_DOWN){
    if(!state.open&&control!=6)return false;
    if(state.open&&control==7){
@@ -108,7 +115,7 @@ bool tankSwitcherEvent(Session& session,TankSwitcherState& state,const HudLayout
   const int pressed=state.pressed;state.pressed=-1;
   if(pressed<0)return state.open;
   if(!state.dragged&&control==pressed&&std::hypot(p.x-state.pressPoint.x,p.y-state.pressPoint.y)<=12*l.unit){
-   if(control==6){state.open=!state.open;state.notice.clear();state.shopTarget.reset();}
+   if(control==6){state.open=!state.open;state.motion={};state.notice.clear();state.shopTarget.reset();}
    else if(state.open&&control<l.count)choose(control);
    else if(state.open&&control==7)state.open=false;
   }
@@ -123,6 +130,10 @@ bool tankSwitcherEvent(Session& session,TankSwitcherState& state,const HudLayout
 void paintTankSwitcher(Canvas& canvas,const Domain& domain,const HudLayout& hud,const TankSwitcherState& state,SDL_FPoint pointer){
  if(!state.open)return;
  const auto l=layoutTankSwitcher(domain,hud);const float u=l.unit;const auto h=l.header;
+ Rect frame=h;
+ for(int i=0;i<l.count;++i){const auto r=l.tanks[i];const float right=std::max(frame.x+frame.w,r.x+r.w),bottom=std::max(frame.y+frame.h,r.y+r.h);frame.x=std::min(frame.x,r.x);frame.y=std::min(frame.y,r.y);frame.w=right-frame.x;frame.h=bottom-frame.y;}
+ const DialogPaint animation(canvas,state.motion,frame,domain.state().settings.reducedMotion,false);
+ pointer=state.motion.inputPoint(pointer);
  const float sx=h.w/1747.f,sy=h.h/265.f;
  canvas.image("tank-switcher/header.png",{h.x-98*sx,h.y-265*sy,1944*sx,809*sy});
  label(canvas,"MY TANKS",{h.x+12*u,h.y+3*u,h.w-80*u,h.h},27*u);
@@ -155,12 +166,8 @@ TankShopLayout layoutTankShop(const ShopLayout& page,float scroll){
  l.scroll=std::clamp(std::isfinite(scroll)?scroll:0.f,0.f,l.maxScroll);
  for(int i=0;i<6;++i){
   const Rect r{left+(float(i)-l.scroll)*l.step,top,width,height};l.cards[i]=r;
-  const float inset=12*u,priceGap=32*l.unit,priceWidth=(r.w-2*inset-priceGap)*.5f,priceHeight=56*l.unit;
-  l.coins[i]={r.x+inset,r.y+r.h-inset-priceHeight,priceWidth,priceHeight};
-  l.pearls[i]={r.x+r.w-inset-priceWidth,l.coins[i].y,priceWidth,priceHeight};
-  const float targetHeight=std::max(priceHeight,page.minimumTouch);
-  l.coinTargets[i]={l.coins[i].x,l.coins[i].y+l.coins[i].h-targetHeight,priceWidth,targetHeight};
-  l.pearlTargets[i]={l.pearls[i].x,l.coinTargets[i].y,priceWidth,targetHeight};
+  const float inset=12*u,actionHeight=56*l.unit;
+  l.actions[i]={r.x+inset,r.y+r.h-inset-actionHeight,r.w-2*inset,actionHeight};
  }
  l.scrollTrack=page.scrollTrack;const float trackWidth=l.scrollTrack.w;
  const float thumbWidth=std::min(trackWidth,std::max(40*u,trackWidth*availableWidth/contentWidth));
@@ -168,12 +175,65 @@ TankShopLayout layoutTankShop(const ShopLayout& page,float scroll){
  l.scrollHitArea={l.scrollTrack.x,l.scrollTrack.y-8*u,trackWidth,20*u};
  return l;
 }
+TankPurchaseLayout layoutTankPurchase(const ShopLayout& page){
+ const float base=page.unit,scale=std::max(base,page.minimumTouch/64.f);
+ const Insets safe{page.header.x,page.header.y,page.page.w-page.header.x-page.header.w,page.page.h-page.footer.y-page.footer.h};
+ auto dialog=layoutDialog(page.page.w,page.page.h,safe,{"",DialogSize::Custom,800*scale/base,584*scale/base});
+ const float u=dialog.frame.w/800.f,close=std::max(64*u,page.minimumTouch),header=close+16*u;
+ dialog.unit=u;
+ dialog.header={dialog.frame.x+8*u,dialog.frame.y+8*u,dialog.frame.w-16*u,header};
+ dialog.close={dialog.header.x+dialog.header.w-close-8*u,dialog.header.y+8*u,close,close};
+ dialog.title={dialog.header.x+16*u,dialog.header.y,dialog.header.w-close-40*u,header};
+ dialog.body={dialog.frame.x+8*u,dialog.header.y+header,dialog.frame.w-16*u,dialog.frame.h-header-16*u};
+ dialog.content={dialog.body.x+24*u,dialog.body.y+20*u,dialog.body.w-48*u,dialog.body.h-40*u};
+ const auto c=dialog.content;const float height=std::max(88*u,page.minimumTouch),gap=40*u,buttonWidth=(c.w-gap)*.5f;
+ const Rect coins{c.x,c.y+c.h-height,buttonWidth,height},pearls{c.x+c.w-buttonWidth,coins.y,buttonWidth,height};
+ const Rect message{c.x,coins.y-48*u,c.w,32*u};
+ const Rect capacity{c.x,message.y-56*u,c.w,40*u};
+ const Rect art{c.x+40*u,c.y,c.w-80*u,std::max(0.f,capacity.y-c.y-16*u)};
+ return {dialog,art,capacity,message,coins,pearls,{coins.x+coins.w,coins.y,gap,height}};
+}
 namespace {
 void cancelTankShopPress(TankShopState& state){state.pressed=-1;state.pointerDown=state.scrollbarDrag=false;}
+bool tankPurchaseEvent(Session& session,TankShopState& state,const ShopLayout& page,const SDL_Event& e,SDL_FPoint p){
+ auto& purchase=state.purchase;
+ const auto screenPoint=p;p=purchase.dialog.motion.inputPoint(p);
+ if(cancelled(e)){
+  purchase.pressed=-1;purchase.dragged=false;purchase.dialog.closePressed=purchase.dialog.backdropPressed=false;
+  cancelTankShopPress(state);return false;
+ }
+ const auto l=layoutTankPurchase(page);
+ const int control=l.coins.has(p.x,p.y)?0:l.pearls.has(p.x,p.y)?1:-1;
+ const float threshold=std::max(8*page.unit,page.minimumTouch*6/44);
+ if(e.type==SDL_EVENT_MOUSE_BUTTON_DOWN&&e.button.button==SDL_BUTTON_LEFT){purchase.pressed=control;purchase.pressPoint=screenPoint;purchase.dragged=false;}
+ if(e.type==SDL_EVENT_MOUSE_MOTION&&std::hypot(screenPoint.x-purchase.pressPoint.x,screenPoint.y-purchase.pressPoint.y)>threshold){
+  purchase.dragged=true;purchase.dialog.closePressed=purchase.dialog.backdropPressed=false;
+ }
+ if(e.type==SDL_EVENT_MOUSE_BUTTON_UP&&e.button.button==SDL_BUTTON_LEFT){
+  const bool activate=control>=0&&control==purchase.pressed&&!purchase.dragged&&std::hypot(screenPoint.x-purchase.pressPoint.x,screenPoint.y-purchase.pressPoint.y)<=threshold;
+  purchase.pressed=-1;
+  if(activate){
+   const auto id=purchase.offer.tank;const auto offer=tankOffer(session.domain(),id);
+   // Confirm only the capacity and price that the player reviewed.
+   if(!offer.available()||offer.next->id!=purchase.offer.id){
+    state.noticeTank=id;state.notice=errorText(Error::Conflict);purchase={};return true;
+   }
+   const auto result=session.command({.action=purchase.upgrade?Action::ExpandTank:Action::UnlockTank,.tank=id,.currency=control?Currency::Pearls:Currency::Coins});
+   state.shortfall=result.error==Error::Funds?std::optional{result.shortfall}:std::nullopt;
+   if(result){state.noticeTank=id;state.notice=purchase.upgrade?"Tank upgraded!":"Tank unlocked!";purchase={};}
+   else if(result.error==Error::Funds){state.notice.clear();purchase={};}
+   else purchase.error=result.message.empty()?errorText(result.error):result.message;
+   return true;
+  }
+ }
+ const bool handled=dialogEvent(purchase.dialog,l.dialog,e,screenPoint);
+ if(!purchase.dialog.open)purchase={};
+ return handled;
+}
 }
 void focusTankShop(TankShopState& state,const ShopLayout& page,TankId id){
  if(id.value<1||id.value>6)return;
- cancelTankShopPress(state);state.focusedTank=id;
+ cancelTankShopPress(state);state.motion.stop();state.focusedTank=id;
  const auto l=layoutTankShop(page,state.scroll);const auto card=l.cards[id.value-1];
  state.scroll=l.scroll;
  if(card.x<l.viewport.x)state.scroll-=(l.viewport.x-card.x)/l.step;
@@ -182,25 +242,26 @@ void focusTankShop(TankShopState& state,const ShopLayout& page,TankId id){
 }
 int tankShopControl(const TankShopLayout& l,SDL_FPoint p){
  if(!l.viewport.has(p.x,p.y))return -1;
- for(int i=0;i<5;++i){if(l.coinTargets[i].has(p.x,p.y))return i*2;if(l.pearlTargets[i].has(p.x,p.y))return i*2+1;}
+ for(int i=0;i<6;++i)if(l.cards[i].has(p.x,p.y))return i;
  return -1;
 }
 bool tankShopEvent(Session& session,TankShopState& state,const ShopLayout& page,const SDL_Event& e,SDL_FPoint p){
- if(cancelled(e)||(e.type==SDL_EVENT_KEY_DOWN&&e.key.key==SDLK_ESCAPE)){cancelTankShopPress(state);return false;}
+ if(state.purchase.dialog.open){state.motion.stop();return tankPurchaseEvent(session,state,page,e,p);}
+ if(cancelled(e)||(e.type==SDL_EVENT_KEY_DOWN&&e.key.key==SDLK_ESCAPE)){cancelTankShopPress(state);state.motion.stop();return false;}
  const auto l=layoutTankShop(page,state.scroll);state.scroll=l.scroll;
+ const bool reduced=session.domain().state().settings.reducedMotion;
  const bool inside=l.viewport.has(p.x,p.y),overTrack=l.maxScroll>0&&l.scrollHitArea.has(p.x,p.y);
  if(e.type==SDL_EVENT_MOUSE_WHEEL&&(inside||overTrack)){
-  float delta=e.wheel.x!=0?e.wheel.x:-e.wheel.y;if(e.wheel.direction==SDL_MOUSEWHEEL_FLIPPED)delta=-delta;
-  cancelTankShopPress(state);state.scroll=std::clamp(state.scroll+delta*.25f,0.f,l.maxScroll);return true;
+  cancelTankShopPress(state);state.motion.wheel(state.scroll,horizontalWheel(e)*.25f,l.maxScroll,reduced);return true;
  }
  if(e.type==SDL_EVENT_KEY_DOWN){
-  float target=state.scroll;
+  float target=state.motion.destination(state.scroll);
   switch(e.key.key){
    case SDLK_LEFT:target-=1;break;case SDLK_RIGHT:target+=1;break;
    case SDLK_HOME:target=0;break;case SDLK_END:target=l.maxScroll;break;
    default:return false;
   }
-  cancelTankShopPress(state);state.scroll=std::clamp(target,0.f,l.maxScroll);return true;
+  cancelTankShopPress(state);state.motion.stop();state.scroll=std::clamp(target,0.f,l.maxScroll);return true;
  }
  auto drag=[&]{
   if(state.scrollbarDrag){
@@ -209,14 +270,15 @@ bool tankShopEvent(Session& session,TankShopState& state,const ShopLayout& page,
   }else{
    const float threshold=std::max(8*page.unit,page.minimumTouch*6/44);
    if(std::hypot(p.x-state.pressPoint.x,p.y-state.pressPoint.y)>threshold)state.dragged=true;
-   if(state.dragged)state.scroll=std::clamp(state.pressScroll+(state.pressPoint.x-p.x)/l.step,0.f,l.maxScroll);
+   if(state.dragged)state.motion.drag(state.scroll,state.pressScroll+(state.pressPoint.x-p.x)/l.step,l.maxScroll,scrollEventTime(e));
   }
  };
  if(e.type==SDL_EVENT_MOUSE_MOTION&&state.pointerDown){drag();return true;}
  if(leftButton(e)){
   if(e.type==SDL_EVENT_MOUSE_BUTTON_DOWN){
    if(!inside&&!overTrack)return false;
-   state.pointerDown=true;state.scrollbarDrag=overTrack;state.dragged=overTrack;
+   state.pointerDown=true;state.scrollbarDrag=overTrack;state.dragged=overTrack||state.motion.moving();
+   state.motion.begin(state.scroll,scrollEventTime(e));
    state.pressed=overTrack?-1:tankShopControl(l,p);state.pressPoint=p;
    if(overTrack&&!l.scrollThumb.has(p.x,l.scrollThumb.y+l.scrollThumb.h*.5f)){
     const float travel=l.scrollTrack.w-l.scrollThumb.w;
@@ -227,20 +289,23 @@ bool tankShopEvent(Session& session,TankShopState& state,const ShopLayout& page,
   if(!state.pointerDown)return false;
   drag();const int pressed=state.pressed,control=tankShopControl(l,p);
   const bool activate=!state.dragged&&!state.scrollbarDrag&&control>=0&&control==pressed;
+  state.motion.release(scrollEventTime(e),reduced||state.scrollbarDrag);
   cancelTankShopPress(state);
   if(activate){
-   const TankId id{control/2+1};const auto offer=tankOffer(session.domain(),id);
+   const TankId id{control+1};const auto offer=tankOffer(session.domain(),id);
    if(offer.available()){
-    const bool pearl=control%2;const bool owned=session.domain().tank(id)!=nullptr;
-    const auto result=session.command({.action=owned?Action::ExpandTank:Action::UnlockTank,.tank=id,.currency=pearl?Currency::Pearls:Currency::Coins});
-    state.noticeTank=id;
-    state.shortfall=result.error==Error::Funds?std::optional{result.shortfall}:std::nullopt;
-    state.notice=result?(owned?"Tank upgraded!":"Tank unlocked!"):result.error==Error::Funds?"":(result.message.empty()?errorText(result.error):result.message);
+    state.purchase={};state.purchase.offer=*offer.next;state.purchase.upgrade=session.domain().tank(id)!=nullptr;state.purchase.dialog.open=true;
+    state.shortfall.reset();state.notice.clear();
    }
   }
   return true;
  }
  return false;
+}
+void advanceTankShop(TankShopState& state,const ShopLayout& page,double seconds,bool reducedMotion){
+ state.purchase.dialog.motion.advance(state.purchase.dialog.open,seconds,reducedMotion);
+ if(state.purchase.dialog.open){state.motion.stop();return;}
+ state.motion.advance(state.scroll,seconds,layoutTankShop(page).maxScroll,reducedMotion);
 }
 void paintTankShop(Canvas& canvas,const Domain& domain,const ShopLayout& page,const TankShopState& state){
  const auto l=layoutTankShop(page,state.scroll);const float u=l.unit;
@@ -256,33 +321,25 @@ void paintTankShop(Canvas& canvas,const Domain& domain,const ShopLayout& page,co
    canvas.outline({card.x+2*u,card.y+2*u,card.w-4*u,card.h-4*u},{255,234,123,255},10*u,2*u);
   }
   text("Tank "+std::to_string(i+1),{card.x+4*u,card.y+12*u,card.w-8*u,56*u},28);
-  text(future?"Soon":tank?(current?"Current":"Owned"):(locked?"Locked":"New"),{card.x+card.w-108*u,card.y+24*u,96*u,32*u},18);
-  const std::string capacity=future?"More room to explore":(tank?std::to_string(tank->slots)+(offer.next?" > "+std::to_string(offer.next->slots):""):std::to_string(offer.next?offer.next->slots:0))+" growing slots";
+  const Rect badge{card.x+card.w-110*u,card.y+24*u,98*u,32*u};
+  if(current)shopTheme::panel(canvas,badge,u*.65f,shopTheme::Surface::Amber);
+  text(future?"Soon":tank?(current?"Current":"Owned"):(locked?"Locked":"New"),badge,18,current?numberInk:shopTheme::white);
+  const std::string capacity=future?"More room to explore":(tank?std::to_string(tank->slots)+(offer.next?" > "+std::to_string(offer.next->slots):""):std::to_string(offer.next?offer.next->slots:0))+" fish";
   text(capacity,{card.x+12*u,card.y+60*u,card.w-24*u,28*u},20,locked?Color{235,229,194,255}:shopTheme::white);
-  const Rect note{card.x+12*u,l.coins[i].y-48*u,card.w-24*u,32*u};
+  const Rect note{card.x+12*u,l.actions[i].y-48*u,card.w-24*u,32*u};
   const float artTop=card.y+96*u;
   const Rect art{card.x+24*u,artTop,card.w-48*u,std::max(0.f,note.y-artTop-16*u)};
-  const Rect source=tank?Rect{48,87,1678,731}:Rect{47,86,1680,732};
-  const float scale=std::min(art.w/source.w,art.h/source.h);
-  canvas.image(tank?"tank-grid/active.png":"tank-grid/empty.png",{art.x+(art.w-source.w*scale)*.5f-source.x*scale,art.y+(art.h-source.h*scale)*.5f-source.y*scale,1774*scale,887*scale},0,{.5f,.5f},locked?.6f:1.f);
+  tankIllustration(canvas,art,tank!=nullptr,locked?.6f:1.f);
   if(locked&&!future){
    const float size=std::min(76*u,art.h*.6f);
    shopTheme::lockIcon(canvas,{art.x+(art.w-size)*.5f,art.y+(art.h-size)*.5f,size,size});
   }
   if(state.noticeTank==id&&!state.notice.empty())text(state.notice,note,24);
-  else if(offer.available())text(tank?"Upgrade":"Unlock",note,24);
   if(!future&&offer.available()){
-   for(int currency=0;currency<2;++currency){
-    const auto r=currency?l.pearls[i]:l.coins[i];const auto value=currency?offer.next->cost.pearls:offer.next->cost.coins;
-    shopTheme::pricePanel(canvas,r,u,state.pressed==i*2+currency&&!state.dragged);
-    const std::string amount=compact(value);const float size=28*u,textWidth=canvas.textWidth(amount,size,true,false,false,false,true),total=textWidth+40*u;
-    const float fit=std::min(1.f,(r.w-16*u)/total),left=r.x+(r.w-total*fit)*.5f;
-    canvas.text(amount,left,r.y+(r.h-size*fit)*.5f,size*fit,shopTheme::white,false,textWidth*fit,true,true);
-    canvas.icon(currency?"hud-icons/pearl-v4.png":"hud-icons/coin-v4.png",{left+(textWidth+8*u)*fit,r.y+(r.h-32*u*fit)*.5f,32*u*fit,32*u*fit});
-   }
-   text("or",{l.coins[i].x+l.coins[i].w,l.coins[i].y,32*u,l.coins[i].h},20);
+   shopTheme::pricePanel(canvas,l.actions[i],u,state.pressed==i&&!state.dragged);
+   text(tank?"Upgrade":"Unlock",l.actions[i],28);
   }else{
-   const Rect r{l.coins[i].x,l.coins[i].y,l.pearls[i].x+l.pearls[i].w-l.coins[i].x,l.coins[i].h};
+   const Rect r=l.actions[i];
    shopTheme::pricePanel(canvas,r,u);
    const std::string requirement=offer.next&&domain.level()<offer.next->level?"Level "+std::to_string(offer.next->level):offer.requirement;
    text(future?"Coming soon":offer.next?requirement:"Fully upgraded",r,28);
@@ -290,5 +347,27 @@ void paintTankShop(Canvas& canvas,const Domain& domain,const ShopLayout& page,co
  }
  canvas.clearClip();
  if(l.maxScroll>0)shopTheme::scrollbar(canvas,l.scrollTrack,l.scrollThumb,u);
+}
+void paintTankPurchase(Canvas& canvas,const ShopLayout& page,const TankShopState& state,bool reducedMotion){
+ const auto& purchase=state.purchase;if(!purchase.dialog.open)return;
+ const auto l=layoutTankPurchase(page);const float u=l.dialog.unit;
+ const auto& offer=purchase.offer;
+ const std::string title=(purchase.upgrade?"Upgrade Tank ":"Unlock Tank ")+std::to_string(offer.tank.value)+"?";
+ const DialogPaint animation(canvas,purchase.dialog.motion,l.dialog.frame,reducedMotion);
+ paintDialog(canvas,l.dialog,{title},false,purchase.dialog.closePressed,DialogPresentation::ModalContent);
+ tankIllustration(canvas,l.illustration,purchase.upgrade);
+ const std::string capacity=purchase.upgrade?std::to_string(offer.slots-offer.addedSlots)+" > "+std::to_string(offer.slots)+" fish":"Room for "+std::to_string(offer.slots)+" fish";
+ label(canvas,capacity,l.capacity,32*u,shopTheme::ink);
+ if(!purchase.error.empty())label(canvas,purchase.error,l.message,24*u,{157,48,38,255});
+ for(int currency=0;currency<2;++currency){
+  const auto r=currency?l.pearls:l.coins;const auto value=currency?offer.cost.pearls:offer.cost.coins;
+  shopTheme::panel(canvas,r,u,currency?shopTheme::Surface::PearlBuy:shopTheme::Surface::Buy,purchase.pressed==currency&&!purchase.dragged);
+  label(canvas,currency?"Pearls":"Coins",{r.x,r.y+8*u,r.w,24*u},20*u,shopTheme::white);
+  const std::string amount=compact(value);const float size=32*u,textWidth=canvas.textWidth(amount,size,true,false,false,false,true),total=textWidth+44*u;
+  const float fit=std::min(1.f,(r.w-24*u)/total),left=r.x+(r.w-total*fit)*.5f,centerY=r.y+32*u+(r.h-40*u)*.5f;
+  canvas.text(amount,left,centerY-size*fit*.5f,size*fit,shopTheme::white,false,textWidth*fit,true,true);
+  canvas.icon(currency?"hud-icons/pearl-v4.png":"hud-icons/coin-v4.png",{left+(textWidth+8*u)*fit,centerY-18*u*fit,36*u*fit,36*u*fit});
+ }
+ label(canvas,"or",l.choice,20*u,shopTheme::ink);
 }
 }

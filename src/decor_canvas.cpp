@@ -1,27 +1,9 @@
 #include "aquarium/canvas.hpp"
 #include <algorithm>
 #include <cmath>
+#include <stdexcept>
 
 namespace aq {
-void Canvas::decorPlacementMarker(Rect item){
- const float unit=minimumTouchSize()/44.f;
- const float cx=item.x+item.w*.5f,cy=item.y+item.h-3*unit;
- const float rx=std::max(item.w*.58f,34*unit),ry=std::max(12*unit,rx*.24f);
- const auto diamond=[&](float x,float y,float w,float h,SDL_FColor color){
-  const SDL_Vertex vertices[]={{{x,y-h},color,{}},{{x+w,y},color,{}},{{x,y+h},color,{}},{{x-w,y},color,{}}};
-  const int indices[]={0,1,2,0,2,3};SDL_RenderGeometry(renderer_,nullptr,vertices,4,indices,6);
- };
- diamond(cx,cy,rx,ry,{.5f,1.f,.25f,.75f});
- diamond(cx,cy,rx-3*unit,ry-2*unit,{.1f,.78f,.16f,.55f});
- const auto arrow=[&](float x,float y,float dx,float dy){
-  const float length=8*unit;const SDL_FColor c{.7f,1.f,.34f,1};
-  const SDL_Vertex v[]={{{x+dx*length,y+dy*length},c,{}},{{x-dy*length-dx*length*.5f,y+dx*length-dy*length*.5f},c,{}},{{x+dy*length-dx*length*.5f,y-dx*length-dy*length*.5f},c,{}}};
-  SDL_RenderGeometry(renderer_,nullptr,v,3,nullptr,0);
- };
- arrow(cx-rx-12*unit,cy,-1,0);arrow(cx+rx+12*unit,cy,1,0);
- arrow(cx,cy-ry-12*unit,0,-1);arrow(cx,cy+ry+12*unit,0,1);
-}
-
 namespace {
 constexpr double pi=3.14159265358979323846;
 double smooth(double t){t=std::clamp(t,0.,1.);return t*t*(3-2*t);}
@@ -86,25 +68,48 @@ DecorVertexPose decorVertexPose(const DecorDef& d,std::uint64_t copy,double time
  return out;
 }
 Rect Canvas::decorRect(const DecorDef& d,WorldPoint position,double sizeMul)const{
- const auto p=toScreen(position);const float unit=std::min(width_/12.f,height_/7.f)*float(decorScale(position)*sizeMul);
+ const auto view=decorProjection();const auto p=view.toScreen(position);const float unit=view.decorUnit()*float(decorScale(position)*sizeMul);
  const float w=float(d.width)*unit,h=float(d.height)*unit;
  return {p.x-w*.5f,p.y-h,w,h};
 }
+std::vector<const Decoration*> Canvas::decorHits(const Domain& domain,SDL_FPoint point)const{
+ std::vector<const Decoration*> hits;
+ DecorDef legacy;legacy.width=1.1;legacy.height=.95;
+ for(const auto& item:domain.state().decor){
+  if(item.stored||item.tank!=domain.state().activeTank)continue;
+  const auto* def=domain.content().findDecor(item.kind);
+  if(decorRect(def?*def:legacy,item.position,item.sizeMul).has(point.x,point.y))hits.push_back(&item);
+ }
+ std::sort(hits.begin(),hits.end(),[](const auto* a,const auto* b){return decorBehind(*b,*a);});
+ return hits;
+}
 void Canvas::decoration(const DecorDef& def,const Decoration& item,double time,bool animate,float alpha,int* fxBudget,bool allowEmitter,bool highlight){
  const auto r=decorRect(def,item.position,item.sizeMul);const auto m=def.art.value("motion",Json::object());const auto kind=m.value("kind",std::string("static"));
- // Screen a water-coloured silhouette over the sprite. Two built-in blend
- // passes also work with SDL's software renderer: dst*(1-haze) + haze.
+ const float visualScale=decorProjection().artwork.w/float(waterWidth);
+ // Screen a water-coloured silhouette over the sprite. The mask and vertex
+ // colours both carry opacity so transparent padding never alters the tank.
  auto draw=[&](const std::string& asset,const std::vector<SDL_Vertex>& vertices,const std::vector<int>& indices){
   auto* mask=texture("mask:"+asset)->sampled(r.w*pixelScaleX_,r.h*pixelScaleY_);
+  const auto blend=[&](SDL_BlendMode mode){if(!SDL_SetTextureBlendMode(mask,mode))throw std::runtime_error(SDL_GetError());};
+  blend(SDL_BLENDMODE_BLEND_PREMULTIPLIED);
   if(highlight){
-   for(int i=0;i<8;++i){const double angle=i*pi/4;auto rim=vertices;for(auto& v:rim){v.position.x+=float(std::cos(angle))*2.5f*worldScale();v.position.y+=float(std::sin(angle))*2.5f*worldScale();v.color={1,.7f,.22f,.5f*alpha};}mesh(mask,rim,indices);}
+   // A dark edge, gold rim and ivory inner rim stay legible on sand and plants.
+   // This follows the animated silhouette without filtering the tank scene.
+   const float unit=std::max(visualScale,minimumTouchSize()/44.f);
+   for(const auto [radius,tint]:{std::pair{4.f,SDL_FColor{.10f,.22f,.20f,.9f}},
+                               std::pair{3.f,SDL_FColor{1.f,.73f,.12f,1.f}},
+                               std::pair{1.4f,SDL_FColor{1.f,1.f,.86f,1.f}}}){
+    const float opacity=tint.a*alpha;
+    for(int i=0;i<12;++i){const double angle=i*pi/6;auto rim=vertices;for(auto& v:rim){v.position.x+=float(std::cos(angle))*radius*unit;v.position.y+=float(std::sin(angle))*radius*unit;v.color={tint.r*opacity,tint.g*opacity,tint.b*opacity,opacity};}mesh(mask,rim,indices);}
+   }
   }
   mesh(texture(asset)->sampled(r.w*pixelScaleX_,r.h*pixelScaleY_),vertices,indices);
-  const float haze=float(decorHaze(item.position));auto pass=vertices;
-  for(auto& v:pass)v.color={1-95/255.f,1-196/255.f,1-220/255.f,v.color.a*haze};
-  SDL_SetTextureBlendMode(mask,SDL_BLENDMODE_MUL);mesh(mask,pass,indices);
-  for(auto& v:pass){v.color.r=95/255.f;v.color.g=196/255.f;v.color.b=220/255.f;}
-  SDL_SetTextureBlendMode(mask,SDL_BLENDMODE_ADD);mesh(mask,pass,indices);SDL_SetTextureBlendMode(mask,SDL_BLENDMODE_BLEND);
+  const float haze=float(decorHaze(item.position));if(haze<=0)return;
+  auto pass=vertices;
+  for(auto& v:pass){const float opacity=v.color.a*haze;v.color={(1-95/255.f)*opacity,(1-196/255.f)*opacity,(1-220/255.f)*opacity,opacity};}
+  blend(SDL_BLENDMODE_MUL);mesh(mask,pass,indices);
+  for(auto& v:pass){const float opacity=v.color.a;v.color={95/255.f*opacity,196/255.f*opacity,220/255.f*opacity,opacity};}
+  blend(SDL_BLENDMODE_ADD_PREMULTIPLIED);mesh(mask,pass,indices);blend(SDL_BLENDMODE_BLEND_PREMULTIPLIED);
  };
  auto sprite=[&](const std::string& asset,Rect rect,double degrees=0,SDL_FPoint pivot=SDL_FPoint{.5f,1}){
   const double angle=degrees*pi/180.;std::vector<SDL_Vertex> vertices;
@@ -142,10 +147,10 @@ void Canvas::decoration(const DecorDef& def,const Decoration& item,double time,b
  if(!fxBudget||*fxBudget<=0)return;
  const double p=period(m,item.id),tm=std::max(0.,time)+phase(item.id)*p;
  if(kind=="bubble"&&allowEmitter){
-  const double elapsed=std::fmod(tm,p),travel=m.value("travel_units",.5)*std::min(width_/12.f,height_/7.f),life=3.;
+  const double elapsed=std::fmod(tm,p),travel=m.value("travel_units",.5)*decorProjection().decorUnit(),life=3.;
   if(elapsed<life){
    const float x=r.x+r.w*(def.id=="PL-05"?.82f:.5f),y=r.y+float(r.h*.2-travel*(elapsed/life));
-   const float radius=std::min(r.w*.04f,5*worldScale());
+   const float radius=std::min(r.w*.04f,5*visualScale);
    // Leave reserved space for HUD and stop the effect at the tank edge.
    if(x>radius&&x<width_-radius&&y>height_*.18f+radius){const auto a=Uint8(130*(1-elapsed/life)*alpha);round({x-radius,y-radius,radius*2,radius*2},{203,242,245,Uint8(a/3)},radius,{223,254,255,a},1,false);--*fxBudget;}
   }
@@ -160,8 +165,8 @@ void Canvas::decoration(const DecorDef& def,const Decoration& item,double time,b
    const float sourceX=kind=="snowglobe"?chipHomes[i].x:.5f;
    const float chamberX=item.flipped?1-sourceX:sourceX;
    const float x=r.x+r.w*(chamberX+(kind=="snowglobe"?.018f:.065f)*float(std::sin(cycle*2*pi+i))),
-    y=r.y+r.h*chamberY+(kind=="snowglobe"?float(.5*std::sin(cycle*2*pi)):float(.5-cycle))*float(m.value("travel_units",.15)*std::min(width_/12.f,height_/7.f));
-   const float radius=std::max(1.f,std::min(r.w*.016f,3.f*worldScale()));
+    y=r.y+r.h*chamberY+(kind=="snowglobe"?float(.5*std::sin(cycle*2*pi)):float(.5-cycle))*float(m.value("travel_units",.15)*decorProjection().decorUnit());
+   const float radius=std::max(1.f,std::min(r.w*.016f,3.f*visualScale));
    // Clip each reusable chip/bubble to a conservative rectangle entirely
    // inside the authored glass. The lower hourglass chamber excludes its neck.
    const Rect interior{r.x+r.w*(chamberX-.085f),r.y+r.h*(chamberY-.075f),r.w*.17f,r.h*.15f};

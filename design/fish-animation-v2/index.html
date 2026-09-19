@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Neon tetra and guppy animation study</title>
+  <style>
+    @font-face{font-family:Nunito;src:url('./fonts/Nunito-SemiBold.ttf');font-weight:600}
+    *{box-sizing:border-box}body{margin:0;background:#e8f2ef;color:#173f4d;font-family:Nunito,system-ui,sans-serif}main{max-width:1160px;margin:32px auto;padding:0 20px}canvas{width:100%;height:auto;display:block;border:1px solid #c4dbda;border-radius:20px;box-shadow:0 12px 38px #123f5010}.controls{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:20px 0}button,select{font:inherit;font-size:14px;padding:10px 16px;border:1px solid #accacd;border-radius:999px;background:#f7fcfa;color:#234e5c;cursor:pointer}button.active,button[aria-pressed=true]{background:#225a69;color:white;border-color:#225a69}button:hover,select:hover{border-color:#225a69}.spacer{flex:1}.timeline{display:flex;gap:12px;align-items:center}input{flex:1;accent-color:#246579}output{font-size:13px;font-variant-numeric:tabular-nums;min-width:75px}p{font-size:13px;line-height:1.6;color:#547178}a{color:#245e6b}#error{color:#983d37}@media(max-width:640px){main{margin:16px auto;padding:0 12px}.controls{gap:7px}button,select{padding:8px 12px}.spacer{display:none}}
+  </style>
+</head>
+<body><main>
+  <canvas id="stage" width="1080" height="680" aria-label="Animated neon tetra and guppy with large and small previews"></canvas>
+  <div class="controls" aria-label="Animation controls">
+    <button id="play" aria-pressed="false">Pause</button>
+    <button data-mode="showcase" class="active">Full preview</button><button data-mode="idle">Idle</button><button data-mode="swim">Swim</button><button data-mode="blink">Blink</button><button data-mode="feed">Gulp</button>
+    <span class="spacer"></span><label for="speed">Speed</label><select id="speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option></select>
+  </div>
+  <div class="timeline"><input id="scrub" type="range" min="0" max="12" value="0" step="0.01" aria-label="Animation time"><output id="time">0.0 / 12 s</output></div>
+  <p>Each fish has its own timing. Use Blink or Gulp to replay a facial animation. <a href="fish-animation-preview.mp4">Watch the video</a> · <a href="README.md">Animation files and notes</a></p><p id="error" role="alert"></p>
+</main>
+<script type="module">
+import {drawStage} from './animation.mjs';
+const stage=document.querySelector('#stage'), ctx=stage.getContext('2d');
+let mode='showcase',time=0,paused=false,speed=1,previous=0;
+const period=()=>mode==='showcase'?12:mode==='blink'||mode==='feed'?2:4;
+try {
+ await document.fonts.ready;
+ const rigs=await fetch('./rigs.json').then(r=>{if(!r.ok)throw Error('Could not load fish rig');return r.json()});
+ const images={};
+ await Promise.all(Object.entries(rigs.species).map(async([id,rig])=>{
+  images[id]={};await Promise.all(Object.keys(rig.parts).map(async name=>{
+   const image=new Image();image.src=`./parts/${id}/${name}.png`;await image.decode();images[id][name]=image;
+  }));
+ }));
+ document.querySelector('#play').onclick=()=>{paused=!paused;document.querySelector('#play').textContent=paused?'Play':'Pause';document.querySelector('#play').setAttribute('aria-pressed',String(paused))};
+ document.querySelectorAll('[data-mode]').forEach(button=>button.onclick=()=>{mode=button.dataset.mode;time=0;document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b===button));document.querySelector('#scrub').max=period()});
+ document.querySelector('#speed').onchange=e=>{speed=Number(e.target.value)};
+ document.querySelector('#scrub').oninput=e=>{time=Number(e.target.value)};
+ const frame=now=>{if(previous&&!paused)time=(time+Math.min(.06,(now-previous)/1000)*speed)%period();previous=now;drawStage(ctx,rigs,images,time,mode);document.querySelector('#scrub').value=time;document.querySelector('#time').textContent=`${time.toFixed(1)} / ${period()} s`;requestAnimationFrame(frame)};
+ window.animationReady=true;requestAnimationFrame(frame);
+} catch(error){document.querySelector('#error').textContent=error.message;throw error;}
+</script>
+</body></html>

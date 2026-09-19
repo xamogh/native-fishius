@@ -1,0 +1,31 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-09-18",
+  "prompt": "Use case: stylized-concept\nAsset type: production Layout mode HUD button for the Fishius aquarium game.\nPrimary request: one simple FOUR-ARROW MOVE icon in a rounded-square cream-and-gold button. Exactly four chunky turquoise arrows joined at the center, pointing straight up, down, left and right. A familiar four-way move cursor shape. Symmetric, very bold and easy to read at 40 to 64 pixels. No diagonal arrows.\nStyle: polished hand-painted 2D casual aquarium game art. The tile matches the existing Food and Sell tools: warm cream center, softly golden bottom, thin warm brown outside outline, slim ivory inner bevel and subtle gold rim highlights. The four-way arrow is painted saturated teal/turquoise, with a thin darker teal outline and broad restrained aqua highlights. Friendly rounded edges. No heavy 3D extrusion.\nComposition: exactly one upright rounded square tile facing straight ahead. Tile centered and occupying about 88 percent of the square image. Four-arrow symbol occupies about 70 percent of the tile and is centered both ways. All artwork is inside the tile, no objects protrude.\nBackground: true RGBA transparency outside the rounded-square tile. Opaque cream tile interior. Do not draw a checkerboard. High-resolution square PNG.\nConstraints: only the tile and four-arrow symbol. NO pencil, NO blueprint, NO net, NO words, NO letters, NO labels, NO fish, NO extra buttons, NO scene, NO sparkles, NO external drop shadow.",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a0b31a-4409-7df3-a456-316dd8a399fc/exec-bc701a99-e1bc-40a7-88ff-b084284539e3.png",
+  "path": "hud-icons/layout-button-v1.png",
+  "style_references": [
+    "hud-icons/rehome-button-v1.png",
+    "hud-icons/food-button-v3.png",
+    "hud-icons/bag-button-v3.png"
+  ],
+  "format": "RGBA PNG",
+  "size": [
+    1254,
+    1254
+  ],
+  "alpha_bounds": [
+    34,
+    44,
+    1211,
+    1209
+  ],
+  "visible_bounds_at_alpha_128": [
+    45,
+    48,
+    1207,
+    1202
+  ],
+  "transparency": "Original generated alpha preserved. File copied without image edits. All four corners have alpha 0.",
+  "sha256": "3c553cb9b5546018e49f044711e9b3a31821f0fb0c5285dd0b3d12ac96276c35"
+}

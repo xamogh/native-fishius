@@ -1,0 +1,29 @@
+{
+  "asset": "assets/dialogs/level-up-mobile-badge-v1.png",
+  "tool": "built-in image_gen",
+  "date": "2026-09-18",
+  "dimensions": {
+    "width": 1774,
+    "height": 887
+  },
+  "background": "opaque warm cream",
+  "reference": "/Users/amoghrijal/amogh/aquarium-native/design/mockups/level-up-2026-09-18/mobile-first/approved.png",
+  "referenceRole": "Selected mobile dialog badge group, approximately x205..576 y209..401",
+  "generatedSource": "/Users/amoghrijal/.codex/generated_images/01a0b306-e5e9-72b0-8adf-d524ede07f54/exec-271c0449-c919-4b87-9d06-f49fc33c0eda.png",
+  "prompt": "Use case: stylized-concept.\nAsset type: ONE production raster LEVEL badge asset for the Fishius mobile level-up dialog, with a blank center for a live level number.\nInput image role: attached selected mobile layout is a style and subject reference. The badge group is approximately x205..576 and y209..401 in this 1844x852 reference. Extract its visual idea into a separate clean standalone asset, without its number.\nPrimary request: A large polished golden circular medal in the center, broad curved blue ribbon over the top with the exact white word \"LEVEL\", upright lush green seaweed reaching toward the top behind each side, and a few smooth natural gray rocks at the lower corners. Match the friendly illustrated aquarium game style and proportions in the reference.\nCanvas: approximately 1536 x 768 pixels, landscape aspect ratio 2:1. Tight deliberate framing. The artwork group must fill 92 to 96 percent of the total image width and 95 percent of the total image height. No huge empty side margins. Plant fronds should extend out toward both far left and far right edges to create the wide silhouette. Keep every leaf, ribbon tip and rock fully within the canvas.\nMedal: Centered horizontally, large enough that the gold circular shape occupies about 43 percent of total image width and 86 percent of total image height. Use a rich golden rim with warm orange edge shadows and smooth yellow-gold inner face. The INNER FACE is entirely EMPTY, bright flat gold with very subtle soft illumination only, large enough for a bold two-digit level number to be drawn later. No numeral, no embossed symbol, no star, no face or insignia.\nRibbon: Deep vivid blue with lighter cyan highlights, friendly shaded game illustration, broad balanced curve above the medal, exact centered white uppercase \"LEVEL\". Crisp readable bold game lettering. The ribbon must not cover the main blank face.\nBackground: Fully opaque FLAT warm cream #fffdf0 across the entire image. No transparency, no checkerboard, no border, no vignette, no gradient in the background, no baked rectangular card. Only the illustrated group has shading. Keep rock shadows tiny and soft.\nAvoid: No level number, no currency icon, no rewards, no fish, no interface, no text except LEVEL, no extra labels, no buttons, no card frame, no composition board, no watermark. No bubbles or stray decorative dots. This is a tightly packed reusable asset, not a full screenshot.",
+  "normalizedBlankFaceBounds": {
+    "x": 0.337,
+    "y": 0.28,
+    "width": 0.315,
+    "height": 0.555
+  },
+  "normalizedNumberLayoutBounds": {
+    "x": 0.365,
+    "y": 0.325,
+    "width": 0.26,
+    "height": 0.5
+  },
+  "inspection": "Large blank gold medal, white LEVEL on broad blue ribbon, green seaweed and gray rocks. The final framing edit widens only side plants; circular medal, ribbon and blank face remain unchanged. Artwork fills approximately 98% canvas width and 96% height with all leaves and rocks fully visible. Dynamic number box centered approximately x0.495 y0.575. No baked number, buttons, card frame, false transparency or other interface. Original generated files retained.",
+  "initialGeneratedSource": "/Users/amoghrijal/.codex/generated_images/01a0b306-e5e9-72b0-8adf-d524ede07f54/exec-9da43a0f-a1d3-430b-9db2-97f7536a1488.png",
+  "framingPrompt": "Use case: precise-object-edit. Edit this production mobile game badge asset with ONE targeted framing improvement: increase the lateral spread of the seaweed on both sides so the complete artwork group fills 94 percent of the 2:1 canvas width, leaving only 3 percent empty cream margin at far left and 3 percent at far right. Keep all leaf tips fully inside the frame. Keep the center gold medal, blank gold number face, LEVEL ribbon, rocks, artwork height, warm cream background, colors and illustration style unchanged. The medal position and size must remain unchanged. Do not scale down the central medal. Widen only the seaweed silhouette toward the left and right outer edges. No numeral, no new decoration, no extra text. Preserve fully opaque flat warm cream background, no transparency or checkerboard. Output one standalone asset, 1774x887 pixels or equivalent exact 2:1 landscape aspect ratio."
+}

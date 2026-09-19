@@ -1,8 +1,8 @@
 {
   "schema": 4,
-  "config_version": "v4-fed-1-4282137c4f99",
-  "workbook_sha256": "8759dd1341e9ebf43ecf7f9f9c8ec244af1fcc1d5a0ac706a94c2ed1361da81c",
-  "config_checksum": "4282137c4f991f1d4f7dddcdbc45978a61569be970daf52af51b261180539b7d",
+  "config_version": "v4-fed-1-7f4a7edbf5c1",
+  "workbook_sha256": "4a3868fc7100458903f2922b2e5dbaeec54571af1cbae3fe92fad64d99d31808",
+  "config_checksum": "7f4a7edbf5c1ade7b6b6648039f5a51eda24a4ecfdc8173f46bef2d08c63f33e",
   "overrides": {
     "hatch_ms": 6000,
     "egg_counts_toward_growth": true,
@@ -12,12 +12,74 @@
     "hungry_pauses_growth": true,
     "sickness": false,
     "death": false,
-    "purchase_xp": 0,
+    "fish_purchase_xp": 0,
+    "decor_purchase_xp": {
+      "coins_per_xp": 10,
+      "xp_per_pearl": 10,
+      "minimum_xp": 1,
+      "rounding": "half_up",
+      "first_purchase_only": true
+    },
+    "decor_placed_limit": 64,
     "backend": "local",
     "legacy_save_migration": false,
     "minimum_sell_age": 1,
     "selling_rule": "Eggs and Babies cannot be sold; selling starts at Junior",
-    "source": "User decisions in this task, 14 and 17 September 2026"
+    "keep_action": false,
+    "fish_capacity": "shared",
+    "fish_lifecycle": "shared",
+    "pearl_fish_schedule": "SC-2H",
+    "bubble_eye_pearls": 1,
+    "pearl_fish_repeatable": true,
+    "tank_upgrade_level_gate": false,
+    "tank_capacity_steps": [
+      10,
+      15,
+      20,
+      25,
+      30,
+      35,
+      40
+    ],
+    "active_play": {
+      "base_xp_day": 576,
+      "xp_slope_bps": 1500,
+      "pearl_price_divisor": 6,
+      "adult_coin_sales_per_pearl": 20,
+      "pearls_per_milestone": 1,
+      "new_tank_coins": [
+        0,
+        1500,
+        6000,
+        15000,
+        30000
+      ],
+      "new_tank_pearls": [
+        0,
+        5,
+        10,
+        15,
+        20
+      ],
+      "upgrade_coins": [
+        300,
+        900,
+        1800,
+        3000,
+        4500,
+        6300
+      ],
+      "upgrade_pearls": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "tank_price_step_bps": 5000
+    },
+    "source": "User decisions in this task, 14, 17 and 18 September 2026"
   },
   "inputs": {
     "launch_cap": 40,
@@ -78,14 +140,14 @@
     "active_speed_limit": 1.7,
     "paid_speed_limit": 1.2,
     "cash_reserve_cycles": 1,
-    "showcase_slots": 8,
+    "showcase_slots": 0,
     "decimals_server": 1000
   },
   "economy": {
     "base_coin_day": 360,
-    "base_xp_day": 96,
+    "base_xp_day": 576,
     "coin_slope_bps": 450,
-    "xp_slope_bps": 100,
+    "xp_slope_bps": 1500,
     "principal_share_bps": 2500,
     "minimum_price": 5,
     "early_refund_bps": 9500,
@@ -156,8 +218,7 @@
       "coin_factor_bps": 12500,
       "xp_factor_bps": 12500,
       "preview_profit": 6,
-      "preview_xp": 2,
-      "companion": false,
+      "preview_xp": 10,
       "sale_coins": [
         0,
         4,
@@ -167,10 +228,10 @@
       ],
       "sale_xp": [
         0,
-        0,
-        0,
         1,
-        2
+        4,
+        7,
+        10
       ],
       "badge": "Starter",
       "description": "20 minutes. First fast-return demonstration; favorite remains viable at later levels. Launch-ready design; asset QA required.",
@@ -178,7 +239,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 5
@@ -222,8 +282,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 39,
-      "preview_xp": 10,
-      "companion": false,
+      "preview_xp": 62,
       "sale_coins": [
         0,
         12,
@@ -233,10 +292,10 @@
       ],
       "sale_xp": [
         0,
-        1,
-        4,
-        7,
-        10
+        6,
+        24,
+        43,
+        62
       ],
       "badge": "Balanced",
       "description": "2 hours. Neutral coin/XP choice for a predictable return schedule. Launch-ready design; asset QA required.",
@@ -244,7 +303,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 6
@@ -288,8 +346,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 300,
-      "preview_xp": 80,
-      "companion": false,
+      "preview_xp": 480,
       "sale_coins": [
         0,
         101,
@@ -299,10 +356,10 @@
       ],
       "sale_xp": [
         0,
-        8,
-        32,
-        56,
-        80
+        48,
+        192,
+        336,
+        480
       ],
       "badge": "Convenience",
       "description": "20 hours. Longer unattended cycle; no absence penalty and no special care requirement. Launch-ready design; asset QA required.",
@@ -310,7 +367,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 7
@@ -354,8 +410,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 607,
-      "preview_xp": 162,
-      "companion": false,
+      "preview_xp": 972,
       "sale_coins": [
         0,
         204,
@@ -365,10 +420,10 @@
       ],
       "sale_xp": [
         0,
-        16,
-        64,
-        113,
-        162
+        97,
+        388,
+        680,
+        972
       ],
       "badge": "Convenience",
       "description": "44 hours. Longer unattended cycle; no absence penalty and no special care requirement. Launch-ready design; asset QA required.",
@@ -376,7 +431,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 8
@@ -420,8 +474,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 147,
-      "preview_xp": 46,
-      "companion": false,
+      "preview_xp": 316,
       "sale_coins": [
         0,
         49,
@@ -431,10 +484,10 @@
       ],
       "sale_xp": [
         0,
-        4,
-        18,
-        32,
-        46
+        31,
+        126,
+        221,
+        316
       ],
       "badge": "XP Specialist",
       "description": "8 hours. Trades 10% base coin output for 10% base XP; no premium prerequisite. Launch-ready design; asset QA required.",
@@ -442,7 +495,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 9
@@ -486,8 +538,7 @@
       "coin_factor_bps": 12500,
       "xp_factor_bps": 12500,
       "preview_profit": 8,
-      "preview_xp": 2,
-      "companion": false,
+      "preview_xp": 13,
       "sale_coins": [
         0,
         4,
@@ -497,10 +548,10 @@
       ],
       "sale_xp": [
         0,
-        0,
-        0,
         1,
-        2
+        5,
+        9,
+        13
       ],
       "badge": "Coin Specialist",
       "description": "20 minutes. Trades 10% base XP for 10% base coin output; schedule choice still matters. Launch-ready design; asset QA required.",
@@ -508,7 +559,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 10
@@ -552,8 +602,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 191,
-      "preview_xp": 44,
-      "companion": false,
+      "preview_xp": 437,
       "sale_coins": [
         0,
         64,
@@ -563,10 +612,10 @@
       ],
       "sale_xp": [
         0,
-        4,
-        17,
-        30,
-        44
+        43,
+        174,
+        305,
+        437
       ],
       "badge": "Balanced",
       "description": "8 hours. Neutral coin/XP choice for a predictable return schedule. Launch-ready design; asset QA required.",
@@ -574,7 +623,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 11
@@ -618,8 +666,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 395,
-      "preview_xp": 86,
-      "companion": false,
+      "preview_xp": 984,
       "sale_coins": [
         0,
         133,
@@ -629,10 +676,10 @@
       ],
       "sale_xp": [
         0,
-        8,
-        34,
-        60,
-        86
+        98,
+        393,
+        688,
+        984
       ],
       "badge": "Collection",
       "description": "20 hours. Distinctive journal/scene choice; no hidden collection-stat multiplier. Launch-ready design; asset QA required.",
@@ -640,7 +687,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 12
@@ -684,8 +730,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 204,
-      "preview_xp": 50,
-      "companion": false,
+      "preview_xp": 686,
       "sale_coins": [
         0,
         68,
@@ -695,10 +740,10 @@
       ],
       "sale_xp": [
         0,
-        5,
-        20,
-        35,
-        50
+        68,
+        274,
+        480,
+        686
       ],
       "badge": "XP Specialist",
       "description": "8 hours. Trades 10% base coin output for 10% base XP; no premium prerequisite. Launch-ready design; asset QA required.",
@@ -706,7 +751,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 13
@@ -750,8 +794,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 908,
-      "preview_xp": 180,
-      "companion": false,
+      "preview_xp": 2575,
       "sale_coins": [
         0,
         305,
@@ -761,10 +804,10 @@
       ],
       "sale_xp": [
         0,
-        18,
-        72,
-        126,
-        180
+        257,
+        1030,
+        1802,
+        2575
       ],
       "badge": "Payout",
       "description": "44 hours. Long cycle produces a larger single settlement, not a superior daily rate. Launch-ready design; asset QA required.",
@@ -772,7 +815,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 14
@@ -816,8 +858,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 56,
-      "preview_xp": 13,
-      "companion": false,
+      "preview_xp": 202,
       "sale_coins": [
         0,
         18,
@@ -827,10 +868,10 @@
       ],
       "sale_xp": [
         0,
-        1,
-        5,
-        9,
-        13
+        20,
+        80,
+        141,
+        202
       ],
       "badge": "XP Specialist",
       "description": "2 hours. Trades 10% base coin output for 10% base XP; no premium prerequisite. Launch-ready design; asset QA required.",
@@ -838,7 +879,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 15
@@ -882,8 +922,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 280,
-      "preview_xp": 43,
-      "companion": false,
+      "preview_xp": 696,
       "sale_coins": [
         0,
         94,
@@ -893,10 +932,10 @@
       ],
       "sale_xp": [
         0,
-        4,
-        17,
-        30,
-        43
+        69,
+        278,
+        487,
+        696
       ],
       "badge": "Coin Specialist",
       "description": "8 hours. Trades 10% base XP for 10% base coin output; schedule choice still matters. Launch-ready design; asset QA required.",
@@ -904,7 +943,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 16
@@ -948,8 +986,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 503,
-      "preview_xp": 92,
-      "companion": false,
+      "preview_xp": 1560,
       "sale_coins": [
         0,
         169,
@@ -959,10 +996,10 @@
       ],
       "sale_xp": [
         0,
-        9,
-        36,
-        64,
-        92
+        156,
+        624,
+        1092,
+        1560
       ],
       "badge": "Balanced",
       "description": "20 hours. Neutral coin/XP choice for a predictable return schedule. Launch-ready design; asset QA required.",
@@ -970,7 +1007,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 17
@@ -1014,8 +1050,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 1044,
-      "preview_xp": 188,
-      "companion": false,
+      "preview_xp": 3303,
       "sale_coins": [
         0,
         351,
@@ -1025,10 +1060,10 @@
       ],
       "sale_xp": [
         0,
-        18,
-        75,
-        131,
-        188
+        330,
+        1321,
+        2312,
+        3303
       ],
       "badge": "Convenience",
       "description": "44 hours. Longer unattended cycle; no absence penalty and no special care requirement. Launch-ready design; asset QA required.",
@@ -1036,7 +1071,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 18
@@ -1080,8 +1114,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 557,
-      "preview_xp": 95,
-      "companion": false,
+      "preview_xp": 1848,
       "sale_coins": [
         0,
         187,
@@ -1091,10 +1124,10 @@
       ],
       "sale_xp": [
         0,
-        9,
-        38,
-        66,
-        95
+        184,
+        739,
+        1293,
+        1848
       ],
       "badge": "Collection",
       "description": "20 hours. Distinctive journal/scene choice; no hidden collection-stat multiplier. Launch-ready design; asset QA required.",
@@ -1102,7 +1135,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 19
@@ -1146,8 +1178,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 642,
-      "preview_xp": 87,
-      "companion": false,
+      "preview_xp": 1793,
       "sale_coins": [
         0,
         216,
@@ -1157,10 +1188,10 @@
       ],
       "sale_xp": [
         0,
-        8,
-        34,
-        60,
-        87
+        179,
+        717,
+        1255,
+        1793
       ],
       "badge": "Coin Specialist",
       "description": "20 hours. Trades 10% base XP for 10% base coin output; schedule choice still matters. Launch-ready design; asset QA required.",
@@ -1168,7 +1199,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 20
@@ -1212,8 +1242,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 1236,
-      "preview_xp": 199,
-      "companion": false,
+      "preview_xp": 4323,
       "sale_coins": [
         0,
         416,
@@ -1223,10 +1252,10 @@
       ],
       "sale_xp": [
         0,
-        19,
-        79,
-        139,
-        199
+        432,
+        1729,
+        3026,
+        4323
       ],
       "badge": "Collection",
       "description": "44 hours. Distinctive journal/scene choice; no hidden collection-stat multiplier. Launch-ready design; asset QA required.",
@@ -1234,7 +1263,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 21
@@ -1278,8 +1306,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 91,
-      "preview_xp": 12,
-      "companion": false,
+      "preview_xp": 267,
       "sale_coins": [
         0,
         30,
@@ -1289,10 +1316,10 @@
       ],
       "sale_xp": [
         0,
-        1,
-        4,
-        8,
-        12
+        26,
+        106,
+        186,
+        267
       ],
       "badge": "Coin Specialist",
       "description": "2 hours. Trades 10% base XP for 10% base coin output; schedule choice still matters. Launch-ready design; asset QA required.",
@@ -1300,7 +1327,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 22
@@ -1344,8 +1370,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 746,
-      "preview_xp": 92,
-      "companion": false,
+      "preview_xp": 2246,
       "sale_coins": [
         0,
         251,
@@ -1355,10 +1380,10 @@
       ],
       "sale_xp": [
         0,
-        9,
-        36,
-        64,
-        92
+        224,
+        898,
+        1572,
+        2246
       ],
       "badge": "Coin Specialist",
       "description": "20 hours. Trades 10% base XP for 10% base coin output; schedule choice still matters. Launch-ready design; asset QA required.",
@@ -1366,7 +1391,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 23
@@ -1410,8 +1434,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 1260,
-      "preview_xp": 230,
-      "companion": false,
+      "preview_xp": 5717,
       "sale_coins": [
         0,
         425,
@@ -1421,10 +1444,10 @@
       ],
       "sale_xp": [
         0,
-        23,
-        92,
-        161,
-        230
+        571,
+        2286,
+        4001,
+        5717
       ],
       "badge": "XP Specialist",
       "description": "44 hours. Trades 10% base coin output for 10% base XP; no premium prerequisite. Launch-ready design; asset QA required.",
@@ -1432,7 +1455,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 24
@@ -1476,8 +1498,7 @@
       "coin_factor_bps": 12500,
       "xp_factor_bps": 12500,
       "preview_profit": 16,
-      "preview_xp": 2,
-      "companion": false,
+      "preview_xp": 51,
       "sale_coins": [
         0,
         5,
@@ -1487,10 +1508,10 @@
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        1,
-        2
+        5,
+        20,
+        35,
+        51
       ],
       "badge": "Coin Specialist",
       "description": "20 minutes. Trades 10% base XP for 10% base coin output; schedule choice still matters. Launch-ready design; asset QA required.",
@@ -1498,7 +1519,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 25
@@ -1542,8 +1562,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 381,
-      "preview_xp": 55,
-      "companion": false,
+      "preview_xp": 1448,
       "sale_coins": [
         0,
         128,
@@ -1553,10 +1572,10 @@
       ],
       "sale_xp": [
         0,
-        5,
-        22,
-        38,
-        55
+        144,
+        579,
+        1013,
+        1448
       ],
       "badge": "Balanced",
       "description": "8 hours. Neutral coin/XP choice for a predictable return schedule. Launch-ready design; asset QA required.",
@@ -1564,7 +1583,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 26
@@ -1608,8 +1626,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 1536,
-      "preview_xp": 217,
-      "companion": false,
+      "preview_xp": 5926,
       "sale_coins": [
         0,
         517,
@@ -1619,10 +1636,10 @@
       ],
       "sale_xp": [
         0,
-        21,
-        86,
-        151,
-        217
+        592,
+        2370,
+        4148,
+        5926
       ],
       "badge": "Prestige",
       "description": "44 hours. Capstone visual collection goal; rarity grants no hidden fish or decor power. Launch-ready design; asset QA required.",
@@ -1630,7 +1647,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 27
@@ -1674,8 +1690,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 773,
-      "preview_xp": 108,
-      "companion": false,
+      "preview_xp": 3000,
       "sale_coins": [
         0,
         260,
@@ -1685,10 +1700,10 @@
       ],
       "sale_xp": [
         0,
-        10,
-        43,
-        75,
-        108
+        300,
+        1200,
+        2100,
+        3000
       ],
       "badge": "Collection",
       "description": "20 hours. Distinctive journal/scene choice; no hidden collection-stat multiplier. Launch-ready design; asset QA required.",
@@ -1696,7 +1711,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 28
@@ -1740,8 +1754,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 374,
-      "preview_xp": 63,
-      "companion": false,
+      "preview_xp": 1798,
       "sale_coins": [
         0,
         126,
@@ -1751,10 +1764,10 @@
       ],
       "sale_xp": [
         0,
-        6,
-        25,
-        44,
-        63
+        179,
+        719,
+        1258,
+        1798
       ],
       "badge": "XP Specialist",
       "description": "8 hours. Trades 10% base coin output for 10% base XP; no premium prerequisite. Launch-ready design; asset QA required.",
@@ -1762,7 +1775,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 29
@@ -1806,8 +1818,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 1673,
-      "preview_xp": 225,
-      "companion": false,
+      "preview_xp": 6655,
       "sale_coins": [
         0,
         564,
@@ -1817,10 +1828,10 @@
       ],
       "sale_xp": [
         0,
-        22,
-        90,
-        157,
-        225
+        665,
+        2662,
+        4658,
+        6655
       ],
       "badge": "Payout",
       "description": "44 hours. Long cycle produces a larger single settlement, not a superior daily rate. Launch-ready design; asset QA required.",
@@ -1828,7 +1839,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 30
@@ -1872,8 +1882,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 170,
-      "preview_xp": 42,
-      "companion": false,
+      "preview_xp": 324,
       "sale_coins": [
         0,
         57,
@@ -1883,10 +1892,10 @@
       ],
       "sale_xp": [
         0,
-        4,
-        16,
-        29,
-        42
+        32,
+        129,
+        226,
+        324
       ],
       "badge": "Balanced",
       "description": "8 hours. Neutral coin/XP choice for a predictable return schedule. Launch-ready design; asset QA required.",
@@ -1894,7 +1903,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 31
@@ -1938,8 +1946,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 354,
-      "preview_xp": 83,
-      "companion": false,
+      "preview_xp": 768,
       "sale_coins": [
         0,
         119,
@@ -1949,10 +1956,10 @@
       ],
       "sale_xp": [
         0,
-        8,
-        33,
-        58,
-        83
+        76,
+        307,
+        537,
+        768
       ],
       "badge": "Balanced",
       "description": "20 hours. Neutral coin/XP choice for a predictable return schedule. Launch-ready design; asset QA required.",
@@ -1960,7 +1967,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 32
@@ -2004,8 +2010,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 771,
-      "preview_xp": 172,
-      "companion": false,
+      "preview_xp": 1846,
       "sale_coins": [
         0,
         260,
@@ -2015,10 +2020,10 @@
       ],
       "sale_xp": [
         0,
-        17,
-        68,
-        120,
-        172
+        184,
+        738,
+        1292,
+        1846
       ],
       "badge": "Convenience",
       "description": "44 hours. Longer unattended cycle; no absence penalty and no special care requirement. Disabled until its release/content gate is approved.",
@@ -2026,7 +2031,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 33
@@ -2070,8 +2074,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 53,
-      "preview_xp": 11,
-      "companion": false,
+      "preview_xp": 137,
       "sale_coins": [
         0,
         17,
@@ -2081,10 +2084,10 @@
       ],
       "sale_xp": [
         0,
-        1,
-        4,
-        7,
-        11
+        13,
+        54,
+        95,
+        137
       ],
       "badge": "Balanced",
       "description": "2 hours. Neutral coin/XP choice for a predictable return schedule. Launch-ready design; asset QA required.",
@@ -2092,7 +2095,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 34
@@ -2136,8 +2138,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 853,
-      "preview_xp": 176,
-      "companion": false,
+      "preview_xp": 2283,
       "sale_coins": [
         0,
         287,
@@ -2147,10 +2148,10 @@
       ],
       "sale_xp": [
         0,
-        17,
-        70,
-        123,
-        176
+        228,
+        913,
+        1598,
+        2283
       ],
       "badge": "Payout",
       "description": "44 hours. Long cycle produces a larger single settlement, not a superior daily rate. Launch-ready design; asset QA required.",
@@ -2158,7 +2159,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 35
@@ -2202,8 +2202,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 462,
-      "preview_xp": 90,
-      "companion": false,
+      "preview_xp": 1344,
       "sale_coins": [
         0,
         156,
@@ -2213,10 +2212,10 @@
       ],
       "sale_xp": [
         0,
-        9,
-        36,
-        63,
-        90
+        134,
+        537,
+        940,
+        1344
       ],
       "badge": "Balanced",
       "description": "20 hours. Neutral coin/XP choice for a predictable return schedule. Launch-ready design; asset QA required.",
@@ -2224,7 +2223,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 36
@@ -2268,8 +2266,7 @@
       "coin_factor_bps": 12500,
       "xp_factor_bps": 12500,
       "preview_profit": 12,
-      "preview_xp": 2,
-      "companion": false,
+      "preview_xp": 32,
       "sale_coins": [
         0,
         5,
@@ -2279,10 +2276,10 @@
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        1,
-        2
+        3,
+        12,
+        22,
+        32
       ],
       "badge": "Coin Specialist",
       "description": "20 minutes. Trades 10% base XP for 10% base coin output; schedule choice still matters. Launch-ready design; asset QA required.",
@@ -2290,7 +2287,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 37
@@ -2334,8 +2330,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 282,
-      "preview_xp": 49,
-      "companion": false,
+      "preview_xp": 924,
       "sale_coins": [
         0,
         95,
@@ -2345,10 +2340,10 @@
       ],
       "sale_xp": [
         0,
-        4,
-        19,
-        34,
-        49
+        92,
+        369,
+        646,
+        924
       ],
       "badge": "Balanced",
       "description": "8 hours. Neutral coin/XP choice for a predictable return schedule. Launch-ready design; asset QA required.",
@@ -2356,7 +2351,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 38
@@ -2400,8 +2394,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 1154,
-      "preview_xp": 194,
-      "companion": false,
+      "preview_xp": 3886,
       "sale_coins": [
         0,
         389,
@@ -2411,10 +2404,10 @@
       ],
       "sale_xp": [
         0,
-        19,
-        77,
-        135,
-        194
+        388,
+        1554,
+        2720,
+        3886
       ],
       "badge": "Payout",
       "description": "44 hours. Long cycle produces a larger single settlement, not a superior daily rate. Disabled until its release/content gate is approved.",
@@ -2422,7 +2415,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 39
@@ -2466,8 +2458,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 597,
-      "preview_xp": 98,
-      "companion": false,
+      "preview_xp": 2064,
       "sale_coins": [
         0,
         200,
@@ -2477,10 +2468,10 @@
       ],
       "sale_xp": [
         0,
-        9,
-        39,
-        68,
-        98
+        206,
+        825,
+        1444,
+        2064
       ],
       "badge": "Balanced",
       "description": "20 hours. Neutral coin/XP choice for a predictable return schedule. Launch-ready design; asset QA required.",
@@ -2488,7 +2479,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 40
@@ -2532,8 +2522,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 81,
-      "preview_xp": 13,
-      "companion": false,
+      "preview_xp": 287,
       "sale_coins": [
         0,
         27,
@@ -2543,10 +2532,10 @@
       ],
       "sale_xp": [
         0,
-        1,
-        5,
-        9,
-        13
+        28,
+        114,
+        200,
+        287
       ],
       "badge": "Balanced",
       "description": "2 hours. Neutral coin/XP choice for a predictable return schedule. Launch-ready design; asset QA required.",
@@ -2554,7 +2543,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 41
@@ -2598,8 +2586,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 339,
-      "preview_xp": 52,
-      "companion": false,
+      "preview_xp": 1223,
       "sale_coins": [
         0,
         113,
@@ -2609,10 +2596,10 @@
       ],
       "sale_xp": [
         0,
-        5,
-        20,
-        36,
-        52
+        122,
+        489,
+        856,
+        1223
       ],
       "badge": "Balanced",
       "description": "8 hours. Neutral coin/XP choice for a predictable return schedule. Launch-ready design; asset QA required.",
@@ -2620,7 +2607,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 42
@@ -2664,8 +2650,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 346,
-      "preview_xp": 53,
-      "companion": false,
+      "preview_xp": 1260,
       "sale_coins": [
         0,
         116,
@@ -2675,10 +2660,10 @@
       ],
       "sale_xp": [
         0,
-        5,
-        21,
-        37,
-        53
+        126,
+        504,
+        882,
+        1260
       ],
       "badge": "Collection",
       "description": "8 hours. Distinctive journal/scene choice; no hidden collection-stat multiplier. Launch-ready design; asset QA required.",
@@ -2686,7 +2671,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 43
@@ -2730,8 +2714,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 1427,
-      "preview_xp": 210,
-      "companion": false,
+      "preview_xp": 5343,
       "sale_coins": [
         0,
         481,
@@ -2741,10 +2724,10 @@
       ],
       "sale_xp": [
         0,
-        21,
-        84,
-        147,
-        210
+        534,
+        2137,
+        3740,
+        5343
       ],
       "badge": "Convenience",
       "description": "44 hours. Longer unattended cycle; no absence penalty and no special care requirement. Disabled until its release/content gate is approved.",
@@ -2752,7 +2735,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 44
@@ -2796,8 +2778,7 @@
       "coin_factor_bps": 12500,
       "xp_factor_bps": 12500,
       "preview_profit": 16,
-      "preview_xp": 2,
-      "companion": false,
+      "preview_xp": 50,
       "sale_coins": [
         0,
         5,
@@ -2807,10 +2788,10 @@
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        1,
-        2
+        5,
+        20,
+        35,
+        50
       ],
       "badge": "Coin Specialist",
       "description": "20 minutes. Trades 10% base XP for 10% base coin output; schedule choice still matters. Disabled until its release/content gate is approved.",
@@ -2818,7 +2799,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 45
@@ -2862,8 +2842,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 388,
-      "preview_xp": 55,
-      "companion": false,
+      "preview_xp": 1485,
       "sale_coins": [
         0,
         130,
@@ -2873,10 +2852,10 @@
       ],
       "sale_xp": [
         0,
-        5,
-        22,
-        38,
-        55
+        148,
+        594,
+        1039,
+        1485
       ],
       "badge": "Collection",
       "description": "8 hours. Distinctive journal/scene choice; no hidden collection-stat multiplier. Launch-ready design; asset QA required.",
@@ -2884,7 +2863,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 46
@@ -2928,8 +2906,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 746,
-      "preview_xp": 106,
-      "companion": false,
+      "preview_xp": 2856,
       "sale_coins": [
         0,
         251,
@@ -2939,10 +2916,10 @@
       ],
       "sale_xp": [
         0,
-        10,
-        42,
-        74,
-        106
+        285,
+        1142,
+        1999,
+        2856
       ],
       "badge": "Collection",
       "description": "20 hours. Distinctive journal/scene choice; no hidden collection-stat multiplier. Disabled until its release/content gate is approved.",
@@ -2950,7 +2927,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 47
@@ -2994,8 +2970,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 1591,
-      "preview_xp": 220,
-      "companion": false,
+      "preview_xp": 6218,
       "sale_coins": [
         0,
         537,
@@ -3005,10 +2980,10 @@
       ],
       "sale_xp": [
         0,
-        22,
-        88,
-        154,
-        220
+        621,
+        2487,
+        4352,
+        6218
       ],
       "badge": "Convenience",
       "description": "44 hours. Longer unattended cycle; no absence penalty and no special care requirement. Launch-ready design; asset QA required.",
@@ -3016,7 +2991,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 48
@@ -3060,8 +3034,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 786,
-      "preview_xp": 109,
-      "companion": false,
+      "preview_xp": 3072,
       "sale_coins": [
         0,
         265,
@@ -3071,10 +3044,10 @@
       ],
       "sale_xp": [
         0,
-        10,
-        43,
-        76,
-        109
+        307,
+        1228,
+        2150,
+        3072
       ],
       "badge": "Collection",
       "description": "20 hours. Distinctive journal/scene choice; no hidden collection-stat multiplier. Disabled until its release/content gate is approved.",
@@ -3082,7 +3055,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 49
@@ -3126,8 +3098,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 116,
-      "preview_xp": 13,
-      "companion": false,
+      "preview_xp": 376,
       "sale_coins": [
         0,
         38,
@@ -3137,10 +3108,10 @@
       ],
       "sale_xp": [
         0,
-        1,
-        5,
-        9,
-        13
+        37,
+        150,
+        263,
+        376
       ],
       "badge": "Coin Specialist",
       "description": "2 hours. Trades 10% base XP for 10% base coin output; schedule choice still matters. Launch-ready design; asset QA required.",
@@ -3148,7 +3119,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 50
@@ -3192,8 +3162,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 1673,
-      "preview_xp": 225,
-      "companion": false,
+      "preview_xp": 6655,
       "sale_coins": [
         0,
         564,
@@ -3203,10 +3172,10 @@
       ],
       "sale_xp": [
         0,
-        22,
-        90,
-        157,
-        225
+        665,
+        2662,
+        4658,
+        6655
       ],
       "badge": "Payout",
       "description": "44 hours. Long cycle produces a larger single settlement, not a superior daily rate. Disabled until its release/content gate is approved.",
@@ -3214,7 +3183,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 51
@@ -3258,8 +3226,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 1809,
-      "preview_xp": 233,
-      "companion": false,
+      "preview_xp": 7384,
       "sale_coins": [
         0,
         609,
@@ -3269,10 +3236,10 @@
       ],
       "sale_xp": [
         0,
-        23,
-        93,
-        163,
-        233
+        738,
+        2953,
+        5168,
+        7384
       ],
       "badge": "Payout",
       "description": "44 hours. Long cycle produces a larger single settlement, not a superior daily rate. Disabled until its release/content gate is approved.",
@@ -3280,7 +3247,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 52
@@ -3324,8 +3290,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 130,
-      "preview_xp": 14,
-      "companion": false,
+      "preview_xp": 435,
       "sale_coins": [
         0,
         44,
@@ -3335,10 +3300,10 @@
       ],
       "sale_xp": [
         0,
-        1,
-        5,
-        9,
-        14
+        43,
+        174,
+        304,
+        435
       ],
       "badge": "Coin Specialist",
       "description": "2 hours. Trades 10% base XP for 10% base coin output; schedule choice still matters. Disabled until its release/content gate is approved.",
@@ -3346,7 +3311,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 53
@@ -3390,8 +3354,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 921,
-      "preview_xp": 117,
-      "companion": false,
+      "preview_xp": 3792,
       "sale_coins": [
         0,
         310,
@@ -3401,10 +3364,10 @@
       ],
       "sale_xp": [
         0,
-        11,
-        46,
-        81,
-        117
+        379,
+        1516,
+        2654,
+        3792
       ],
       "badge": "Balanced",
       "description": "20 hours. Neutral coin/XP choice for a predictable return schedule. Disabled until its release/content gate is approved.",
@@ -3412,7 +3375,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 54
@@ -3456,8 +3418,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 935,
-      "preview_xp": 118,
-      "companion": false,
+      "preview_xp": 3864,
       "sale_coins": [
         0,
         315,
@@ -3467,10 +3428,10 @@
       ],
       "sale_xp": [
         0,
-        11,
-        47,
-        82,
-        118
+        386,
+        1545,
+        2704,
+        3864
       ],
       "badge": "Balanced",
       "description": "20 hours. Neutral coin/XP choice for a predictable return schedule. Disabled until its release/content gate is approved.",
@@ -3478,7 +3439,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 55
@@ -3522,8 +3482,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 137,
-      "preview_xp": 14,
-      "companion": false,
+      "preview_xp": 469,
       "sale_coins": [
         0,
         45,
@@ -3533,10 +3492,10 @@
       ],
       "sale_xp": [
         0,
-        1,
-        5,
-        9,
-        14
+        46,
+        187,
+        328,
+        469
       ],
       "badge": "Coin Specialist",
       "description": "2 hours. Trades 10% base XP for 10% base coin output; schedule choice still matters. Disabled until its release/content gate is approved.",
@@ -3544,7 +3503,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 56
@@ -3588,8 +3546,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 507,
-      "preview_xp": 62,
-      "companion": false,
+      "preview_xp": 2122,
       "sale_coins": [
         0,
         170,
@@ -3599,10 +3556,10 @@
       ],
       "sale_xp": [
         0,
-        6,
-        24,
-        43,
-        62
+        212,
+        848,
+        1485,
+        2122
       ],
       "badge": "Balanced",
       "description": "8 hours. Neutral coin/XP choice for a predictable return schedule. Disabled until its release/content gate is approved.",
@@ -3610,7 +3567,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 57
@@ -3654,8 +3610,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 989,
-      "preview_xp": 121,
-      "companion": false,
+      "preview_xp": 4152,
       "sale_coins": [
         0,
         332,
@@ -3665,10 +3620,10 @@
       ],
       "sale_xp": [
         0,
-        12,
-        48,
-        84,
-        121
+        415,
+        1660,
+        2906,
+        4152
       ],
       "badge": "Balanced",
       "description": "20 hours. Neutral coin/XP choice for a predictable return schedule. Disabled until its release/content gate is approved.",
@@ -3676,7 +3631,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 58
@@ -3720,8 +3674,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 2028,
-      "preview_xp": 246,
-      "companion": false,
+      "preview_xp": 8549,
       "sale_coins": [
         0,
         683,
@@ -3731,10 +3684,10 @@
       ],
       "sale_xp": [
         0,
-        24,
-        98,
-        172,
-        246
+        854,
+        3419,
+        5984,
+        8549
       ],
       "badge": "Convenience",
       "description": "44 hours. Longer unattended cycle; no absence penalty and no special care requirement. Disabled until its release/content gate is approved.",
@@ -3742,7 +3695,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 59
@@ -3786,8 +3738,7 @@
       "coin_factor_bps": 12500,
       "xp_factor_bps": 12500,
       "preview_profit": 23,
-      "preview_xp": 2,
-      "companion": false,
+      "preview_xp": 81,
       "sale_coins": [
         0,
         7,
@@ -3797,10 +3748,10 @@
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        1,
-        2
+        8,
+        32,
+        56,
+        81
       ],
       "badge": "Coin Specialist",
       "description": "20 minutes. Trades 10% base XP for 10% base coin output; schedule choice still matters. Disabled until its release/content gate is approved.",
@@ -3808,7 +3759,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 60
@@ -3852,8 +3802,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 535,
-      "preview_xp": 64,
-      "companion": false,
+      "preview_xp": 2271,
       "sale_coins": [
         0,
         180,
@@ -3863,10 +3812,10 @@
       ],
       "sale_xp": [
         0,
-        6,
-        25,
-        44,
-        64
+        227,
+        908,
+        1589,
+        2271
       ],
       "badge": "Balanced",
       "description": "8 hours. Neutral coin/XP choice for a predictable return schedule. Disabled until its release/content gate is approved.",
@@ -3874,7 +3823,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 61
@@ -3918,8 +3866,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 1043,
-      "preview_xp": 124,
-      "companion": false,
+      "preview_xp": 4440,
       "sale_coins": [
         0,
         351,
@@ -3929,10 +3876,10 @@
       ],
       "sale_xp": [
         0,
-        12,
-        49,
-        86,
-        124
+        444,
+        1776,
+        3108,
+        4440
       ],
       "badge": "Balanced",
       "description": "20 hours. Neutral coin/XP choice for a predictable return schedule. Disabled until its release/content gate is approved.",
@@ -3940,7 +3887,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 62
@@ -3984,8 +3930,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 2137,
-      "preview_xp": 253,
-      "companion": false,
+      "preview_xp": 9132,
       "sale_coins": [
         0,
         720,
@@ -3995,10 +3940,10 @@
       ],
       "sale_xp": [
         0,
-        25,
-        101,
-        177,
-        253
+        913,
+        3652,
+        6392,
+        9132
       ],
       "badge": "Payout",
       "description": "44 hours. Long cycle produces a larger single settlement, not a superior daily rate. Disabled until its release/content gate is approved.",
@@ -4006,7 +3951,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 63
@@ -4050,8 +3994,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 153,
-      "preview_xp": 15,
-      "companion": false,
+      "preview_xp": 536,
       "sale_coins": [
         0,
         51,
@@ -4061,10 +4004,10 @@
       ],
       "sale_xp": [
         0,
-        1,
-        6,
-        10,
-        15
+        53,
+        214,
+        375,
+        536
       ],
       "badge": "Coin Specialist",
       "description": "2 hours. Trades 10% base XP for 10% base coin output; schedule choice still matters. Disabled until its release/content gate is approved.",
@@ -4072,7 +4015,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 64
@@ -4116,8 +4058,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 1083,
-      "preview_xp": 126,
-      "companion": false,
+      "preview_xp": 4656,
       "sale_coins": [
         0,
         365,
@@ -4127,10 +4068,10 @@
       ],
       "sale_xp": [
         0,
-        12,
-        50,
-        88,
-        126
+        465,
+        1862,
+        3259,
+        4656
       ],
       "badge": "Balanced",
       "description": "20 hours. Neutral coin/XP choice for a predictable return schedule. Disabled until its release/content gate is approved.",
@@ -4138,7 +4079,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 65
@@ -4182,8 +4122,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 1097,
-      "preview_xp": 127,
-      "companion": false,
+      "preview_xp": 4728,
       "sale_coins": [
         0,
         369,
@@ -4193,10 +4132,10 @@
       ],
       "sale_xp": [
         0,
-        12,
-        50,
-        88,
-        127
+        472,
+        1891,
+        3309,
+        4728
       ],
       "badge": "Balanced",
       "description": "20 hours. Neutral coin/XP choice for a predictable return schedule. Disabled until its release/content gate is approved.",
@@ -4204,7 +4143,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 66
@@ -4248,8 +4186,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 2247,
-      "preview_xp": 259,
-      "companion": false,
+      "preview_xp": 9715,
       "sale_coins": [
         0,
         757,
@@ -4259,10 +4196,10 @@
       ],
       "sale_xp": [
         0,
-        25,
-        103,
-        181,
-        259
+        971,
+        3886,
+        6800,
+        9715
       ],
       "badge": "Payout",
       "description": "44 hours. Long cycle produces a larger single settlement, not a superior daily rate. Disabled until its release/content gate is approved.",
@@ -4270,7 +4207,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 67
@@ -4314,8 +4250,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 161,
-      "preview_xp": 15,
-      "companion": false,
+      "preview_xp": 570,
       "sale_coins": [
         0,
         54,
@@ -4325,10 +4260,10 @@
       ],
       "sale_xp": [
         0,
-        1,
-        6,
-        10,
-        15
+        57,
+        228,
+        399,
+        570
       ],
       "badge": "Coin Specialist",
       "description": "2 hours. Trades 10% base XP for 10% base coin output; schedule choice still matters. Disabled until its release/content gate is approved.",
@@ -4336,7 +4271,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 68
@@ -4380,8 +4314,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 591,
-      "preview_xp": 67,
-      "companion": false,
+      "preview_xp": 2571,
       "sale_coins": [
         0,
         199,
@@ -4391,10 +4324,10 @@
       ],
       "sale_xp": [
         0,
-        6,
-        26,
-        46,
-        67
+        257,
+        1028,
+        1799,
+        2571
       ],
       "badge": "Balanced",
       "description": "8 hours. Neutral coin/XP choice for a predictable return schedule. Disabled until its release/content gate is approved.",
@@ -4402,7 +4335,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 69
@@ -4446,8 +4378,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 1151,
-      "preview_xp": 130,
-      "companion": false,
+      "preview_xp": 5016,
       "sale_coins": [
         0,
         388,
@@ -4457,10 +4388,10 @@
       ],
       "sale_xp": [
         0,
-        13,
-        52,
-        91,
-        130
+        501,
+        2006,
+        3511,
+        5016
       ],
       "badge": "Balanced",
       "description": "20 hours. Neutral coin/XP choice for a predictable return schedule. Disabled until its release/content gate is approved.",
@@ -4468,7 +4399,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 70
@@ -4512,8 +4442,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 2356,
-      "preview_xp": 266,
-      "companion": false,
+      "preview_xp": 10298,
       "sale_coins": [
         0,
         794,
@@ -4523,10 +4452,10 @@
       ],
       "sale_xp": [
         0,
-        26,
-        106,
-        186,
-        266
+        1029,
+        4119,
+        7208,
+        10298
       ],
       "badge": "Convenience",
       "description": "44 hours. Longer unattended cycle; no absence penalty and no special care requirement. Disabled until its release/content gate is approved.",
@@ -4534,7 +4463,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 71
@@ -4578,8 +4506,7 @@
       "coin_factor_bps": 12500,
       "xp_factor_bps": 12500,
       "preview_profit": 27,
-      "preview_xp": 2,
-      "companion": false,
+      "preview_xp": 97,
       "sale_coins": [
         0,
         8,
@@ -4589,10 +4516,10 @@
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        1,
-        2
+        9,
+        38,
+        67,
+        97
       ],
       "badge": "Coin Specialist",
       "description": "20 minutes. Trades 10% base XP for 10% base coin output; schedule choice still matters. Disabled until its release/content gate is approved.",
@@ -4600,7 +4527,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 72
@@ -4644,8 +4570,7 @@
       "coin_factor_bps": 13000,
       "xp_factor_bps": 13000,
       "preview_profit": 619,
-      "preview_xp": 69,
-      "companion": false,
+      "preview_xp": 2721,
       "sale_coins": [
         0,
         208,
@@ -4655,10 +4580,10 @@
       ],
       "sale_xp": [
         0,
-        6,
-        27,
-        48,
-        69
+        272,
+        1088,
+        1904,
+        2721
       ],
       "badge": "Balanced",
       "description": "8 hours. Neutral coin/XP choice for a predictable return schedule. Disabled until its release/content gate is approved.",
@@ -4666,7 +4591,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 73
@@ -4710,8 +4634,7 @@
       "coin_factor_bps": 10000,
       "xp_factor_bps": 10000,
       "preview_profit": 1205,
-      "preview_xp": 134,
-      "companion": false,
+      "preview_xp": 5304,
       "sale_coins": [
         0,
         405,
@@ -4721,10 +4644,10 @@
       ],
       "sale_xp": [
         0,
-        13,
-        53,
-        93,
-        134
+        530,
+        2121,
+        3712,
+        5304
       ],
       "badge": "Collection",
       "description": "20 hours. Distinctive journal/scene choice; no hidden collection-stat multiplier. Disabled until its release/content gate is approved.",
@@ -4732,7 +4655,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 74
@@ -4776,8 +4698,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 2465,
-      "preview_xp": 272,
-      "companion": false,
+      "preview_xp": 10881,
       "sale_coins": [
         0,
         831,
@@ -4787,10 +4708,10 @@
       ],
       "sale_xp": [
         0,
-        27,
-        108,
-        190,
-        272
+        1088,
+        4352,
+        7616,
+        10881
       ],
       "badge": "Payout",
       "description": "44 hours. Long cycle produces a larger single settlement, not a superior daily rate. Disabled until its release/content gate is approved.",
@@ -4798,7 +4719,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 75
@@ -4842,8 +4762,7 @@
       "coin_factor_bps": 9200,
       "xp_factor_bps": 9200,
       "preview_profit": 2493,
-      "preview_xp": 274,
-      "companion": false,
+      "preview_xp": 11027,
       "sale_coins": [
         0,
         840,
@@ -4853,10 +4772,10 @@
       ],
       "sale_xp": [
         0,
-        27,
-        109,
-        191,
-        274
+        1102,
+        4410,
+        7718,
+        11027
       ],
       "badge": "Payout",
       "description": "44 hours. Long cycle produces a larger single settlement, not a superior daily rate. Disabled until its release/content gate is approved.",
@@ -4864,7 +4783,6 @@
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": false,
       "source": {
         "sheet": "Coin Fish",
         "row": 76
@@ -4896,41 +4814,40 @@
       "rarity": "premium",
       "level": 2,
       "release_gate": "Launch",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
-      "currency": "gift",
-      "price": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
+      "currency": "pearls",
+      "price": 1,
+      "cached_price": 0,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 41,
+      "preview_xp": 72,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        4,
+        16,
+        28,
+        41
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        7,
+        28,
+        50,
+        72
       ],
-      "badge": "Companion",
+      "badge": "Premium",
       "description": "Wobbling bubble cheeks - instantly adorable",
       "length": 58,
       "event_configured": true,
       "annual": false,
-      "one_time": true,
-      "non_resellable": true,
+      "one_time": false,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 5
@@ -4945,41 +4862,40 @@
       "rarity": "premium",
       "level": 5,
       "release_gate": "Launch",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
-      "price": 18,
+      "price": 3,
+      "cached_price": 18,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 46,
+      "preview_xp": 100,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        4,
+        18,
+        32,
+        46
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        10,
+        40,
+        70,
+        100
       ],
-      "badge": "Companion",
+      "badge": "Premium",
       "description": "Painted silk pattern, unique per fish",
       "length": 58,
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 6
@@ -4994,41 +4910,40 @@
       "rarity": "premium",
       "level": 8,
       "release_gate": "Launch",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
-      "price": 24,
+      "price": 4,
+      "cached_price": 24,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 51,
+      "preview_xp": 128,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        5,
+        20,
+        35,
+        51
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        12,
+        51,
+        89,
+        128
       ],
-      "badge": "Companion",
+      "badge": "Premium",
       "description": "Metallic white fins trailing like a gown",
       "length": 58,
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 7
@@ -5043,41 +4958,40 @@
       "rarity": "premium",
       "level": 10,
       "release_gate": "Launch",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
-      "price": 24,
+      "price": 4,
+      "cached_price": 24,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 55,
+      "preview_xp": 147,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        5,
+        22,
+        38,
+        55
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        14,
+        58,
+        102,
+        147
       ],
-      "badge": "Companion",
+      "badge": "Premium",
       "description": "Psychedelic orange-and-blue swirls",
       "length": 58,
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 8
@@ -5092,41 +5006,40 @@
       "rarity": "premium",
       "level": 12,
       "release_gate": "Launch",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
-      "price": 30,
+      "price": 5,
+      "cached_price": 30,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 58,
+      "preview_xp": 165,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        5,
+        23,
+        40,
+        58
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        16,
+        66,
+        115,
+        165
       ],
-      "badge": "Companion",
+      "badge": "Premium",
       "description": "Pink smiling face with feathery gills",
       "length": 58,
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 9
@@ -5141,41 +5054,40 @@
       "rarity": "premium",
       "level": 16,
       "release_gate": "Launch",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
-      "price": 35,
+      "price": 6,
+      "cached_price": 35,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 65,
+      "preview_xp": 203,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        6,
+        26,
+        45,
+        65
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        20,
+        81,
+        142,
+        203
       ],
-      "badge": "Companion",
+      "badge": "Premium",
       "description": "Bioluminescent cheek lights that blink in the dark",
       "length": 58,
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 10
@@ -5190,41 +5102,40 @@
       "rarity": "premium",
       "level": 20,
       "release_gate": "Launch",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
-      "price": 45,
+      "price": 8,
+      "cached_price": 45,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 72,
+      "preview_xp": 240,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        7,
+        28,
+        50,
+        72
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        24,
+        96,
+        168,
+        240
       ],
-      "badge": "Companion",
+      "badge": "Premium",
       "description": "Gleaming dragon scales - Asian 'lucky' fish",
       "length": 58,
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 11
@@ -5239,41 +5150,40 @@
       "rarity": "premium",
       "level": 25,
       "release_gate": "Launch",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
-      "price": 50,
+      "price": 9,
+      "cached_price": 50,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 81,
+      "preview_xp": 287,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        8,
+        32,
+        56,
+        81
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        28,
+        114,
+        200,
+        287
       ],
-      "badge": "Companion",
+      "badge": "Premium",
       "description": "Candy-cane stripes",
       "length": 58,
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 12
@@ -5288,41 +5198,40 @@
       "rarity": "premium",
       "level": 35,
       "release_gate": "Launch",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
-      "price": 70,
+      "price": 12,
+      "cached_price": 70,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 99,
+      "preview_xp": 381,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        9,
+        39,
+        69,
+        99
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        38,
+        152,
+        266,
+        381
       ],
-      "badge": "Companion",
+      "badge": "Premium",
       "description": "Galaxy-spotted black disc gliding on sand",
       "length": 58,
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 13
@@ -5337,41 +5246,40 @@
       "rarity": "premium",
       "level": 40,
       "release_gate": "Launch",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
-      "price": 80,
+      "price": 14,
+      "cached_price": 80,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 107,
+      "preview_xp": 427,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        10,
+        42,
+        74,
+        107
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        42,
+        170,
+        298,
+        427
       ],
-      "badge": "Companion",
+      "badge": "Premium",
       "description": "Pure-white dragon fish - one in a million",
       "length": 58,
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 14
@@ -5386,41 +5294,40 @@
       "rarity": "premium",
       "level": 5,
       "release_gate": "Reserve L1–40",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
-      "price": 18,
+      "price": 3,
+      "cached_price": 18,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 46,
+      "preview_xp": 100,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        4,
+        18,
+        32,
+        46
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        10,
+        40,
+        70,
+        100
       ],
-      "badge": "Companion",
+      "badge": "Premium",
       "description": "Warm gold seahorse with a curled tail; gentle hovering and head tilts.",
       "length": 58,
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 15
@@ -5435,41 +5342,40 @@
       "rarity": "premium",
       "level": 8,
       "release_gate": "Reserve L1–40",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
-      "price": 20,
+      "price": 4,
+      "cached_price": 20,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 51,
+      "preview_xp": 128,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        5,
+        20,
+        35,
+        51
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        12,
+        51,
+        89,
+        128
       ],
-      "badge": "Companion",
+      "badge": "Premium",
       "description": "Translucent rounded catfish with a readable luminous outline and visible stylized spine.",
       "length": 58,
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 16
@@ -5484,41 +5390,40 @@
       "rarity": "premium",
       "level": 15,
       "release_gate": "Reserve L1–40",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
-      "price": 30,
+      "price": 5,
+      "cached_price": 30,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 64,
+      "preview_xp": 193,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        6,
+        25,
+        44,
+        64
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        19,
+        77,
+        135,
+        193
       ],
-      "badge": "Companion",
+      "badge": "Premium",
       "description": "Patterned drifting twig silhouette with playful fin flutter; original decorative palette.",
       "length": 58,
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 17
@@ -5533,41 +5438,40 @@
       "rarity": "premium",
       "level": 18,
       "release_gate": "Reserve L1–40",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
-      "price": 35,
+      "price": 6,
+      "cached_price": 35,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 69,
+      "preview_xp": 222,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        6,
+        27,
+        48,
+        69
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        22,
+        88,
+        155,
+        222
       ],
-      "badge": "Companion",
+      "badge": "Premium",
       "description": "Electric-blue ribbon body with gold accents; slow looping swim and curious face.",
       "length": 58,
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 18
@@ -5582,41 +5486,40 @@
       "rarity": "premium",
       "level": 22,
       "release_gate": "Reserve L1–40",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
-      "price": 45,
+      "price": 8,
+      "cached_price": 45,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 76,
+      "preview_xp": 259,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        7,
+        30,
+        53,
+        76
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        25,
+        103,
+        181,
+        259
       ],
-      "badge": "Companion",
+      "badge": "Premium",
       "description": "Round coral-colored companion with fin-walking motion; no productive advantage.",
       "length": 58,
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 19
@@ -5631,41 +5534,40 @@
       "rarity": "premium",
       "level": 28,
       "release_gate": "Reserve L1–40",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
-      "price": 50,
+      "price": 9,
+      "cached_price": 50,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 86,
+      "preview_xp": 315,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        8,
+        34,
+        60,
+        86
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        31,
+        126,
+        220,
+        315
       ],
-      "badge": "Companion",
+      "badge": "Premium",
       "description": "Leaf-shaped appendages sway softly around a clear seadragon silhouette; no speed bonus.",
       "length": 58,
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 20
@@ -5680,41 +5582,40 @@
       "rarity": "premium",
       "level": 30,
       "release_gate": "Reserve L1–40",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
-      "price": 55,
+      "price": 10,
+      "cached_price": 55,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 90,
+      "preview_xp": 334,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        9,
+        36,
+        63,
+        90
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        33,
+        133,
+        233,
+        334
       ],
-      "badge": "Companion",
+      "badge": "Premium",
       "description": "Rainbow armor plates and bright expressive eyes; safe restrained color shimmer.",
       "length": 58,
       "event_configured": true,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 21
@@ -5729,41 +5630,40 @@
       "rarity": "seasonal",
       "level": 5,
       "release_gate": "Event-gated",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
       "price": 0,
+      "cached_price": 0,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 46,
+      "preview_xp": 100,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        4,
+        18,
+        32,
+        46
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        10,
+        40,
+        70,
+        100
       ],
-      "badge": "Companion",
+      "badge": "Seasonal",
       "description": "Small pink-and-rose tetra with a heart-shaped tail silhouette; permanent seasonal keepsake.",
       "length": 58,
       "event_configured": false,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 22
@@ -5778,41 +5678,40 @@
       "rarity": "seasonal",
       "level": 8,
       "release_gate": "Event-gated",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
       "price": 0,
+      "cached_price": 0,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 51,
+      "preview_xp": 128,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        5,
+        20,
+        35,
+        51
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        12,
+        51,
+        89,
+        128
       ],
-      "badge": "Companion",
+      "badge": "Seasonal",
       "description": "Rounded emerald fish with clover-like fin accents and friendly gold freckles; no economic boost.",
       "length": 58,
       "event_configured": false,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 23
@@ -5827,41 +5726,40 @@
       "rarity": "seasonal",
       "level": 8,
       "release_gate": "Event-gated",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
       "price": 0,
+      "cached_price": 0,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 51,
+      "preview_xp": 128,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        5,
+        20,
+        35,
+        51
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        12,
+        51,
+        89,
+        128
       ],
-      "badge": "Companion",
+      "badge": "Seasonal",
       "description": "Warm white goldfish with pink blossom markings and softly fanning fins.",
       "length": 58,
       "event_configured": false,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 24
@@ -5876,41 +5774,40 @@
       "rarity": "seasonal",
       "level": 8,
       "release_gate": "Event-gated",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
       "price": 0,
+      "cached_price": 0,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 51,
+      "preview_xp": 128,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        5,
+        20,
+        35,
+        51
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        12,
+        51,
+        89,
+        128
       ],
-      "badge": "Companion",
+      "badge": "Seasonal",
       "description": "Bold warm-cool fin rays like a stylized celebration; no flashing firework effect.",
       "length": 58,
       "event_configured": false,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 25
@@ -5925,41 +5822,40 @@
       "rarity": "seasonal",
       "level": 8,
       "release_gate": "Event-gated",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
       "price": 0,
+      "cached_price": 0,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 51,
+      "preview_xp": 128,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        5,
+        20,
+        35,
+        51
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        12,
+        51,
+        89,
+        128
       ],
-      "badge": "Companion",
+      "badge": "Seasonal",
       "description": "Round orange puffer with a smiling carved-pumpkin motif; friendly rather than frightening.",
       "length": 58,
       "event_configured": false,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 26
@@ -5974,41 +5870,40 @@
       "rarity": "seasonal",
       "level": 8,
       "release_gate": "Event-gated",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
       "price": 0,
+      "cached_price": 0,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 51,
+      "preview_xp": 128,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        5,
+        20,
+        35,
+        51
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        12,
+        51,
+        89,
+        128
       ],
-      "badge": "Companion",
+      "badge": "Seasonal",
       "description": "Small midnight-purple squid with a cape-like fin spread and gentle moonlit trim; extended free reward.",
       "length": 58,
       "event_configured": false,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 27
@@ -6023,41 +5918,40 @@
       "rarity": "seasonal",
       "level": 5,
       "release_gate": "Event-gated",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
       "price": 0,
+      "cached_price": 0,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 46,
+      "preview_xp": 100,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        4,
+        18,
+        32,
+        46
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        10,
+        40,
+        70,
+        100
       ],
-      "badge": "Companion",
+      "badge": "Seasonal",
       "description": "Red-and-cream clownfish with a soft winter cap motif; slow playful wiggle.",
       "length": 58,
       "event_configured": false,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 28
@@ -6072,41 +5966,40 @@
       "rarity": "seasonal",
       "level": 8,
       "release_gate": "Event-gated",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
       "price": 0,
+      "cached_price": 0,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 51,
+      "preview_xp": 128,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        5,
+        20,
+        35,
+        51
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        12,
+        51,
+        89,
+        128
       ],
-      "badge": "Companion",
+      "badge": "Seasonal",
       "description": "Frost-blue angelfish with translucent scalloped fins; subtle static sparkle fallback.",
       "length": 58,
       "event_configured": false,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 29
@@ -6121,41 +6014,40 @@
       "rarity": "seasonal",
       "level": 8,
       "release_gate": "Event-gated",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
       "price": 0,
+      "cached_price": 0,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 51,
+      "preview_xp": 128,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        5,
+        20,
+        35,
+        51
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        12,
+        51,
+        89,
+        128
       ],
-      "badge": "Companion",
+      "badge": "Seasonal",
       "description": "Gold and red koi with a painted festive pattern; no currency conversion or lucky-stat effect.",
       "length": 58,
       "event_configured": false,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 30
@@ -6170,41 +6062,40 @@
       "rarity": "seasonal",
       "level": 3,
       "release_gate": "Event-gated",
-      "schedule_id": "",
-      "role": "Companion",
-      "coin_weight_bps": 0,
-      "xp_weight_bps": 0,
+      "schedule_id": "SC-2H",
+      "role": "Balanced",
+      "coin_weight_bps": 10000,
+      "xp_weight_bps": 10000,
       "currency": "pearls",
       "price": 0,
+      "cached_price": 0,
       "buy_xp": 0,
-      "duration_ms": 0,
-      "feed_ms": 43200000,
-      "coin_factor_bps": 0,
-      "xp_factor_bps": 0,
-      "preview_profit": 0,
-      "preview_xp": 0,
-      "companion": true,
+      "duration_ms": 7200000,
+      "feed_ms": 3600000,
+      "coin_factor_bps": 13000,
+      "xp_factor_bps": 13000,
+      "preview_profit": 43,
+      "preview_xp": 81,
       "sale_coins": [
         0,
-        0,
-        0,
-        0,
-        0
+        4,
+        17,
+        30,
+        43
       ],
       "sale_xp": [
         0,
-        0,
-        0,
-        0,
-        0
+        8,
+        32,
+        56,
+        81
       ],
-      "badge": "Companion",
+      "badge": "Seasonal",
       "description": "Rainbow fish with an anniversary ribbon motif; permanent free event reward, no year baked into art.",
       "length": 58,
       "event_configured": false,
       "annual": false,
       "one_time": false,
-      "non_resellable": true,
       "source": {
         "sheet": "Fish Collectibles",
         "row": 31
@@ -6215,7 +6106,7 @@
   ],
   "counts": {
     "coin": 72,
-    "companions": 27,
+    "pearl": 27,
     "launch_coin": 40
   },
   "levels": [
@@ -6468,10 +6359,10 @@
     {
       "id": "TK-01-15",
       "tank": 1,
-      "level": 3,
+      "level": 0,
       "added_slots": 5,
       "coins": 300,
-      "pearls": 3,
+      "pearls": 2,
       "prerequisite": "TK-01-10",
       "slots": 15
     },
@@ -6480,28 +6371,28 @@
       "tank": 2,
       "level": 7,
       "added_slots": 10,
-      "coins": 6500,
-      "pearls": 15,
+      "coins": 1500,
+      "pearls": 5,
       "prerequisite": "TK-01-10",
       "slots": 10
     },
     {
       "id": "TK-01-20",
       "tank": 1,
-      "level": 9,
+      "level": 0,
       "added_slots": 5,
-      "coins": 15000,
-      "pearls": 15,
+      "coins": 900,
+      "pearls": 3,
       "prerequisite": "TK-01-15",
       "slots": 20
     },
     {
       "id": "TK-02-15",
       "tank": 2,
-      "level": 12,
+      "level": 0,
       "added_slots": 5,
-      "coins": 40000,
-      "pearls": 25,
+      "coins": 450,
+      "pearls": 3,
       "prerequisite": "TK-02-10",
       "slots": 15
     },
@@ -6510,28 +6401,28 @@
       "tank": 3,
       "level": 16,
       "added_slots": 10,
-      "coins": 120000,
-      "pearls": 35,
+      "coins": 6000,
+      "pearls": 10,
       "prerequisite": "TK-02-10",
       "slots": 10
     },
     {
       "id": "TK-02-20",
       "tank": 2,
-      "level": 18,
+      "level": 0,
       "added_slots": 5,
-      "coins": 105000,
-      "pearls": 30,
+      "coins": 1350,
+      "pearls": 5,
       "prerequisite": "TK-02-15",
       "slots": 20
     },
     {
       "id": "TK-03-15",
       "tank": 3,
-      "level": 21,
+      "level": 0,
       "added_slots": 5,
-      "coins": 200000,
-      "pearls": 45,
+      "coins": 600,
+      "pearls": 4,
       "prerequisite": "TK-03-10",
       "slots": 15
     },
@@ -6540,28 +6431,28 @@
       "tank": 4,
       "level": 25,
       "added_slots": 10,
-      "coins": 300000,
-      "pearls": 55,
+      "coins": 15000,
+      "pearls": 15,
       "prerequisite": "TK-03-10",
       "slots": 10
     },
     {
       "id": "TK-03-20",
       "tank": 3,
-      "level": 28,
+      "level": 0,
       "added_slots": 5,
-      "coins": 350000,
-      "pearls": 50,
+      "coins": 1800,
+      "pearls": 6,
       "prerequisite": "TK-03-15",
       "slots": 20
     },
     {
       "id": "TK-04-15",
       "tank": 4,
-      "level": 30,
+      "level": 0,
       "added_slots": 5,
-      "coins": 300000,
-      "pearls": 60,
+      "coins": 750,
+      "pearls": 5,
       "prerequisite": "TK-04-10",
       "slots": 15
     },
@@ -6570,42 +6461,246 @@
       "tank": 5,
       "level": 34,
       "added_slots": 10,
-      "coins": 600000,
-      "pearls": 75,
+      "coins": 30000,
+      "pearls": 20,
       "prerequisite": "TK-04-10",
       "slots": 10
     },
     {
       "id": "TK-04-20",
       "tank": 4,
-      "level": 36,
+      "level": 0,
       "added_slots": 5,
-      "coins": 425000,
-      "pearls": 65,
+      "coins": 2250,
+      "pearls": 8,
       "prerequisite": "TK-04-15",
       "slots": 20
     },
     {
       "id": "TK-05-15",
       "tank": 5,
-      "level": 38,
+      "level": 0,
       "added_slots": 5,
-      "coins": 600000,
-      "pearls": 80,
+      "coins": 900,
+      "pearls": 6,
       "prerequisite": "TK-05-10",
       "slots": 15
     },
     {
       "id": "TK-05-20",
       "tank": 5,
-      "level": 40,
+      "level": 0,
       "added_slots": 5,
-      "coins": 700000,
-      "pearls": 85,
+      "coins": 2700,
+      "pearls": 9,
       "prerequisite": "TK-05-15",
       "slots": 20
+    },
+    {
+      "id": "TK-01-25",
+      "tank": 1,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 1800,
+      "pearls": 4,
+      "prerequisite": "TK-01-20",
+      "slots": 25
+    },
+    {
+      "id": "TK-01-30",
+      "tank": 1,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 3000,
+      "pearls": 5,
+      "prerequisite": "TK-01-25",
+      "slots": 30
+    },
+    {
+      "id": "TK-01-35",
+      "tank": 1,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 4500,
+      "pearls": 6,
+      "prerequisite": "TK-01-30",
+      "slots": 35
+    },
+    {
+      "id": "TK-01-40",
+      "tank": 1,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 6300,
+      "pearls": 7,
+      "prerequisite": "TK-01-35",
+      "slots": 40
+    },
+    {
+      "id": "TK-02-25",
+      "tank": 2,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 2700,
+      "pearls": 6,
+      "prerequisite": "TK-02-20",
+      "slots": 25
+    },
+    {
+      "id": "TK-02-30",
+      "tank": 2,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 4500,
+      "pearls": 8,
+      "prerequisite": "TK-02-25",
+      "slots": 30
+    },
+    {
+      "id": "TK-02-35",
+      "tank": 2,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 6750,
+      "pearls": 9,
+      "prerequisite": "TK-02-30",
+      "slots": 35
+    },
+    {
+      "id": "TK-02-40",
+      "tank": 2,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 9450,
+      "pearls": 11,
+      "prerequisite": "TK-02-35",
+      "slots": 40
+    },
+    {
+      "id": "TK-03-25",
+      "tank": 3,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 3600,
+      "pearls": 8,
+      "prerequisite": "TK-03-20",
+      "slots": 25
+    },
+    {
+      "id": "TK-03-30",
+      "tank": 3,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 6000,
+      "pearls": 10,
+      "prerequisite": "TK-03-25",
+      "slots": 30
+    },
+    {
+      "id": "TK-03-35",
+      "tank": 3,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 9000,
+      "pearls": 12,
+      "prerequisite": "TK-03-30",
+      "slots": 35
+    },
+    {
+      "id": "TK-03-40",
+      "tank": 3,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 12600,
+      "pearls": 14,
+      "prerequisite": "TK-03-35",
+      "slots": 40
+    },
+    {
+      "id": "TK-04-25",
+      "tank": 4,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 4500,
+      "pearls": 10,
+      "prerequisite": "TK-04-20",
+      "slots": 25
+    },
+    {
+      "id": "TK-04-30",
+      "tank": 4,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 7500,
+      "pearls": 13,
+      "prerequisite": "TK-04-25",
+      "slots": 30
+    },
+    {
+      "id": "TK-04-35",
+      "tank": 4,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 11250,
+      "pearls": 15,
+      "prerequisite": "TK-04-30",
+      "slots": 35
+    },
+    {
+      "id": "TK-04-40",
+      "tank": 4,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 15750,
+      "pearls": 18,
+      "prerequisite": "TK-04-35",
+      "slots": 40
+    },
+    {
+      "id": "TK-05-25",
+      "tank": 5,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 5400,
+      "pearls": 12,
+      "prerequisite": "TK-05-20",
+      "slots": 25
+    },
+    {
+      "id": "TK-05-30",
+      "tank": 5,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 9000,
+      "pearls": 15,
+      "prerequisite": "TK-05-25",
+      "slots": 30
+    },
+    {
+      "id": "TK-05-35",
+      "tank": 5,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 13500,
+      "pearls": 18,
+      "prerequisite": "TK-05-30",
+      "slots": 35
+    },
+    {
+      "id": "TK-05-40",
+      "tank": 5,
+      "level": 0,
+      "added_slots": 5,
+      "coins": 18900,
+      "pearls": 21,
+      "prerequisite": "TK-05-35",
+      "slots": 40
     }
   ],
+  "pearl_earning": {
+    "sales_target": 20,
+    "reward": 1
+  },
   "treasure": {
     "offers": [
       {
@@ -6797,7 +6892,49 @@
       }
     ],
     "reference_utilization_numerator": 5,
-    "reference_utilization_denominator": 6
+    "reference_utilization_denominator": 6,
+    "reference_slots_by_level": [
+      10,
+      10,
+      15,
+      15,
+      15,
+      15,
+      25,
+      25,
+      30,
+      30,
+      30,
+      35,
+      35,
+      35,
+      35,
+      45,
+      45,
+      50,
+      50,
+      50,
+      55,
+      55,
+      55,
+      55,
+      65,
+      65,
+      65,
+      70,
+      70,
+      75,
+      75,
+      75,
+      75,
+      85,
+      85,
+      90,
+      90,
+      95,
+      95,
+      100
+    ]
   },
   "starter_species": [
     "neonTetra",
@@ -6817,7 +6954,7 @@
         "level": 1,
         "currency": "coins",
         "price": 25,
-        "buy_xp": 0,
+        "buy_xp": 3,
         "score": 10,
         "width": 0.9,
         "height": 0.65,
@@ -6864,7 +7001,7 @@
         "level": 2,
         "currency": "coins",
         "price": 70,
-        "buy_xp": 0,
+        "buy_xp": 7,
         "score": 10,
         "width": 1.2,
         "height": 0.8,
@@ -6911,7 +7048,7 @@
         "level": 3,
         "currency": "coins",
         "price": 110,
-        "buy_xp": 0,
+        "buy_xp": 11,
         "score": 10,
         "width": 1.1,
         "height": 1.05,
@@ -6958,7 +7095,7 @@
         "level": 4,
         "currency": "coins",
         "price": 305,
-        "buy_xp": 0,
+        "buy_xp": 31,
         "score": 20,
         "width": 1.5,
         "height": 1.9,
@@ -7005,7 +7142,7 @@
         "level": 5,
         "currency": "coins",
         "price": 320,
-        "buy_xp": 0,
+        "buy_xp": 32,
         "score": 20,
         "width": 1.2,
         "height": 1.8,
@@ -7052,7 +7189,7 @@
         "level": 6,
         "currency": "coins",
         "price": 330,
-        "buy_xp": 0,
+        "buy_xp": 33,
         "score": 20,
         "width": 1.55,
         "height": 1.35,
@@ -7099,7 +7236,7 @@
         "level": 7,
         "currency": "coins",
         "price": 570,
-        "buy_xp": 0,
+        "buy_xp": 57,
         "score": 20,
         "width": 1.8,
         "height": 1.1,
@@ -7146,7 +7283,7 @@
         "level": 8,
         "currency": "coins",
         "price": 1700,
-        "buy_xp": 0,
+        "buy_xp": 170,
         "score": 35,
         "width": 1.2,
         "height": 2.7,
@@ -7193,7 +7330,7 @@
         "level": 9,
         "currency": "coins",
         "price": 2110,
-        "buy_xp": 0,
+        "buy_xp": 211,
         "score": 35,
         "width": 1.8,
         "height": 2.4,
@@ -7240,7 +7377,7 @@
         "level": 10,
         "currency": "coins",
         "price": 2180,
-        "buy_xp": 0,
+        "buy_xp": 218,
         "score": 35,
         "width": 1.5,
         "height": 2.2,
@@ -7287,7 +7424,7 @@
         "level": 12,
         "currency": "coins",
         "price": 2710,
-        "buy_xp": 0,
+        "buy_xp": 271,
         "score": 35,
         "width": 1.6,
         "height": 2.6,
@@ -7334,7 +7471,7 @@
         "level": 14,
         "currency": "coins",
         "price": 2870,
-        "buy_xp": 0,
+        "buy_xp": 287,
         "score": 35,
         "width": 2.5,
         "height": 3,
@@ -7381,7 +7518,7 @@
         "level": 16,
         "currency": "coins",
         "price": 3900,
-        "buy_xp": 0,
+        "buy_xp": 390,
         "score": 35,
         "width": 2.2,
         "height": 2,
@@ -7428,7 +7565,7 @@
         "level": 18,
         "currency": "coins",
         "price": 4565,
-        "buy_xp": 0,
+        "buy_xp": 457,
         "score": 35,
         "width": 2.4,
         "height": 2.7,
@@ -7475,7 +7612,7 @@
         "level": 20,
         "currency": "coins",
         "price": 4340,
-        "buy_xp": 0,
+        "buy_xp": 434,
         "score": 20,
         "width": 1.8,
         "height": 1.3,
@@ -7522,7 +7659,7 @@
         "level": 22,
         "currency": "coins",
         "price": 5005,
-        "buy_xp": 0,
+        "buy_xp": 501,
         "score": 20,
         "width": 1.8,
         "height": 1.6,
@@ -7569,7 +7706,7 @@
         "level": 24,
         "currency": "coins",
         "price": 9820,
-        "buy_xp": 0,
+        "buy_xp": 982,
         "score": 35,
         "width": 2.4,
         "height": 1.4,
@@ -7616,7 +7753,7 @@
         "level": 26,
         "currency": "coins",
         "price": 12120,
-        "buy_xp": 0,
+        "buy_xp": 1212,
         "score": 35,
         "width": 2.8,
         "height": 1.4,
@@ -7663,7 +7800,7 @@
         "level": 28,
         "currency": "coins",
         "price": 13605,
-        "buy_xp": 0,
+        "buy_xp": 1361,
         "score": 35,
         "width": 2.2,
         "height": 3,
@@ -7710,7 +7847,7 @@
         "level": 30,
         "currency": "coins",
         "price": 15170,
-        "buy_xp": 0,
+        "buy_xp": 1517,
         "score": 35,
         "width": 1.7,
         "height": 3.1,
@@ -7757,7 +7894,7 @@
         "level": 32,
         "currency": "coins",
         "price": 15760,
-        "buy_xp": 0,
+        "buy_xp": 1576,
         "score": 35,
         "width": 2.5,
         "height": 2.6,
@@ -7804,7 +7941,7 @@
         "level": 34,
         "currency": "coins",
         "price": 9885,
-        "buy_xp": 0,
+        "buy_xp": 989,
         "score": 20,
         "width": 1.8,
         "height": 1.4,
@@ -7851,7 +7988,7 @@
         "level": 36,
         "currency": "coins",
         "price": 23465,
-        "buy_xp": 0,
+        "buy_xp": 2347,
         "score": 35,
         "width": 2.8,
         "height": 3,
@@ -7898,7 +8035,7 @@
         "level": 38,
         "currency": "coins",
         "price": 25635,
-        "buy_xp": 0,
+        "buy_xp": 2564,
         "score": 35,
         "width": 2.8,
         "height": 3.2,
@@ -7945,7 +8082,7 @@
         "level": 40,
         "currency": "coins",
         "price": 44630,
-        "buy_xp": 0,
+        "buy_xp": 4463,
         "score": 50,
         "width": 3,
         "height": 3.5,
@@ -7992,7 +8129,7 @@
         "level": 44,
         "currency": "coins",
         "price": 29715,
-        "buy_xp": 0,
+        "buy_xp": 2972,
         "score": 35,
         "width": 2.4,
         "height": 2.2,
@@ -8039,7 +8176,7 @@
         "level": 48,
         "currency": "coins",
         "price": 31540,
-        "buy_xp": 0,
+        "buy_xp": 3154,
         "score": 35,
         "width": 2.7,
         "height": 3,
@@ -8086,7 +8223,7 @@
         "level": 52,
         "currency": "coins",
         "price": 53380,
-        "buy_xp": 0,
+        "buy_xp": 5338,
         "score": 50,
         "width": 2,
         "height": 3.4,
@@ -8133,7 +8270,7 @@
         "level": 56,
         "currency": "coins",
         "price": 56295,
-        "buy_xp": 0,
+        "buy_xp": 5630,
         "score": 50,
         "width": 3.1,
         "height": 3.4,
@@ -8180,7 +8317,7 @@
         "level": 60,
         "currency": "coins",
         "price": 59210,
-        "buy_xp": 0,
+        "buy_xp": 5921,
         "score": 50,
         "width": 3.8,
         "height": 3.4,
@@ -8227,7 +8364,7 @@
         "level": 65,
         "currency": "coins",
         "price": 75425,
-        "buy_xp": 0,
+        "buy_xp": 7543,
         "score": 50,
         "width": 3.8,
         "height": 3.5,
@@ -8274,7 +8411,7 @@
         "level": 70,
         "currency": "coins",
         "price": 79800,
-        "buy_xp": 0,
+        "buy_xp": 7980,
         "score": 50,
         "width": 3.4,
         "height": 4,
@@ -8321,7 +8458,7 @@
         "level": 1,
         "currency": "coins",
         "price": 70,
-        "buy_xp": 0,
+        "buy_xp": 7,
         "score": 10,
         "width": 1.1,
         "height": 0.65,
@@ -8368,7 +8505,7 @@
         "level": 2,
         "currency": "coins",
         "price": 70,
-        "buy_xp": 0,
+        "buy_xp": 7,
         "score": 10,
         "width": 0.95,
         "height": 0.8,
@@ -8415,7 +8552,7 @@
         "level": 3,
         "currency": "coins",
         "price": 110,
-        "buy_xp": 0,
+        "buy_xp": 11,
         "score": 10,
         "width": 1,
         "height": 1,
@@ -8462,7 +8599,7 @@
         "level": 4,
         "currency": "coins",
         "price": 305,
-        "buy_xp": 0,
+        "buy_xp": 31,
         "score": 20,
         "width": 1.8,
         "height": 1.2,
@@ -8509,7 +8646,7 @@
         "level": 5,
         "currency": "coins",
         "price": 320,
-        "buy_xp": 0,
+        "buy_xp": 32,
         "score": 20,
         "width": 1.1,
         "height": 1.4,
@@ -8556,7 +8693,7 @@
         "level": 6,
         "currency": "coins",
         "price": 330,
-        "buy_xp": 0,
+        "buy_xp": 33,
         "score": 20,
         "width": 1.8,
         "height": 1.3,
@@ -8603,7 +8740,7 @@
         "level": 7,
         "currency": "coins",
         "price": 570,
-        "buy_xp": 0,
+        "buy_xp": 57,
         "score": 20,
         "width": 1.5,
         "height": 1.4,
@@ -8650,7 +8787,7 @@
         "level": 8,
         "currency": "coins",
         "price": 905,
-        "buy_xp": 0,
+        "buy_xp": 91,
         "score": 20,
         "width": 1.4,
         "height": 1.8,
@@ -8697,7 +8834,7 @@
         "level": 9,
         "currency": "coins",
         "price": 1125,
-        "buy_xp": 0,
+        "buy_xp": 113,
         "score": 20,
         "width": 2,
         "height": 1.4,
@@ -8744,7 +8881,7 @@
         "level": 10,
         "currency": "coins",
         "price": 2180,
-        "buy_xp": 0,
+        "buy_xp": 218,
         "score": 35,
         "width": 2.4,
         "height": 1.4,
@@ -8791,7 +8928,7 @@
         "level": 11,
         "currency": "coins",
         "price": 1200,
-        "buy_xp": 0,
+        "buy_xp": 120,
         "score": 20,
         "width": 1.8,
         "height": 0.7,
@@ -8838,7 +8975,7 @@
         "level": 13,
         "currency": "coins",
         "price": 1490,
-        "buy_xp": 0,
+        "buy_xp": 149,
         "score": 20,
         "width": 1.9,
         "height": 2,
@@ -8885,7 +9022,7 @@
         "level": 15,
         "currency": "coins",
         "price": 1575,
-        "buy_xp": 0,
+        "buy_xp": 158,
         "score": 20,
         "width": 1.8,
         "height": 1.8,
@@ -8932,7 +9069,7 @@
         "level": 17,
         "currency": "coins",
         "price": 4005,
-        "buy_xp": 0,
+        "buy_xp": 401,
         "score": 35,
         "width": 2.3,
         "height": 2.7,
@@ -8979,7 +9116,7 @@
         "level": 19,
         "currency": "coins",
         "price": 7940,
-        "buy_xp": 0,
+        "buy_xp": 794,
         "score": 35,
         "width": 2.5,
         "height": 2.5,
@@ -9026,7 +9163,7 @@
         "level": 21,
         "currency": "coins",
         "price": 9170,
-        "buy_xp": 0,
+        "buy_xp": 917,
         "score": 35,
         "width": 2.5,
         "height": 2.3,
@@ -9073,7 +9210,7 @@
         "level": 23,
         "currency": "coins",
         "price": 5120,
-        "buy_xp": 0,
+        "buy_xp": 512,
         "score": 20,
         "width": 1.9,
         "height": 1.2,
@@ -9120,7 +9257,7 @@
         "level": 25,
         "currency": "coins",
         "price": 11865,
-        "buy_xp": 0,
+        "buy_xp": 1187,
         "score": 35,
         "width": 2.3,
         "height": 2.5,
@@ -9167,7 +9304,7 @@
         "level": 27,
         "currency": "coins",
         "price": 12375,
-        "buy_xp": 0,
+        "buy_xp": 1238,
         "score": 35,
         "width": 2.3,
         "height": 2.7,
@@ -9214,7 +9351,7 @@
         "level": 29,
         "currency": "coins",
         "price": 13880,
-        "buy_xp": 0,
+        "buy_xp": 1388,
         "score": 35,
         "width": 2.8,
         "height": 2.1,
@@ -9261,7 +9398,7 @@
         "level": 31,
         "currency": "coins",
         "price": 15465,
-        "buy_xp": 0,
+        "buy_xp": 1547,
         "score": 35,
         "width": 2.7,
         "height": 2.6,
@@ -9308,7 +9445,7 @@
         "level": 33,
         "currency": "coins",
         "price": 16060,
-        "buy_xp": 0,
+        "buy_xp": 1606,
         "score": 35,
         "width": 2.5,
         "height": 1.8,
@@ -9355,7 +9492,7 @@
         "level": 35,
         "currency": "coins",
         "price": 21775,
-        "buy_xp": 0,
+        "buy_xp": 2178,
         "score": 35,
         "width": 3,
         "height": 3.1,
@@ -9402,7 +9539,7 @@
         "level": 37,
         "currency": "coins",
         "price": 23875,
-        "buy_xp": 0,
+        "buy_xp": 2388,
         "score": 35,
         "width": 2.8,
         "height": 2.4,
@@ -9449,7 +9586,7 @@
         "level": 39,
         "currency": "coins",
         "price": 41705,
-        "buy_xp": 0,
+        "buy_xp": 4171,
         "score": 50,
         "width": 3.5,
         "height": 2.6,
@@ -9496,7 +9633,7 @@
         "level": 42,
         "currency": "coins",
         "price": 28805,
-        "buy_xp": 0,
+        "buy_xp": 2881,
         "score": 35,
         "width": 2.8,
         "height": 3,
@@ -9543,7 +9680,7 @@
         "level": 46,
         "currency": "coins",
         "price": 49005,
-        "buy_xp": 0,
+        "buy_xp": 4901,
         "score": 50,
         "width": 3.6,
         "height": 3.4,
@@ -9590,7 +9727,7 @@
         "level": 50,
         "currency": "coins",
         "price": 51920,
-        "buy_xp": 0,
+        "buy_xp": 5192,
         "score": 50,
         "width": 3.9,
         "height": 3,
@@ -9637,7 +9774,7 @@
         "level": 54,
         "currency": "coins",
         "price": 54835,
-        "buy_xp": 0,
+        "buy_xp": 5484,
         "score": 50,
         "width": 3.4,
         "height": 3.8,
@@ -9684,7 +9821,7 @@
         "level": 58,
         "currency": "coins",
         "price": 57755,
-        "buy_xp": 0,
+        "buy_xp": 5776,
         "score": 50,
         "width": 4,
         "height": 3.4,
@@ -9731,7 +9868,7 @@
         "level": 64,
         "currency": "coins",
         "price": 74550,
-        "buy_xp": 0,
+        "buy_xp": 7455,
         "score": 50,
         "width": 2.6,
         "height": 4,
@@ -9778,7 +9915,7 @@
         "level": 68,
         "currency": "coins",
         "price": 78050,
-        "buy_xp": 0,
+        "buy_xp": 7805,
         "score": 50,
         "width": 4.2,
         "height": 4.1,
@@ -9825,7 +9962,7 @@
         "level": 4,
         "currency": "pearls",
         "price": 12,
-        "buy_xp": 0,
+        "buy_xp": 120,
         "score": 20,
         "width": 1.5,
         "height": 1.4,
@@ -9878,7 +10015,7 @@
         "level": 7,
         "currency": "pearls",
         "price": 18,
-        "buy_xp": 0,
+        "buy_xp": 180,
         "score": 35,
         "width": 1.4,
         "height": 2.3,
@@ -9931,7 +10068,7 @@
         "level": 10,
         "currency": "pearls",
         "price": 18,
-        "buy_xp": 0,
+        "buy_xp": 180,
         "score": 35,
         "width": 1.6,
         "height": 2.2,
@@ -9984,7 +10121,7 @@
         "level": 13,
         "currency": "pearls",
         "price": 12,
-        "buy_xp": 0,
+        "buy_xp": 120,
         "score": 20,
         "width": 2,
         "height": 2,
@@ -10041,7 +10178,7 @@
         "level": 16,
         "currency": "pearls",
         "price": 18,
-        "buy_xp": 0,
+        "buy_xp": 180,
         "score": 35,
         "width": 1.8,
         "height": 2.6,
@@ -10094,7 +10231,7 @@
         "level": 20,
         "currency": "pearls",
         "price": 12,
-        "buy_xp": 0,
+        "buy_xp": 120,
         "score": 20,
         "width": 1.8,
         "height": 1,
@@ -10147,7 +10284,7 @@
         "level": 24,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 1.6,
         "height": 2.7,
@@ -10204,7 +10341,7 @@
         "level": 28,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 2.5,
         "height": 2.6,
@@ -10257,7 +10394,7 @@
         "level": 32,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 2.6,
         "height": 3,
@@ -10310,7 +10447,7 @@
         "level": 36,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 2.8,
         "height": 2.6,
@@ -10363,7 +10500,7 @@
         "level": 40,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 3.2,
         "height": 3.2,
@@ -10416,7 +10553,7 @@
         "level": 45,
         "currency": "pearls",
         "price": 28,
-        "buy_xp": 0,
+        "buy_xp": 280,
         "score": 50,
         "width": 2.9,
         "height": 3.7,
@@ -10469,7 +10606,7 @@
         "level": 50,
         "currency": "pearls",
         "price": 28,
-        "buy_xp": 0,
+        "buy_xp": 280,
         "score": 50,
         "width": 2.3,
         "height": 3.8,
@@ -10522,7 +10659,7 @@
         "level": 55,
         "currency": "pearls",
         "price": 30,
-        "buy_xp": 0,
+        "buy_xp": 300,
         "score": 50,
         "width": 3.3,
         "height": 3.6,
@@ -10575,7 +10712,7 @@
         "level": 60,
         "currency": "pearls",
         "price": 30,
-        "buy_xp": 0,
+        "buy_xp": 300,
         "score": 50,
         "width": 3.6,
         "height": 3.8,
@@ -10628,7 +10765,7 @@
         "level": 70,
         "currency": "pearls",
         "price": 30,
-        "buy_xp": 0,
+        "buy_xp": 300,
         "score": 50,
         "width": 4,
         "height": 4.2,
@@ -10681,7 +10818,7 @@
         "level": 4,
         "currency": "pearls",
         "price": 12,
-        "buy_xp": 0,
+        "buy_xp": 120,
         "score": 20,
         "width": 1.6,
         "height": 1.2,
@@ -10738,7 +10875,7 @@
         "level": 8,
         "currency": "pearls",
         "price": 12,
-        "buy_xp": 0,
+        "buy_xp": 120,
         "score": 20,
         "width": 1.5,
         "height": 1.8,
@@ -10791,7 +10928,7 @@
         "level": 12,
         "currency": "pearls",
         "price": 18,
-        "buy_xp": 0,
+        "buy_xp": 180,
         "score": 35,
         "width": 1.7,
         "height": 2.1,
@@ -10850,7 +10987,7 @@
         "level": 15,
         "currency": "pearls",
         "price": 12,
-        "buy_xp": 0,
+        "buy_xp": 120,
         "score": 20,
         "width": 1.9,
         "height": 1.5,
@@ -10907,7 +11044,7 @@
         "level": 18,
         "currency": "pearls",
         "price": 18,
-        "buy_xp": 0,
+        "buy_xp": 180,
         "score": 35,
         "width": 2.3,
         "height": 2.6,
@@ -10960,7 +11097,7 @@
         "level": 22,
         "currency": "pearls",
         "price": 18,
-        "buy_xp": 0,
+        "buy_xp": 180,
         "score": 35,
         "width": 2.5,
         "height": 2.1,
@@ -11013,7 +11150,7 @@
         "level": 26,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 2.5,
         "height": 2.8,
@@ -11066,7 +11203,7 @@
         "level": 30,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 2.5,
         "height": 2.3,
@@ -11125,7 +11262,7 @@
         "level": 34,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 2.8,
         "height": 2.8,
@@ -11178,7 +11315,7 @@
         "level": 38,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 2.7,
         "height": 2.3,
@@ -11235,7 +11372,7 @@
         "level": 40,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 3,
         "height": 3,
@@ -11288,7 +11425,7 @@
         "level": 43,
         "currency": "pearls",
         "price": 28,
-        "buy_xp": 0,
+        "buy_xp": 280,
         "score": 50,
         "width": 2.3,
         "height": 3.4,
@@ -11343,7 +11480,7 @@
         "level": 48,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 3,
         "height": 2.4,
@@ -11400,7 +11537,7 @@
         "level": 53,
         "currency": "pearls",
         "price": 30,
-        "buy_xp": 0,
+        "buy_xp": 300,
         "score": 50,
         "width": 3.2,
         "height": 3.6,
@@ -11453,7 +11590,7 @@
         "level": 62,
         "currency": "pearls",
         "price": 30,
-        "buy_xp": 0,
+        "buy_xp": 300,
         "score": 50,
         "width": 3.8,
         "height": 4,
@@ -11506,7 +11643,7 @@
         "level": 68,
         "currency": "pearls",
         "price": 30,
-        "buy_xp": 0,
+        "buy_xp": 300,
         "score": 50,
         "width": 3,
         "height": 4.2,
@@ -11559,7 +11696,7 @@
         "level": 10,
         "currency": "coins",
         "price": 3700,
-        "buy_xp": 0,
+        "buy_xp": 370,
         "score": 35,
         "width": 1.7,
         "height": 2.3,
@@ -11606,7 +11743,7 @@
         "level": 10,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 2.5,
         "height": 2.7,
@@ -11659,7 +11796,7 @@
         "level": 5,
         "currency": "coins",
         "price": 490,
-        "buy_xp": 0,
+        "buy_xp": 49,
         "score": 20,
         "width": 1.8,
         "height": 1,
@@ -11706,7 +11843,7 @@
         "level": 5,
         "currency": "pearls",
         "price": 12,
-        "buy_xp": 0,
+        "buy_xp": 120,
         "score": 20,
         "width": 1.8,
         "height": 2,
@@ -11759,7 +11896,7 @@
         "level": 10,
         "currency": "coins",
         "price": 1975,
-        "buy_xp": 0,
+        "buy_xp": 198,
         "score": 20,
         "width": 1.9,
         "height": 1.2,
@@ -11806,7 +11943,7 @@
         "level": 10,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 2,
         "height": 2.1,
@@ -11863,7 +12000,7 @@
         "level": 8,
         "currency": "coins",
         "price": 905,
-        "buy_xp": 0,
+        "buy_xp": 91,
         "score": 20,
         "width": 1.4,
         "height": 1.8,
@@ -11910,7 +12047,7 @@
         "level": 8,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 2.4,
         "height": 2.8,
@@ -11963,7 +12100,7 @@
         "level": 12,
         "currency": "coins",
         "price": 4590,
-        "buy_xp": 0,
+        "buy_xp": 459,
         "score": 35,
         "width": 1.8,
         "height": 2.4,
@@ -12010,7 +12147,7 @@
         "level": 12,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 2.2,
         "height": 1.9,
@@ -12069,7 +12206,7 @@
         "level": 15,
         "currency": "coins",
         "price": 2670,
-        "buy_xp": 0,
+        "buy_xp": 267,
         "score": 20,
         "width": 1.9,
         "height": 1.4,
@@ -12116,7 +12253,7 @@
         "level": 15,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 2.2,
         "height": 2.8,
@@ -12169,7 +12306,7 @@
         "level": 10,
         "currency": "coins",
         "price": 1975,
-        "buy_xp": 0,
+        "buy_xp": 198,
         "score": 20,
         "width": 2,
         "height": 1.8,
@@ -12216,7 +12353,7 @@
         "level": 10,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 1.9,
         "height": 2.5,
@@ -12269,7 +12406,7 @@
         "level": 18,
         "currency": "coins",
         "price": 4130,
-        "buy_xp": 0,
+        "buy_xp": 413,
         "score": 20,
         "width": 1.8,
         "height": 1.6,
@@ -12316,7 +12453,7 @@
         "level": 18,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 2.2,
         "height": 2.3,
@@ -12369,7 +12506,7 @@
         "level": 20,
         "currency": "coins",
         "price": 8140,
-        "buy_xp": 0,
+        "buy_xp": 814,
         "score": 35,
         "width": 2.2,
         "height": 2.2,
@@ -12416,7 +12553,7 @@
         "level": 20,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 2.8,
         "height": 2.9,
@@ -12469,7 +12606,7 @@
         "level": 12,
         "currency": "coins",
         "price": 2450,
-        "buy_xp": 0,
+        "buy_xp": 245,
         "score": 20,
         "width": 1.9,
         "height": 1.8,
@@ -12516,7 +12653,7 @@
         "level": 12,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 2,
         "height": 2.3,
@@ -12569,7 +12706,7 @@
         "level": 5,
         "currency": "coins",
         "price": 490,
-        "buy_xp": 0,
+        "buy_xp": 49,
         "score": 20,
         "width": 1.6,
         "height": 1.8,
@@ -12616,7 +12753,7 @@
         "level": 15,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 2.3,
         "height": 2.6,
@@ -12671,7 +12808,7 @@
         "level": 1,
         "currency": "coins",
         "price": 275,
-        "buy_xp": 0,
+        "buy_xp": 28,
         "score": 20,
         "width": 1.4,
         "height": 1.3,
@@ -12718,7 +12855,7 @@
         "level": 5,
         "currency": "pearls",
         "price": 20,
-        "buy_xp": 0,
+        "buy_xp": 200,
         "score": 35,
         "width": 2.2,
         "height": 2.2,
@@ -12873,7 +13010,7 @@
       }
     ],
     "tuning": {
-      "placed_limit": 32,
+      "placed_limit": 64,
       "animated_limit": 6,
       "emitter_limit": 2,
       "particle_limit": 6,
@@ -12945,7 +13082,7 @@
         null
       ],
       [
-        "Safe offline growth; mature fish settle once, then Keep or Rehome with the same payout. Paid companions and all decor are permanent, nonproducing cosmetics. Capacity can use coins OR pearls, with no mandatory friends.",
+        "Fish stay until sold. Favorite fish to protect them from sale. Selling pays once and removes the fish. Eggs and all fish share tank capacity. Premium fish and decor grant no sale rewards. Capacity costs coins OR pearls, with no required friends.",
         null,
         null,
         null,
@@ -13007,7 +13144,7 @@
         null
       ],
       [
-        "Gold cells are candidate tuning inputs; formulas update catalog/XP comparisons. Daily Ledger and progression scenarios are FROZEN simulation outputs. Editing Excel does not rerun player behavior. The companion Python model/config regenerates CSVs. Model Contract includes a numeric freshness warning; text/ID/rule changes also require a rerun.",
+        "Gold cells are tuning inputs; formulas update catalog/XP comparisons. Daily Ledger and progression scenarios are frozen baseline outputs. They need a rerun for the 18 September shared-capacity and favorite rules. Editing Excel does not rerun player behavior.",
         null,
         null,
         null,
@@ -13201,7 +13338,7 @@
       ],
       [],
       [
-        "HANDOFF • The .xlsx is the main specification. The companion ZIP preserves the original workbook and contains the exact baseline simulator, JSON config, extracted source cells, daily ledger CSV, summary CSV and validation output. Revised values are authored proposals dated 13 September 2026.",
+        "HANDOFF: This workbook is the main specification. Rules updated 18 September 2026: favorites protect fish; sales alone pay rewards; all fish share tank capacity. The companion package and simulation snapshots retain the 13 September baseline and need a rerun.",
         null,
         null,
         null,
@@ -13284,7 +13421,7 @@
         null,
         "CORE DAYS TO LEVEL 40",
         null,
-        "START / MAX GROWTH SLOTS",
+        "START / MAX FISH CAPACITY",
         null,
         null,
         1,
@@ -13355,11 +13492,11 @@
       [
         99,
         null,
-        "27 passed",
+        "26 passed",
         null,
         "NOT YET",
         null,
-        "CURRENT",
+        "STALE",
         null,
         null,
         6,
@@ -13398,7 +13535,7 @@
         13
       ],
       [
-        "The free path works in these actors: one or two visits a day, no ads and no purchases. Keeping favorites does not sacrifice payout. All 960 modeled daily cash balances reconcile. Runtime and player validation are still outstanding.",
+        "Baseline only: all 960 daily cash balances reconcile under the former rules. Shared tank capacity and favorites require a new simulation run. Fish retained in a tank use space and earn no sale reward until sold.",
         null,
         null,
         null,
@@ -13788,7 +13925,7 @@
         28
       ],
       [
-        "Test whether caring, keeping and decorating are enjoyable without extra rewards. Then validate the server ledger, asset manifest, real arrival patterns and mature D7/D30 cohorts. These simulations establish candidate pacing and cash solvency under assumptions—not an addictive-game or revenue guarantee.",
+        "Test care, favorites and decorating with players. Rerun balance scenarios with space reserved for favorite and premium fish, then validate arrival patterns and retention. Baseline simulations do not establish outcomes under the new rules.",
         null,
         null,
         null,
@@ -15206,7 +15343,7 @@
         "Premium Fish; Limited Edition",
         "Pearls buy coins and account XP through fish",
         "Premium 'cosmetics' are economically productive and undermine the stated positioning.",
-        "Permanent nonproducing companions; no settlement, XP or slot advantage.",
+        "Premium fish arrive as adults, grant no sale rewards and use one normal tank space.",
         "All collectible economic fields equal zero.",
         "Observed conflict",
         "Spec revised / verify runtime"
@@ -15228,7 +15365,7 @@
         "Tanks & Social; Economy Simulation",
         "Conflicting capacity arithmetic",
         "Different formulas and an extra eight slots produce incompatible balances.",
-        "One transaction table; 10 initial, 100 total launch growth slots, five tanks.",
+        "One capacity table: 10 initial fish spaces, 100 across five fully expanded tanks. All fish share these spaces.",
         "SUM(Tanks added slots)=100; owned capacity never exceeds authorized grants.",
         "Observed inconsistency",
         "Spec revised / verify runtime"
@@ -15240,7 +15377,7 @@
         "No complete onboarding cash/XP ledger",
         "Implementation can strand a new player or grant rewards twice.",
         "Scripted first growth, decoration, 80 tutorial XP and one level-2 grant.",
-        "End state: 731 coins, 80 XP, 1 pearl and four gifted growing fish.",
+        "End state: 731 coins, 80 XP, 1 pearl and four gifted fish.",
         "Design omission",
         "Spec revised / verify runtime"
       ],
@@ -15248,10 +15385,10 @@
         "A-12",
         "P1",
         "Coin Fish; Overview",
-        "Keeping favorites competes with income",
+        "Protecting favorite fish",
         "Selling beloved fish can make collection feel disposable.",
-        "At maturity: settle once, then Keep to Showcase or Rehome with identical payout.",
-        "Keeping never consumes a growth slot or creates a second payout.",
+        "Favorite fish to block sales. Fish stay until sold; selling pays once and removes the fish.",
+        "Favorites still use tank space. Favoriting grants no reward and creates no copy.",
         "Retention hypothesis",
         "Open validation"
       ],
@@ -15615,21 +15752,21 @@
       ],
       [
         "06",
-        "Maturity payoff",
-        "Batch-settle ready fish with a satisfying but skippable animation.",
-        "Atomic principal + profit + XP, once per instance.",
+        "Adult sale",
+        "Sell ready fish with a satisfying but skippable reward animation.",
+        "Pay principal + profit + XP once, then remove the sold fish.",
         "A readable reward and visible progress.",
         "Next level or chosen project is closer.",
         "fish_settlement"
       ],
       [
         "07",
-        "Keep or rehome",
-        "Keep a favorite as a permanent display copy or rehome it.",
-        "Identical settlement; Showcase is separate from production; free storage.",
-        "Attachment is not punished by loss of income.",
+        "Favorite a fish",
+        "Mark the heart to protect a fish from sale.",
+        "The same fish stays in its tank and uses one space. Favoriting grants no reward.",
+        "Players choose which fish to retain and which to sell.",
         "A personal collection grows alongside progression.",
-        "showcase_keep; fish_rehome"
+        "fish_favorite"
       ],
       [
         "08",
@@ -15720,11 +15857,11 @@
       ],
       [
         "R02",
-        "Production vs display",
-        "Separate object types",
-        "Growing fish occupy paid/unlocked growth capacity. Showcase fish and premium companions are nonproducing display ownership; no sell value, breeding or XP.",
-        "Coin Fish; Fish Collectibles",
-        "A kept fish never restarts growth"
+        "Fish ownership",
+        "One shared capacity",
+        "Eggs and all fish use normal tank space. Favorite fish remain the same fish and cannot be sold. Premium fish arrive as adults with no coin or XP sale reward.",
+        "Coin Fish; Fish Collectibles; Tanks",
+        "Favoriting does not pay, create a copy or free space."
       ],
       [
         "R03",
@@ -15736,9 +15873,9 @@
       ],
       [
         "R04",
-        "Adult settlement",
-        "One atomic claim",
-        "Adult payout = actual principal + snapshotted net profit. Adult XP = snapshotted XP. Keep and Rehome have identical settlement. Gift principal is zero.",
+        "Adult sale",
+        "One atomic sale",
+        "Selling pays actual principal + saved net profit and XP, then removes the fish. Retaining or favoriting grants no reward. Gift principal is zero.",
         "Coin Fish",
         "Unique fish instance settlement key"
       ],
@@ -15857,8 +15994,8 @@
       [
         "R19",
         "Free expression",
-        "Separate display budget",
-        "32 visible decor copies and 8 fish companions per tank; 6 concurrently animated props. These are free rendering limits, not paid capacity. Excess owned items stay in inventory.",
+        "Decor rendering limits",
+        "32 visible decor copies per tank; 6 animated props. Excess decor stays in inventory. All eggs and fish use the shared capacity in Tanks; there is no extra fish allowance.",
         "Decor Rules",
         "Reduced motion retains recognizability"
       ],
@@ -16092,7 +16229,7 @@
         "early_refund_share",
         0.95,
         "fraction",
-        "Principal returned on Junior / Young / Mature rehome. Eggs and Babies cannot be sold.",
+        "Principal returned on Junior / Young / Mature sale. Eggs and Babies cannot be sold.",
         "Proposal / v4",
         16
       ],
@@ -16434,10 +16571,10 @@
       ],
       [
         "showcase_slots",
-        8,
-        "visible companions",
-        "Free display slots per tank; no power; unlimited collection storage.",
-        "Proposal / v4",
+        0,
+        "retired slots",
+        "Retired. All eggs and fish use the shared capacity in Tanks. No extra fish spaces.",
+        "Removed 2026-09-18",
         59
       ],
       [
@@ -18816,7 +18953,7 @@
     ],
     "Fish Collectibles": [
       [
-        "PERMANENT FISH COMPANIONS",
+        "PREMIUM AND SEASONAL FISH",
         null,
         null,
         null,
@@ -18836,7 +18973,7 @@
         null
       ],
       [
-        "Premium / seasonal ownership is not consumed, does not produce Coins or XP, and is excluded from economic mastery. One visible copy per owned companion ID; freely store and move.",
+        "Premium and seasonal fish arrive as adults and use one normal tank space. They grant no sale rewards or economic mastery. Ownership is permanent; stored fish use no tank space and can return when space is available.",
         null,
         null,
         null,
@@ -18877,7 +19014,7 @@
       ],
       [
         "ID",
-        "Companion",
+        "Fish",
         "Edition",
         "Unlock level",
         "Release gate",
@@ -18888,7 +19025,7 @@
         "Buy XP",
         "Sell Coins",
         "Harvest XP",
-        "Production slots",
+        "Extra tank spaces",
         "Guaranteed route",
         "Visual hook",
         "Original price",
@@ -20926,7 +21063,7 @@
         null
       ],
       [
-        "Guaranteed path only. Optional extra purchases are excluded. Four gifted fish use zero cost basis; the kept tutorial fish occupies no growth slot.",
+        "Guaranteed path only. Optional purchases are excluded. Sell the tutorial adult for its reward; four gifted fish have zero principal. Fish stay until sold, and favorites protect fish from sale.",
         null,
         null,
         null,
@@ -20963,11 +21100,11 @@
         "Coin delta",
         "XP delta",
         "Pearl delta",
-        "Growing delta",
+        "Fish delta",
         "Coin balance",
         "Total XP",
         "Pearls",
-        "Growing fish",
+        "Fish in tank",
         "Implementation detail"
       ],
       [
@@ -21033,8 +21170,8 @@
       [
         "05",
         "1:20",
-        "Settle and choose Keep",
-        "Return 5 principal + 6 profit; keep display copy.",
+        "Sell the adult",
+        "Sell for 5 principal + 6 profit. Favorite other fish you want to retain.",
         11,
         10,
         0,
@@ -21959,7 +22096,7 @@
         "1 adult settlement",
         "Journal entry and free base portrait",
         "0",
-        "Actual adult instance only; no early rehome, premium fish or scripted tutorial instance."
+        "Actual adult sale only; no early sale, premium fish or scripted tutorial instance."
       ],
       [
         "MS-02",
@@ -21977,7 +22114,7 @@
         "10 adult settlements",
         "Alternate display pose / cosmetic palette option",
         "0",
-        "Variant is Showcase-only; not another productive species."
+        "Cosmetic variant of the same fish; no growth or sale reward change."
       ],
       [
         "MS-04",
@@ -22072,11 +22209,11 @@
       [
         "MS-06",
         "Duplicate safety",
-        "Kept Showcase copies",
-        "Same species can have favorites, not economic stacks",
-        "Free rename, favorite and hide",
+        "Favorite fish",
+        "Favorite protection belongs to the individual fish.",
+        "Free rename and favorite controls",
         0,
-        "Display capacity affects visibility only; no duplicate rewards from collection-screen actions."
+        "Favorites use normal tank space. Toggling favorite grants no coins or XP."
       ],
       [
         "MS-07",
@@ -22164,8 +22301,8 @@
       [
         "SO-06",
         "Token shop: 45",
-        "Companion accessory",
-        "Decorative bow / tiny hat for Showcase fish only.",
+        "Fish accessory",
+        "Decorative bow or tiny hat for owned fish; no growth or sale reward bonus.",
         "45 tokens; one-time ownership",
         "Preview the accessory on owned fish before purchase."
       ],
@@ -28204,7 +28341,7 @@
       [
         "DR05",
         "Free display limits",
-        "32 placed decor copies and 8 display companions per tank; unlimited owned inventory within safe storage limits.",
+        "32 placed decor copies per tank; extra decor stays in inventory. Fish share the capacity in Tanks, with no separate allowance.",
         "Limits are rendering budgets; do not sell additional productive power through them.",
         "Attempt beyond visible cap gives Store / Replace choice, never destroys ownership."
       ],
@@ -28327,7 +28464,7 @@
         "First session",
         "New owner",
         "Make the aquarium feel like theirs.",
-        "Keep a favorite, place a plant, choose a scene name and next schedule.",
+        "Favorite a fish, place a plant, choose a scene name and next schedule.",
         "A kept fish and a saved scene.",
         "Allow exit with safe progress.",
         "First scene saved; care interactions",
@@ -28337,7 +28474,7 @@
         "First return / D1",
         "Returning owner",
         "Discover a ready batch, not damage.",
-        "One clear batch reward, keep/rehome choice, a new achievable goal.",
+        "Clear sale rewards, favorite protection and a new achievable goal.",
         "Two sessions with a chosen next goal.",
         "No guilt copy or loss animation.",
         "Classic D1 + second-session activation",
@@ -28474,7 +28611,7 @@
         "UX02",
         "Fish info",
         "One readable popover",
-        "Anchor to selected fish, not inside its card. Show stage, exact ready time, principal, net gain, adult payout and XP; Keep/Settle appears when relevant.",
+        "Anchor the panel to the selected fish. Show growth, care, current sale coins and XP. A heart toggles favorite; one Sell button handles eligible fish.",
         "No decorative bubbles/plants in cards; no redundant pills or arrows overlapping."
       ],
       [
@@ -28495,7 +28632,7 @@
         "UX05",
         "Batch actions",
         "Reward without tap fatigue",
-        "Select ready fish, summarize aggregate principal / net gain / XP, default keep favorites and show explicit Rehome options.",
+        "Select eligible fish and show total sale coins and XP. Exclude eggs, Babies, favorites and fish with no sale rewards.",
         "One atomic batch transaction composed of per-instance idempotent settlements; skip animation."
       ],
       [
@@ -28579,14 +28716,14 @@
         "UX17",
         "Favorite fish",
         "Attachment-safe default",
-        "Favorite lock protects rehome actions; Keep converts to a nonproductive copy after settlement; no fish can be permanently lost by a mis-tap.",
+        "Favorites block sale. Fish stay until sold; favoriting does not convert them, grant rewards or free tank space.",
         "Explicit destructive action confirmation; storage alternative always visible."
       ],
       [
         "UX18",
         "Performance",
         "Budget on hardware",
-        "Profile worst-case 100 productive fish across five tanks, 32 visible decor and 8 companions in one viewed tank; only visible assets animate.",
+        "Profile 100 fish across five full tanks, up to 20 fish and 32 decor in the viewed tank. Only visible assets animate.",
         "Define minimum device matrix before launch; budgets in Art Production are hypotheses."
       ]
     ],
@@ -28629,7 +28766,7 @@
       [
         "MC02",
         "Starting state",
-        "After the guaranteed tutorial: 731 coins, 80 XP (L2), 1 pearl, 10 owned growth slots, 4 zero-principal gifted fish, CP-01 owned.",
+        "After the proposed tutorial: 731 coins, 80 XP (L2), 1 pearl, 10 fish spaces, 4 zero-principal gifted fish, CP-01 owned.",
         "Tutorial is shown separately in Onboarding; daily rows begin after it.",
         "The free accelerated tutorial fish never enters repeatable production."
       ],
@@ -28650,9 +28787,9 @@
       [
         "MC05",
         "Inventory",
-        "Every growing instance records ready time, principal, profit and XP. Ready fish pay once, only on the next visit. Gifts have principal zero.",
+        "Each normal fish records growth, principal, profit and XP. Rewards are paid only on sale, which removes the fish. Gifts have principal zero.",
         "No passive multi-cycle growth, feeding losses, death or hidden upkeep.",
-        "Keeping versus rehoming does not change the settlement economics."
+        "Favorites block sale and use tank space. The baseline does not model space reserved for retained fish."
       ],
       [
         "MC06",
@@ -28666,7 +28803,7 @@
         "Capacity",
         "Buy eligible, prerequisite-satisfied Tanks rows only when enough coins remain for one refill reserve. Paid-capacity actor uses the pearl alternative.",
         "Owned slots, actual expenditure and cash residuals are recorded.",
-        "Reference slots used for pricing are NOT treated as owned production."
+        "All fish share capacity. Baseline runs need to account for favorite and premium fish occupying spaces."
       ],
       [
         "MC08",
@@ -28762,7 +28899,7 @@
       [],
       [],
       [
-        "SNAPSHOT FRESHNESS | numeric tuning guard only; any text/rule/ID change still requires a rerun",
+        "SNAPSHOT FRESHNESS: baseline predates the 18 September favorite and shared-capacity rules; rerun required.",
         null,
         null,
         null,
@@ -28770,7 +28907,7 @@
       ],
       [
         "Current numeric checksum",
-        43877781.30816667
+        43877309.30816667
       ],
       [
         "Baseline checksum",
@@ -28778,7 +28915,7 @@
       ],
       [
         "Numeric status",
-        "CURRENT NUMERIC INPUTS"
+        "STALE - RERUN SIMULATION"
       ],
       [
         "Baseline config version",
@@ -30390,7 +30527,7 @@
         null
       ],
       [
-        "Time-to-level is elapsed time since tutorial completion. Fractional days preserve visit timing. Coin balances are not profit, revenue or retention.",
+        "Baseline from 13 September. Rerun for shared capacity and favorites. Time-to-level is measured from tutorial completion; coin balances are not profit, revenue or retention.",
         null,
         null,
         null,
@@ -30656,7 +30793,7 @@
         null
       ],
       [
-        "Frozen deterministic simulation output. Formula columns recompute cash reconciliation, not player behavior. Original tuning is shipped in the companion model config.",
+        "Frozen 13 September baseline. Rerun for shared capacity and favorites. Formula columns check cash reconciliation only; they do not rerun player behavior.",
         null,
         null,
         null,
@@ -62559,17 +62696,17 @@
       [
         "B09",
         "Economy",
-        "Companion economic fields",
+        "Premium rewards / extra capacity",
         0,
         0,
         "PASS",
-        "Premium/seasonal companions have zero buy XP, sell coins, harvest XP and production slots.",
+        "Premium fish grant no purchase XP, sale coins, sale XP or extra spaces. Each active fish uses one normal tank space.",
         "Paid capacity is separately disclosed convenience."
       ],
       [
         "B10",
         "Capacity",
-        "Total new-account growth slots",
+        "Total new-account fish spaces",
         100,
         100,
         "PASS",
@@ -62609,7 +62746,7 @@
       [
         "B14",
         "Tutorial",
-        "Gifted growing fish",
+        "Gifted fish",
         4,
         4,
         "PASS",
@@ -62740,11 +62877,11 @@
         "B27",
         "Snapshots",
         "Numeric tuning freshness",
+        "STALE - RERUN SIMULATION",
         "CURRENT NUMERIC INPUTS",
-        "CURRENT NUMERIC INPUTS",
-        "PASS",
+        "STALE",
         "Numeric checksum only; text/ID/rule edits also invalidate snapshots.",
-        "Run companion model after edits."
+        "Rerun the model for the 18 September favorite and shared-capacity rules."
       ],
       [
         "B28",
@@ -62967,7 +63104,7 @@
       [
         "EVENT",
         "fish_settlement",
-        "instance_id; species; stage; principal_returned; net_reward; XP; actual_wait; keep/rehome; request_id.",
+        "instance_id; species; stage; principal_returned; net_reward; XP; actual_wait; sale; request_id.",
         "Server only; one event per terminal fish.",
         "Required P0",
         "Duplicate-event filtering is not a substitute for duplicate-grant prevention."
@@ -63090,13 +63227,13 @@
       ],
       [
         "EXP02",
-        "Keep vs rehome",
-        "Equal payout with a Keep choice strengthens attachment without hurting replanting.",
-        "New installs; compare Keep-first versus equally prominent dual choice.",
+        "Favorite protection",
+        "Clear favorite controls may strengthen attachment and reduce accidental sales.",
+        "Compare favorite-control visibility with the same sale and shared-capacity rules.",
         "D7 retention",
-        "Favorite ownership; time-to-replant; accidental deletion/support.",
+        "Favorite use; tank occupancy; purchase rate; accidental-sale support requests.",
         "Pre-register minimum detectable effect and sample; age/acquisition mix balanced.",
-        "Do not test deleting favorites or withholding legitimate payouts."
+        "Favorites block sales in every variant. Favoriting never grants rewards."
       ],
       [
         "EXP03",
@@ -63230,7 +63367,7 @@
         "P0 / vertical slice",
         "Make interaction enjoyable",
         "Design + art + client engineer",
-        "4 starter species, growth/settle/keep, one upgradable tank, 8 decor, scene edit/undo, free care and photo play.",
+        "4 starter species, growth, selling, favorites, one upgradable tank, 8 decor, scene edit/undo, free care and photo play.",
         "Observe 10–15 target players; most can explain the loop and name a chosen next goal without coaching (qualitative, not statistical).",
         "If empty-timer play is boring, improve feedback/creation rather than add chores."
       ],
@@ -63376,10 +63513,10 @@
       [
         "MG04",
         "Tank capacities",
-        "Legacy tanks exceed the new per-tank/global limits",
-        "Grandfather existing owned capacity or grant equivalent protected capacity; new purchases follow new entitlement table. Never delete or overflow growing fish.",
-        "Explicit account legacy_capacity entitlement; display actual capacity; simulate migrated high-capacity cohorts separately.",
-        "The 100-slot model describes NEW accounts only; migrated accounts can differ."
+        "Older v4 saves with separate fish allowances",
+        "Preserve all fish and earlier rewards. Combine occupancy under normal tank capacity; move excess adult records to free storage.",
+        "Restoring a stored fish requires a free tank space. Previously rewarded fish cannot pay again.",
+        "No fish or historical reward is deleted. New saves must obey shared capacity."
       ],
       [
         "MG05",
@@ -63896,9 +64033,9 @@
       [
         "DC03",
         "Fish instance",
-        "instance_id; species_id; purchase_level; config_version; principal_paid; profit_snapshot; xp_snapshot; purchased_at; ready_at; status",
-        "Status growing to settled, exactly once. Selling starts at Junior; reject eggs and Babies. Paid basis immutable; gift basis=0. Preserve historical cancellation receipts.",
-        "Concurrent adult, partial rehome and batch requests lock the same instance."
+        "instance_id; species_id; purchase_level; config_version; principal_paid; profit_snapshot; xp_snapshot; purchased_at; ready_at; status; favorite",
+        "Fish remain until sold. Sale pays once and removes the fish; favorites block sale. Selling starts at Junior. Paid basis is fixed; gift basis=0. Preserve historical receipts.",
+        "Adult, partial-stage and batch sales lock the same instance."
       ],
       [
         "DC04",
@@ -63923,10 +64060,10 @@
       ],
       [
         "DC07",
-        "Showcase ownership",
-        "account_id; companion_id; origin_instance_id; display_variant; favorite; nickname; created_at",
-        "Unique origin prevents duplicate conversion. No principal, production timer or economic settlement fields.",
-        "Keep and Rehome pay identically; display slots are not growth slots."
+        "Favorite protection",
+        "account_id; instance_id; favorite",
+        "Favorite is a reversible property of the same fish. It does not change identity, growth, capacity use or rewards.",
+        "Favorites block sales. Premium fish and adults already rewarded under old rules cannot pay again."
       ],
       [
         "DC08",
@@ -63960,7 +64097,7 @@
         "DC12",
         "Mastery",
         "account_id; species_id; adult_count; distinct_care_dates; claimed_tiers",
-        "Count real adult settlements once, including gifted growth but excluding scripted tutorial and early rehome.",
+        "Count real adult sales once, including gifted fish but excluding scripted tutorial fish and early sales.",
         "Cosmetic tiers only; chapter claim key lifetime account+chapter."
       ],
       [
@@ -64143,7 +64280,7 @@
         "ART10",
         "Rendering budget",
         "One visible tank",
-        "32 decor, 6 animated props, 8 display fish; offscreen tanks update time but do not animate.",
+        "32 decor, 6 animated props and up to 20 fish within shared tank capacity. Offscreen tanks update time but do not animate.",
         "Pool fish/particles; batch sprites; cap overdraw and transparent effects.",
         "Profile frame time and memory on selected minimum device; no performance claim until measured."
       ],

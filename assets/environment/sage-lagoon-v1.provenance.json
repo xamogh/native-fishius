@@ -1,0 +1,29 @@
+{
+  "asset": "sage-lagoon-v1.png",
+  "tool": "image_gen.imagegen",
+  "mode": "built-in edit",
+  "use_case": "precise-object-edit",
+  "created_date": "2026-09-18",
+  "source_reference_path": "/Users/amoghrijal/amogh/aquarium-native/design/mockups/background-directions-2026-09-18/03-sage-lagoon.png",
+  "imagegen_origin_path": "/Users/amoghrijal/.codex/generated_images/01a0b4d5-f19d-7182-9eda-064737ab3712/exec-3e874486-dbcb-4349-aa11-381cb2811a7b.png",
+  "output_path": "/Users/amoghrijal/amogh/aquarium-native/assets/environment/sage-lagoon-v1.png",
+  "dimensions": {
+    "width": 1672,
+    "height": 940
+  },
+  "alpha": false,
+  "sha256": "bcc2b48a6948dfccc7682b57b87ac4c840933bae48d462f3434b8d663ccbb77b",
+  "prompt": "Use case: precise-object-edit.\nAsset type: clean opaque raster background for a landscape aquarium game.\nInput image: the supplied 03-sage-lagoon.png is the exact edit target, not merely a style reference.\nPrimary request: extract the existing selected Sage Lagoon BACKDROP by removing every game interface element and every placed fish, plant, or decoration. Reconstruct the removed elements' footprints with the matching existing water, rocks, background silhouettes, or clean sand.\n\nRemove completely:\n- All interface overlays: the top-left level badge, XP bar and text; top coin and pearl currency bars, values and plus signs; top-right settings gear; all right-side tool buttons; the bottom-left TANK button; bottom-right SHOP button; small bottom treasure button; and all their outlines, shadows, labels, icons, frames, borders and numbers.\n- Every one of the six fish, including the dark blue fish at upper center, orange goldfish and overlapping guppy near center-left, guppy at middle-right, guppy near lower center, and goldfish at lower-right.\n- All five placed foreground plants/decorations and their cast shadows: the detailed grass clump at lower left, broad-leaf foreground plant at lower center-left, the two detailed dark pebbles with leaves at lower center, brown foreground driftwood at lower center-right, and the tall detailed green foreground plant at lower right.\n\nKeep the backdrop itself visually unchanged. Preserve exactly its selected design's flat, soft, simple illustrated style; pale mint-aqua open water; muted sage and blue-green rounded angular rock masses in exactly the same relative positions; loose flat leaf silhouettes growing behind and between rocks; distant hazy silhouettes; broad cream sand patches with exactly the same relative height and layout; and the existing small scattered simple background stones. These flat backdrop leaves and small simple stones are part of the background and should remain.\n\nThis is precise background extraction, not a new interpretation. Do not redesign or move the backdrop, and do not darken, brighten, desaturate, blur, add texture, add objects, add bubbles, add dramatic lighting, or alter the palette. Keep the existing open central swimming space and the same camera/framing.\nOutput: one clean full-bleed opaque landscape image, 1672 x 940 pixels if possible, otherwise at least 1600 x 900 with the same approximately 16:9 aspect ratio and composition. No UI, no fish, no placed foreground props, no text, no labels, no watermark, no border and no transparency.",
+  "visual_qa": {
+    "passed": true,
+    "checks": [
+      "All six fish removed.",
+      "All five detailed foreground plants and decorations and their shadows removed.",
+      "All UI, text, labels, icons, buttons, outlines and overlay shadows removed.",
+      "Backdrop rock arrangement, flat leaf silhouettes, open aqua water and cream sand retained.",
+      "Small simple backdrop stones retained.",
+      "1672 x 940 opaque PNG confirmed with sips."
+    ],
+    "limitations": "Generative reconstruction fills previously covered regions; no pixel-identical guarantee in those areas."
+  }
+}

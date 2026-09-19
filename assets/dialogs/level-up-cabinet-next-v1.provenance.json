@@ -1,0 +1,22 @@
+{
+  "tool": "built-in image_gen",
+  "generated_at": "2026-09-18",
+  "reference": "/Users/amoghrijal/amogh/aquarium-native/design/mockups/level-up-2026-09-18/horizontal-grid/approved.png",
+  "reference_region": {
+    "x": 1373,
+    "y": 273,
+    "width": 51,
+    "height": 50
+  },
+  "original_generated_path": "/Users/amoghrijal/.codex/generated_images/01a0b2e2-936d-7cc0-b099-7c3c4c2b3b2a/exec-eba27591-317f-4385-bbac-a8544874dc04.png",
+  "dimensions": {
+    "width": 1254,
+    "height": 1254
+  },
+  "opaque": true,
+  "background": "Uniform pale mint, requested #d8f6f0. Use circular clipping when rendering. The initial transparency request returned painted checkerboard, which was removed by a second Image Gen edit.",
+  "initial_generated_path": "/Users/amoghrijal/.codex/generated_images/01a0b2e2-936d-7cc0-b099-7c3c4c2b3b2a/exec-ecc7e388-61c5-4117-a526-8afe9a6a394c.png",
+  "postprocessing": "None. Final generated PNG copied unchanged.",
+  "prompt": "Use case: precise-object-edit\nAsset type: one production UI button sprite for a native 2D aquarium game.\nInput image: the supplied approved game dialog screenshot is the exact reference for style. Recreate ONLY the small RIGHT navigation arrow button at reference x1373 y273, approximately 51 pixels wide and 50 pixels tall. Do not recreate the screenshot.\nPrimary request: a single circular pale aqua glass disk with a thin clear teal rim, a restrained upper-left white shine, a slightly richer turquoise tint at its bottom edge, and one centered solid dark navy right-pointing triangle. The reference triangle is bold, simple, flat-filled and easy to read. The button is soft and polished but not jewel-like and not strongly inflated.\nComposition: front-facing perfectly round circle, centered on a square 1024 by 1024 canvas. The outer circle fills about 94 percent of the canvas; keep equal thin transparent clearance on all sides and do not crop the rim. The only foreground object is this circular button.\nColor: light mint/aqua glass face, mid teal edge, dark petrol navy triangle. Match reference. Keep the icon suitable for display at only 40 to 54 pixels.\nBackground: genuine alpha transparency, completely transparent outside the circular disk. Do not paint a checkerboard, backdrop color, texture, square panel, or fake transparency pattern.\nConstraints: no text, numbers, additional symbols, other UI, scenery, bubbles, stars or ornaments. No perspective, no cast drop shadow outside the circle, no strong glowing halo, no ornamental border. Output a square PNG sprite.",
+  "background_correction_prompt": "Use case: precise-object-edit\nAsset type: one square production navigation-button sprite for a 2D aquarium game.\nEdit target: the supplied circular pale aqua right-arrow button.\nChange ONLY the surrounding background. Replace every checkerboard pixel outside the round button with an absolutely uniform pale mint flat fill #d8f6f0. No checkerboard anywhere, no transparency attempt, no texture, no shadow, no glow, no gradients in that surrounding fill.\nKeep the circular button itself unchanged: teal outer rim, pale aqua glass face, soft upper-left highlight, and dark navy solid right-pointing triangle. Maintain its front-facing perfectly round shape. Center it on a square canvas and use the same thin, equal background clearance as the original.\nOutput: opaque square PNG approximately 1024 by 1024, with no text or additional objects."
+}

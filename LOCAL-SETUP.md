@@ -68,6 +68,18 @@ On 12 September 2026, the Debug device build passed, its code signature was
 verified, and the app was installed and launched on the connected iPhone 15 Pro
 Max. Manual touch and visual checks on the phone remain to be done.
 
+On 18 September 2026, launch was checked again on the iPhone 15 Pro Max running
+iOS 27. The old SDL 3.2.20 lifecycle caused a launch-time `SIGTRAP`. Updating
+the iOS build to SDL 3.4.12 fixed that crash. Startup then exposed a missing
+`Nunito-SemiBold.ttf`, which has been restored with its license from the earlier
+simulator bundle. The rebuilt app installed successfully, remained running, and
+displayed the Shop screen. The desktop `current_interface_startup` test passed,
+and separate checks confirmed that old SDL sources and a missing body font are
+rejected. Logs and the device screenshot are in `build/ios-launch-fixed-*` and
+`build/ios-fix-startup-tests-20260918.log`. The two existing simulator build
+configurations now use the same SDL source; simulator runtime was not retested
+for this fix. Full touch, interruption and performance checks remain pending.
+
 ## Run in the iPhone simulator
 
 To build and debug in Xcode, double-click `Open iPhone Simulator Project.command`.
@@ -100,7 +112,7 @@ BIN=/Users/amoghrijal/Documents/Codex/2026-09-09/plea/work/build-tools/bin
   -DFREETYPE_INCLUDE_DIR_ft2build="$PWD/build/ios-deps/install/include/freetype2" \
   -DFREETYPE_LIBRARY_RELEASE="$PWD/build/ios-deps/install/lib/libfreetype.a" \
   -DFETCHCONTENT_SOURCE_DIR_JSON="$PWD/build/ios-device-deps/json-src" \
-  -DFETCHCONTENT_SOURCE_DIR_SDL3="$PWD/build/ios-device-deps/sdl3-src" \
+  -DFETCHCONTENT_SOURCE_DIR_SDL3="$PWD/build/ios-device-deps/SDL-release-3.4.12" \
   -DFETCHCONTENT_SOURCE_DIR_SDL3_IMAGE="$PWD/build/ios-device-deps/sdl3_image-src" \
   -DFETCHCONTENT_SOURCE_DIR_SDL3_TTF="$PWD/build/ios-device-deps/sdl3_ttf-src"
 ```
@@ -113,7 +125,7 @@ The camera cutout overlap was fixed on 10 September 2026. The game now fills the
 
 The navigation buttons scale from a single reference size of 111x119 with a 45 corner radius. Sizing them without that tie let the corner radius reach half the button height, which collapsed the nine-slice's middle row, flattened the pill into an ellipse and pushed the icon and label past its edges. Labels are also clamped to the width the pill actually has at their own baseline, since the pill has narrowed into its corner radius by that height.
 
-The iOS build includes the font files and their license records. It uses SDL 3.2.20, SDL_image 3.2.4 with its portable image loader, SDL_ttf 3.2.2, and FreeType 2.13.2 built for the simulator. Build logs and dependency sources are in `build/ios-deps`; startup logs are in `evidence/ios-stdout.log` and `evidence/ios-stderr.log`.
+The iOS build includes the font files and their license records. iOS now requires SDL 3.4.12 or newer for the scene lifecycle used by iOS 27. The current SDL source is in `build/ios-device-deps/SDL-release-3.4.12`; the older `sdl3-src` directory is not suitable for these builds. SDL_image remains at 3.2.4 with its portable image loader, SDL_ttf at 3.2.2, and simulator FreeType at 2.13.2. Earlier build logs are in `build/ios-deps`; earlier startup logs are in `evidence/ios-stdout.log` and `evidence/ios-stderr.log`.
 
 To rebuild the configured simulator target:
 
@@ -130,6 +142,7 @@ PATH="$BIN:$PATH" "$BIN/cmake" -S . -B build/ios-simulator -G Ninja \
   -DCMAKE_TOOLCHAIN_FILE="$PWD/platform/ios/ios-toolchain.cmake" \
   -DCMAKE_BUILD_TYPE=Release -DAQ_BUILD_APP=ON -DAQ_BUILD_TESTS=OFF \
   -DBUILD_SHARED_LIBS=OFF \
+  -DFETCHCONTENT_SOURCE_DIR_SDL3="$PWD/build/ios-device-deps/SDL-release-3.4.12" \
   -DCMAKE_OSX_SYSROOT=iphonesimulator -DCMAKE_OSX_ARCHITECTURES=arm64 \
   -DCMAKE_OSX_DEPLOYMENT_TARGET=15.0 \
   -DCMAKE_PREFIX_PATH="$PWD/build/ios-deps/install" \

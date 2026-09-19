@@ -31,7 +31,7 @@ int main(int argc,char** argv){try{
   bool shopOpen=true;ShopState shop{ShopCategory::Fish,1,2.5f};FundsShopReturn navigation;
   check(click(dialog.shop)==FundsDialogEvent::OpenShop&&!funds.open(),"Open Shop button failed");
   navigation.open(funds,shopOpen,shop);
-  check(shopOpen&&shop.category==ShopCategory::Treasure&&shop.subtab==(currency==Currency::Pearls?1:0)&&shop.scroll==0,"Open Shop did not select the matching currency packs");
+  check(shopOpen&&shop.category==ShopCategory::Treasure&&shop.subtab==(currency==Currency::Pearls?2:1)&&shop.scroll==0,"Open Shop did not select the matching currency packs");
   navigation.close(shopOpen,shop);
   check(shopOpen&&shop.category==ShopCategory::Fish&&shop.subtab==1&&shop.scroll==2.5f,"Closing Treasure lost the catalog or scroll position");
   navigation.close(shopOpen,shop);check(!shopOpen,"Closing the restored catalog kept the shop open");
@@ -53,7 +53,11 @@ int main(int argc,char** argv){try{
  for(int tank=1;tank<=2;++tank)for(bool pearls:{false,true}){
   auto state=poor;if(tank==2)state.tanks.front().slots=20;domain.install(state);
   const auto snapshot=encode(domain.state());const auto cost=domain.nextTankEntitlement({tank})->cost;
-  TankShopState tankShop;const auto point=center(pearls?tankGrid.pearls[tank-1]:tankGrid.coins[tank-1]);
+  TankShopState tankShop;const auto card=center(tankGrid.cards[tank-1]);
+  tankShopEvent(session,tankShop,shopPage,button(SDL_EVENT_MOUSE_BUTTON_DOWN),card);
+  tankShopEvent(session,tankShop,shopPage,button(SDL_EVENT_MOUSE_BUTTON_UP),card);
+  check(tankShop.purchase.dialog.open&&!tankShop.shortfall&&encode(domain.state())==snapshot,"Opening the confirmation charged currency or reported a shortage");
+  const auto purchase=layoutTankPurchase(shopPage);const auto point=center(pearls?purchase.pearls:purchase.coins);
   tankShopEvent(session,tankShop,shopPage,button(SDL_EVENT_MOUSE_BUTTON_DOWN),point);
   tankShopEvent(session,tankShop,shopPage,button(SDL_EVENT_MOUSE_BUTTON_UP),point);
   check(tankShop.shortfall.has_value()&&tankShop.notice.empty(),"Tank purchase only shows an inline error");

@@ -19,7 +19,7 @@ bool showFundsDialog(FundsDialogState&,const Result&);
 Currency fundsCurrency(const FundsDialogState&);
 std::string fundsDialogMessage(const FundsDialogState&);
 FundsDialogLayout layoutFundsDialog(float width,float height,Insets safe,float minimumTouch=44);
-void paintFundsDialog(Canvas&,const FundsDialogLayout&,const FundsDialogState&,SDL_FPoint pointer={-1,-1});
+void paintFundsDialog(Canvas&,const FundsDialogLayout&,const FundsDialogState&,SDL_FPoint pointer={-1,-1},bool reducedMotion=false);
 FundsDialogEvent fundsDialogEvent(FundsDialogState&,const FundsDialogLayout&,const SDL_Event&,SDL_FPoint);
 
 // Closing Treasure returns to the catalog and scroll position that opened it.

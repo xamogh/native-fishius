@@ -1,12 +1,25 @@
 #include "aquarium/loading.hpp"
 #include "aquarium/hud_tanks.hpp"
 #include <fstream>
+#include <cstring>
 #include <iostream>
 #include <stdexcept>
 
 namespace {
 using namespace aq;
 void check(bool value,const char* message){if(!value)throw std::runtime_error(message);}
+void checkOpaqueShop(Canvas& canvas,const Domain& domain,const ShopLayout& layout){
+ using Surface=std::unique_ptr<SDL_Surface,decltype(&SDL_DestroySurface)>;
+ for(const auto category:{ShopCategory::Fish,ShopCategory::Tanks}){
+  auto draw=[&](Color background){
+   canvas.begin();canvas.fill(layout.page,background);paintShop(canvas,domain,layout,ShopState{category});
+   return Surface(SDL_RenderReadPixels(canvas.renderer(),nullptr),SDL_DestroySurface);
+  };
+  const auto red=draw({255,0,0}),blue=draw({0,0,255});
+  check(red&&blue&&red->w==blue->w&&red->h==blue->h&&red->format==blue->format,"Cannot inspect Shop opacity");
+  for(int y=0;y<red->h;++y)check(std::memcmp(static_cast<const Uint8*>(red->pixels)+y*red->pitch,static_cast<const Uint8*>(blue->pixels)+y*blue->pitch,std::size_t(red->w)*SDL_BYTESPERPIXEL(red->format))==0,"Shop exposes the aquarium that rendering skips");
+ }
+}
 void checkMenus(const std::filesystem::path& assets,const Content& content,PreviewViewport viewport,bool progressed){
  Domain domain(content,0);
  if(progressed){
@@ -32,7 +45,9 @@ void checkMenus(const std::filesystem::path& assets,const Content& content,Previ
  scene();paintHud(canvas,domain,hud());SDL_FlushRenderer(canvas.renderer());
  canvas.loadingScreen(1,"Your reef is ready",0,true,true);SDL_FlushRenderer(canvas.renderer());
  const auto ready=canvas.cacheStats();
+ std::cout<<"Prepared text cache: "<<ready.textBytes/(1024*1024)<<" MiB at "<<viewport.width<<'x'<<viewport.height<<" @"<<viewport.pixelRatio<<"x"<<std::endl;
  check(ready.textureLoads>0&&ready.textRasterizations>0,"Preparation did not populate the caches");
+ checkOpaqueShop(canvas,domain,page());
  for(int pass=0;pass<2;++pass){
   // Check both entry points and the locked-tank route, including returning
   // to the aquarium. No cache misses should occur after the ready screen.
@@ -45,6 +60,15 @@ void checkMenus(const std::filesystem::path& assets,const Content& content,Previ
   check(canvas.cacheStats()==ready,"Opening Tank Shop decoded artwork or rasterized text after startup");
   scene();paintHud(canvas,domain,hud());SDL_FlushRenderer(canvas.renderer());
   check(canvas.cacheStats()==ready,"Closing a menu lost cached aquarium resources");
+  for(const auto category:{ShopCategory::Fish,ShopCategory::Plants,ShopCategory::Decorations,ShopCategory::Treasure,ShopCategory::Environment}){
+   ShopState state{category};const float limit=shopScrollLimit(state,shopItems(domain,state).size());
+   // Overlapping pages cover every card; fractional positions exercise clips.
+   for(float scroll=0;;scroll=std::min(limit,scroll==0?.5f:scroll+float(page().visibleCards-1))){
+    state.scroll=scroll;canvas.begin();paintShop(canvas,domain,page(),state);SDL_FlushRenderer(canvas.renderer());
+    check(canvas.cacheStats()==ready,"Scrolling loads artwork or rasterizes card text after preparation");
+    if(scroll>=limit)break;
+   }
+  }
  }
  check(encode(domain.state())==initial,"Menu preparation changed game state");
  std::cout<<"PASS cached menus at "<<viewport.width<<'x'<<viewport.height<<" @"<<viewport.pixelRatio<<"x, "<<(progressed?"owned tanks":"new game")<<'\n';

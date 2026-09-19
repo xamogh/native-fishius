@@ -1,0 +1,8 @@
+{
+  "mode": "built-in Image Gen",
+  "purpose": "Keep the liked character faces and change the rendering to simpler cartoon artwork.",
+  "file": "06-cartoon-starter-fish.png",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a0b47c-3a29-7952-b05b-51c10ad5c42a/exec-73ab51f9-74e7-4e9f-a604-5788a45a3046.png",
+  "reference": "05-oddball-starter-fish.png",
+  "prompt_file": "06-cartoon-fish-prompt.md"
+}

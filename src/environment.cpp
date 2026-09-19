@@ -4,8 +4,9 @@
 namespace aq {
 std::span<const EnvironmentStyle> environmentCatalog(){
  static const std::array<EnvironmentStyle,2> styles{{
-  {"sunlit-lagoon","Sunlit Lagoon",0,"environment/sunlit-lagoon.png"},
-  {"coral-garden","Coral Garden",1200,"environment/coral-garden.png"}
+  // Keep the saved IDs so existing tank choices and purchases still apply.
+  {"sunlit-lagoon","Open Blue Cove",0,"environment/open-blue-cove-v1.png"},
+  {"coral-garden","Sage Lagoon",1200,"environment/sage-lagoon-v1.png"}
  }};
  return styles;
 }

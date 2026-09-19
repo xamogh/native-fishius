@@ -36,15 +36,21 @@ Json encode(const State& s){
  Json j={{"version",s.version},{"contentVersion",s.contentVersion},{"simNow",s.simNow},{"wallAnchor",s.wallAnchor},{"calendarNow",s.calendarNow},{"coins",s.wallet.coins},{"pearls",s.wallet.pearls},{"xp",s.xp},{"lifetimeXp",s.lifetimeXp},{"highestRewardedLevel",s.highestRewardedLevel},{"activeTank",s.activeTank.value},{"nextFishId",s.nextFishId},{"nextDecorId",s.nextDecorId},{"rngState",s.rngState},{"claims",s.claims},{"collected",s.collected},{"mastery",s.mastery},{"totalEvents",s.totalEvents},{"tutorialStep",s.tutorialStep},{"tutorialClaims",s.tutorialClaims},{"dailyPeriod",s.dailyPeriod},{"weeklyPeriod",s.weeklyPeriod},{"giftDay",s.giftDay},{"eggDay",s.eggDay},
   {"adultRaised",s.adultRaised},{"pendingDecor",s.pendingDecor},{"decorOwned",s.decorOwned},{"environmentOwned",s.environmentOwned},{"decorOnboardingComplete",s.decorOnboardingComplete},
   {"receipts",s.receipts},{"settlements",s.settlements},{"ledger",s.ledger},{"nextRequestId",s.nextRequestId},{"revision",s.revision},{"careDays",s.careDays}};
- j["settings"]={{"reducedMotion",s.settings.reducedMotion},{"sound",s.settings.sound},{"music",s.settings.music},{"volume",s.settings.volume},{"tankLook",s.settings.tankLook}};
+ j["fishCapacity"]="shared";
+ j["fishLifecycle"]="shared";
+ j["settings"]={{"reducedMotion",s.settings.reducedMotion},{"sound",s.settings.sound},{"music",s.settings.music},{"volume",s.settings.volume},{"tankLook",s.settings.tankLook},{"vibration",s.settings.vibration},{"reducedMotionOverride",s.settings.reducedMotionOverride}};
  j["tanks"]=Json::array();for(const auto& t:s.tanks)j["tanks"].push_back({{"id",t.id.value},{"slots",t.slots},{"backgroundId",t.backgroundId}});
- j["fish"]=Json::array();for(const auto& f:s.fish)j["fish"].push_back({{"id",f.id.value},{"species",f.species},{"tank",f.tank.value},{"position",point(f.position)},{"age",f.age},{"egg",f.egg},{"growthMs",f.growthMs},{"hatchAt",f.hatchAt},{"lastFedAt",f.lastFedAt},{"boughtAt",f.boughtAt},{"motion",motion(f.motion)},{"purchase",f.purchase},{"favorite",f.favorite},{"scripted",f.scripted}});
- j["companions"]=Json::array();for(const auto& f:s.companions)j["companions"].push_back({{"id",f.id.value},{"origin",f.origin.value},{"species",f.species},{"tank",f.tank.value},{"position",point(f.position)},{"stored",f.stored},{"favorite",f.favorite},{"lastFedAt",f.lastFedAt},{"motion",motion(f.motion)}});
+ j["fish"]=Json::array();for(const auto& f:s.fish)j["fish"].push_back({{"id",f.id.value},{"species",f.species},{"tank",f.tank.value},{"position",point(f.position)},{"age",f.age},{"egg",f.egg},{"growthMs",f.growthMs},{"hatchAt",f.hatchAt},{"lastFedAt",f.lastFedAt},{"boughtAt",f.boughtAt},{"motion",motion(f.motion)},{"purchase",f.purchase},{"favorite",f.favorite},{"scripted",f.scripted},{"stashed",f.stashed},{"stashedAt",f.stashedAt}});
  j["decor"]=Json::array();for(const auto& d:s.decor)j["decor"].push_back({{"id",d.id},{"kind",d.kind},{"tank",d.tank.value},{"position",point(d.position)},{"stored",d.stored},{"flipped",d.flipped},{"sizeMul",d.sizeMul}});
  j["quests"]=Json::object();for(const auto& [id,q]:s.quests)j["quests"][id]={{"count",q.count},{"claimed",q.claimed}};return j;
 }
 State decodeAndValidate(const Json& j,const Content& c){
  require(j.is_object()&&j.at("version")==4&&j.at("contentVersion")==4,"This development save uses an older format. Start a fresh v4 game.");State s;
+ const bool sharedCapacity=j.contains("fishCapacity");
+ require(!sharedCapacity||j.at("fishCapacity")=="shared","Invalid fish capacity rules");
+ const bool sharedLifecycle=j.contains("fishLifecycle");
+ require(!sharedLifecycle||j.at("fishLifecycle")=="shared","Invalid fish lifecycle rules");
+ require(!sharedLifecycle||!j.contains("companions")||(j.at("companions").is_array()&&j.at("companions").empty()),"Unexpected legacy fish records");
  s.simNow=j.at("simNow");s.wallAnchor=j.at("wallAnchor");s.calendarNow=j.at("calendarNow");s.wallet={j.at("coins"),j.at("pearls")};s.xp=j.at("xp");s.lifetimeXp=j.at("lifetimeXp");s.highestRewardedLevel=j.at("highestRewardedLevel");s.activeTank={j.at("activeTank").get<int>()};
  require(bounded(s.simNow)&&s.simNow<limit-315576000000LL&&bounded(s.wallAnchor)&&bounded(s.calendarNow),"Invalid time");
  require(bounded(s.wallet.coins)&&bounded(s.wallet.pearls)&&bounded(s.xp)&&s.xp<=c.levels.back()&&bounded(s.lifetimeXp)&&s.lifetimeXp>=s.xp,"Invalid balance");
@@ -52,7 +58,7 @@ State decodeAndValidate(const Json& j,const Content& c){
  s.nextFishId=j.at("nextFishId");s.nextDecorId=j.at("nextDecorId");s.rngState=j.at("rngState");s.nextRequestId=j.at("nextRequestId");s.revision=j.at("revision");
  require(s.nextFishId>0&&s.nextDecorId>0&&s.rngState&&s.nextRequestId>0,"Invalid identity sequence");
  // Convert the earlier separate reef/sand purchases into complete themes.
- // Any paid legacy style grants Coral Garden, without charging again.
+ // Any paid legacy style grants the paid background, without charging again.
  const auto owned=j.value("environmentOwned",std::vector<std::string>{});
  std::set<std::string> oldIds,environmentIds;
  for(const auto& id:owned){
@@ -70,7 +76,7 @@ State decodeAndValidate(const Json& j,const Content& c){
  s.tanks.clear();std::set<int> tanks;
  for(const auto& x:j.at("tanks")){
   Tank t{{x.at("id").get<int>()},x.at("slots").get<int>()};
-  require(t.id.value>=1&&t.id.value<=5&&tanks.insert(t.id.value).second&&(t.slots==10||t.slots==15||t.slots==20),"Invalid tank capacity");
+  require(tanks.insert(t.id.value).second&&std::any_of(c.tankEntitlements.begin(),c.tankEntitlements.end(),[&](const auto& e){return e.tank==t.id&&e.slots==t.slots;}),"Invalid tank capacity");
   if(x.contains("backgroundId"))t.backgroundId=x.at("backgroundId").get<std::string>();
   else{
    const auto reef=x.value("reefId",std::string{"starter-reef"}),sand=x.value("sandId",std::string{"golden-sand"});
@@ -81,21 +87,43 @@ State decodeAndValidate(const Json& j,const Content& c){
   require(validBackground(t.backgroundId),"Invalid equipped background");s.tanks.push_back(t);
  }
  require(tanks.contains(1)&&tanks.contains(s.activeTank.value),"Missing tank");for(int id:tanks)require(id==1||tanks.contains(id-1),"Tank sequence has a gap");
- require(j.at("fish").is_array()&&j.at("fish").size()<=100,"Invalid growing collection");std::set<std::uint64_t> ids;
+ require(j.at("fish").is_array()&&j.at("fish").size()<=10000,"Invalid fish collection");std::set<std::uint64_t> ids;
  for(const auto& x:j.at("fish")){
   Fish f;f.id={x.at("id").get<std::uint64_t>()};f.species=x.at("species");f.tank={x.at("tank").get<int>()};f.position=readPoint(x.at("position"));f.age=x.at("age");f.egg=x.at("egg");f.growthMs=x.at("growthMs");f.hatchAt=x.at("hatchAt");f.lastFedAt=x.at("lastFedAt");f.boughtAt=x.at("boughtAt");f.purchase=x.at("purchase").get<GrowthSnapshot>();f.favorite=x.at("favorite");f.scripted=x.at("scripted");
-  require(f.id.value>0&&f.id.value<s.nextFishId&&ids.insert(f.id.value).second,"Duplicate fish identity");const auto* spec=c.find(f.species);require(spec&&!spec->companion&&tanks.contains(f.tank.value),"Invalid productive fish");validatePurchase(f.purchase);
+  f.stashed=x.value("stashed",false);f.stashedAt=x.value("stashedAt",Millis{});
+  require(f.stashedAt>=0&&f.stashedAt<=s.simNow&&(!f.stashed||(!f.egg&&f.age==4)),"Invalid fish storage");
+  require(f.id.value>0&&f.id.value<s.nextFishId&&ids.insert(f.id.value).second,"Duplicate fish identity");const auto* spec=c.find(f.species);require(spec&&tanks.contains(f.tank.value),"Invalid fish species or tank");validatePurchase(f.purchase);
   require(f.growthMs>=0&&f.growthMs<=f.purchase.durationMs&&f.age==growthStage(f.purchase,f.growthMs)&&(!f.egg||f.age==0),"Invalid growth progress");
   require(f.hatchAt>=0&&f.hatchAt<=s.simNow+6000&&f.boughtAt>=0&&f.boughtAt<=s.simNow&&f.hatchAt>=f.boughtAt,"Invalid hatch time");
   require(f.lastFedAt>=-f.purchase.feedMs&&f.lastFedAt<=s.simNow,"Invalid feeding time");f.motion=readMotion(x.at("motion"),f.position);s.fish.push_back(f);
  }
- require(j.at("companions").is_array()&&j.at("companions").size()<=10000,"Invalid companion collection");std::set<std::uint64_t> origins;
- for(const auto& x:j.at("companions")){
-  Companion f;f.id={x.at("id").get<std::uint64_t>()};f.origin={x.at("origin").get<std::uint64_t>()};f.species=x.at("species");f.tank={x.at("tank").get<int>()};f.position=readPoint(x.at("position"));f.stored=x.at("stored");f.favorite=x.at("favorite");f.lastFedAt=x.at("lastFedAt");
-  const auto* spec=c.find(f.species);require(spec&&tanks.contains(f.tank.value)&&f.id.value>0&&f.id.value<s.nextFishId&&ids.insert(f.id.value).second,"Invalid companion identity");
-  require(f.origin.value?f.origin==f.id&&origins.insert(f.origin.value).second:spec->companion,"Invalid companion origin");require(f.lastFedAt>=-158400000&&f.lastFedAt<=s.simNow,"Invalid companion feeding time");f.motion=readMotion(x.at("motion"),f.position);s.companions.push_back(f);
+ // Read the retired adult-only records once, then persist ordinary fish.
+ // Previously paid adults keep their receipts and receive no second reward.
+ std::vector<Fish> legacyFish;std::set<std::uint64_t> paidOrigins;
+ if(!sharedLifecycle){
+  require(j.at("companions").is_array()&&j.at("companions").size()+s.fish.size()<=10000,"Invalid legacy fish collection");
+  for(const auto& x:j.at("companions")){
+   Fish f;f.id={x.at("id").get<std::uint64_t>()};const auto origin=x.at("origin").get<std::uint64_t>();f.species=x.at("species");f.tank={x.at("tank").get<int>()};f.position=readPoint(x.at("position"));f.stashed=x.at("stored");f.favorite=x.at("favorite");f.lastFedAt=x.at("lastFedAt");
+   const auto* spec=c.find(f.species);require(spec&&tanks.contains(f.tank.value)&&f.id.value>0&&f.id.value<s.nextFishId&&ids.insert(f.id.value).second,"Invalid legacy fish identity");
+   require(origin?origin==f.id.value&&paidOrigins.insert(origin).second:spec->currency==Currency::Pearls,"Invalid legacy fish origin");
+   require(f.lastFedAt>=-158400000&&f.lastFedAt<=s.simNow,"Invalid legacy feeding time");f.motion=readMotion(x.at("motion"),f.position);
+   f.purchase=purchaseQuote(c,*spec,levelFor(c,s.xp),true);f.age=4;f.growthMs=f.purchase.durationMs;f.boughtAt=f.hatchAt=s.simNow;
+   f.lastFedAt=std::max(f.lastFedAt,-f.purchase.feedMs);f.stashedAt=s.simNow;
+   if(origin)f.purchase.principal=f.purchase.profit=f.purchase.xp=0;
+   legacyFish.push_back(std::move(f));
+  }
  }
- for(const auto& t:s.tanks){require(std::count_if(s.fish.begin(),s.fish.end(),[&](const auto& f){return f.tank==t.id;})<=t.slots,"Growing capacity exceeded");require(std::count_if(s.companions.begin(),s.companions.end(),[&](const auto& f){return f.tank==t.id&&!f.stored;})<=c.displaySlots,"Display capacity exceeded");}
+ for(const auto& t:s.tanks){
+  auto occupied=std::count_if(s.fish.begin(),s.fish.end(),[&](const auto& f){return f.tank==t.id&&!f.stashed;});
+  const auto adults=std::count_if(legacyFish.begin(),legacyFish.end(),[&](const auto& f){return f.tank==t.id&&!f.stashed;});
+  if(sharedCapacity)require(occupied+adults<=t.slots,"Tank capacity exceeded");
+  else{
+   require(occupied<=t.slots&&adults<=8,"Legacy tank capacity exceeded");
+   // Older v4 saves had extra adult spaces. Preserve every owned fish and
+   // its past reward, placing any excess adults into existing free storage.
+   for(auto& f:legacyFish)if(f.tank==t.id&&!f.stashed){if(occupied<t.slots)++occupied;else f.stashed=true;}
+  }
+ }
  require(j.at("decor").is_array()&&j.at("decor").size()<=500,"Invalid decor collection");std::set<std::uint64_t> decorIds;
  for(const auto& x:j.at("decor")){
   Decoration d;d.id=x.at("id");d.kind=x.at("kind");d.tank={x.at("tank").get<int>()};d.position=readPoint(x.at("position"));d.stored=x.at("stored");d.flipped=x.at("flipped");d.sizeMul=x.at("sizeMul");
@@ -110,7 +138,7 @@ State decodeAndValidate(const Json& j,const Content& c){
  for(const auto* values:{&s.totalEvents,&s.mastery,&s.adultRaised}){require(values->size()<=200,"Oversized progress map");for(const auto& [id,n]:*values)require(!id.empty()&&id.size()<128&&bounded(n),"Invalid progress count");}
  for(const auto& [id,days]:s.careDays)require(c.find(id)&&days.size()<=5&&std::set(days.begin(),days.end()).size()==days.size(),"Invalid care days");
  require(j.at("quests").is_object()&&j.at("quests").size()<=100,"Invalid quests");for(const auto& [id,v]:j.at("quests").items()){ObjectiveProgress q{v.at("count"),v.at("claimed")};require(bounded(q.count),"Invalid quest count");s.quests[id]=q;}
- const auto& st=j.at("settings");s.settings={st.at("reducedMotion"),st.at("sound"),st.at("music"),st.at("volume"),st.at("tankLook")};require(std::isfinite(s.settings.volume)&&s.settings.volume>=0&&s.settings.volume<=1&&s.settings.tankLook>=0&&s.settings.tankLook<=2,"Invalid settings");
+ const auto& st=j.at("settings");s.settings={st.at("reducedMotion"),st.at("sound"),st.at("music"),st.at("volume"),st.at("tankLook"),st.value("vibration",true),st.value("reducedMotionOverride",st.at("reducedMotion").get<bool>())};require(std::isfinite(s.settings.volume)&&s.settings.volume>=0&&s.settings.volume<=1&&s.settings.tankLook>=0&&s.settings.tankLook<=2,"Invalid settings");
  s.receipts=j.at("receipts");s.settlements=j.at("settlements");s.ledger=j.at("ledger");require(s.receipts.is_object()&&s.receipts.size()<=50000&&s.settlements.is_object()&&s.settlements.size()<=50000&&s.ledger.is_array()&&s.ledger.size()<=200000,"Invalid transaction storage");
  for(const auto& [id,r]:s.receipts.items()){
   require(!id.empty()&&id.size()<=128&&r.at("command").is_object()&&r.at("result").is_object(),"Invalid request receipt");const auto& result=r.at("result");
@@ -123,19 +151,39 @@ State decodeAndValidate(const Json& j,const Content& c){
   require(request=="initial"||request=="fixture"||s.receipts.contains(request),"Ledger is missing its receipt");const std::string key=currency+":"+entry.at("reason").get<std::string>()+":"+entry.at("source_id").get<std::string>();require(sources.insert(key).second,"Duplicate grant source");
  }
  require(balances["coins"]==s.wallet.coins&&balances["pearls"]==s.wallet.pearls&&balances["xp"]==s.xp,"Wallet does not match ledger");
+ std::set<Amount> pearlSaleNumbers;
  for(const auto& [id,r]:s.settlements.items()){
   const auto& result=r.at("result");const auto origin=result.at("fish").get<std::uint64_t>();const Amount principal=r.at("principal"),profit=r.at("profit");
   require(id==std::to_string(origin)&&origin>0&&origin<s.nextFishId&&bounded(principal)&&bounded(profit)&&principal<=limit-profit,"Invalid settlement");
   Fish settled;settled.age=r.at("stage");settled.egg=r.at("egg");settled.scripted=r.at("scripted");settled.purchase=r.at("purchase").get<GrowthSnapshot>();
   validatePurchase(settled.purchase);require(settled.age>=0&&settled.age<=4&&(!settled.egg||settled.age==0),"Invalid settled stage");
   const auto expected=fishReward(settled);const Amount xp=result.at("xp");
-  require(expected.principal==principal&&expected.profit==profit&&result.at("coins")==principal+profit&&bounded(xp)&&xp<=expected.xp&&result.at("pearls")==0,"Invalid settlement amounts");
   const std::string disposition=r.at("disposition"),request=r.at("request_id"),species=r.at("species");
-  require(c.find(species)&&!c.find(species)->companion&&(disposition=="rehome"||(disposition=="keep"&&settled.age==4)),"Invalid settled species or choice");
+  require(c.find(species)&&(disposition=="rehome"||(disposition=="keep"&&settled.age==4)),"Invalid settled species or choice");
+  Amount pearlReward=0;
+  if(r.contains("pearl_reward")){
+   settled.species=species;const auto& milestone=r.at("pearl_reward");
+   const Amount sale=milestone.at("sale"),amount=milestone.at("amount");const int target=milestone.at("target");
+   const auto progress=s.totalEvents.find("adult-coin-sale");
+   require(pearlSaleEligible(c,settled)&&disposition=="rehome"&&sale>0&&bounded(sale)&&target>=1&&target<=1000&&amount>=1&&amount<=100&&
+           progress!=s.totalEvents.end()&&sale<=progress->second&&pearlSaleNumbers.insert(sale).second,"Invalid pearl milestone");
+   if(sale%target==0)pearlReward=amount;
+  }
+  require(expected.principal==principal&&expected.profit==profit&&result.at("coins")==principal+profit&&bounded(xp)&&xp<=expected.xp&&result.at("pearls")==pearlReward,"Invalid settlement amounts");
   require(s.receipts.contains(request)&&s.receipts.at(request).at("result")==result,"Settlement is missing its receipt");
-  require(std::none_of(s.fish.begin(),s.fish.end(),[&](const auto& f){return f.id.value==origin;}),"Settled fish still growing");
+  require(std::none_of(s.fish.begin(),s.fish.end(),[&](const auto& f){return f.id.value==origin;})&&std::none_of(legacyFish.begin(),legacyFish.end(),[&](const auto& f){return f.id.value==origin&&!paidOrigins.contains(origin);}),"Settled fish is still owned");
  }
- for(const auto& f:s.companions)if(f.origin.value)require(s.settlements.contains(std::to_string(f.origin.value))&&s.settlements.at(std::to_string(f.origin.value)).at("disposition")=="keep","Kept fish is missing its settlement");
+ for(auto& f:legacyFish){
+  if(paidOrigins.contains(f.id.value)){
+   const auto id=std::to_string(f.id.value);
+   require(s.settlements.contains(id)&&s.settlements.at(id).at("disposition")=="keep"&&s.settlements.at(id).at("species")==f.species,"Kept fish is missing its settlement");
+   require(s.nextFishId<std::numeric_limits<std::uint64_t>::max(),"Fish identity sequence exhausted");
+   // Keep the old identity attached to the paid settlement. A new identity
+   // allows this owned fish to be sold for zero without replaying that sale.
+   f.id={s.nextFishId++};
+  }
+  s.fish.push_back(std::move(f));
+ }
  return s;
 }
 LoadResult Storage::load(const Content& c){

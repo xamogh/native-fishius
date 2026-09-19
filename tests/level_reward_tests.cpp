@@ -13,7 +13,7 @@ int main(int argc,char** argv){try{
  check(levelReward(content,1).coins==0&&levelReward(content,41).pearls==0,"Unsupported levels give no reward");
  for(int reached=2;reached<=40;++reached){
   Domain domain(content);const auto id=adultAt(domain,content.levels[reached-1]-1);const auto before=domain.state();const auto expected=content.levelRewards[reached-1];
-  const Command settle{.action=Action::Keep,.fish=id,.requestId="level-crossing"};check(bool(domain.execute(settle)),"Cannot cross level threshold");
+  const Command settle{.action=Action::Sell,.fish=id,.requestId="level-crossing"};check(bool(domain.execute(settle)),"Cannot cross level threshold");
   check(domain.level()==reached,"Wrong reached level");check(domain.state().wallet.coins==before.wallet.coins+6+expected.coins&&domain.state().wallet.pearls==before.wallet.pearls+expected.pearls,"Level grant differs from workbook");
   int levels=0;for(const auto& event:domain.takeEvents())if(event.kind=="level"){++levels;check(event.reachedLevel==reached&&event.coins==expected.coins&&event.pearls==expected.pearls,"Level event differs from credited reward");}check(levels==1,"Expected one level event");
   const auto paid=encode(domain.state());domain.install(decodeAndValidate(paid,content));check(domain.execute(settle).replayed,"Reload lost receipt");check(encode(domain.state())==paid,"Reload repeated level reward");
@@ -29,7 +29,7 @@ int main(int argc,char** argv){try{
  }
  for(bool pearls:{false,true}){
   Domain domain(content);const auto id=adultAt(domain,79);auto s=domain.state();if(pearls)s.wallet.pearls=9'000'000'000'000'000LL;else s.wallet.coins=9'000'000'000'000'000LL;testing::openingBalances(s);domain.install(s);const auto before=encode(s);
-  check(domain.execute({.action=Action::Keep,.fish=id}).error==Error::Overflow,"Overflowing reward was accepted");check(encode(domain.state())==before&&domain.takeEvents().empty(),"Overflow partially paid reward");
+  check(domain.execute({.action=Action::Sell,.fish=id}).error==Error::Overflow,"Overflowing reward was accepted");check(encode(domain.state())==before&&domain.takeEvents().empty(),"Overflow partially paid reward");
  }
  auto invalid=json;invalid["level_rewards"][1]["coins"]=-1;bool rejected=false;try{Content::fromJson(invalid);}catch(const std::exception&){rejected=true;}check(rejected,"Invalid reward tuning was accepted");
  std::cout<<"PASS multi-level jumps, ordered events, cap, atomic overflow and tuning validation\n";return 0;

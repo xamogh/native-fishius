@@ -1,0 +1,11 @@
+{
+  "tool": "built-in image_gen",
+  "generated_at": "2026-09-18",
+  "reference": "/Users/amoghrijal/amogh/aquarium-native/assets/dialogs/level-up-underwater-v1.png",
+  "original_generated_path": "/Users/amoghrijal/.codex/generated_images/01a0b273-767d-7103-925e-ffa93493cee1/exec-31e1d04b-726b-4205-a993-cf591ea2b5da.png",
+  "dimensions": {
+    "width": 926,
+    "height": 1698
+  },
+  "prompt": "Use case: precise-object-edit\nAsset type: portrait production background plate for the narrow responsive native aquarium level-up dialog.\nInput image 1 is the approved landscape background plate. Adapt only its composition to portrait while preserving the same soft painted casual aquarium game artwork, colors, and quiet lighting.\nTarget a 720 x 1320 image, aspect ratio exactly 6:11. Full bleed opaque PNG.\nLayout: warm ivory cream through the upper 43% of the picture, very pale turquoise/aqua water through the lower middle, soft warm cream sand across the lower 22%, quiet cream center footer. The entire center 82% of the width must stay free of objects for live badge, currency rewards, three stacked item rows and button. Keep delicate pale cyan kelp silhouettes, a few small round translucent bubbles, and thin green kelp plants only within the extreme outer 9% of each side. Small smooth bluish gray rocks and green kelp tuck into the two bottom corners. Objects must keep their natural proportions and round bubbles must be round; recompose for portrait, never stretch the landscape reference.\nPreserve the reference's warm cream and pale aqua tones, hand-painted texture, gentle low contrast, and calm flat front-facing background. The plants and rocks should be small and understated.\nNo lettering, numbers, title, badge, gold medallion, star, coins, pearl, fish, grass patch, shell, foreground unlock items, dividers, labels, buttons, frame, header, HUD, or outside game backdrop. No harsh rays, glare, heavy shadows, saturated dark center, watermark, or border. Only the clean empty decorative background plate."
+}

@@ -1,0 +1,17 @@
+{
+  "mode": "built-in Image Gen",
+  "purpose": "Generate cartoon neon tetra and guppy concepts with clearer fish anatomy after the animated trial looked like birds.",
+  "file": "07-fish-silhouette.png",
+  "source": "/Users/amoghrijal/.codex/generated_images/01a0b47c-3a29-7952-b05b-51c10ad5c42a/exec-d574f3cb-212c-4cfa-b4d0-ab566fa77065.png",
+  "initial_file": "07-fish-silhouette-initial.png",
+  "initial_source": "/Users/amoghrijal/.codex/generated_images/01a0b47c-3a29-7952-b05b-51c10ad5c42a/exec-a94b11d2-9748-468e-8af0-88df7141d2ce.png",
+  "initial_references": [
+    "/Users/amoghrijal/amogh/aquarium-native/assets/species/neonTetra.png",
+    "/Users/amoghrijal/amogh/aquarium-native/assets/species/guppy.png"
+  ],
+  "initial_prompt_file": "07-fish-silhouette-prompt.md",
+  "refinement_reference": "07-fish-silhouette-initial.png",
+  "refinement_prompt_file": "07-fish-silhouette-refinement-prompt.md",
+  "scope": "Concept mockup only.",
+  "review": "Both species and labels are present with complete silhouettes, small inset mouths, embedded eyes, gill curves and compact lower fins. The refinement simplifies shading and fin shapes. Some gentle shading remains. Small previews are illustrative."
+}

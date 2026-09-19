@@ -2,30 +2,6 @@
   "failures": 0,
   "tests": [
     {
-      "name": "catalog counts and exact imported duration",
-      "passed": true
-    },
-    {
-      "name": "four hungry starter babies",
-      "passed": true
-    },
-    {
-      "name": "all catalog purchase and four stage rewards",
-      "passed": true
-    },
-    {
-      "name": "six-second hatch and hungry newborn",
-      "passed": true
-    },
-    {
-      "name": "free feeding pauses and resumes exact growth",
-      "passed": true
-    },
-    {
-      "name": "sickness and death boundaries; feeding cannot revive",
-      "passed": true
-    },
-    {
       "name": "large and small lifecycle advances agree",
       "passed": true
     },
@@ -38,59 +14,27 @@
       "passed": true
     },
     {
-      "name": "level-two pearl granted only once",
+      "name": "tank sequencing and level gates apply to either currency",
       "passed": true
     },
     {
-      "name": "repeatable tutorial premium fish",
+      "name": "tank purchases reject unsupported currencies without charging",
       "passed": true
     },
     {
-      "name": "quest XP uses exact columns and refreshes after level changes",
+      "name": "empty water startles nearby coin and pearl fish without changing care or rewards",
       "passed": true
     },
     {
-      "name": "caretaker requires eight healthy feeds and sickness resets progress",
+      "name": "water taps keep the current heading on either side of the fish",
       "passed": true
     },
     {
-      "name": "mastery counts Adult growth once and claims three persistent tiers",
+      "name": "water taps stay bounded and clear on tank changes and transient reset",
       "passed": true
     },
     {
-      "name": "old sales counters do not become Adult mastery when a save upgrades",
-      "passed": true
-    },
-    {
-      "name": "fish and eggs cannot be stashed",
-      "passed": true
-    },
-    {
-      "name": "legacy stored fish preserve identity and all remaining clocks",
-      "passed": true
-    },
-    {
-      "name": "legacy stored eggs retain remaining hatch time",
-      "passed": true
-    },
-    {
-      "name": "five exact workbook Coin and Pearl tank schedules",
-      "passed": true
-    },
-    {
-      "name": "tank sequencing and level gates",
-      "passed": true
-    },
-    {
-      "name": "every tank step consumes source Coins plus Pearls atomically",
-      "passed": true
-    },
-    {
-      "name": "revival overflow allowed, purchase and restore blocked",
-      "passed": true
-    },
-    {
-      "name": "atomic bulk revival and corpse removal",
+      "name": "startled fish respect tank edges, selection, feeding and reduced motion",
       "passed": true
     },
     {
@@ -98,11 +42,19 @@
       "passed": true
     },
     {
-      "name": "food is bounded and cleared on tank switch",
+      "name": "full tank accepts fish actions and preserves lower positions in saves",
       "passed": true
     },
     {
-      "name": "year-crossing events and annual claims",
+      "name": "food and eggs settle 48 units above the tank bottom",
+      "passed": true
+    },
+    {
+      "name": "fish swim and eat in the lower tank",
+      "passed": true
+    },
+    {
+      "name": "food is bounded and cleared on tank switch",
       "passed": true
     },
     {
@@ -111,10 +63,6 @@
     },
     {
       "name": "save round-trip, unknown IDs, duplicate IDs and future schemas",
-      "passed": true
-    },
-    {
-      "name": "legacy Gift Token balance converts to Pearls once",
       "passed": true
     },
     {

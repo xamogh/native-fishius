@@ -1,0 +1,60 @@
+{
+  "title": "Lagoon Daydream",
+  "created": "2026-09-18",
+  "description": "Calm aquarium music with pearl mallets, warm electric piano, soft pads, harp, bass and quiet synthesized water.",
+  "method": "Original score and procedural synthesis written for Fishius. No third-party samples, recordings, or sound fonts.",
+  "generator": "tools/generate_lagoon_music.py",
+  "generator_sha256": "3200d83a89c339cce068abd2d6c43b2a246713298a2dcb6a3d662c86036caf8d",
+  "seed": 18092026,
+  "bpm": 80,
+  "meter": "4/4",
+  "tonal_center": "D major",
+  "bars": 32,
+  "duration_seconds": 96.0,
+  "sample_rate": 48000,
+  "channels": 2,
+  "pcm_bits": 16,
+  "loop_start_frame": 0,
+  "loop_end_frame_exclusive": 4608000,
+  "loop_method": "Note tails, delay and reverb wrap across the full buffer. No fade or silent gap in the WAV.",
+  "chord_progression": [
+    "Dmaj9",
+    "A6/9/C#",
+    "Bm9",
+    "Gmaj9",
+    "Dadd9/F#",
+    "Em9",
+    "Gmaj9",
+    "A6sus4",
+    "Bm9",
+    "F#m11",
+    "Gmaj9",
+    "Dadd9/A",
+    "Em9",
+    "Gmaj9",
+    "Dadd9/F#",
+    "A6/9"
+  ],
+  "verification": {
+    "integrated_loudness_lufs": -20.0,
+    "true_peak_dbtp": -7.92,
+    "loudness_range_lu": 2.4,
+    "seam_sample_step": 0.00072464719414711,
+    "largest_sample_step": 0.026940342038869858,
+    "finite_samples": true,
+    "clipped_samples": 0,
+    "review": "Objective level and continuity checks. The preview is provided for listening review."
+  },
+  "files": {
+    "loop": {
+      "name": "lagoon-daydream-loop.wav",
+      "sha256": "129d11ade79f793f958129c799277031f6204ab5d58a5340e49b30817bde1218",
+      "bytes": 18432044
+    },
+    "preview": {
+      "name": "lagoon-daydream-preview.mp3",
+      "sha256": "bc4e1f0d7596d95960b8b050467e2fb5a4b8e0fed462ed1623d2800fcb0f4542",
+      "bytes": 2305243
+    }
+  }
+}

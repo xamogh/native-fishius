@@ -1,0 +1,53 @@
+{
+  "asset": "favorite-heart-v1.png",
+  "status": "production_ready",
+  "created_at": "2026-09-18",
+  "method": "built-in image_gen followed by deterministic alpha-noise removal, crop and downsample",
+  "use_case": "stylized-concept",
+  "original_generation": "/Users/amoghrijal/.codex/generated_images/01a0b276-3f3e-7d02-969f-a8d9e269ce28/exec-c57588a8-19aa-4e24-84da-6d8f61138946.png",
+  "preserved_source": "design/mockups/error-toast-2026-09-18/favorite-heart/source-imagegen.png",
+  "prompt": "Use case: stylized-concept.\nAsset type: a tiny production game HUD icon, a favourite marker displayed above a fish in a polished colourful aquarium game.\nPrimary request: one single simple coral-red heart, upright and symmetrical, with a warm ivory rim and a very thin dark teal outside edge. Strong clean heart silhouette with two rounded lobes and a neat lower point. A small restrained soft highlight on the upper left and very subtle painted shading give the same friendly polished 2D cartoon finish as a premium aquarium game. The red heart must remain the dominant shape. The warm ivory rim is clean and visible all the way around, roughly 7 percent of the icon width; the dark teal outer contour is roughly 2 percent. The heart will ultimately render at only 14 to 16 screen points, so avoid tiny details and keep contrast, proportions and edges extremely clear.\nComposition/framing: single centred icon, tightly framed with around 4 percent empty margin. Square high-resolution source, 1024 by 1024 or larger. No rotation, no perspective.\nScene/backdrop: actual transparent PNG with real alpha, isolated icon. Do not render checkerboard pixels. If an alpha channel cannot be represented, use only a perfectly uniform neutral middle grey (#808080) background with no texture, gradient or shadows outside the icon so it can be removed locally.\nConstraints: ONLY one heart with ivory rim and dark teal edge. No lock, no bottle, no sparkles, no backing circle, no badges, no text, no drop shadow, no extra objects. Do not include a scene or UI screenshot. Do not make it metallic or photorealistic. Preserve a solid opaque heart interior and use smooth antialiased contours.\n",
+  "source_dimensions": {
+    "width": 1254,
+    "height": 1254
+  },
+  "source_mode": "RGBA",
+  "source_sha256": "3c2e679d116a6903ee293f939b977caad364cf696f8078ef18f6a470df4960b0",
+  "dimensions": {
+    "width": 128,
+    "height": 112
+  },
+  "mode": "RGBA",
+  "has_alpha": true,
+  "alpha_bounds": {
+    "x": 2,
+    "y": 3,
+    "width": 124,
+    "height": 106
+  },
+  "processing": {
+    "alpha_cleanup": "The generated file already had actual alpha. Set only alpha values 0 and 1 to zero to discard invisible background speckles; preserve every other generated RGBA value before resampling.",
+    "source_crop_bounds_exclusive": [
+      74,
+      153,
+      1181,
+      1103
+    ],
+    "downsample_size": [
+      124,
+      106
+    ],
+    "resampling": "Pillow LANCZOS",
+    "transparent_canvas": [
+      128,
+      112
+    ],
+    "placement": [
+      2,
+      3
+    ],
+    "authorization": "User approved deterministic local alpha cleanup earlier in this task."
+  },
+  "validation": "Inspected against teal at source size and at 14, 16, 28 and 32 pixel widths. Strong readable heart silhouette with ivory rim and dark teal edge. No backdrop, lock, text or extra objects.",
+  "output_sha256": "06c5d462bb6e312fe41edf0b3e95b775b4a01f011a08e6191a8eda5b0c30c6b8"
+}

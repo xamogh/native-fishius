@@ -1,0 +1,37 @@
+{
+  "tool": "built-in image_gen",
+  "generated_at": "2026-09-18",
+  "reference": "/Users/amoghrijal/amogh/aquarium-native/design/mockups/level-up-2026-09-18/horizontal-grid/approved.png",
+  "reference_region": {
+    "x": 692,
+    "y": 158,
+    "width": 258,
+    "height": 138
+  },
+  "original_generated_path": "/Users/amoghrijal/.codex/generated_images/01a0b2e2-d930-7d42-88e3-087514881425/exec-804aa57f-8413-44b7-afc8-bab00d31c544.png",
+  "dimensions": {
+    "width": 1774,
+    "height": 887
+  },
+  "opaque": true,
+  "background": "Warm cream fallback, requested #fffbee. The initial transparency request returned RGB with a baked checkerboard, so a second built-in edit replaced it with cream.",
+  "postprocessing": "None. Original generated PNG copied unchanged.",
+  "blank_medal_face_normalized_approximate": {
+    "x": 0.37,
+    "y": 0.33,
+    "width": 0.26,
+    "height": 0.51
+  },
+  "recommended_number_rect_normalized": {
+    "x": 0.405,
+    "y": 0.415,
+    "width": 0.19,
+    "height": 0.345
+  },
+  "face_center_normalized": {
+    "x": 0.5,
+    "y": 0.585
+  },
+  "prompt": "Use case: stylized-concept. Asset type: standalone transparent PNG level badge sprite for a polished aquarium game UI. Input image 1 is the approved reference and is STYLE AND SHAPE REFERENCE ONLY. Extract and faithfully recreate ONLY the small top-center badge at approximate reference pixels x692 y158 to950 y296, enlarged at high quality, with this one change: completely REMOVE the number 40 and leave the gold medal face EMPTY for live game text. The badge is a round warm gold medal with a thick raised orange-gold rim and an open bright gold center, a short curved deep blue ribbon across the top with exact white text LEVEL, sparse upright green seaweed fronds behind both sides and a few small smooth gray stones at its base. Match the compact friendly hand-painted 3D game art from reference, softly shaded with crisp readable edges and no strong light flare. The medal remains circular, shown straight-on, not perspective. No number, digits, star or symbol on medal. Text (verbatim): LEVEL only, on ribbon. Scene/backdrop: true transparent alpha background, not a checkerboard drawing, no scene. Composition: approximately 2:1 landscape canvas at least 1024x512, ideally 1536x768. Badge group centered and nearly fills canvas with narrow safe transparent margins, ribbon top around 8% and stones baseline around 94%, group width about 88%. Medal disk spans about 39% of canvas width, centered horizontally, with clear empty face suitable for a large two-digit game level. Avoid all other elements of reference: no panel, no header, no HUD, no cards, no coins, no pearls, no other text, no bubbles, no stars, no backdrop, no broad margin, no number 40. The PNG must contain genuine transparency outside the badge. If true alpha cannot be produced, use perfectly flat solid #fffbee outside the badge.",
+  "background_correction_prompt": "Use case: precise-object-edit. Asset type: aquarium game level medal badge PNG. Input image 1 is edit target. Keep the badge absolutely unchanged: same LEVEL ribbon, completely blank empty gold medal face, sea fronds, stones, scale, composition, crisp edges, color and 1774x887 2:1 image aspect ratio. Change ONLY every gray checkerboard and any other background pixel to one perfectly uniform solid warm cream color #FFF BEE (RGB 255, 251, 238; hexadecimal #fffbee). Important: render a FLAT opaque cream background, no transparency checkerboard, no texture, no varying light or gradients in background, no shadows or reflections outside artwork. Remove the checker pattern from all gaps between seaweed/ribbon/medal as well. Keep the overall badge tightly framed at its existing dimensions and position. Text must remain LEVEL. The gold medal must stay empty with no numbers or symbols. No new items, no decoration, no panels."
+}

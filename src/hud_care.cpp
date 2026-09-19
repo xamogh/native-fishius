@@ -1,4 +1,6 @@
 #include "aquarium/hud_care.hpp"
+#include "aquarium/platform_feedback.hpp"
+#include "aquarium/hud_decor_placement.hpp"
 #include "aquarium/fish_details.hpp"
 #include "aquarium/shop_theme.hpp"
 #include <algorithm>
@@ -19,8 +21,8 @@ bool normalizeHudPointer(HudPointer& state,SDL_Event& e,float width,float height
  if(type==SDL_EVENT_FINGER_DOWN){if(state.finger)return false;state.finger=e.tfinger.fingerID;}
  if(state.finger!=e.tfinger.fingerID)return false;
  const float x=e.tfinger.x*width,y=e.tfinger.y*height;
- const auto window=e.tfinger.windowID;state.touch=true;
- e={};
+ const auto window=e.tfinger.windowID;const auto timestamp=e.common.timestamp;state.touch=true;
+ e={};e.common.timestamp=timestamp;
  if(type==SDL_EVENT_FINGER_CANCELED){state.finger.reset();e.type=SDL_EVENT_WINDOW_FOCUS_LOST;return true;}
  if(type==SDL_EVENT_FINGER_MOTION){e.type=SDL_EVENT_MOUSE_MOTION;e.motion.windowID=window;e.motion.which=SDL_TOUCH_MOUSEID;e.motion.x=x;e.motion.y=y;}
  else{e.type=type==SDL_EVENT_FINGER_DOWN?SDL_EVENT_MOUSE_BUTTON_DOWN:SDL_EVENT_MOUSE_BUTTON_UP;e.button.windowID=window;e.button.which=SDL_TOUCH_MOUSEID;e.button.button=SDL_BUTTON_LEFT;e.button.down=type==SDL_EVENT_FINGER_DOWN;e.button.x=x;e.button.y=y;}
@@ -71,7 +73,7 @@ FishCareLayout layoutFishCare(float width,float height,Insets safe,Rect fish,flo
  out.status=box(20,top+10,420,28);out.progress=box(24,top+44,412,16);
  out.stages=box(20,top+70,420,22);out.rewards=box(24,top+104,412,56);
  out.breakdown=box(20,top+168,420,extended?28:22);out.note=box(20,top+204,420,28);
- out.primary=box(16,actionY,208,button/u);out.secondary=box(236,actionY,208,button/u);
+ out.action=box(16,actionY,428,button/u);
  if(side<2){
   const float rootX=std::clamp(tipX,frame.x+60*u,frame.x+w-28*u);
   const float rootY=side==0?frame.y+h-6*u:frame.y+6*u;
@@ -94,7 +96,7 @@ FishCareLayout HudCare::detailsLayout()const{
   point=canvas_.toScreen(fishPose(*f,session_.interpolation()).position);
   const float egg=std::max(20.f,30*canvas_.worldScale());
   size=f->egg?SDL_FPoint{egg,egg}:canvas_.fishSize(*session_.domain().content().find(f->species),*f);
-  extended=!session_.domain().companion(f->id)&&(f->egg||f->age<4);
+  extended=f->egg||f->age<4;
  }
  return layoutFishCare(canvas_.width(),canvas_.height(),canvas_.safeInsets(),{point.x-size.x*.5f,point.y-size.y*.5f,size.x,size.y},canvas_.minimumTouchSize(),extended||!notice_.empty());
 }
@@ -102,7 +104,6 @@ FishCareLayout HudCare::detailsLayout()const{
 std::optional<Fish> HudCare::visual(FishId id)const{
  const auto& d=session_.domain();
  if(const auto* f=d.fish(id);f&&!f->stashed&&f->tank==d.state().activeTank)return *f;
- if(const auto* c=d.companion(id);c&&!c->stored&&c->tank==d.state().activeTank)return companionVisual(*c);
  return {};
 }
 FishId HudCare::hitFish(SDL_FPoint point)const{
@@ -118,8 +119,21 @@ FishId HudCare::hitFish(SDL_FPoint point)const{
   if(dx*dx/(rx*rx)+dy*dy/(ry*ry)<=1&&distance<best){found=f.id;best=distance;}
  };
  for(const auto& f:d.state().fish)hit(f);
- for(const auto& c:d.state().companions)hit(companionVisual(c));
  return found;
+}
+const Decoration* HudCare::visibleDecor(std::uint64_t id)const{
+ const auto& d=session_.domain();const auto* item=d.decoration(id);
+ return item&&!item->stored&&item->tank==d.state().activeTank?item:nullptr;
+}
+std::uint64_t HudCare::hitDecor(SDL_FPoint point)const{
+ // A selected rear item owns the next drag even through a translucent object.
+ if(const auto* item=visibleDecor(selectedDecor_)){
+  const auto* def=session_.domain().content().findDecor(item->kind);DecorDef legacy;legacy.width=1.1;legacy.height=.95;
+  const auto area=decorDragBounds(canvas_.decorRect(def?*def:legacy,item->position,item->sizeMul),canvas_.minimumTouchSize());
+  if(area.has(point.x,point.y))return selectedDecor_;
+ }
+ const auto hits=canvas_.decorHits(session_.domain(),point);
+ return hits.empty()?0:hits.front()->id;
 }
 FishReward HudCare::reward(const Fish& fish)const{
  auto result=fishReward(fish);
@@ -139,22 +153,55 @@ bool HudCare::waterAt(SDL_FPoint point)const{
  if(tool_!=Tool::Select&&doneBounds().has(point.x,point.y))return false;
  return inPlacementWater(canvas_.toWorld(point.x,point.y));
 }
-void HudCare::cancelPress(){downActive_=dragged_=false;pressed_=-1;pressedFish_={};details_.closePressed=details_.backdropPressed=false;}
+bool HudCare::draggingFood()const{return tool_==Tool::Food&&!details_.open&&downActive_&&dragged_&&pressed_<=0;}
+void HudCare::pourFood(double seconds){
+ if(!draggingFood())return;
+ if(!waterAt(pointer_)){foodPoint_.reset();foodElapsed_=0;return;}
+ constexpr double interval=.08;
+ const float spacing=16*canvas_.minimumTouchSize()/44;
+ auto drop=[&](SDL_FPoint point){
+  foodPoint_=point;
+  if(!waterAt(point))return true;
+  if(!command({.action=Action::DropFood,.point=canvas_.toWorld(point.x,point.y)})){
+   foodPoint_=pointer_;foodElapsed_=0;return false;
+  }
+  tapAge_=0;return true;
+ };
+ if(!foodPoint_){
+  if(!drop(pointer_))return;
+  foodElapsed_=0;
+ }else{
+  // Fill the path between input events so a quick swipe leaves a trail too.
+  const auto from=*foodPoint_;
+  const float distance=std::hypot(pointer_.x-from.x,pointer_.y-from.y);
+  const int count=int(distance/spacing);
+  for(int i=1;i<=count;++i){
+   const float fraction=i*spacing/distance;
+   if(!drop({from.x+(pointer_.x-from.x)*fraction,from.y+(pointer_.y-from.y)*fraction}))return;
+  }
+  if(count)foodElapsed_=0;
+ }
+ // Keep pouring during slow drags and pauses, without a burst after a stall.
+ foodElapsed_+=std::clamp(seconds,0.,.25);
+ while(foodElapsed_+1e-9>=interval){foodElapsed_-=interval;if(!drop(pointer_))return;}
+}
+void HudCare::cancelPress(){downActive_=dragged_=false;foodPoint_.reset();foodElapsed_=0;pressed_=-1;pressedFish_={};pressedDecor_=0;details_.closePressed=details_.backdropPressed=false;}
 void HudCare::closeDetails(){selected_={};details_={false};cancelPress();}
-void HudCare::reset(){tool_=Tool::Select;closeDetails();pointerSeen_=false;canvas_.cursor(CursorKind::Arrow);}
-void HudCare::setTool(Tool tool){closeDetails();tool_=tool;notice_.clear();}
-void HudCare::message(std::string text){notice_=std::move(text);noticeAge_=0;}
+void HudCare::reset(){if(tool_==Tool::Sell)session_.domain().arrangeForSale({});tool_=Tool::Select;selectedDecor_=0;closeDetails();notice_.clear();toast_.clear();pointerSeen_=false;canvas_.cursor(CursorKind::Arrow);}
+void HudCare::setTool(Tool tool){closeDetails();selectedDecor_=0;tool_=tool;notice_.clear();toast_.clear();if(tool_==Tool::Sell)arrangeForSale(true);else session_.domain().arrangeForSale({});}
+void HudCare::message(std::string text){toast_.clear();notice_=std::move(text);noticeAge_=0;}
+void HudCare::favoriteNotice(){notice_.clear();toast_.show("This fish is a favourite","Unfavourite it before selling.");}
 bool HudCare::command(const Command& c){
  const auto result=session_.command(c);
  if(!result){message(result.message.empty()?errorText(result.error):result.message);return false;}
- notice_.clear();return true;
+ notice_.clear();toast_.clear();return true;
 }
 int HudCare::control(SDL_FPoint point)const{
  if(details_.open){
+  point=details_.motion.inputPoint(point);
   const auto l=detailsLayout();
   if(l.favorite.has(point.x,point.y))return 3;
-  if(l.primary.has(point.x,point.y))return 4;
-  if(l.secondary.has(point.x,point.y))return 5;
+  if(l.action.has(point.x,point.y))return 4;
   return -1;
  }
  const auto hud=layoutHud(canvas_.width(),canvas_.height(),canvas_.safeInsets(),canvas_.minimumTouchSize());
@@ -169,42 +216,55 @@ void HudCare::activate(int target){
  if(target==1){setTool(tool_==Tool::Sell?Tool::Select:Tool::Sell);return;}
  if(target==2){setTool(Tool::Select);return;}
  const auto f=visual(selected_);if(!f){closeDetails();return;}
- const auto& d=session_.domain();const bool display=d.companion(f->id)!=nullptr;
  if(target==3){command({.action=Action::Favorite,.fish=f->id});return;}
- if(target==4){
-  if(display){setTool(Tool::Food);return;}
-  if(!f->egg&&f->age==4){if(command({.action=Action::Keep,.fish=f->id})){closeDetails();tool_=Tool::Select;}}
-  return;
- }
- if(target!=5)return;
- if(display){closeDetails();return;}
+ if(target!=4)return;
  if(f->egg||f->age<1)return;
- if(f->favorite){message("Unfavorite this fish before selling it.");return;}
+ if(f->favorite){favoriteNotice();return;}
  if(command({.action=Action::Sell,.fish=f->id})){closeDetails();tool_=Tool::Select;}
 }
 bool HudCare::event(const SDL_Event& e,bool touch,bool blocked){
  if(blocked){reset();return false;}
+ const bool toastButton=e.type==SDL_EVENT_MOUSE_BUTTON_DOWN||e.type==SDL_EVENT_MOUSE_BUTTON_UP;
+ const auto toastPoint=toastButton?canvas_.inputPoint(e.button.x,e.button.y):e.type==SDL_EVENT_MOUSE_MOTION?canvas_.inputPoint(e.motion.x,e.motion.y):SDL_FPoint{};
+ if(toast_.event(e,toastPoint,toastLayout(),canvas_.minimumTouchSize())){cancelPress();pointerSeen_=false;canvas_.cursor(CursorKind::Arrow);return true;}
  if(e.type==SDL_EVENT_WINDOW_FOCUS_LOST||e.type==SDL_EVENT_WILL_ENTER_BACKGROUND||e.type==SDL_EVENT_RENDER_DEVICE_RESET||e.type==SDL_EVENT_RENDER_TARGETS_RESET||e.type==SDL_EVENT_WINDOW_RESIZED){cancelPress();pointerSeen_=false;canvas_.cursor(CursorKind::Arrow);return false;}
  if(details_.open&&!visual(selected_)){closeDetails();return true;}
  if(e.type==SDL_EVENT_KEY_DOWN&&!details_.open){
   if(e.key.key==SDLK_F||e.key.key==SDLK_S){if(!e.key.repeat)activate(e.key.key==SDLK_F?0:1);return true;}
-  if(e.key.key==SDLK_ESCAPE&&tool_!=Tool::Select){setTool(Tool::Select);return true;}
+  if(e.key.key==SDLK_ESCAPE&&(tool_!=Tool::Select||selectedDecor_)){setTool(Tool::Select);return true;}
  }
  const bool button=e.type==SDL_EVENT_MOUSE_BUTTON_DOWN||e.type==SDL_EVENT_MOUSE_BUTTON_UP;
  const bool pointer=button||e.type==SDL_EVENT_MOUSE_MOTION;
  if(pointer){
   pointer_=button?canvas_.inputPoint(e.button.x,e.button.y):canvas_.inputPoint(e.motion.x,e.motion.y);pointerSeen_=true;touch_=touch;
   if(downActive_&&std::hypot(pointer_.x-down_.x,pointer_.y-down_.y)>canvas_.minimumTouchSize()*8/44){dragged_=true;details_.closePressed=details_.backdropPressed=false;}
+  if(downActive_&&dragged_&&pressed_==0&&tool_!=Tool::Food){
+   // Pick up Food directly from its button, keeping ownership of this drag.
+   setTool(Tool::Food);downActive_=dragged_=true;pressed_=0;
+  }
+  if(e.type==SDL_EVENT_MOUSE_MOTION)pourFood(0);
  }
  if(details_.open){
   const auto layout=detailsLayout();
-  if(e.type==SDL_EVENT_MOUSE_BUTTON_DOWN&&e.button.button==SDL_BUTTON_LEFT){cancelPress();downActive_=true;down_=pointer_;pressed_=control(pointer_);}
+  const auto point=details_.motion.inputPoint(pointer_);
+  if(e.type==SDL_EVENT_MOUSE_BUTTON_DOWN&&e.button.button==SDL_BUTTON_LEFT){
+   cancelPress();downActive_=true;down_=pointer_;pressed_=control(pointer_);
+   if(!layout.dialog.frame.has(point.x,point.y)&&waterAt(pointer_)){
+    pressedFish_=hitFish(pointer_);if(!pressedFish_.value)pressedDecor_=hitDecor(pointer_);
+   }
+  }
   if(e.type==SDL_EVENT_MOUSE_BUTTON_UP&&e.button.button==SDL_BUTTON_LEFT){
    const int action=downActive_&&!dragged_&&pressed_==control(pointer_)?pressed_:-1;
    if(action>=0){cancelPress();activate(action);return true;}
-   if(downActive_&&!dragged_&&details_.backdropPressed&&!layout.dialog.frame.has(pointer_.x,pointer_.y)){
+   if(downActive_&&!dragged_&&details_.backdropPressed&&!layout.dialog.frame.has(point.x,point.y)){
     const auto other=hitFish(pointer_);
-    if(other.value&&other!=selected_){selected_=other;details_={true};notice_.clear();cancelPress();return true;}
+    if(other.value&&other!=selected_){selected_=other;details_={true};notice_.clear();toast_.clear();cancelPress();return true;}
+    if(!other.value&&pressedDecor_&&pressedDecor_==hitDecor(pointer_)){
+     const auto decor=pressedDecor_;closeDetails();selectedDecor_=decor;notice_.clear();toast_.clear();return true;
+    }
+    if(waterAt(down_)&&waterAt(pointer_)&&!pressedFish_.value&&!pressedDecor_&&!other.value&&!hitDecor(pointer_)){
+     closeDetails();session_.domain().tapWater(canvas_.toWorld(pointer_.x,pointer_.y));return true;
+    }
    }
   }
   const bool consumed=dialogEvent(details_,layout.dialog,e,pointer_);
@@ -217,59 +277,96 @@ bool HudCare::event(const SDL_Event& e,bool touch,bool blocked){
   if(pressed_>=0){downActive_=true;return true;}
   const auto hud=layoutHud(canvas_.width(),canvas_.height(),canvas_.safeInsets(),canvas_.minimumTouchSize());
   if(hudHit(hud,pointer_)){setTool(Tool::Select);return false;}
-  if(waterAt(pointer_)){downActive_=true;if(tool_!=Tool::Food)pressedFish_=hitFish(pointer_);return true;}
+  if(waterAt(pointer_)){
+   downActive_=true;if(tool_!=Tool::Food)pressedFish_=hitFish(pointer_);
+   else{foodPoint_=pointer_;foodElapsed_=.08;}
+   if(tool_==Tool::Select&&!pressedFish_.value)pressedDecor_=hitDecor(pointer_);
+   return true;
+  }
  }
  if(e.type==SDL_EVENT_MOUSE_BUTTON_UP&&e.button.button==SDL_BUTTON_LEFT){
   if(!downActive_)return false;
-  const int pressed=pressed_;const auto fish=pressedFish_;const bool tap=!dragged_;cancelPress();
+  const int pressed=pressed_;const auto fish=pressedFish_;const auto decor=pressedDecor_;const bool tap=!dragged_;cancelPress();
   if(tap&&pressed>=0&&pressed==control(pointer_))activate(pressed);
-  else if(tap&&pressed<0&&waterAt(pointer_)){
-   if(tool_==Tool::Food){if(command({.action=Action::DropFood,.point=canvas_.toWorld(pointer_.x,pointer_.y)}))tapAge_=0;}
-   else if(fish.value&&visual(fish)&&hitFish(pointer_)==fish){
+  else if(tap&&pressed<0&&tool_!=Tool::Food&&waterAt(pointer_)){
+   if(fish.value&&visual(fish)&&hitFish(pointer_)==fish){
     if(tool_==Tool::Sell){
      const auto f=visual(fish);
-     if(session_.domain().companion(fish))message("Display fish stay in your aquarium.");
-     else if(!f->egg&&f->age>=1){
-      if(f->favorite)message("Unfavorite this fish before selling it.");
+     if(!f->egg&&f->age>=1){
+      if(f->favorite)favoriteNotice();
       else command({.action=Action::Sell,.fish=fish});
      }
-    }else{selected_=fish;details_={true};notice_.clear();}
+    }else{selectedDecor_=0;selected_=fish;details_={true};notice_.clear();toast_.clear();}
+   }else if(tool_==Tool::Select){
+    if(decor&&hitDecor(pointer_)==decor&&!hitFish(pointer_).value){
+     const auto hits=canvas_.decorHits(session_.domain(),pointer_);
+     const auto current=std::find_if(hits.begin(),hits.end(),[&](const auto* item){return item->id==selectedDecor_;});
+     selectedDecor_=hits.empty()?decor:current==hits.end()||std::next(current)==hits.end()?hits.front()->id:(*std::next(current))->id;
+    }else selectedDecor_=0;
+    if(!fish.value&&!decor&&!hitFish(pointer_).value&&!hitDecor(pointer_))
+     session_.domain().tapWater(canvas_.toWorld(pointer_.x,pointer_.y));
    }
   }
   return true;
  }
  return e.type==SDL_EVENT_MOUSE_MOTION&&downActive_;
 }
+bool HudCare::beginDecorMove(DecorPlacement& placement){
+ if(!downActive_||!dragged_||tool_!=Tool::Select||!selectedDecor_||pressedDecor_!=selectedDecor_)return false;
+ const auto from=down_,to=pointer_;
+ const auto result=startDecorMove(session_.domain(),placement,selectedDecor_);
+ reset();
+ if(!result){message(result.message);return false;}
+ const auto layout=layoutDecorPlacement(canvas_,session_.domain(),placement);
+ SDL_Event event{};event.type=SDL_EVENT_MOUSE_BUTTON_DOWN;event.button.button=SDL_BUTTON_LEFT;
+ decorPlacementEvent(session_,placement,layout,event,from);
+ event={};event.type=SDL_EVENT_MOUSE_MOTION;
+ decorPlacementEvent(session_,placement,layout,event,to);
+ return true;
+}
 void HudCare::advance(double seconds,bool rewardsVisible){
+ if(tool_==Tool::Sell)arrangeForSale();
  tapAge_+=seconds;noticeAge_+=seconds;
+ pourFood(seconds);
  const bool reduced=session_.domain().state().settings.reducedMotion;
+ details_.motion.advance(details_.open,seconds,reduced);
+ toast_.advance(seconds,reduced);
  rewards_.advance(seconds,reduced);
+ levelUp_.advance(seconds,reduced);
  if(noticeAge_>6&&!details_.open)notice_.clear();
  if(selected_.value&&!visual(selected_))closeDetails();
+ if(selectedDecor_&&!visibleDecor(selectedDecor_))selectedDecor_=0;
  for(auto& item:feedback_)item.age+=seconds;
  std::erase_if(feedback_,[](const auto& item){return item.event.kind=="feed"&&item.age>=2;});
+ bool heardReward=false;
  for(auto& e:session_.domain().takeEvents()){
+  if(!heardReward&&(e.kind=="feed"||e.kind=="sale"||e.kind=="sell"||e.kind=="quest"||e.kind=="level"||e.kind=="purchase")){
+   const auto& settings=session_.domain().state().settings;
+   if(settings.sound)canvas_.sound(e.kind=="feed"?880:1047,.7f);
+   if(settings.vibration)playHaptic();heardReward=true;
+  }
   if(rewardsVisible)rewards_.collect(e,reduced);
-  if(e.kind=="feed"||e.kind=="level")feedback_.push_back({std::move(e),0});
+  levelUp_.collect(session_.domain(),e);
+  if(e.kind=="feed")feedback_.push_back({std::move(e),0});
  }
  // Shop replaces the destinations. Show the saved totals there immediately.
  if(!rewardsVisible)rewards_.finish();
  const int shownLevel=levelFor(session_.domain().content(),Amount(rewards_.display(session_.domain()).xp));
- std::erase_if(feedback_,[&](const auto& item){
-  const auto& e=item.event;
-  if(e.kind!="level"||e.reachedLevel>shownLevel)return false;
-  message(e.text+(e.pearls?"  +"+compact(e.pearls)+" Pearls":""));return true;
- });
+ // The first XP star can cross a level before the remaining rewards arrive.
+ // Keep their destinations visible until the whole sale animation finishes.
+ if(reduced||!rewards_.active())levelUp_.reveal(shownLevel);
  if(feedback_.size()>24)feedback_.erase(feedback_.begin(),feedback_.end()-24);
 }
 void HudCare::paintDetails(){
  const auto f=visual(selected_);if(!f)return;
  const auto& d=session_.domain();const auto& species=*d.content().find(f->species);
- const bool display=d.companion(f->id)!=nullptr,adult=!display&&!f->egg&&f->age==4;
+ const bool adult=!f->egg&&f->age==4;
  const auto l=detailsLayout();const auto frame=l.dialog.frame;const float u=l.dialog.unit;
  const auto content=fishDetailsContent(species,*f,d.state().simNow);
+ const DialogPaint animation(canvas_,details_.motion,frame,d.state().settings.reducedMotion,false);
+ const auto point=details_.motion.inputPoint(pointer_);
  canvas_.triangle(l.tail,shopTheme::dialogEdge);
- paintDialog(canvas_,l.dialog,{species.name},l.dialog.close.has(pointer_.x,pointer_.y),details_.closePressed,DialogPresentation::Popover);
+ paintDialog(canvas_,l.dialog,{species.name},l.dialog.close.has(point.x,point.y),details_.closePressed,DialogPresentation::Popover);
  auto inner=l.tail;
  const SDL_FPoint middle{(inner[0].x+inner[1].x)*.5f,(inner[0].y+inner[1].y)*.5f};
  for(int i=0;i<2;++i){inner[i].x+=(middle.x-inner[i].x)*.22f;inner[i].y+=(middle.y-inner[i].y)*.22f;}
@@ -288,15 +385,12 @@ void HudCare::paintDetails(){
   if(clock)shopTheme::clockIcon(canvas_,{r.x+14*u,r.y+(r.h-art)*.5f,art,art},ink);
   canvas_.text(label,r.x+14*u+art+gap,r.y+(r.h-font)*.5f,font,ink,false,r.w-28*u-art-gap,true,true);
  };
- auto line=[&](Rect r,float y){r.y+=y*u;return r;};
  auto icon=[&](std::string_view path,Rect r,Color color=shopTheme::white){canvas_.icon(path,r,1,false,color);};
- // Hearts use the current body font; the popover adds no icon or font assets.
- auto heart=[&](Rect r,Color color=shopTheme::white){
-  canvas_.text("♥",r.x+r.w*.5f,r.y-r.h*.15f,r.h,color,true,r.w);
- };
- const float heartSize=38*u;
- heart({l.favorite.x+(l.favorite.w-heartSize)*.5f,l.favorite.y+(l.favorite.h-heartSize)*.5f,heartSize,heartSize},f->favorite?Color{255,207,74,255}:shopTheme::white);
- const std::string status=display?"Display fish":adult?content.care:f->egg?"Egg":stageName(*f)+(content.condition==Care::Fed?" · Growing":" · Hungry");
+ const float heartSize=32*u;
+ icon("mask:hud-icons/favorite-heart-v1.png",
+  {l.favorite.x+(l.favorite.w-heartSize)*.5f,l.favorite.y+(l.favorite.h-heartSize)*.5f,heartSize,heartSize},
+  f->favorite?Color{244,67,64,255}:shopTheme::white);
+ const std::string status=adult?content.care:f->egg?"Egg":stageName(*f)+(content.condition==Care::Fed?" · Growing":" · Hungry");
  const float percentWidth=116*u;
  auto statusRect=l.status;statusRect.w-=percentWidth;text(status,statusRect,24);
  // Use saved milliseconds so the display never rounds up to 100% early.
@@ -304,16 +398,16 @@ void HudCare::paintDetails(){
  const auto hundredths=duration>0?std::clamp(f->growthMs,Millis{0},duration)*10000/duration:10000;
  const auto fraction=hundredths%100;
  const std::string percent=std::to_string(hundredths/100)+"."+(fraction<10?"0":"")+std::to_string(fraction)+"%";
- text(display?"Kept":percent,{l.status.x+l.status.w-percentWidth,l.status.y,percentWidth,l.status.h},24,shopTheme::ink,true);
+ text(percent,{l.status.x+l.status.w-percentWidth,l.status.y,percentWidth,l.status.h},24,shopTheme::ink,true);
  shopTheme::panel(canvas_,l.progress,u*.6f,shopTheme::Surface::Well);
  // Equal stage spacing follows the mock. The fill advances within each saved
  // stage interval; the percentage above remains the total timed growth.
- const float progress=display?1:f->egg?0:std::clamp((float(f->age)+float(nextStageProgress(*f)))/4.f,0.f,1.f);
+ const float progress=f->egg?0:std::clamp((float(f->age)+float(nextStageProgress(*f)))/4.f,0.f,1.f);
  if(progress>0)canvas_.gradient({l.progress.x+3*u,l.progress.y+3*u,(l.progress.w-6*u)*progress,l.progress.h-6*u},{111,222,142},{42,167,112},5*u);
  constexpr std::array<std::string_view,5> names{"Baby","Junior","Young","Mature","Adult"};
  for(int i=0;i<5;++i){
   const float x=l.progress.x+8*u+(l.progress.w-16*u)*float(i)*.25f;
-  const bool reached=display||(!f->egg&&i<=f->age);
+  const bool reached=!f->egg&&i<=f->age;
   canvas_.gradient({x-7*u,l.progress.y+u,14*u,14*u},reached?Color{255,227,135,255}:Color{197,216,206,255},reached?Color{250,201,74,255}:Color{147,177,176,255},7*u);
   canvas_.outline({x-7*u,l.progress.y+u,14*u,14*u},shopTheme::fishInk,7*u,u);
   const float labelWidth=std::min(88*u,canvas_.textWidth(names[i],18*u,true,false,false,false,true));
@@ -321,11 +415,7 @@ void HudCare::paintDetails(){
   text(names[i],{left,l.stages.y,labelWidth,l.stages.h},18,i==f->age?shopTheme::fishInk:shopTheme::ink,true);
  }
  canvas_.fill({frame.x+36*u,l.rewards.y-12*u,388*u,u},{126,149,134,100});
- if(display){
-  text(d.companion(f->id)->origin.value?"Reward collected":"Permanent companion",line(l.rewards,4),26,shopTheme::ink,true);
-  text("No more coin or XP rewards",line(l.rewards,38),18,shopTheme::ink,true);
-  text("This fish stays in your aquarium.",l.breakdown,18,shopTheme::ink,true);
- }else{
+ {
   auto grown=*f;grown.egg=false;grown.age=4;const auto atAdult=reward(grown);
   const bool locked=f->egg||f->age<1;
   const auto payout=locked?atAdult:reward(*f);
@@ -341,27 +431,54 @@ void HudCare::paintDetails(){
   else if(f->favorite)text("Unfavorite to sell",l.breakdown,18,shopTheme::ink,true);
   else if(!adult)text("Adult: "+compact(atAdult.coins())+" coins + "+compact(atAdult.xp)+" XP",l.breakdown,18,shopTheme::ink,true);
  }
- const bool growthBadge=notice_.empty()&&!adult&&!display;
+ const bool growthBadge=notice_.empty()&&!adult;
  const bool paused=!f->egg&&content.condition!=Care::Fed;
- const std::string note=!notice_.empty()?notice_:adult||display?"":paused?"Growth paused":content.growth;
+ const std::string note=!notice_.empty()?notice_:adult?"":paused?"Growth paused":content.growth;
  if(growthBadge){
   badge(note,l.note,paused?shopTheme::Surface::PausedBadge:shopTheme::Surface::Tab,paused?Color{100,65,21,255}:shopTheme::ink,!paused);
  }else if(!note.empty())text(note,l.note,18,notice_.empty()?shopTheme::ink:shopTheme::fishInk,true);
- auto button=[&](Rect r,int id,std::string_view label,shopTheme::Surface style,std::string_view asset,bool enabled=true,bool showHeart=false){
+ auto button=[&](Rect r,int id,std::string_view label,shopTheme::Surface style,std::string_view asset,bool enabled=true){
   shopTheme::panel(canvas_,r,u,enabled?style:shopTheme::Surface::DisabledButton,enabled&&pressed_==id&&downActive_&&!dragged_);
-  const Color foreground=!enabled?Color{65,87,86,255}:style==shopTheme::Surface::Keep?Color{95,40,36,255}:style==shopTheme::Surface::Buy?Color{16,71,45,255}:shopTheme::white;
-  const float font=28*u,art=enabled&&asset.empty()&&!showHeart?0:32*u,gap=art?12*u:0;
+  const Color foreground=!enabled?Color{65,87,86,255}:style==shopTheme::Surface::Buy?Color{16,71,45,255}:shopTheme::white;
+  const float font=28*u,art=enabled&&asset.empty()?0:32*u,gap=art?12*u:0;
   const float width=canvas_.textWidth(label,font,true,false,false,false,true);
   const float scale=std::min(1.f,(r.w-24*u)/(width+art+gap));
   const float x=r.x+(r.w-(width+art+gap)*scale)*.5f;
   const Rect artBounds{x,r.y+(r.h-art*scale)*.5f,art*scale,art*scale};
   if(!enabled)shopTheme::lockIcon(canvas_,artBounds);
   else if(!asset.empty())icon(asset,artBounds,foreground);
-  else if(showHeart)heart(artBounds,foreground);
   canvas_.text(label,x+(art+gap)*scale,r.y+(r.h-font*scale)*.5f,font*scale,foreground,false,width*scale,true,true);
  };
- button(l.primary,4,display?"Feed fish":"Keep",display?shopTheme::Surface::Buy:shopTheme::Surface::Keep,"",display||adult,!display);
- button(l.secondary,5,display?"Close":"Sell",display?shopTheme::Surface::Button:shopTheme::Surface::Buy,display?"":"mask:tools/sell-net.png",display||(!f->favorite&&!f->egg&&f->age>=1));
+ button(l.action,4,"Sell",shopTheme::Surface::Buy,"mask:tools/sell-net.png",!f->favorite&&!f->egg&&f->age>=1);
+}
+void HudCare::paintFavorite(const Fish& fish){
+ const auto& d=session_.domain();
+ if(!fish.favorite||fish.stashed||fish.tank!=d.state().activeTank)return;
+ const auto& species=*d.content().find(fish.species);
+ const auto pose=fishPose(fish,session_.interpolation());
+ const auto position=canvas_.toScreen(pose.position);
+ const float density=canvas_.minimumTouchSize()/44.f;
+ const float egg=std::max(20.f,30*canvas_.worldScale());
+ const auto size=fish.egg?SDL_FPoint{egg,egg}:canvas_.fishSize(species,fish);
+ const float side=std::clamp(size.x*.22f,12*density,16*density),gap=3*density;
+ // Follow the same interpolated head position as the swimming fish, including
+ // turns. Keep the heart upright and above the existing care and sell labels.
+ const float headOffset=fish.egg?0:size.x*.28f;
+ const float headX=position.x-float(pose.facing*std::cos(pose.pitch))*headOffset;
+ const float headY=position.y+float(std::sin(pose.pitch)*std::abs(pose.facing))*headOffset;
+ float bottom=headY-size.y*.5f-gap;
+ if(!fish.egg&&!fish.dead&&fish.id!=held()&&careOf(species,fish,d.state().simNow)!=Care::Fed){
+  const float careHeadY=position.y+float(std::sin(pose.pitch)*std::abs(pose.facing))*size.x*.22f;
+  bottom=std::min(bottom,careHeadY-28-gap);
+ }
+ if(tool_==Tool::Sell&&!details_.open){
+  const float unit=std::max(.9f*density,canvas_.worldScale());
+  bottom=std::min(bottom,position.y-size.y*.5f-18*unit-gap);
+ }
+ const auto safe=canvas_.safeInsets();
+ const Rect badge{std::clamp(headX-side*.5f,safe.left+2*density,canvas_.width()-safe.right-side-2*density),
+  std::clamp(bottom-side,safe.top+2*density,canvas_.height()-safe.bottom-side-2*density),side,side};
+ canvas_.icon("hud-icons/favorite-heart-v1.png",badge);
 }
 void HudCare::paintStageMeter(const Fish& fish,SDL_FPoint position,SDL_FPoint fishSize,bool locked){
  const auto safe=canvas_.safeInsets();
@@ -406,13 +523,14 @@ void HudCare::paint(){
   canvas_.outline({active.x-4*u,active.y-4*u,active.w+8*u,active.h+8*u},{231,255,167,255},16*u,4*u);
   if(tool_==Tool::Sell){
    const auto& d=session_.domain();
-   auto label=[&](const Fish& f,bool companion){
+   auto label=[&](const Fish& f){
     if(f.stashed||f.tank!=d.state().activeTank)return;
+    paintFavorite(f);
     const auto p=canvas_.toScreen(fishPose(f,session_.interpolation()).position);
     const float egg=std::max(20.f,30*canvas_.worldScale());
     const auto& species=*d.content().find(f.species);
     const auto size=f.egg?SDL_FPoint{egg,egg}:canvas_.fishSize(species,f);
-    const bool locked=companion||!sellable(species,f);
+    const bool locked=!sellable(species,f);
     paintStageMeter(f,p,size,locked);
     if(locked)return;
     // Uniformly halve the accepted ribbon, including its artwork and live text.
@@ -440,20 +558,20 @@ void HudCare::paint(){
      text(xp,xpX+offset.x*scale,xpY+offset.y*scale,12,{12,57,77,255},34);
     text(xp,xpX,xpY,12,{255,255,248,255},34);
    };
-   for(const auto& f:d.state().fish)label(f,false);
-   for(const auto& c:d.state().companions)if(!c.stored)label(companionVisual(c),true);
+   for(const auto& f:d.state().fish)label(f);
   }
   const auto done=doneBounds();
   shopTheme::panel(canvas_,done,u,shopTheme::Surface::Buy,pressed_==2&&downActive_);
   canvas_.text("Done",done.x+done.w*.5f,done.y+16*u,28*u,shopTheme::white,true,done.w,true,true);
  }
- if((!notice_.empty()||session_.saveFailed())&&!details_.open){
+ if((!notice_.empty()||session_.saveFailed())&&!details_.open&&!toast_.visible()){
   Rect note{(canvas_.width()-880*u)*.5f,canvas_.safeInsets().top+(tool_==Tool::Sell?164:100)*u,880*u,52*u};
   canvas_.gradient(note,{18,68,82,240},{18,68,82,240},12*u);
   canvas_.text(session_.saveFailed()?"Progress is not saved. Keep the game open to retry.":notice_,note.x+note.w*.5f,note.y+12*u,26*u,shopTheme::white,true,note.w-24*u,true,true);
  }
  if(details_.open)paintDetails();
- const bool cursor=tool_!=Tool::Select&&!details_.open&&pointerSeen_&&waterAt(pointer_)&&(!touch_||downActive_||tapAge_<.2);
+ toast_.paint(canvas_,toastLayout());
+ const bool cursor=tool_!=Tool::Select&&!details_.open&&pointerSeen_&&(draggingFood()||waterAt(pointer_))&&(!touch_||downActive_||tapAge_<.2);
  canvas_.cursor(cursor&&!touch_?CursorKind::Hidden:CursorKind::Arrow);
  if(cursor)canvas_.toolCursor(tool_,pointer_,tapAge_,session_.domain().state().settings.reducedMotion);
 }

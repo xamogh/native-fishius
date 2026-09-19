@@ -27,13 +27,14 @@ def main():
     same('unique IDs',len(items),120,'Decor Catalog!A5:A124')
     same('row count',len(data['items']),120,'Decor Catalog!A5:A124')
     same('categories',dict(Counter(i['category'] for i in data['items'])),{'Plant':60,'Decoration':60},'Decor Catalog!C5:C124')
-    columns={'id':0,'name':1,'category':2,'theme':3,'edition':4,'rarity':5,'level':6,'currency':7,'price':11,'buy_xp':12,'score':13,'width':14,'height':15,'size':16,'layer':17,'event':18,'release_gate':19,'subcategory':21}
+    columns={'id':0,'name':1,'category':2,'theme':3,'edition':4,'rarity':5,'level':6,'currency':7,'price':11,'score':13,'width':14,'height':15,'size':16,'layer':17,'event':18,'release_gate':19,'subcategory':21}
     for number,row in enumerate(sheets['Decor Catalog'][4:124],5):
         item=items.get(row[0],{})
         for key,col in columns.items():
             expected=row[col].lower() if key=='currency' else '' if key=='event' and row[col]=='None' else row[col]
             same(f'{row[0]}.{key}',item.get(key),expected,f'Decor Catalog!{openpyxl.utils.get_column_letter(col+1)}{number}')
-        same(f'{row[0]}.zero_purchase_xp',item.get('buy_xp'),0,'v4 no purchase XP')
+        xp=max(1,int(row[11])//10+(int(row[11])%10>=5)) if row[7]=='Coins' else int(row[11])*10
+        same(f'{row[0]}.first_purchase_xp',item.get('buy_xp'),xp,'18 September price-based decor XP override')
         same(f'{row[0]}.asset',item.get('asset'),'decor/catalog/'+row[0]+'.png','Catalog ID join')
         same(f'{row[0]}.source_row',item.get('source',{}).get('row'),number,'Decor Catalog')
     art_fields=['id','name','silhouette','palette','materials','footprint','placement','animation','motion_class','still','hook','construction']
@@ -45,7 +46,7 @@ def main():
     for event,row in zip(data['events'],sheets['Events'][4:16]):
         for key,col in {'name':1,'proposed_window':2,'coin_id':3,'pearl_id':4}.items():same('event.'+key,event.get(key),row[col],'Events')
         same('event.default_closed',event.get('configured'),False,'Events require an explicit release')
-    same('zero tutorial purchase XP',data['tuning']['tutorial_total_xp'],0,'v4 no purchase XP')
+    same('no extra tutorial purchase XP',data['tuning']['tutorial_total_xp'],0,'Normal first-purchase reward only')
     result=dict(checks=checks,errors=errors,items=len(items),events=len(data['events']),workbook=str(args.workbook))
     args.out.parent.mkdir(parents=True,exist_ok=True);args.out.write_text(json.dumps(result,indent=2))
     print(json.dumps(result,indent=2));return bool(errors)
